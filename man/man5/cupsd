@@ -61,9 +61,9 @@ DIRECTIVES
 
        AuthType Digest
 
-       AuthType Kerberos
+       AuthType Negotiate
             Specifies  the  authentication  type  (None,  Basic,  BasicDigest,
-            Digest, Kerberos)
+            Digest, Negotiate)
 
        AutoPurgeJobs Yes
 
@@ -188,7 +188,7 @@ DIRECTIVES
 
        DefaultAuthType Digest
 
-       DefaultAuthType Kerberos
+       DefaultAuthType Negotiate
             Specifies the default type of authentication to use.
 
        DefaultCharset charset

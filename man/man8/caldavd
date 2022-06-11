@@ -1,0 +1,69 @@
+CALDAVD(8)                BSD System Manager's Manual               CALDAVD(8)
+
+NAME
+     caldavd -- Calendar Server Control Interface
+
+SYNOPSIS
+     caldavd [-hX] [-u username] [-g groupname] [-T twistd] [-f caldavd.plist]
+
+DESCRIPTION
+     caldavd is a front end to the Darwin Calendar Server.  The Darwin Calen-
+     dar server is a web server which implements the HTTP, WebDAV, WebDAV ACL,
+     and CalDAV protocols.
+
+     caldavd is a simple tool for starting the server.
+
+OPTIONS
+     -h    Displays usage information
+
+     -X    Starts the server but does not daemonize it.
+
+     -u username
+           Drops privileges to the given username.
+
+     -g groupname
+           Drops privileges to the given groupname.
+
+     -f caldavd.plist
+           Specifies the path of the configuration file to read.
+
+     -T twistd
+           Specifies the path to the twistd binary.
+
+FILES
+     /etc/caldavd/caldavd.plist
+           The main configuration file for caldavd.  It is an XML property
+           list in server options such as the port to bind to, whether to use
+           SSL, and the names of other files can specified.
+
+     /etc/caldavd/server.pem
+           PEM-format server keys for use with SSL.
+
+     /Library/CalendarServer/Documents
+           The location of static files which are exposed into the URL names-
+           pace of the server, as well as files which are used as a backing
+           store for dynamic and managed resources on the server.
+
+     /var/log/caldavd/server.log
+           The server's main log file.
+
+     /var/run/caldavd.pid
+           The server's process ID file.
+
+     /usr/share/caldavd
+           Server implementation and support files.
+
+SEE ALSO
+     httpd(8)
+
+STANDARDS
+     caldavd is expected to comply with RFC 2445 (iCalendar), RFC 2518 (Web-
+     DAV), RFC 3744 (WebDAV ACL), draft-dusseault-caldav-12 (CalDAV), and
+     draft-desruisseaux-caldav-sched-01 (CalDAV Scheduling).
+
+HISTORY
+     caldavd was first introduced as part of Darwin 9 and Mac OS 10.5.
+
+BUGS
+     This version of caldavd is still in development and testing.
+

@@ -1,0 +1,28 @@
+swupd_syncd(1)            BSD General Commands Manual           swupd_syncd(1)
+
+NAME
+     swupd_syncd -- Software Update Server sync daemon
+
+SYNOPSIS
+     swupd_syncd
+
+DESCRIPTION
+     Upon invocation, swupd_syncd downloads a list of Software Updates from a
+     master server (typically Apple's), then mirrors an administrator-speci-
+     fied subset of those updates into the directory /usr/share/swupd/html.
+     swupd_syncd is normally invoked by the launchd item com.apple.swup-
+     date.sync, where by default it is configured to check every 12 hours for
+     new updates. Once swupd_syncd has completed a check cycle, it terminates.
+
+     Settings controlling the operation of the Software Update Service are
+     stored in the file /etc/swupd/swupd.plist
+
+     Data about packages that should and should not be mirrored is stored in
+     the file /etc/swupd/com.apple.server.swupdate.plist
+
+FILES & FOLDERS
+     /usr/sbin/swupd_syncd
+     /etc/swupd/swupd.plist
+     /etc/swupd/com.apple.server.swupdate.plist
+     /System/Library/LaunchDaemons/com.apple.swupdate.sync.plist
+

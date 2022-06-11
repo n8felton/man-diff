@@ -49,16 +49,18 @@ VERBS, DIRECT OBJECTS, AND SPECIFIC ARGUMENTS
               may also be expressed as --name, --raidset, and --size, respec-
               tively.
 
-     delete raidset -n <NameOfRAIDSet> [-f]
+     delete raidset -n <NameOfRAIDSet> [-f] [-u]
               Remove a RAIDSet.  The name of the RAIDSet is specified using
               the -n argument.  The -n flag may also be expressed as --name.
-              The optional -f flag may also be expressed as --force.
+              The optional -f flag may also be expressed as --force.  The
+              optional -u flag may also be expressed as --unmount.
 
-     delete volume -n <NameOfVolume> [-r <RAIDSet>] [-f]
+     delete volume -n <NameOfVolume> [-r <RAIDSet>] [-f] [-u]
               Remove a volume.  The name of the volume is specified using the
               -n argument.  The -n flag may also be expressed as --name.  The
               optional -r flag may also be expressed as --raidset.  The
-              optional -f flag may also be expressed as --force.
+              optional -f flag may also be expressed as --force.  The optional
+              -u flag may also be expressed as --unmount.
 
      list [devices]
               List all known RAID devices.  This is the default behavior if no
@@ -99,16 +101,20 @@ VERBS, DIRECT OBJECTS, AND SPECIFIC ARGUMENTS
      modify raidset [arguments listed below]
               This will allow the user to modify specific attributes of the
               targeted RAIDSet.
-              --addcapacity -n <RAIDSet> -d <ListOfDrives> [-Y | -N]
-              --addmirror -n <RAIDSet> -d <ListOfDrives> [-Y | -N]
-              --migratetoraid5 -n <RAIDSet> -d <ListOfDrives> [-Y | -N]
-              --scrub -n <RAIDSet> -p <ServicePriority>
+              --addcapacity -n <RAIDSet> -d <ListOfDrives> [-Y | -N] [-W]
+              --addmirror -n <RAIDSet> -d <ListOfDrives> [-Y | -N] [-W]
+              --migratetoraid5 -n <RAIDSet> -d <ListOfDrives> [-Y | -N] [-W]
+              --verify -n <RAIDSet> -p <ServicePriority> [-W]
 
      modify volume [arguments listed below]
               This will allow the user to modify specific attributes of the
               targeted volume.
+              --move -n <ListOfVolumes> [-r <SourceRAIDSet>] -t <TargetRAID-
+              Set> [-W]
               --rewrite -n <VolumeName>  [-r <RAIDSet>] -p <ServicePriority>
-              --scrub -n <VolumeName>  [-r <RAIDSet>] -p <ServicePriority>
+              [-W]
+              --verify -n <VolumeName>  [-r <RAIDSet>] -p <ServicePriority>
+              [-W]
 
               NOTE: Valid values for <ServicePriority> are:  low, medium,
               high.
@@ -121,6 +127,11 @@ EXAMPLES
      raidutil create volume -n volume1 -r set1 -s 1.5T
               This creates a volume named "volume1", on the RAIDSet named
               "set1".  The size of the volume will be 1.5 tebibytes.
+
+     raidutil modify volume -n volume1 --move -r set1 -t set2 --waitfortask
+              This moves the volume named "volume1", from the RAIDSet named
+              "set1".  to the  RAIDSet named "set2".  The program will wait
+              for the verification task to complete before proceeding.
 
      raidutil delete raidset -n setX
               This deletes a RAIDSet named "setX." Any volumes associated with

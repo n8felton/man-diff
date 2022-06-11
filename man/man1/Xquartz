@@ -1,0 +1,153 @@
+XQUARTZ(1)                                                          XQUARTZ(1)
+
+
+
+NAME
+       Xquartz - X window system server for Quartz operating system
+
+SYNOPSIS
+       Xquartz [ options ] ...
+
+DESCRIPTION
+       Xquartz is the X window server for Mac OS X provided by Apple.  Xquartz
+       runs in parallel with Aqua in rootless mode. In rootless  mode,  the  X
+       window  system and Mac OS X share your display.  The root window of the
+       X11 display is the size of the screen and contains all the  other  win-
+       dows. The X11 root window is not displayed in rootless mode as Mac OS X
+       handles the desktop background.
+
+OPTIONS
+       In addition to the normal server options described  in  the  Xserver(1)
+       manual page, Xquartz accepts the following command line switches:
+
+       -fakebuttons
+               Emulates  a 3 button mouse using modifier keys. By default, the
+               Command modifier is used to emulate button 2 and Option is used
+               for button 3. Thus, clicking the first mouse button while hold-
+               ing down Command will act like clicking button 2. Holding  down
+               Option will simulate button 3.
+
+       -nofakebuttons
+               Do not emulate a 3 button mouse. This is the default.
+
+       -fakemouse2 modifiers
+               Change  the modifier keys used to emulate the second mouse but-
+               ton. By default, Command is used to emulate the second  button.
+               Any  combination  of  the following modifier names may be used:
+               Shift, Option, Control, Command, Fn. For  example,  -fakemouse2
+               "Option,Shift"  will  set holding Option, Shift and clicking on
+               button one as equivalent to clicking the second mouse button.
+
+       -fakemouse3 modifiers
+               Change the modifier keys used to emulate the third  mouse  but-
+               ton.  By  default,  Option is used to emulate the third button.
+               Any combination of the following modifier names  may  be  used:
+               Shift,  Option,  Control, Command, Fn. For example, -fakemouse3
+               "Control,Shift" will set holding Control, Shift and clicking on
+               button one as equivalent to clicking the third mouse button.
+
+       -swapAltMeta
+               Swaps the meaning of the Alt and Meta modifier keys.
+
+       -keymap file
+               On  startup  Xquartz  translates  a Darwin keymapping into an X
+               keymap.   The  default  is  to  read   this   keymapping   from
+               USA.keymapping.  With  this  option the keymapping will be read
+               from file instead. If the file's path is not specified, it will
+               be  searched for in Library/Keyboards/ underneath the following
+               directories (in order): ~, /, /Network, /System.
+
+       -nokeymap
+               On startup Xquartz translates a Darwin  keymapping  into  an  X
+               keymap.   With  this  option Xquartz queries the kernel for the
+               current keymapping instead of reading it from a file. This will
+               often fail on newer kernels.
+
+       -depth depth
+               Specifies the color bit depth to use. Currently only 15, and 24
+               color bits per pixel are supported. If not specified,  defaults
+               to the depth of the main display.
+
+CUSTOMIZATION
+       Xquartz  can  also  be  customized  using  the defaults(1) command. The
+       available options are:
+
+       defaults write org.x.X11 enable_fake_buttons -boolean true
+               Equivalent to the -fakebuttons command line option.
+
+       defaults write org.x.X11 fake_button2 modifiers
+               Equivalent to the -fakemouse2 option.
+
+       defaults write org.x.X11 fake_button3 modifiers
+               Equivalent to the -fakemouse3 option.
+
+       defaults write org.x.X11 swap_alt_meta -boolean true
+               Equivalent to the -swapAltMeta option.
+
+       defaults write org.x.X11 keymap_file filename
+               Equivalent to the -keymap option.
+
+       defaults write org.x.X11 no_quit_alert -boolean true
+               Disables the alert dialog displayed  when  attempting  to  quit
+               X11.
+
+       defaults write org.x.X11 no_auth -boolean true
+               Stops  the  X  server requiring that clients authenticate them-
+               selves when connecting. See Xsecurity(7).
+
+       defaults write org.x.X11 nolisten_tcp -boolean true
+               Prevents the X server accepting remote connections.
+
+       defaults write org.x.X11 xinit_kills_server -boolean false
+               Stops the X server exiting when the xinitrc script  terminates.
+
+       defaults write org.x.X11 fullscreen_hotkeys -boolean false
+               Allows  system  hotkeys  to  be handled while in X11 fullscreen
+               mode.
+
+       defaults write org.x.X11 enable_system_beep -boolean false
+               Don't use the standard system beep effect for X11 alerts.
+
+       defaults write org.x.X11 enable_key_equivalents -boolean false
+               Disable  menu  keyboard  equivalents  while  X11  windows   are
+               focused.
+
+       defaults write org.x.X11 depth depth
+               Equivalent to the -depth option.
+
+SEE ALSO
+       X(7), Xserver(1), xdm(1), xinit(1)
+
+
+AUTHORS
+       XFree86  was originally ported to Mac OS X Server by John Carmack. Dave
+       Zarzycki used this as the basis of his port of XFree86  4.0  to  Darwin
+       1.0.   Torrey  T.  Lyons  improved  and  integrated  this code into the
+       XFree86 Project's mainline for the 4.0.2 release.
+
+       The following members of the XonX Team  contributed  to  the  following
+       releases (in alphabetical order):
+
+       XFree86 4.1.0:
+           Rob Braun - Darwin x86 support
+           Torrey T. Lyons - Project Lead
+           Andreas Monitzer - Cocoa version of XDarwin front end
+           Gregory Robert Parker - Original Quartz implementation
+           Christoph Pfisterer - Dynamic shared X libraries
+           Toshimitsu Tanaka - Japanese localization
+
+       XFree86 4.2.0:
+           Rob Braun - Darwin x86 support
+           Pablo Di Noto - Spanish localization
+           Paul Edens - Dutch localization
+           Kyunghwan Kim - Korean localization
+           Mario Klebsch - Non-US keyboard support
+           Torrey T. Lyons - Project Lead
+           Andreas Monitzer - German localization
+           Patrik Montgomery - Swedish localization
+           Greg Parker - Rootless support
+           Toshimitsu Tanaka - Japanese localization
+           Olivier Verdier - French localization
+
+
+

@@ -76,21 +76,22 @@ CONFIGURATION
 
 
        catalogue (list of string)
-              Ordered  list  of  font  path element names.  Use of the keyword
-              "catalogue" is very misleading at present, the current implemen-
-              tation  only supports a single catalogue ("all"), containing all
-              of the specified fonts.
+              Ordered  list of font path element names.  The current implemen-
+              tation only supports a single catalogue ("all")  containing  all
+              of  the  specified  fonts.  A special directory with symlinks to
+              font paths can be specified using a catalogue:<dir>  entry.  See
+              the CATALOGUE DIR section below for details.
 
        alternate-servers (list of string)
               List of alternate servers for this font server.
 
        client-limit (cardinal)
-              Number of clients this font server will support before  refusing
-              service.   This is useful for tuning the load on each individual
+              Number  of clients this font server will support before refusing
+              service.  This is useful for tuning the load on each  individual
               font server.
 
        clone-self (boolean)
-              Whether this font server should attempt to clone itself when  it
+              Whether  this font server should attempt to clone itself when it
               reachs the client-limit.
 
        default-point-size (cardinal)
@@ -98,32 +99,61 @@ CONFIGURATION
               ify.  The default is 120.
 
        default-resolutions (list of resolutions)
-              Resolutions the server supports by  default.   This  information
-              may  be  used  as  a hint for pre-rendering, and substituted for
+              Resolutions  the  server  supports by default.  This information
+              may be used as a hint for  pre-rendering,  and  substituted  for
               scaled fonts which do not specify a resolution.  A resolution is
-              a  comma-separated  pair  of  x  and y resolutions in pixels per
+              a comma-separated pair of x and  y  resolutions  in  pixels  per
               inch.  Multiple resolutions are separated by commas.
 
        error-file (string)
-              Filename of the error file.  All warnings  and  errors  will  be
+              Filename  of  the  error  file.  All warnings and errors will be
               logged here.
 
        no-listen (trans-type)
-              Disable  a  transport  type. For example, TCP/IP connections can
+              Disable a transport  type. For example, TCP/IP  connections  can
               be disabled with no-listen tcp
 
        port (cardinal)
               TCP port on which the server will listen for connections.
 
        use-syslog (boolean)
-              Whether syslog(3) (on supported  systems)  is  to  be  used  for
+              Whether  syslog(3)  (on  supported  systems)  is  to be used for
               errors.
 
        deferglyphs (string)
-              Set  the mode for delayed fetching and caching of glyphs.  Value
-              is "none", meaning deferred glyphs is disabled,  "all",  meaning
-              it  is  enabled  for  all fonts, and "16", meaning it is enabled
+              Set the mode for delayed fetching and caching of glyphs.   Value
+              is  "none",  meaning deferred glyphs is disabled, "all", meaning
+              it is enabled for all fonts, and "16",  meaning  it  is  enabled
               only for 16-bits fonts.
+
+CATALOGUE DIR
+       You  can  specify  a  special  kind  of  font  path  in  the form cata-
+       logue:<dir>.  The directory specified after the catalogue: prefix  will
+       be scanned for symlinks and each symlink destination will be added as a
+       local fontfile FPE.
+
+       The symlink can be suffixed by attributes  such  as  'unscaled',  which
+       will  be passed through to the underlying fontfile FPE. The only excep-
+       tion is the newly introduced 'pri' attribute, which will  be  used  for
+       ordering the font paths specified by the symlinks.
+
+       An example configuration:
+
+           75dpi:unscaled:pri=20 -> /usr/share/X11/fonts/75dpi
+           ghostscript:pri=60 -> /usr/share/fonts/default/ghostscript
+           misc:unscaled:pri=10 -> /usr/share/X11/fonts/misc
+           type1:pri=40 -> /usr/share/X11/fonts/Type1
+           type1:pri=50 -> /usr/share/fonts/default/Type1
+
+       This  will  add  /usr/share/X11/fonts/misc  as  the  first FPE with the
+       attribute the attribute unscaled etc. This is  functionally  equivalent
+       to setting the following font path:
+
+           /usr/share/X11/fonts/misc:unscaled,
+           /usr/share/X11/fonts/75dpi:unscaled,
+           /usr/share/X11/fonts/Type1,
+           /usr/share/fonts/default/Type1,
+           /usr/share/fonts/default/ghostscript
 
 EXAMPLE
        #
@@ -156,32 +186,32 @@ EXAMPLE
 
 
 FONT SERVER NAMES
-       One of the following forms can be used  to  name  a  font  server  that
+       One  of  the  following  forms  can  be used to name a font server that
        accepts TCP connections:
 
            tcp/hostname:port
            tcp/hostname:port/cataloguelist
 
-       The  hostname  specifies  the  name (or decimal numeric address) of the
-       machine on which the font server is running.  The port is  the  decimal
-       TCP  port  on  which the font server is listening for connections.  The
-       cataloguelist specifies a list of catalogue names, with '+' as a  sepa-
+       The hostname specifies the name (or decimal  numeric  address)  of  the
+       machine  on  which the font server is running.  The port is the decimal
+       TCP port on which the font server is listening  for  connections.   The
+       cataloguelist  specifies a list of catalogue names, with '+' as a sepa-
        rator.
 
        Examples: tcp/fs.x.org:7100, tcp/18.30.0.212:7101/all.
 
-       One  of  the  following  forms  can  be used to name a font server that
+       One of the following forms can be used  to  name  a  font  server  that
        accepts DECnet connections:
 
            decnet/nodename::font$objname
            decnet/nodename::font$objname/cataloguelist
 
-       The nodename specifies the name (or decimal  numeric  address)  of  the
-       machine  on which the font server is running.  The objname is a normal,
-       case-insensitive DECnet object name.   The  cataloguelist  specifies  a
+       The  nodename  specifies  the  name (or decimal numeric address) of the
+       machine on which the font server is running.  The objname is a  normal,
+       case-insensitive  DECnet  object  name.   The cataloguelist specifies a
        list of catalogue names, with '+' as a separator.
 
-       Examples:  DECnet/SRVNOD::FONT$DEFAULT, decnet/44.70::font$special/sym-
+       Examples: DECnet/SRVNOD::FONT$DEFAULT,  decnet/44.70::font$special/sym-
        bols.
 
 SEE ALSO

@@ -9,7 +9,7 @@ SYNOPSIS
            [reduce 1/0] [powerbutton 1/0] [lidwake 1/0] [acwake 1/0]
            [lessbright 1/0] [halfdim 1/0] [sms 1/0] [boot]
      pmset -u [haltlevel percent] [haltafter minutes] [haltremain minutes]
-     pmset -g [disk | live | cap | sched | ups | ps | pslog | rawlog]
+     pmset -g [custom | live | cap | sched | ups | ps | pslog | rawlog]
      pmset schedule [cancel] type date+time [owner]
      pmset repeat cancel
      pmset repeat type weekdays time
@@ -33,8 +33,9 @@ SETTING
 GETTING
      -g (with no argument) will display the settings currently in use.
      -g live will also display the settings currently in use.
-     -g disk will display settings for all power sources, including those not
-     currently in use.
+     -g custom will display custom settings for all power sources, although
+     these settings may not currently be in use; a pre-set settings profile
+     may be active instead.
      -g cap will display which power management features the machine supports.
      -g sched will display scheduled startup/wake and shutdown/sleep events.
      -g ups will display UPS emergency thresholds.

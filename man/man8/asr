@@ -9,7 +9,7 @@ SYNOPSIS
      asr restore --source source --target target [options]
      asr server --source source --config configuration [options]
      asr restore --source asr://source --file file [options]
-     asr imagescan --source [options] image
+     asr imagescan --source image [options]
      asr help | version
 
 DESCRIPTION

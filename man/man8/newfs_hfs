@@ -21,7 +21,14 @@ DESCRIPTION
 
      -N [partition-size]
                  Causes the file system parameters to be printed out without
-                 really creating the file system.
+                 really creating the file system.  The optional partition-size
+                 argument can be specified in bytes (with a `b' suffix),
+                 petabytes (`p' suffix), terabytes (`t' suffix), gigabytes
+                 (`g' suffix), megabytes (`m' suffix), or kilobytes (`k' suf-
+                 fix).  All suffixes indicate binary, not decimal, multipliers
+                 (e.g., `1k' is 1024 bytes).  If no suffix is specified, the
+                 value is assumed to be in bytes; if an illegal suffix is
+                 specified, it results in a size of 0 bytes.
 
      -U uid      Set the owner of the file system's root directory to uid.
 

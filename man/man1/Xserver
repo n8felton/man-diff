@@ -659,13 +659,13 @@ FONTS
        The    default    font    path     is     /usr/X11/lib/X11/fonts/misc/,
        /usr/X11/lib/X11/fonts/TTF/,                /usr/X11/lib/X11/fonts/OTF,
        /usr/X11/lib/X11/fonts/Type1/,          /usr/X11/lib/X11/fonts/100dpi/,
-       /usr/X11/lib/X11/fonts/75dpi/ .
+       /usr/X11/lib/X11/fonts/75dpi/,  /Library/Fonts, /System/Library/Fonts .
 
-       The  font  path  can be set with the -fp option or by xset(1) after the
+       The font path can be set with the -fp option or by  xset(1)  after  the
        server has started.
 
 FILES
-       /etc/Xn.hosts                 Initial access control list  for  display
+       /etc/Xn.hosts                 Initial  access  control list for display
                                      number n
 
        /usr/X11/lib/X11/fonts/misc,/usr/X11/lib/X11/fonts/75dpi,/usr/X11/lib/X11/fonts/100dpi
@@ -678,43 +678,43 @@ FILES
 
        /tmp/.X11-unix/Xn             Unix domain socket for display number n
 
-       /tmp/rcXn                     Kerberos  5 replay cache for display num-
+       /tmp/rcXn                     Kerberos 5 replay cache for display  num-
                                      ber n
 
-       /usr/adm/Xnmsgs               Error log file for display  number  n  if
+       /usr/adm/Xnmsgs               Error  log  file  for display number n if
                                      run from init(8)
 
        /usr/X11/lib/X11/xdm/xdm-errors
-                                     Default  error  log file if the server is
+                                     Default error log file if the  server  is
                                      run from xdm(1)
 
 SEE ALSO
        General information: X(7)
 
-       Protocols: X Window System Protocol, The X  Font  Service  Protocol,  X
+       Protocols:  X  Window  System  Protocol, The X Font Service Protocol, X
        Display Manager Control Protocol
 
-       Fonts:  bdftopcf(1), mkfontdir(1), mkfontscale(1), xfs(1), xlsfonts(1),
+       Fonts: bdftopcf(1), mkfontdir(1), mkfontscale(1), xfs(1),  xlsfonts(1),
        xfontsel(1), xfd(1), X Logical Font Description Conventions
 
-       Security: Xsecurity(7), xauth(1), Xau(1),  xdm(1),  xhost(1),  xfwp(1),
+       Security:  Xsecurity(7),  xauth(1),  Xau(1), xdm(1), xhost(1), xfwp(1),
        Security Extension Specification
 
        Starting the server: xdm(1), xinit(1)
 
        Controlling the server once started: xset(1), xsetroot(1), xhost(1)
 
-       Server-specific  man  pages: Xorg(1), Xdmx(1), Xnest(1), Xvfb(1), XDar-
+       Server-specific man pages: Xorg(1), Xdmx(1), Xnest(1),  Xvfb(1),  XDar-
        win(1), XWin(1).
 
-       Server internal documentation: Definition of the Porting Layer for  the
+       Server  internal documentation: Definition of the Porting Layer for the
        X v11 Sample Server
 
 AUTHORS
-       The  sample server was originally written by Susan Angebranndt, Raymond
-       Drewry, Philip Karlton, and Todd Newman, from Digital Equipment  Corpo-
-       ration,  with support from a large cast.  It has since been extensively
-       rewritten by Keith Packard and Bob Scheifler, from MIT.   Dave  Wiggins
+       The sample server was originally written by Susan Angebranndt,  Raymond
+       Drewry,  Philip Karlton, and Todd Newman, from Digital Equipment Corpo-
+       ration, with support from a large cast.  It has since been  extensively
+       rewritten  by  Keith Packard and Bob Scheifler, from MIT.  Dave Wiggins
        took over post-R5 and made substantial improvements.
 
 
