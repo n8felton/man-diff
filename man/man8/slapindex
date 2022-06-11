@@ -6,8 +6,8 @@ NAME
        slapindex - SLAPD index to LDIF utility
 
 SYNOPSIS
-       /BinaryCache/OpenLDAP/OpenLDAP-106~5/Root/usr/sbin/slapindex  [-v] [-c]
-       [-g] [-q] [-d  level]  [-b  suffix]  [-n  dbnum]  [-f  slapd.conf]  [-F
+       /BinaryCache/OpenLDAP/OpenLDAP-108.1~2/Root/usr/sbin/slapindex     [-v]
+       [-c] [-g] [-q] [-d level] [-b suffix] [-n dbnum]  [-f  slapd.conf]  [-F
        confdir]
 
 
@@ -66,7 +66,7 @@ LIMITATIONS
 EXAMPLES
        To reindex your SLAPD database, give the command:
 
-            /BinaryCache/OpenLDAP/OpenLDAP-106~5/Root/usr/sbin/slapindex
+            /BinaryCache/OpenLDAP/OpenLDAP-108.1~2/Root/usr/sbin/slapindex
 
 SEE ALSO
        ldap(3), ldif(5), slapadd(8), ldapadd(1), slapd(8)

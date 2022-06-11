@@ -1,0 +1,128 @@
+TRIAL(1)                                                              TRIAL(1)
+
+
+
+NAME
+       trial - run unit tests
+
+SYNOPSIS
+       trial [options] [[file|package|module|TestCase|testmethod]...]
+
+       trial --help
+
+DESCRIPTION
+       trial  loads and executes a suite of unit tests, obtained from modules,
+       packages and files listed on the command line.
+
+       trial will take either filenames or fully  qualified  Python  names  as
+       arguments.  Thus 'trial myproject/foo.py', 'trial myproject.foo' and
+        'trial  myproject.foo.SomeTestCase.test_method'  are all valid ways to
+       invoke trial.
+
+       -b, --debug
+              Run the tests in the  Python  debugger.  Also  does  post-mortem
+              debugging on exceptions.
+
+       -B, --debug-stacktraces
+              Report Deferred creation and callback stack traces
+
+       --coverage
+              Generate coverage information in _trial_temp/coverage/. Requires
+              Python 2.3 or higher.
+
+       --disablegc
+              Disable the garbage collector.  I don't  know  why  this  is  in
+              trial.
+
+       -e, --rterrors
+              Print tracebacks to standard output as soon as they occur
+
+       --force-gc
+              Run  gc.collect()  before  and after each test case. This can be
+              used to isolate errors that occur when  objects  get  collected.
+              This  option  would  be  the  default, except it makes tests run
+              about ten times slower.
+
+       -h, --help
+              Print a usage message to standard output, then exit.
+
+       --help-reporters
+              Print a list of valid reporters to standard output, then exit.
+
+       --help-reactors
+              List the names of possibly available reactors.
+
+       -l, --logfile <logfile>
+              Direct the  log  to  a  different  file.  The  default  file  is
+              'test.log'.  <logfile> is relative to _trial_temp.
+
+       -n, --dry-run
+              Go through all the tests and make them pass without running.
+
+       -N, --no-recurse
+              By default, trial recurses through packages to find every module
+              inside every subpackage.  Unless,  that  is,  you  specify  this
+              option.
+
+       --nopm Don't  automatically jump into debugger for post-mortem analysis
+              of exceptions.  Only usable in conjunction with --debug.
+
+       --profile
+              I don't know what this option does.
+
+       -r, --reactor <reactor>
+              Choose which reactor to use.  See --help-reactors for a list.
+
+       --recursionlimit
+              Set Python's recursion limit.  I  don't  know  why  this  is  in
+              trial.
+
+       --reporter
+              Select  the reporter to use for Trial's output.  Use the --help-
+              reporters option to see a list of valid reporters.
+
+       --spew Print an insanely verbose log of everything that happens. Useful
+              when debugging freezes or locks in complex code.
+
+       --tbformat <format>
+              Format   to  display  tracebacks  with.  Acceptable  values  are
+              'default', 'brief' and 'verbose'.  'brief'  produces  tracebacks
+              that play nicely with Emacs' GUD.
+
+       --temp-directory <directory>
+              WARNING:  Do  not  use this options unless you know what you are
+              doing.  By default, trial creates a directory called _trial_temp
+              under  the current working directory.  When trial runs, it first
+              deletes this directory, then creates it, then changes  into  the
+              directory  to run the tests. The log file and any coverage files
+              are stored here. Use this option if you wish to have  trial  run
+              in  a  directory  other  than _trial_temp. Be warned, trial will
+              delete the directory before re-creating it.
+
+       --testmodule <filename>
+              Ask trial to look into <filename> and run  any  tests  specified
+              using the Emacs-style buffer variable 'test-case-name'.
+
+       -u, --until-failure
+              Keep  looping  the  tests until one of them raises an error or a
+              failure.  This is particularly useful for reproducing  intermit-
+              tent failures.
+
+       -z, --random [<seed>]
+              Run the tests in random order using the specified seed.
+
+
+AUTHOR
+       Written by Jonathan M. Lange
+
+REPORTING BUGS
+       To report a bug, visit http://twistedmatrix.com/bugs/
+
+COPYRIGHT
+       Copyright (C) 2003-2006 Twisted Matrix Laboratories
+       This is free software; see the source for copying conditions.  There is
+       NO warranty; not even for MERCHANTABILITY or FITNESS FOR  A  PARTICULAR
+       PURPOSE.
+
+
+

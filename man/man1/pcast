@@ -27,7 +27,7 @@ SYNOPSIS
      podcast --getconfig
 
      podcast --status camera_name [--update_preview]
-     podcast --start camera_name [--audio_only]
+     podcast --start camera_name [--audio_only] [--delay seconds]
      podcast --stop camera_name --metadata metadata_file_path --workflow
              workflow_name
      podcast --pause camera_name
@@ -138,9 +138,10 @@ CAMERA CONTROL OPERATIONS
                                          era. Optionally, ask for the preview
                                          image to be updated
 
-     --start camera_name [--audio_only]  Start capture on a specific remote
+     --start camera_name [--audio_only [--delay seconds]]
+                                         Start capture on a specific remote
                                          camera. Optionally, start recording
-                                         with audio only mode
+                                         with audio only mode or with delay
 
      --stop camera_name                  Stop capture on a specific remote
                                          camera (requires --workflow and

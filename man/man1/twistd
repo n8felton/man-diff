@@ -1,0 +1,104 @@
+TWISTD(1)                                                            TWISTD(1)
+
+
+
+NAME
+       twistd - run Twisted applications (TACs, TAPs)
+
+SYNOPSIS
+       twistd [options]
+
+DESCRIPTION
+       Read  an twisted.application.service.Application out of a file and runs
+       it.
+
+       -n, --nodaemon
+              Don't daemonize (stay in foreground)
+
+       -q, --quiet
+              be a little more quiet
+
+       -p, --profile
+              Run profiler
+
+       -b, --debug
+              Run the application in the  Python  Debugger  (implies  nodaemon
+              option).   Sending  a SIGUSR2 signal to the process will drop it
+              into the debugger.
+
+       -o, --no_save
+              Do not save shutdown state
+
+       --originalname
+              Behave as though the specified Application has no  process  name
+              set,  and  run with the standard process name (the python binary
+              in most cases).
+
+       -l, --logfile <logfile>
+              Log to a specified file, - for stdout (default twistd.log).  The
+              log file will be rotated on SIGUSR1.
+
+       --pidfile <pidfile>
+              Save pid in specified file (default twistd.pid)
+
+       --chroot <directory>
+              Chroot  to a supplied directory before running (default -- don't
+              chroot).  Chrooting is done before changing the  current  direc-
+              tory.
+
+       -d, --rundir <directory>
+              Change to a supplied directory before running (default .)
+
+       -r, --reactor <reactor>
+              Choose which reactor to use.  See --help-reactors for a list.
+
+       --help-reactors
+              List the names of possibly available reactors.
+
+       --spew Write an extremely verbose log of everything that happens.  Use-
+              ful for debugging freezes or locks in complex code.
+
+       -f, --file <tap file>
+              Read the given .tap file (default twistd.tap)
+
+       -x, --xml <tax file>
+              Load an Application from the given .tax (XML) file.
+
+       -s, --source <tas file>
+              Load an Application from the  given  .tas  (AOT  Python  source)
+              file.
+
+       -y, --python <python file>
+              Use  the variable "application" from the given Python file. This
+              setting, if given, overrides -f.  This option implies --no_save.
+
+       -g, --plugin <plugin name>
+              Read config.tac from a plugin package, as with -y.
+
+       --syslog
+              Log to syslog, not to file.
+
+       --prefix <prefix>
+              Use  the  specified  prefix  when logging to logfile. Default is
+              "twisted".
+
+       Note that if twistd is run  as  root,  the  working  directory  is  not
+       searched for Python modules.
+
+AUTHOR
+       Written by Moshe Zadka, based on twistd's help messages
+
+REPORTING BUGS
+       To report a bug, visit http://twistedmatrix.com/bugs/
+
+COPYRIGHT
+       Copyright (C) 2003 Matthew W. Lefkowitz
+       This is free software; see the source for copying conditions.  There is
+       NO warranty; not even for MERCHANTABILITY or FITNESS FOR  A  PARTICULAR
+       PURPOSE.
+
+SEE ALSO
+       mktap(1)
+
+
+

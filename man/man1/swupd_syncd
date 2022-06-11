@@ -11,11 +11,11 @@ DESCRIPTION
      master server (typically Apple's), then mirrors an administrator-speci-
      fied subset of those updates into the directory /usr/share/swupd/html.
      swupd_syncd is normally invoked by the launchd item com.apple.swup-
-     date.sync, where by default it is configured to check every 12 hours for
-     new updates. Once swupd_syncd has completed a check cycle, it terminates.
+     date.sync, where it is configured to check every 12 hours for new
+     updates. Once swupd_syncd has completed a check cycle, it terminates.
 
-     Settings controlling the operation of the Software Update Service are
-     stored in the file /etc/swupd/swupd.plist
+     Settings controlling the operation of the Software Update Service system
+     are stored in the file /etc/swupd/swupd.plist
 
      Data about packages that should and should not be mirrored is stored in
      the file /etc/swupd/com.apple.server.swupdate.plist

@@ -1,0 +1,185 @@
+slapconfig(8)             BSD System Manager's Manual            slapconfig(8)
+
+NAME
+     slapconfig -- tool to configure slapd and related daemons
+
+SYNOPSIS
+     slapconfig command [command-options] [-q]
+
+DESCRIPTION
+     slapconfig is a utility for configuring slapd, slurpd, and the Directory
+     Services search policy. It must be run by root.
+
+USAGE
+     -q                    suppress prompts.
+
+   Queries
+     -defaultsuffix        Returns the default suffix which is based on the
+                           machine's DNS name, or hostname if DNS is not
+                           available.
+
+     -getauthmechanisms    Returns a list of authentication methods, their
+                           current  states, and whether or not the method
+                           requires a recoverable password to be stored.
+
+     -getclientconfig      Returns whether this machine is an LDAP client, not
+                           a client, or advanced.
+
+     -getldapconfig        Returns the LDAP server settings.
+
+     -getmacosxodpolicy    Returns a property list containing the directory
+                           binding settings.
+
+     -getmasterconfig      Returns the list of replicas and replication inter-
+                           val.
+
+     -getpasswordserveraddress
+                           Returns the IP address of the default password
+                           server.
+
+     -getreplicaconfig     Returns the master address and last update date.
+
+     -getstyle             Returns whether configuration is master, replica,
+                           client, or standalone.
+
+     -help                 Print usage information.
+
+     -ver                  Displays version information.
+
+   Setup
+     -addreplica <replica-address>
+     Adds a replica to the slapd configuration file.
+
+     -changeip <old-ip> <new-ip> [<old-host> <new-host>]
+     Updates configuration records and files to contain the new host informa-
+     tion.  It does not change the IP address in Network preferences.
+
+     -createldapmasterandadmin [--allow_local_realm] <new-admin>
+     <new-fullname> <new-uid> [<search base suffix> [<realm>]]
+     Creates a new master LDAP server. Copies the root account to the new mas-
+     ter domain. Creates a new directory node administrator.
+
+     -createreplica <master IP or name> <admin user>
+     Create a new replica from an existing LDAP master.
+
+     -destroyldapserver
+     Turns off the LDAP server and deletes its database.
+
+     -kerberize [-f] [--allow_local_realm] <admin> [<realm>]
+     Ensures a Kerberos principal for each user in the directory, creating one
+     if necessary. Pass in -f to force kerberization of a server.
+
+     -promotereplica -<admin-user>
+     Converts an existing replica into a master using the current database.
+
+     -removereplica -<replica-address>
+     Removes a replica from the slapd configuration file.
+
+     -setclient
+     Sets NetInfo to use DHCP binding, enables LDAP directory binding with
+     DHCP (Option 95), and sets the search policy to Automatic.
+
+     -setldapconfig [-database <database path>] [-maxresults <maximum search
+     results>] [-searchtimeout timeout] [-ssl on|off] [-sslcert <path to
+     cert>] [-sslkey <path to key>] [-sslcacert <path to CA cert>] [-ssldomain
+     <domain name> | -sslpassphrase]
+     Applies the specified settings and restarts slapd. Settings not specified
+     are unchanged.
+
+     -setstandalone
+     Configures the machine to only use the local directory.
+
+     -setldapdhcp
+     Enables binding to an LDAP server using DHCP option 95.
+
+     -setldapstatic <IP-or-name> [port [SSL|NoSSL [search base]]]
+     Configures to use the specified LDAP server. Requires server based map-
+     pings.
+
+     -setldapnetinfodhcp
+     Enables binding to LDAP and NetInfo using DHCP.
+
+     -setmacosxodpolicy [-binding [disabled|enabled|required]] [-cleartext
+     [blocked|allowed]] [-encrypt [yes|no]] [-sign [yes|no]] [-clientcaching
+     [yes|no]] [-man-in-middle [blocked|allowed]]
+     Sets directory binding options.
+
+     -startldapserver      Configures launchd to run slapd.
+
+     -startreplicator      Configures launchd to run slurpd.
+
+     -stopldapserver       Configures launchd not to run slapd and slurpd.
+
+     -updateaddresses      Merges new interfaces into the list of LDAP repli-
+                           cas.
+
+   Password Server
+     -pwsrekey keysize     Divorces the password server from a replicated sys-
+                           tem and issues a new RSA key. Users in the local
+                           and LDAP directories are migrated to the new key.
+                           Valid key sizes are 1024, 2048, and 3072. There is
+                           a performance penalty when using large keys.
+
+     -setauthmechanisms mech [on|off] [mech [on|off] ...]
+                           Sets the states of authentication methods.
+
+     -settopasswordserver user directory-administrator [user-password
+                           [admin-password]]
+                           Converts a user account to have an Open Directory
+                           authentication type. A new password server slot and
+                           kerberos principal are created. If the user was
+                           previously an Open Directory user, the old slot and
+                           principal are deleted and replaced.
+
+     -startpasswordserver  Sets up a launchd plist file and starts the pass-
+                           word server.
+
+     -startpasswordserver  Sets the launchd plist file to be disabled and
+                           stops the password server.
+
+     -stripsyncdates       Removes the last synchronization dates and transac-
+                           tion ID values from the password server's replica-
+                           tion list, causing all records to replicate.
+
+   Runtime
+     -enableslapdlog       Turns on the LDAP server logging to
+                           /var/log/slapd.log.
+
+     -replicatenow         Initiates replication sessions for LDAP and Pass-
+                           word Server.
+
+   Backup and Restore
+     -backupdb <archive-path>
+     Creates an archive containing the LDAP, Password Server and Kerberos
+     databases.
+
+     -restoredb <archive-path>
+     Restores a directory to the backed-up state.
+
+     -mergedb [-f] <archive-path>
+     Merges a backup archive into an existing directory system. By default, if
+     the Kerberos realm in the archive does not exist on the server, the merge
+     command aborts. The [-f] option can be used to force the merge without
+     the Kerberos principals. To create new Kerberos principals in the
+     server's realm, use the "slapconfig -kerberize" command. The [-f] option
+     can be used to force kerberization, if the OD master is bound to another
+     realm. If the Password Server can supply a plain text password for an
+     account, it will restore the password, otherwise the user is required to
+     change the password at the next login. A Kerberos principal is created
+     for the user when the password is changed, or when the administrator sets
+     it. Although it is not possible to determine whether or not all accounts
+     have recoverable passwords, the current behavior can be determined by
+     using "slapconfig -getauthmechanisms" and checking the status of the
+     "WEBDAV-DIGEST" and "APOP" mechanisms. If either one is enabled, then the
+     Password Server stores recoverable passwords. Otherwise, it does not.
+
+ENVIRONMENT
+     The environment variable SSOUtilDebugLevel can be set to change the ver-
+     bosity of the log.  Valid values are [0-9]. The default value is 1.
+
+FILES
+     /usr/sbin/slapconfig
+
+SEE ALSO
+     DirectoryService(1), slapd(8), slurpd(8)
+

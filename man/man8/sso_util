@@ -86,8 +86,8 @@ DESCRIPTION
               service  Service can be any number of afp, ftp, imap, pop, smtp,
                        ssh, or all
 
-     generateconfig -r REALM -R record_name -f dir_node_path -U user_list -a
-              admin_name [-p password] service
+     generateconfig [-u] -r REALM -R record_name -f dir_node_path -U user_list
+              -a admin_name [-p password] service
               Creates a secure config record and attaches it to a computer
               record in the given directory
 

@@ -22,7 +22,7 @@ DESCRIPTION
 
 
 SEE ALSO
-       libpng(3),zlib(3),deflate(5),andzlib(5)
+       libpng(3), zlib(3), deflate(5), and zlib(5)
 
        PNG specification (second edition), November 2003:
 
@@ -57,7 +57,7 @@ AUTHORS
 
 
 COPYRIGHT NOTICE
-       This  man  page  is Copyright (c) 1998-2004 Glenn Randers-Pehrson.  See
+       This  man  page  is Copyright (c) 1998-2006 Glenn Randers-Pehrson.  See
        png.h for conditions of use and distribution.
 
        The PNG Specification (Second Edition) is Copyright (c) 2003 W3C. (MIT,

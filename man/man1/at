@@ -77,14 +77,12 @@ DESCRIPTION
      If _PERM_PATH/at.allow does not exist, _PERM_PATH/at.deny is checked,
      every username not mentioned in it is then allowed to use at.
 
-     If neither exists, only the superuser is allowed use of at.  This is the
-     default configuration.
+     If neither exists, only the superuser is allowed use of at.
 
 IMPLEMENTATION NOTES
-     Note that at is implemented through the cron(8) daemon by calling
-     atrun(8) every five minutes.  This implies that the granularity of at
-     might not be optimal for every deployment.  If a finer granularity is
-     needed, the system crontab at /etc/crontab needs to be changed.
+     Note that at is implemented through the launchd(8) daemon periodically
+     invoking atrun(8), which is disabled by default.  See atrun(8) for infor-
+     mation about enabling atrun.
 
 OPTIONS
      -b      Is an alias for batch.

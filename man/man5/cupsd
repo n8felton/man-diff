@@ -200,6 +200,11 @@ DIRECTIVES
        DefaultPolicy policy-name
             Specifies the default access policy to use.
 
+       DefaultShared Yes
+
+       DefaultShared No
+            Specifies whether local printers are shared by default.
+
        Deny all
 
        Deny none
@@ -526,7 +531,7 @@ SEE ALSO
        http://localhost:631/help
 
 COPYRIGHT
-       Copyright 2007 by Apple Inc.
+       Copyright 2007-2008 by Apple Inc.
 
 
 
