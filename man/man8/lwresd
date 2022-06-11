@@ -6,9 +6,9 @@ NAME
        lwresd - lightweight resolver daemon
 
 SYNOPSIS
-       lwresd [-C config-file] [-d debug-level] [-f] [-g] [-i pid-file]
-              [-n #cpus] [-P port] [-p port] [-s] [-t directory] [-u user]
-              [-v]
+       lwresd [-c config-file] [-C config-file] [-d debug-level] [-f] [-g]
+              [-i pid-file] [-m flag] [-n #cpus] [-P port] [-p port] [-s]
+              [-t directory] [-u user] [-v] [-4] [-6]
 
 DESCRIPTION
        lwresd is the daemon providing name lookup services to clients that use
@@ -34,9 +34,23 @@ DESCRIPTION
        of root server hints.
 
 OPTIONS
+       -4
+           Use IPv4 only even if the host machine is capable of IPv6.  -4 and
+           -6 are mutually exclusive.
+
+       -6
+           Use IPv6 only even if the host machine is capable of IPv4.  -4 and
+           -6 are mutually exclusive.
+
+       -c config-file
+           Use config-file as the configuration file instead of the default,
+           /etc/lwresd.conf.  <term>-c</term> can not be used with
+           <term>-C</term>.
+
        -C config-file
            Use config-file as the configuration file instead of the default,
-           /etc/resolv.conf.
+           /etc/resolv.conf.  <term>-C</term> can not be used with
+           <term>-c</term>.
 
        -d debug-level
            Set the daemon's debug level to debug-level. Debugging traces from
@@ -47,6 +61,15 @@ OPTIONS
 
        -g
            Run the server in the foreground and force all logging to stderr.
+
+       -i pid-file
+           Use pid-file as the PID file instead of the default,
+           /var/run/lwresd.pid.
+
+       -m flag
+           Turn on memory usage debugging flags. Possible flags are usage,
+           trace, record, size, and mctx. These correspond to the
+           ISC_MEM_DEBUGXXXX flags described in <isc/mem.h>.
 
        -n #cpus
            Create #cpus worker threads to take advantage of multiple CPUs. If
@@ -70,16 +93,16 @@ OPTIONS
                   and may be removed or changed in a future release.
 
        -t directory
-           chroot() to directory after processing the command line arguments,
+           Chroot to directory after processing the command line arguments,
            but before reading the configuration file.
                   Warning: This option should be used in conjunction with the
                   -u option, as chrooting a process running as root doesn't
-                  enhance security on most systems; the way chroot() is
+                  enhance security on most systems; the way chroot(2) is
                   defined allows a process with root privileges to escape a
                   chroot jail.
 
        -u user
-           setuid() to user after completing privileged operations, such as
+           Setuid to user after completing privileged operations, such as
            creating sockets that listen on privileged ports.
 
        -v

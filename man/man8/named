@@ -6,8 +6,9 @@ NAME
        named - Internet domain name server
 
 SYNOPSIS
-       named [-4] [-6] [-c config-file] [-d debug-level] [-f] [-g] [-n #cpus]
-             [-p port] [-s] [-t directory] [-u user] [-v] [-x cache-file]
+       named [-4] [-6] [-c config-file] [-d debug-level] [-f] [-g] [-m flag]
+             [-n #cpus] [-p port] [-s] [-t directory] [-u user] [-v]
+             [-x cache-file]
 
 DESCRIPTION
        named is a Domain Name System (DNS) server, part of the BIND 9
@@ -44,6 +45,11 @@ OPTIONS
        -g
            Run the server in the foreground and force all logging to stderr.
 
+       -m flag
+           Turn on memory usage debugging flags. Possible flags are usage,
+           trace, record, size, and mctx. These correspond to the
+           ISC_MEM_DEBUGXXXX flags described in <isc/mem.h>.
+
        -n #cpus
            Create #cpus worker threads to take advantage of multiple CPUs. If
            not specified, named will try to determine the number of CPUs
@@ -60,24 +66,24 @@ OPTIONS
                   and may be removed or changed in a future release.
 
        -t directory
-           chroot() to directory after processing the command line arguments,
+           Chroot to directory after processing the command line arguments,
            but before reading the configuration file.
                   Warning: This option should be used in conjunction with the
                   -u option, as chrooting a process running as root doesn't
-                  enhance security on most systems; the way chroot() is
+                  enhance security on most systems; the way chroot(2) is
                   defined allows a process with root privileges to escape a
                   chroot jail.
 
        -u user
-           setuid() to user after completing privileged operations, such as
+           Setuid to user after completing privileged operations, such as
            creating sockets that listen on privileged ports.
                   Note: On Linux, named uses the kernel's capability mechanism
-                  to drop all root privileges except the ability to bind() to
+                  to drop all root privileges except the ability to bind(2) to
                   a privileged port and set process resource limits.
                   Unfortunately, this means that the -u option only works when
                   named is run on kernel 2.2.18 or later, or kernel
                   2.3.99-pre3 or later, since previous kernels did not allow
-                  privileges to be retained after setuid().
+                  privileges to be retained after setuid(2).
 
        -v
            Report the version number and exit.
@@ -113,8 +119,9 @@ FILES
            The default process-id file.
 
 SEE ALSO
-       RFC 1033, RFC 1034, RFC 1035, rndc(8), lwresd(8), named.conf(5), BIND 9
-       Administrator Reference Manual.
+       RFC 1033, RFC 1034, RFC 1035, named-checkconf(8), named-checkzone(8),
+       rndc(8), lwresd(8), named.conf(5), BIND 9 Administrator Reference
+       Manual.
 
 AUTHOR
        Internet Systems Consortium

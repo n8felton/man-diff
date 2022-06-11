@@ -1,0 +1,86 @@
+xinput(1)                                                            xinput(1)
+
+
+
+NAME
+       xinput - utility to configure and test XInput devices
+
+
+SYNOPSIS
+       xinput  [version]  [list [device_name]] [set-pointer device_name] [get-
+       feedbacks device_name] [set-mode device_name  ABSOLUTE|RELATIVE]  [set-
+       ptr-feedback  device_name  threshold  num  denom] [set-integer-feedback
+       device_name index value] [set-button-map device_name map button 1  [map
+       button   2   [...]]]    [query-state  device_name]  [test  [-proximity]
+       device_name]
+
+
+DESCRIPTION
+       xinput version
+               test if the XInput extension is available and return  the  ver-
+               sion number of the program.
+
+
+       xinput list [device_name]
+               If  no argument is given list all the input devices showing all
+               their features. If an argument is given, show all  the  feature
+               of device_name.  Uses XListInputDevices(3).
+
+
+       xinput get-feedbacks device_name
+               Display  the  feedbacks  of  device_name. Uses XGetFeedbackCon-
+               trol(3).
+
+
+       xinput set-pointer device_name
+               Switch device_name  in  core  pointer.  Uses  XChangePointerDe-
+               vice(3).
+
+
+       xinput set-mode device_name ABSOLUTE|RELATIVE
+               Change the mode of device_name. Uses XSetDeviceMode(3).
+
+
+       xinput set-ptr-feedback device_name threshold num denom
+               Change  the  acceleration of device_name. Uses XChangeFeedback-
+               Control(3).
+
+
+       xinput set-integer-feedback device_name index value
+               Change the value of an integer feedback  of  device_name.  Uses
+               XChangeFeedbackControl(3).
+
+
+       xinput set-button-map device_name map button 1 [map button 2 [...]]
+               Change  the  button mapping of device_name. Uses XSetDeviceBut-
+               tonMapping(3).
+
+
+       xinput query-state device_name
+               Query the device state. Uses XQueryDeviceState(3).
+
+
+       xinput test [-proximity] device_name
+               Register all extended events from device_name and enter an end-
+               less  loop  displaying  events  received.  If the -proximity is
+               given, ProximityIn and ProximityOut are registered.
+
+       device_name can be the device name as  a  string  or  the  XID  of  the
+       device.
+
+
+
+COPYRIGHT
+       Copyright 1996,1997, Frederic Lepied.
+
+       Copyright 2008, Philip Langdale.
+
+
+AUTHOR
+       Philip Langdale, <philipl@alumni.utexas.net>
+       Frederic Lepied, France <Frederic.Lepied@sugix.frmug.org>
+
+       Patches, bug reports, and suggestions are welcome.
+
+
+

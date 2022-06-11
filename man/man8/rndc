@@ -17,7 +17,7 @@ DESCRIPTION
 
        rndc communicates with the name server over a TCP connection, sending
        commands authenticated with digital signatures. In the current versions
-       of rndc and named named the only supported authentication algorithm is
+       of rndc and named, the only supported authentication algorithm is
        HMAC-MD5, which uses a shared secret on each end of the connection.
        This provides TSIG-style authentication for the command request and the
        name server's response. All commands sent over the channel must be
@@ -45,8 +45,8 @@ OPTIONS
            server is the name or address of the server which matches a server
            statement in the configuration file for rndc. If no server is
            supplied on the command line, the host named by the default-server
-           clause in the option statement of the configuration file will be
-           used.
+           clause in the options statement of the rndc configuration file will
+           be used.
 
        -p port
            Send commands to TCP port port instead of BIND 9's default control
@@ -55,16 +55,16 @@ OPTIONS
        -V
            Enable verbose logging.
 
-       -y keyid
-           Use the key keyid from the configuration file.  keyid must be known
-           by named with the same algorithm and secret string in order for
-           control message validation to succeed. If no keyid is specified,
-           rndc will first look for a key clause in the server statement of
-           the server being used, or if no server statement is present for
-           that host, then the default-key clause of the options statement.
-           Note that the configuration file contains shared secrets which are
-           used to send authenticated control commands to name servers. It
-           should therefore not have general read or write access.
+       -y key_id
+           Use the key key_id from the configuration file.  key_id must be
+           known by named with the same algorithm and secret string in order
+           for control message validation to succeed. If no key_id is
+           specified, rndc will first look for a key clause in the server
+           statement of the server being used, or if no server statement is
+           present for that host, then the default-key clause of the options
+           statement. Note that the configuration file contains shared secrets
+           which are used to send authenticated control commands to name
+           servers. It should therefore not have general read or write access.
 
        For the complete set of commands supported by rndc, see the BIND 9
        Administrator Reference Manual or run rndc without arguments to see its
@@ -79,7 +79,7 @@ LIMITATIONS
        Several error messages could be clearer.
 
 SEE ALSO
-       rndc.conf(5), named(8), named.conf(5) ndc(8), BIND 9 Administrator
+       rndc.conf(5), named(8), named.conf(5), ndc(8), BIND 9 Administrator
        Reference Manual.
 
 AUTHOR

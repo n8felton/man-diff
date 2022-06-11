@@ -1,0 +1,80 @@
+Clam Daemon(8)                  Clam AntiVirus                  Clam Daemon(8)
+
+
+
+NAME
+       clamd - an anti-virus daemon
+
+SYNOPSIS
+       clamd [options]
+
+DESCRIPTION
+       The  daemon  listens for incoming connections on Unix and/or TCP socket
+       and scans files or directories on demand. It  reads  the  configuration
+       from /private/etc/clamd.conf
+
+COMMANDS
+       clamd recognizes the following commands:
+
+
+       PING   Check the server's state. It should reply with "PONG".
+
+       VERSION
+              Print program and database versions.
+
+       RELOAD Reload the virus databases.
+
+       SHUTDOWN
+              Perform a clean exit.
+
+       SCAN file/directory
+              Scan  a  file  or a directory (recursively) with archive support
+              enabled  (if  not  disabled  in  clamd.conf).  A  full  path  is
+              required.
+
+       CONTSCAN file/directory
+              Scan  file  or  directory  (recursively)  with  archive  support
+              enabled and don't stop the scanning when a virus is found.
+
+       MULTISCAN file/directory
+              Scan file in a standard  way  or  scan  directory  (recursively)
+              using  multiple  threads  (to  make  the  scanning faster on SMP
+              machines).
+
+       STREAM Scan stream - on this command clamd will  return  "PORT  number"
+              you should connect to and send data to scan.
+
+       SESSION, END
+              Start/end  a  clamd session which will allow you to run multiple
+              commands per TCP session. It's recommended to prefix clamd  com-
+              mands with the letter n (eg. nSCAN) to indicate that the command
+              will be delimited by a newline character and that  clamd  should
+              continue  reading command data until a newline is read. The new-
+              line delimiter assures that the complete command and its  entire
+              argument will be processed as a single command.
+
+OPTIONS
+       -h, --help
+              Output help information and exit.
+
+       -V, --version
+              Print the version number and exit.
+
+       -c FILE, --config-file=FILE
+              Read configuration from FILE.
+
+FILES
+       /private/etc/clamd.conf
+
+CREDITS
+       Please check the full documentation for credits.
+
+AUTHOR
+       Tomasz Kojm <tkojm@clamav.net>
+
+SEE ALSO
+       clamd.conf(5),  clamdscan(1),  clamscan(1),  freshclam(1),  sigtool(1),
+       clamav-milter(8)
+
+
+

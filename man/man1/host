@@ -64,7 +64,7 @@ DESCRIPTION
        option clears the RD -- recursion desired -- bit in the query which
        host makes. This should mean that the name server receiving the query
        will not attempt to resolve name. The -r option enables host to mimic
-       the behaviour of a name server by making non-recursive queries and
+       the behavior of a name server by making non-recursive queries and
        expecting to receive answers to those queries that are usually
        referrals to other name servers.
 
@@ -77,7 +77,7 @@ DESCRIPTION
        option forces host to only use IPv6 query transport.
 
        The -t option is used to select the query type.  type can be any
-       recognised query type: CNAME, NS, SOA, SIG, KEY, AXFR, etc. When no
+       recognized query type: CNAME, NS, SOA, SIG, KEY, AXFR, etc. When no
        query type is specified, host automatically selects an appropriate
        query type. By default it looks for A records, but if the -C option was
        given, queries will be made for SOA records, and if name is a
@@ -95,7 +95,7 @@ DESCRIPTION
 
        The -s option tells host not to send the query to the next nameserver
        if any server responds with a SERVFAIL response, which is the reverse
-       of normal stub resolver behaviour.
+       of normal stub resolver behavior.
 
        The -m can be used to set the memory usage debugging flags record,
        usage and trace.

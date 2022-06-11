@@ -1,0 +1,287 @@
+clamscan(1)                     Clam AntiVirus                     clamscan(1)
+
+
+
+NAME
+       clamscan - scan files and directories for viruses
+
+SYNOPSIS
+       clamscan [options] [file/directory/-]
+
+DESCRIPTION
+       clamscan is a command line anti-virus scanner.
+
+OPTIONS
+       -h, --help
+              Print help information and exit.
+
+       -V, --version
+              Print version number and exit.
+
+       -v, --verbose
+              Be verbose.
+
+       --debug
+              Display debug messages from libclamav.
+
+       --quiet
+              Be quiet (only print error messages).
+
+       --stdout
+              Write all messages (except for libclamav output) to the standard
+              output (stdout).
+
+       -d FILE/DIR, --database=FILE/DIR
+              Load virus database from FILE or load all virus  database  files
+              from DIR.
+
+       -l FILE, --log=FILE
+              Save scan report to FILE.
+
+       --tempdir=DIRECTORY
+              Create  temporary files in DIRECTORY. Directory must be writable
+              for the '_clamav' user or unprivileged user running clamscan.
+
+       --leave-temps
+              Do not remove temporary files.
+
+       -r, --recursive
+              Scan directories recursively.  All  the  subdirectories  in  the
+              given directory will be scanned.
+
+       --bell Sound bell on virus detection.
+
+       --no-summary
+              Do not display summary at the end of scanning.
+
+       --exclude=PATT, --exclude-dir=PATT
+              Don't  scan file/directory names containing PATT. It may be used
+              multiple times.
+
+       --include=PATT, --include-dir=PATT
+              Only scan file/directory names containing PATT. It may  be  used
+              multiple times.
+
+       -i, --infected
+              Only print infected files.
+
+       --remove
+              Remove infected files. Be careful.
+
+       --move=DIRECTORY
+              Move  infected  files into DIRECTORY. Directory must be writable
+              for the '_clamav' user or unprivileged user running clamscan.
+
+       --copy=DIRECTORY
+              Copy infected files into DIRECTORY. Directory must  be  writable
+              for the '_clamav' user or unprivileged user running clamscan.
+
+       --detect-pua
+              Detect Possibly Unwanted Applications.
+
+       --no-mail
+              Disable scanning of mail files.
+
+       --no-phishing-sigs
+              Disable signature-based phishing detection.
+
+       --no-phishing-scan-urls
+              Disable  url-based  heuristic  phishing detection. This disables
+              Phishing.Heuristics.Email.*
+
+       --no-phishing-restrictedscan
+              Enable url-based heuristic phishing detection  for  all  domains
+              (might lead to false positives!).
+
+       --phishing-ssl
+              Always  block  SSL mismatches in URLs (might lead to false posi-
+              tives!).
+
+       --phishing-cloak
+              Always block cloaked URLs (might lead to some false  positives).
+
+       --no-algorithmic
+              In  some  cases (eg. complex malware, exploits in graphic files,
+              and others), ClamAV uses special algorithms to provide  accurate
+              detection. This option disables the algorithmic detection.
+
+       --no-pe
+              PE stands for Portable Executable - it's an executable file for-
+              mat used in all 32-bit versions of Windows operating systems. By
+              default  ClamAV performs deeper analysis of executable files and
+              attempts to decompress popular executable packers such  as  UPX,
+              Petite,  and  FSG. This option disables PE support and should be
+              used with care!
+
+       --no-elf
+              Executable and Linking Format is a standard format for UN*X exe-
+              cutables. This option disables ELF support.
+
+       --no-ole2
+              Disable support for Microsoft Office documents and .msi files.
+
+       --no-pdf
+              Disable scanning within PDF files.
+
+       --no-html
+              Disable support for HTML detection and normalisation.
+
+       --no-archive
+              Disable archive support built in libclamav.
+
+       --detect-broken
+              Mark broken executables as viruses (Broken.Executable).
+
+       --block-encrypted
+              Mark    encrypted    archives    as    viruses   (Encrypted.Zip,
+              Encrypted.RAR).
+
+       --mail-follow-urls
+              If an email contains URLs ClamAV can  download  and  scan  them.
+              WARNING: This option may open your system to a DoS attack. Never
+              use it on loaded servers.
+
+       --max-files=#n
+              Extract at most #n files from each scanned file (when this is an
+              archive,  a  document or another kind of container). This option
+              protects your system against DoS attacks (default: 10000)
+
+       --max-filesize=#n
+              Extract and scan at most #n kilobytes from each archive. You may
+              pass  the  value  in  megabytes in format xM or xm, where x is a
+              number. This option protects your  system  against  DoS  attacks
+              (default: 25 MB)
+
+       --max-scansize=#n
+              Extract  and  scan  at most #n kilobytes from each scanned file.
+              You may pass the value in megabytes in format xM or xm, where  x
+              is  a  number.  This  option  protects  your  system against DoS
+              attacks (default: 100 MB)
+
+       --max-recursion=#n
+              Set archive recursion level limit.  This  option  protects  your
+              system against DoS attacks (default: 16).
+
+       --max-dir-recursion=#n
+              Maximum depth directories are scanned at (default: 15).
+
+       --unzip[=FULLPATH]
+              In  most  cases  you don't need this option - the built-in unar-
+              chiver will extract Zip archives. Howvere, this  option  may  be
+              used as a backup for internal unpacker - see the full documenta-
+              tion for more information. When  enabled  without  an  argument,
+              unzip  program  will  be  searched  in $PATH. If unzip cannot be
+              found in $PATH, you must force it with =pathname. Remember about
+              '=' between the option and the argument.
+
+       --unrar[=FULLPATH]
+              Scan .rar files. In most cases the unpacker built into libclamav
+              is enough.
+
+       --arj[=FULLPATH]
+              Scan .arj files.
+
+       --unzoo[=FULLPATH]
+              Scan .zoo files.
+
+       --lha[=FULLPATH]
+              Scan .lzh files.
+
+       --jar[=FULLPATH]
+              clamscan uses unzip for .jar files, so in  some  cases  you  may
+              need  to  pass  a full path to unzip. In most cases the unpacker
+              built into libclamav is enough.
+
+       --deb[=FULLPATH]
+              This option supports debian binary packages. Implies --tgz,  but
+              doesn't conflict with --tgz=FULLPATH. It requires ar utility.
+
+       --tar[=FULLPATH]
+              This  option supports non-compressed tar archives. In most cases
+              the unpacker built into libclamav is enough.
+
+       --tgz[=FULLPATH]
+              This option supports tar.gz and .tgz files. You need GNU tar, on
+              non-Linux system you probably have it installed as gtar. If it's
+              in $PATH, please use --tgz=gtar in other case please pass a full
+              path. In most cases the unpacker built into libclamav is enough.
+
+EXAMPLES
+       (0) Scan a single file:
+
+              clamscan file
+
+       (1) Scan a current working directory:
+
+              clamscan
+
+       (2) Scan all files (and subdirectories) in /home:
+
+              clamscan -r /home
+
+       (3) Load database from a file and limit disk usage to 50 MB:
+
+              clamscan -d /tmp/newclamdb --max-space=50m -r /tmp
+
+       (4) Scan a data stream:
+
+              cat testfile | clamscan -
+
+       (5) Scan a mail spool directory:
+
+              clamscan -r /var/spool/mail
+
+RETURN CODES
+       Note: some return codes may only appear in a  single  file  mode  (when
+       clamscan  is  started  with  a  single argument). Those are marked with
+       (ofm).
+
+       0 : No virus found.
+
+       1 : Virus(es) found.
+
+       40: Unknown option passed.
+
+       50: Database initialization error.
+
+       52: Not supported file type.
+
+       53: Can't open directory.
+
+       54: Can't open file. (ofm)
+
+       55: Error reading file. (ofm)
+
+       56: Can't stat input file / directory.
+
+       57: Can't get absolute path name of current working directory.
+
+       58: I/O error, please check your file system.
+
+       59: Can't get information about current user from /etc/passwd.
+
+       60: Can't get information about user '_clamav' from /etc/passwd.
+
+       61: Can't fork.
+
+       62: Can't initialize logger.
+
+       63: Can't create temporary files/directories (check permissions).
+
+       64: Can't write to temporary directory (please specify another one).
+
+       70: Can't allocate memory (calloc).
+
+       71: Can't allocate memory (malloc).
+
+CREDITS
+       Please check the full documentation for credits.
+
+AUTHOR
+       Tomasz Kojm <tkojm@clamav.net>
+
+SEE ALSO
+       clamdscan(1), freshclam(1)
+
+
+

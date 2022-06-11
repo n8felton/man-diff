@@ -1,0 +1,167 @@
+freshclam.conf(5)               Clam AntiVirus               freshclam.conf(5)
+
+
+
+NAME
+       freshclam.conf  - Configuration file for Clam AntiVirus database update
+       tool
+
+DESCRIPTION
+       The file freshclam.conf configures the Clam AntiVirus Database Updater,
+       freshclam(1).
+
+FILE FORMAT
+       The  file  consists  of  comments and options with arguments. Each line
+       which starts with a hash (#) symbol is ignored by the  parser.  Options
+       and  arguments  are case sensitive and of the form Option Argument. The
+       arguments are of the following types:
+
+       BOOL   Boolean value (yes/no or true/false or 1/0).
+
+       STRING String without blank characters.
+
+       SIZE   Size in bytes. You can use 'M' or 'm'  modifiers  for  megabytes
+              and 'K' or 'k' for kilobytes.
+
+       NUMBER Unsigned integer.
+
+DIRECTIVES
+       When  an  option is not used (hashed or doesn't exist in the configura-
+       tion file) freshclam takes a default action.
+
+       Example
+              If this option is set freshclam will not run.
+
+       DatabaseOwner STRING
+              When started by root, drop privileges to a specified user.
+              Default: _clamav
+
+       AllowSupplementaryGroups BOOL
+              Initialize supplementary group access (freshclam must be started
+              by root).
+              Default: disabled
+
+       DatabaseDirectory STRING
+              Path to a directory containing database files.
+              Default: /private/var/clamav
+
+       Checks NUMBER
+              Number of database checks per day.
+              Default: 12
+
+       UpdateLogFile STRING
+              Enable logging to a specified file. Highly recommended.
+              Default: disabled.
+
+       LogSyslog BOOL
+              Enable  logging  to  Syslog.  May  be  used  in combination with
+              UpdateLogFile.
+              Default: disabled.
+
+       LogFacility STRING
+              Specify the type of syslog messages - please refer to 'man  sys-
+              log' for facility names.
+              Default: LOG_LOCAL6
+
+       PidFile STRING
+              This  option  allows  you  to save the process identifier of the
+              daemon to a file specified in the argument.
+              Default: disabled
+
+       LogVerbose BOOL
+              Enable verbose logging.
+              Default: disabled
+
+       DNSDatabaseInfo STRING
+              This directive enables  database  and  software  version  checks
+              through DNS TXT records.
+              Default: enabled, pointing to current.cvd.clamav.net
+
+       DatabaseMirror STRING
+              Server name where database updates are downloaded from. In order
+              to download the database from the closest mirror you should con-
+              figure  freshclam  to  use  db.xy.clamav.net where xy represents
+              your country code. If  this  option  is  given  multiple  times,
+              freshclam(1) tries them in the order given. It's strongly recom-
+              mended that you use db.xy.clamav.net as  the  first  mirror  and
+              database.clamav.net as the second.
+              Default: database.clamav.net
+
+       MaxAttempts NUMBER
+              How many attempts (per mirror) to make before giving up.
+              Default: 3 (per mirror)
+
+       ScriptedUpdates BOOL
+              With  this  option you can control scripted updates. It's highly
+              recommended to keep it enabled.
+              Default: enabled
+
+       CompressLocalDatabase BOOL
+              By default freshclam will keep the local databases (.cld) uncom-
+              pressed  to make their handling faster. With this option you can
+              enable the compression; the change will  take  effect  with  the
+              next database update.
+              Default: no
+
+       HTTPProxyServer STR, HTTPProxyPort NUMBER
+              Use given proxy server and TCP port for database downloads.
+
+       HTTPProxyUsername STR,HTTPProxyPassword STRING
+              Proxy  usage  is  authenticated through given username and pass-
+              word.
+              Default: no proxy authentication
+
+       HTTPUserAgent STRING
+              If your servers are behind a firewall/proxy which applies  User-
+              Agent  filtering,  you can use this option to force the use of a
+              different User-Agent header.
+              Default: clamav/version_number
+
+       LocalIPAddress IP
+              Use IP as client address for downloading databases.  Useful  for
+              multi homed systems.
+              Default: Use OS'es default outgoing IP address.
+
+       NotifyClamd STRING
+              Notify  a  running clamd(8) to reload its database after a down-
+              load has occurred. The path for clamd.conf  file  must  be  pro-
+              vided.
+              Default: The default is to not notify clamd. See clamd.conf(5)'s
+              option SelfCheck for how clamd(8) handles  database  updates  in
+              this case.
+
+       OnUpdateExecute STRING
+              Execute  this  command  after the database has been successfully
+              updated.
+              Default: disabled
+
+       OnOutdatedExecute STRING
+              Execute this command when freshclam reports outdated version. In
+              the  command  string %v will be replaced by the new version num-
+              ber.
+              Default: disabled
+
+       OnErrorExecute STRING
+              Execute this command after a database update has failed.
+              Default: disabled
+
+       ConnectTimeout NUMBER
+              Timeout in seconds when connecting to database server.
+              Default: 10
+
+       ReceiveTimeout NUMBER
+              Timeout in seconds when reading from database server.
+              Default: 30
+
+FILES
+       /private/etc/freshclam.conf
+
+AUTHOR
+       Thomas Lamy <thomas.lamy@netwake.de>, Tomasz Kojm <tkojm@clamav.net>
+
+SEE ALSO
+       freshclam(1), clamd.conf(5), clamd(8), clamav-milter(8), clamscan(1)
+
+
+
+

@@ -6,8 +6,8 @@ NAME
        slaptest - Check the suitability of the slapd.conf file.
 
 SYNOPSIS
-       /BinaryCache/OpenLDAP/OpenLDAP-108.1~2/Root/usr/sbin/slaptest       [-d
-       level] [-f slapd.conf] [-F confdir] [-u] [-v]
+       /BinaryCache/OpenLDAP/OpenLDAP-110~5/Root/usr/sbin/slaptest  [-d level]
+       [-f slapd.conf] [-F confdir] [-u] [-v]
 
 
 DESCRIPTION
@@ -42,7 +42,7 @@ OPTIONS
 EXAMPLES
        To check a slapd.conf(5) give the command:
 
-            /BinaryCache/OpenLDAP/OpenLDAP-108.1~2/Root/usr/sbin/slaptest -f //etc/openldap/slapd.conf -v
+            /BinaryCache/OpenLDAP/OpenLDAP-110~5/Root/usr/sbin/slaptest -f //etc/openldap/slapd.conf -v
 
 SEE ALSO
        ldap(3), slapd(8) slapdn(8)

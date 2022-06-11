@@ -37,7 +37,7 @@ DESCRIPTION
        HMAC-MD5, which is defined in RFC 2104. Once other algorithms are
        defined for TSIG, applications will need to ensure they select the
        appropriate algorithm as well as the key when authenticating each
-       other. For instance suitable key and server statements would be added
+       other. For instance, suitable key and server statements would be added
        to /etc/named.conf so that the name server can associate the
        appropriate secret key and algorithm with the IP address of the client
        application that will be using TSIG authentication. SIG(0) uses public
@@ -67,16 +67,16 @@ DESCRIPTION
        will be used. The -v option makes nsupdate use a TCP connection. This
        may be preferable when a batch of update requests is made.
 
-       The -t option sets the maximum time a update request can take before it
-       is aborted. The default is 300 seconds. Zero can be used to disable the
-       timeout.
+       The -t option sets the maximum time an update request can take before
+       it is aborted. The default is 300 seconds. Zero can be used to disable
+       the timeout.
 
        The -u option sets the UDP retry interval. The default is 3 seconds. If
-       zero the interval will be computed from the timeout interval and number
-       of UDP retries.
+       zero, the interval will be computed from the timeout interval and
+       number of UDP retries.
 
-       The -r option sets the number of UDP retries. The default is 3. If zero
-       only one update request will be made.
+       The -r option sets the number of UDP retries. The default is 3. If
+       zero, only one update request will be made.
 
 INPUT FORMAT
        nsupdate reads input from filename or standard input. Each command is
@@ -119,11 +119,11 @@ INPUT FORMAT
            correct zone to update based on the rest of the input.
 
        class {classname}
-           Specify the default class. If no class is specified the default
+           Specify the default class. If no class is specified, the default
            class is IN.
 
        key {name} {secret}
-           Specifies that all updates are to be TSIG signed using the keyname
+           Specifies that all updates are to be TSIG-signed using the keyname
            keysecret pair. The key command overrides any key specified on the
            command line via -y or -k.
 
@@ -188,9 +188,9 @@ EXAMPLES
            > send
 
 
-       Any A records for oldhost.example.com are deleted. and an A record for
-       newhost.example.com it IP address 172.16.1.1 is added. The newly-added
-       record has a 1 day TTL (86400 seconds)
+       Any A records for oldhost.example.com are deleted. And an A record for
+       newhost.example.com with IP address 172.16.1.1 is added. The
+       newly-added record has a 1 day TTL (86400 seconds).
 
            # nsupdate
            > prereq nxdomain nickname.example.com

@@ -4,7 +4,7 @@ NAME
      ssh-add -- adds RSA or DSA identities to the authentication agent
 
 SYNOPSIS
-     ssh-add [-cDdLlXx] [-t life] [file ...]
+     ssh-add [-cDdLlXxKk] [-t life] [file ...]
      ssh-add -s reader
      ssh-add -e reader
 
@@ -30,8 +30,12 @@ DESCRIPTION
 
      -D      Deletes all identities from the agent.
 
-     -d      Instead of adding the identity, removes the identity from the
-             agent.
+     -d      Instead of adding identities, removes identities from the agent.
+             If ssh-add has been run without arguments, the keys for the
+             default identities will be removed.  Otherwise, the argument list
+             will be interpreted as a list of paths to public key files and
+             matching keys will be removed from the agent.  If no public key
+             is found at a given path, ssh-add will append .pub and retry.
 
      -e reader
              Remove key in smartcard reader.

@@ -1,0 +1,44 @@
+FC-CAT(1)                                                            FC-CAT(1)
+
+
+
+NAME
+       fc-cat - read font information cache files
+
+SYNOPSIS
+       fc-cat [ -rvV? ] [ --recurse ] [ --verbose ] [ --version ] [ --help ] [
+       fonts-cache-2-files ] [ dirs ]
+
+
+DESCRIPTION
+       fc-cat reads the font information from cache files or related  to  font
+       directories and emits it in ASCII form.
+
+OPTIONS
+       This  program  follows  the  usual  GNU  command line syntax, with long
+       options starting with two  dashes  (`-').   A  summary  of  options  is
+       included below.
+
+       -r --recurse
+              Recurse into subdirectories.
+
+       -v --verbose
+              Be verbose.
+
+       -? --help
+              Show summary of options.
+
+       -V --version
+              Show version of the program and exit.
+
+SEE ALSO
+       fc-cache (1).
+
+       The  fontconfig  user's  guide, in HTML format: /usr/share/doc/fontcon-
+       fig/fontconfig-user.html.
+
+AUTHOR
+       This manual page was written by Patrick Lam <plam@mit.edu>.
+
+
+

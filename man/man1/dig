@@ -25,7 +25,7 @@ DESCRIPTION
        Although dig is normally used with command-line arguments, it also has
        a batch mode of operation for reading lookup requests from a file. A
        brief summary of its command-line arguments and options is printed when
-       the -h option is given. Unlike earlier versions, the BIND9
+       the -h option is given. Unlike earlier versions, the BIND 9
        implementation of dig allows multiple lookups to be issued from the
        command line.
 
@@ -76,12 +76,12 @@ OPTIONS
 
        The default query class (IN for internet) is overridden by the -c
        option.  class is any valid class, such as HS for Hesiod records or CH
-       for CHAOSNET records.
+       for Chaosnet records.
 
        The -f option makes dig operate in batch mode by reading a list of
        lookup requests to process from the file filename. The file contains a
        number of queries, one per line. Each entry in the file should be
-       organised in the same way they would be presented as queries to dig
+       organized in the same way they would be presented as queries to dig
        using the command-line interface.
 
        If a non-standard port number is to be queried, the -p option is used.
@@ -94,18 +94,18 @@ OPTIONS
        option forces dig to only use IPv6 query transport.
 
        The -t option sets the query type to type. It can be any valid query
-       type which is supported in BIND9. The default query type "A", unless
-       the -x option is supplied to indicate a reverse lookup. A zone transfer
-       can be requested by specifying a type of AXFR. When an incremental zone
-       transfer (IXFR) is required, type is set to ixfr=N. The incremental
-       zone transfer will contain the changes made to the zone since the
-       serial number in the zone's SOA record was N.
+       type which is supported in BIND 9. The default query type is "A",
+       unless the -x option is supplied to indicate a reverse lookup. A zone
+       transfer can be requested by specifying a type of AXFR. When an
+       incremental zone transfer (IXFR) is required, type is set to ixfr=N.
+       The incremental zone transfer will contain the changes made to the zone
+       since the serial number in the zone's SOA record was N.
 
-       The -q option sets the query name to name. This useful do distingish
+       The -q option sets the query name to name. This useful do distinguish
        the name from other arguments.
 
-       Reverse lookups - mapping addresses to names - are simplified by the -x
-       option.  addr is an IPv4 address in dotted-decimal notation, or a
+       Reverse lookups -- mapping addresses to names -- are simplified by the
+       -x option.  addr is an IPv4 address in dotted-decimal notation, or a
        colon-delimited IPv6 address. When this option is used, there is no
        need to provide the name, class and type arguments.  dig automatically
        performs a lookup for a name like 11.12.13.10.in-addr.arpa and sets the
@@ -143,7 +143,7 @@ QUERY OPTIONS
 
        +[no]tcp
            Use [do not use] TCP when querying name servers. The default
-           behaviour is to use UDP unless an AXFR or IXFR query is requested,
+           behavior is to use UDP unless an AXFR or IXFR query is requested,
            in which case a TCP connection is used.
 
        +[no]vc
@@ -213,7 +213,7 @@ QUERY OPTIONS
            lookup.
 
        +[no]cmd
-           toggles the printing of the initial comment in the output
+           Toggles the printing of the initial comment in the output
            identifying the version of dig and the query options that have been
            applied. This comment is printed by default.
 
@@ -234,7 +234,7 @@ QUERY OPTIONS
        +[no]stats
            This query option toggles the printing of statistics: when the
            query was made, the size of the reply and so on. The default
-           behaviour is to print the query statistics.
+           behavior is to print the query statistics.
 
        +[no]qr
            Print [do not print] the query as it is sent. By default, the query
@@ -261,9 +261,9 @@ QUERY OPTIONS
            Set or clear all display flags.
 
        +time=T
-           Sets the timeout for a query to T seconds. The default time out is
-           5 seconds. An attempt to set T to less than 1 will result in a
-           query timeout of 1 second being applied.
+           Sets the timeout for a query to T seconds. The default timeout is 5
+           seconds. An attempt to set T to less than 1 will result in a query
+           timeout of 1 second being applied.
 
        +tries=T
            Sets the number of times to try UDP queries to server to T instead
@@ -303,7 +303,7 @@ QUERY OPTIONS
        +[no]fail
            Do not try the next server if you receive a SERVFAIL. The default
            is to not try the next server which is the reverse of normal stub
-           resolver behaviour.
+           resolver behavior.
 
        +[no]besteffort
            Attempt to display the contents of messages which are malformed.
@@ -327,7 +327,7 @@ QUERY OPTIONS
            Requires dig be compiled with -DDIG_SIGCHASE.
 
        +[no]topdown
-           When chasing DNSSEC signature chains perform a top down validation.
+           When chasing DNSSEC signature chains perform a top-down validation.
            Requires dig be compiled with -DDIG_SIGCHASE.
 
 MULTIPLE QUERIES

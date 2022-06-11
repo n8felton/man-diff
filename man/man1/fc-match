@@ -1,0 +1,51 @@
+FC-MATCH(1)                                                        FC-MATCH(1)
+
+
+
+NAME
+       fc-match - match available fonts
+
+SYNOPSIS
+       fc-match  [ -svV? ] [ --sort ] [ --verbose ] [ --version ] [ --help ] [
+       font-pattern ]
+
+
+DESCRIPTION
+       fc-match matches font-pattern (empty pattern by default) using the nor-
+       mal  fontconfig  matching  rules  to  find the best font available.  If
+       --sort is given, the sorted list of best matching fonts  is  displayed.
+       With  --verbose, the whole font pattern for each match is printed, oth-
+       erwise only the file, family and style are printed..
+
+OPTIONS
+       This program follows the usual  GNU  command  line  syntax,  with  long
+       options  starting  with  two  dashes  (`-').   A  summary of options is
+       included below.
+
+       -v --verbose
+              Print whole font pattern for each match.
+
+       -? --help
+              Show summary of options.
+
+       -V --version
+              Show version of the program and exit.
+
+       -s --sort
+              Displays sorted list of best matching fonts.
+
+       font-pattern
+              Displays fonts matching  font-pattern  (uses  empty  pattern  by
+              default).
+
+SEE ALSO
+       fc-list (1).
+
+       The  fontconfig  user's  guide, in HTML format: /usr/share/doc/fontcon-
+       fig/fontconfig-user.html.
+
+AUTHOR
+       This manual page was updated by Patrick Lam <plam@csail.mit.edu>.
+
+
+

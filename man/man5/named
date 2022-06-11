@@ -193,6 +193,7 @@ OPTIONS
                 allow-update { address_match_element; ... };
                 allow-update-forwarding { address_match_element; ... };
                 update-check-ksk boolean;
+                masterfile-format ( text | raw );
                 notify notifytype;
                 notify-source ( ipv4_address | * ) [ port ( integer | * ) ];
                 notify-source-v6 ( ipv6_address | * ) [ port ( integer | * ) ];
@@ -322,6 +323,7 @@ VIEW
                 allow-update { address_match_element; ... };
                 allow-update-forwarding { address_match_element; ... };
                 update-check-ksk boolean;
+                masterfile-format ( text | raw );
                 notify notifytype;
                 notify-source ( ipv4_address | * ) [ port ( integer | * ) ];
                 notify-source-v6 ( ipv6_address | * ) [ port ( integer | * ) ];
@@ -394,6 +396,7 @@ ZONE
                      rrtypelist; ...
                 };
                 update-check-ksk boolean;
+                masterfile-format ( text | raw );
                 notify notifytype;
                 notify-source ( ipv4_address | * ) [ port ( integer | * ) ];
                 notify-source-v6 ( ipv6_address | * ) [ port ( integer | * ) ];
@@ -438,7 +441,8 @@ FILES
        /etc/named.conf
 
 SEE ALSO
-       named(8), rndc(8), BIND 9 Administrator Reference Manual().
+       named(8), named-checkconf(8), rndc(8), BIND 9 Administrator Reference
+       Manual.
 
 COPYRIGHT
        Copyright (C) 2004-2007 Internet Systems Consortium, Inc. ("ISC")

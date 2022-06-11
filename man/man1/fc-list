@@ -1,0 +1,60 @@
+FC-LIST(1)                                                          FC-LIST(1)
+
+
+
+NAME
+       fc-list - list available fonts
+
+SYNOPSIS
+       fc-list  [  -vV? ] [ --verbose ] [ --version ] [ --help ] [ pattern ] [
+       element ]
+
+
+DESCRIPTION
+       fc-list lists fonts and styles available on the system for applications
+       using fontconfig.
+
+OPTIONS
+       This  program  follows  the  usual  GNU  command line syntax, with long
+       options starting with two  dashes  (`-').   A  summary  of  options  is
+       included below.
+
+       -v --verbose
+              Display status information while busy.
+
+       -? --help
+              Show summary of options.
+
+       -V --version
+              Show version of the program and exit.
+
+       pattern
+              If  this  argument  is set, only fonts matching pattern are dis-
+              played.
+
+       element
+              If set, the element property is displayed for matching fonts.
+
+EXAMPLES
+       fc-list
+              Lists all font faces.
+
+       fc-list :lang=hi
+              Lists font faces that cover Hindi.
+
+       fc-list : family style file spacing
+              Lists the filename and spacing value for each font face.   ``:''
+              is an empty pattern that matches all fonts.
+
+SEE ALSO
+       fc-cache (1).
+
+       The  fontconfig  user's  guide, in HTML format: /usr/share/doc/fontcon-
+       fig/fontconfig-user.html.
+
+AUTHOR
+       This manual page was written by Keith Packard  <keithp@keithp.com>  and
+       Josselin Mouette <joss@debian.org>.
+
+
+

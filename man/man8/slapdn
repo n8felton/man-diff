@@ -6,7 +6,7 @@ NAME
        slapdn - Check a list of string-represented DNs based on schema syntax.
 
 SYNOPSIS
-       /BinaryCache/OpenLDAP/OpenLDAP-108.1~2/Root/usr/sbin/slapdn  [-v]   [-d
+       /BinaryCache/OpenLDAP/OpenLDAP-110~5/Root/usr/sbin/slapdn   [-v]    [-d
        level] [-f slapd.conf] [-F confdir] [-N | -P] DN [...]
 
 
@@ -44,7 +44,7 @@ OPTIONS
 EXAMPLES
        To check a DN give the command:
 
-            /BinaryCache/OpenLDAP/OpenLDAP-108.1~2/Root/usr/sbin/slapdn -f //etc/openldap/slapd.conf -v DN
+            /BinaryCache/OpenLDAP/OpenLDAP-110~5/Root/usr/sbin/slapdn -f //etc/openldap/slapd.conf -v DN
 
 SEE ALSO
        ldap(3), slapd(8) slaptest(8)

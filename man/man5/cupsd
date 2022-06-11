@@ -266,9 +266,9 @@ DIRECTIVES
        HideImplicitMembers No
             Specifies whether to hide members of implicit classes.
 
-       HostNameLookups Yes
+       HostNameLookups On
 
-       HostNameLookups No
+       HostNameLookups Off
 
        HostNameLookups Double
             Specifies  whether  or  not  to  do  reverse  lookups  on   client

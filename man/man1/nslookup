@@ -103,16 +103,14 @@ INTERACTIVE COMMANDS
                        (Default = IN; abbreviation = cl)
 
                 [no]debug
-                   Turn debugging mode on. A lot more information is printed
-                   about the packet sent to the server and the resulting
-                   answer.
+                   Turn on or off the display of the full response packet and
+                   any intermediate response packets when searching.
 
                    (Default = nodebug; abbreviation = [no]deb)
 
                 [no]d2
-                   Turn debugging mode on. A lot more information is printed
-                   about the packet sent to the server and the resulting
-                   answer.
+                   Turn debugging mode on or off. This displays more about
+                   what nslookup is doing.
 
                    (Default = nod2)
 

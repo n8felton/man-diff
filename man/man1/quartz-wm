@@ -25,21 +25,28 @@ OPTIONS
                if quartz-wm were running.
 
 CUSTOMIZATION
-       quartz-wm  can  be customized using the defaults(1) command. The avail-
-       able options are:
+       quartz-wm  can  be customized using the defaults(1) command.  quartz-wm
+       can be forced to re-read these preferences by sending it a SIGHUP using
+       kill(1).  The available options are:
 
-       defaults write com.apple.x11 wm_ffm -bool true
-               Enables focus-follows-mouse mode. Windows belonging  to  the  X
-               server  may then be focused by moving the pointer over them, as
+       defaults write org.x.X11 wm_ffm -bool true
+               Enables  focus-follows-mouse  mode.  Windows belonging to the X
+               server may then be focused by moving the pointer over them,  as
                well as the default mode of clicking in them.
 
-       defaults write com.apple.x11 wm_click_through -bool true
-               Disables the default behavior of  swallowing  window-activating
+       defaults write org.x.X11 wm_click_through -bool true
+               Disables  the  default behavior of swallowing window-activating
                mouse events.
 
-       defaults write com.apple.x11 wm_limit_size -bool false
-               Prevents  the  size of each window being limited to the size of
-               the current head.
+       defaults write org.x.X11 wm_limit_size -bool true
+               Limit the size of each window to the size of the current  head.
+
+       defaults write org.x.x11 wm_focus_on_new_window -bool false
+               Don't  tell X11.app to take focus when a new X11 window is cre-
+               ated.
+
+       defaults write org.x.X11 wm_window_shading -bool true
+               Enables double clicking on a titlebar to shade the window
 
 ENVIRONMENT VARIABLES
        DISPLAY This variable is used to determine which X server to use.

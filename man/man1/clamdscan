@@ -1,0 +1,83 @@
+Clamd client(1)                 Clam AntiVirus                 Clamd client(1)
+
+
+
+NAME
+       clamdscan - scan files and directories for viruses using Clam AntiVirus
+       Daemon
+
+SYNOPSIS
+       clamdscan [options] [file/directory]
+
+DESCRIPTION
+       clamdscan is a simple clamd client which may  be  used  as  a  clamscan
+       replacement.  It  accepts  all  the options implemented in clamscan but
+       most of them will be ignored because its scanning abilities only depend
+       on clamd.
+
+OPTIONS
+       -h, --help
+              Display help information and exit.
+
+       -V, --version
+              Print version number and exit.
+
+       -v, --verbose
+              Be verbose.
+
+       --quiet
+              Be quiet - only output error messages.
+
+       --stdout
+              Write all messages (except for libclamav output) to the standard
+              output (stdout).
+
+       --config-file=FILE
+              Read clamd settings from FILE.
+
+       -l FILE, --log=FILE
+              Save the scan report to FILE.
+
+       -m, --multiscan
+              Always use MULTISCAN instead of CONTSCAN.
+
+       --remove
+              Remove infected files. Be careful.
+
+       --move=DIRECTORY
+              Move infected files into DIRECTORY.
+
+       --no-summary
+              Do not display summary at the end of scanning.
+
+EXAMPLES
+       (0) To scan a one file:
+
+              clamdscan file
+
+       (1) To scan a current working directory:
+
+              clamdscan
+
+       (2) To scan all files in /home:
+
+              clamdscan /home
+
+RETURN CODES
+       0 : No virus found.
+
+       1 : Virus(es) found.
+
+       2 : An error occured.
+
+CREDITS
+       Please check the full documentation for credits.
+
+AUTHOR
+       Tomasz Kojm <tkojm@clamav.net>
+
+SEE ALSO
+       clamd(8), clamd.conf(5), clamscan(1), freshclam(1)
+
+
+

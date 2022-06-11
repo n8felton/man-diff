@@ -27,7 +27,7 @@ DESCRIPTION
        the zone contents to a specified file in a specified format.
        Additionally, it applies stricter check levels by default, since the
        dump output will be used as an actual zone file loaded by named. When
-       manaully specified otherwise, the check levels must at least be as
+       manually specified otherwise, the check levels must at least be as
        strict as those specified in the named configuration file.
 
 OPTIONS
@@ -47,7 +47,7 @@ OPTIONS
            Specify the class of the zone. If not specified "IN" is assumed.
 
        -i mode
-           Perform post load zone integrity checks. Possible modes are "full"
+           Perform post-load zone integrity checks. Possible modes are "full"
            (default), "full-sibling", "local", "local-sibling" and "none".
 
            Mode "full" checks that MX records refer to A or AAAA record (both
@@ -60,10 +60,10 @@ OPTIONS
 
            Mode "full" checks that delegation NS records refer to A or AAAA
            record (both in-zone and out-of-zone hostnames). It also checks
-           that glue addresses records in the zone match those advertised by
-           the child. Mode "local" only checks NS records which refer to
-           in-zone hostnames or that some required glue exists, that is when
-           the nameserver is in a child zone.
+           that glue address records in the zone match those advertised by the
+           child. Mode "local" only checks NS records which refer to in-zone
+           hostnames or that some required glue exists, that is when the
+           nameserver is in a child zone.
 
            Mode "full-sibling" and "local-sibling" disable sibling glue checks
            but are otherwise the same as "full" and "local" respectively.
@@ -117,7 +117,7 @@ OPTIONS
            "warn" (default) and "ignore".
 
        -t directory
-           chroot to directory so that include directives in the configuration
+           Chroot to directory so that include directives in the configuration
            file are processed as if run by a similarly chrooted named.
 
        -w directory
@@ -146,7 +146,8 @@ RETURN VALUES
        0 otherwise.
 
 SEE ALSO
-       named(8), RFC 1035, BIND 9 Administrator Reference Manual.
+       named(8), named-checkconf(8), RFC 1035, BIND 9 Administrator Reference
+       Manual.
 
 AUTHOR
        Internet Systems Consortium

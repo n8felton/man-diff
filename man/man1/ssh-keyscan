@@ -50,7 +50,7 @@ DESCRIPTION
              The possible values are ``rsa1'' for protocol version 1 and
              ``rsa'' or ``dsa'' for protocol version 2.  Multiple values may
              be specified by separating them with commas.  The default is
-             ``rsa1''.
+             ``rsa''.
 
      -v      Verbose mode.  Causes ssh-keyscan to print debugging messages
              about its progress.

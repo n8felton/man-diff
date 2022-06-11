@@ -14,14 +14,14 @@ DESCRIPTION
 
 OPTIONS
        -t directory
-           chroot to directory so that include directives in the configuration
+           Chroot to directory so that include directives in the configuration
            file are processed as if run by a similarly chrooted named.
 
        -v
            Print the version of the named-checkconf program and exit.
 
        -z
-           Perform a check load the master zonefiles found in named.conf.
+           Perform a test load of all master zones found in named.conf.
 
        -j
            When loading a zonefile read the journal if it exists.
@@ -35,7 +35,7 @@ RETURN VALUES
        0 otherwise.
 
 SEE ALSO
-       named(8), BIND 9 Administrator Reference Manual.
+       named(8), named-checkzone(8), BIND 9 Administrator Reference Manual.
 
 AUTHOR
        Internet Systems Consortium

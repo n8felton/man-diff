@@ -45,21 +45,17 @@ CONFIGURATION OPTIONS
             Sets  a  standard  System  V interface script or PPD file from the
             model directory.
 
-       -o name=value
-            Sets a PPD or server option for the printer. PPD  options  can  be
-            listed using the -l option with the lpoptions(1) command.
-
        -o job-k-limit=value
             Sets the kilobyte limit for per-user quotas. The value is an inte-
             ger number of kilobytes; one kilobyte is 1024 bytes.
 
        -o job-page-limit=value
-            Sets the page limit for per-user quotas. The value is the  integer
-            number  of  pages  that  can  be  printed;  double-sided pages are
+            Sets  the page limit for per-user quotas. The value is the integer
+            number of pages  that  can  be  printed;  double-sided  pages  are
             counted as two pages.
 
        -o job-quota-period=value
-            Sets the accounting period for per-user quotas. The  value  is  an
+            Sets  the  accounting  period for per-user quotas. The value is an
             integer number of seconds; 86,400 seconds are in one day.
 
        -o job-sheets-default=banner
@@ -67,30 +63,40 @@ CONFIGURATION OPTIONS
        -o job-sheets-default=banner,banner
             Sets the default banner page(s) to use for print jobs.
 
+       -o name=value
+            Sets a PPD option for the printer. PPD options can be listed using
+            the -l option with the lpoptions(1) command.
+
+       -o name-default=value
+            Sets  a default server-side option for the printer. Any print-time
+            option can be defaulted,  e.g.  "-o  cpi-default=17"  to  set  the
+            default "cpi" option value to 17.
+
        -o port-monitor=name
             Sets  the  binary  communications  program  to  use when printing,
-            "none", "bcp", or "tbcp". The default program is "none".
+            "none", "bcp", or "tbcp". The default program is "none". The spec-
+            ified port monitor must be listed in the printer's PPD file.
 
        -o printer-error-policy=name
-            Sets the error policy to be  used  when  the  printer  backend  is
-            unable  to  send  the  job to the printer. The name must be one of
+            Sets  the  error  policy  to  be  used when the printer backend is
+            unable to send the job to the printer. The name  must  be  one  of
             "abort-job", "retry-job" or "stop-printer". The default error pol-
             icy is "stop-printer".
 
        -o printer-is-shared=true/false
-            Sets  the  printer  to  shared/published  or unshared/unpublished.
-            Shared/published printers are publically announced by  the  server
-            on  the  LAN  based  on  the browsing configuration in cupsd.conf,
+            Sets the  printer  to  shared/published  or  unshared/unpublished.
+            Shared/published  printers  are publically announced by the server
+            on the LAN based on  the  browsing  configuration  in  cupsd.conf,
             while unshared/unpublished printers are not announced. The default
             value is "true".
 
        -o printer-op-policy=name
-            Sets  the  IPP  operation  policy associated with the printer. The
-            name must be defined in the cupsd.conf in a Policy  section.   The
+            Sets the IPP operation policy associated  with  the  printer.  The
+            name  must  be defined in the cupsd.conf in a Policy section.  The
             default operation policy is "default".
 
        -r class
-            Removes  the  named  printer  from  class.  If the resulting class
+            Removes the named printer from  class.   If  the  resulting  class
             becomes empty it is removed.
 
        -u allow:user,user,@group
@@ -100,13 +106,13 @@ CONFIGURATION OPTIONS
        -u allow:all
 
        -u deny:none
-            Sets user-level access control on a printer. Names  starting  with
-            "@"  are  interpreted  as  UNIX  groups. The latter two forms turn
+            Sets  user-level  access control on a printer. Names starting with
+            "@" are interpreted as UNIX groups.  The  latter  two  forms  turn
             user-level access control off.
 
        -v "device-uri"
             Sets the device-uri attribute of the printer queue.  If device-uri
-            is   a   filename  it  is  automatically  converted  to  the  form
+            is  a  filename  it  is  automatically  converted  to   the   form
             file:///file/name. Use the lpinfo(8) command to get a list of sup-
             ported device URIs and schemes.
 
@@ -114,27 +120,27 @@ CONFIGURATION OPTIONS
             Provides a textual description of the printer.
 
        -E
-            Enables  the printer and accepts jobs; this is the same as running
+            Enables the printer and accepts jobs; this is the same as  running
             the accept(8) and cupsenable(8) programs on the printer.
 
        -L "location"
             Provides a textual location of the printer.
 
        -P ppd-file
-            Specifies a PostScript Printer Description file to  use  with  the
+            Specifies  a  PostScript  Printer Description file to use with the
             printer. If specified, this option overrides the -i option (inter-
             face script).
 
 COMPATIBILITY
-       Unlike the System V printing system, CUPS allows printer names to  con-
-       tain  any  printable  character  except SPACE, TAB, "/", or "#".  Also,
+       Unlike  the System V printing system, CUPS allows printer names to con-
+       tain any printable character except SPACE, TAB,  "/",  or  "#".   Also,
        printer and class names are not case-sensitive.  Finally, the CUPS ver-
-       sion  of  lpadmin  may ask the user for an access password depending on
-       the printing system configuration. This differs from the System V  ver-
+       sion of lpadmin may ask the user for an access  password  depending  on
+       the  printing system configuration. This differs from the System V ver-
        sion which requires the root user to execute this command.
 
 LIMITATIONS
-       The  CUPS  version  of  lpadmin does not support all of the System V or
+       The CUPS version of lpadmin does not support all of  the  System  V  or
        Solaris printing system configuration options.
 
 SEE ALSO
@@ -142,7 +148,7 @@ SEE ALSO
        http://localhost:631/help
 
 COPYRIGHT
-       Copyright 2007 by Apple Inc.
+       Copyright 2007-2008 by Apple Inc.
 
 
 

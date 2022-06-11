@@ -12,7 +12,7 @@ SYNOPSIS
 
 DESCRIPTION
        dnssec-keygen generates keys for DNSSEC (Secure DNS), as defined in RFC
-       2535 and RFC <TBA\>. It can also generate keys for use with TSIG
+       2535 and RFC 4034. It can also generate keys for use with TSIG
        (Transaction Signatures), as defined in RFC 2845.
 
 OPTIONS
@@ -100,18 +100,18 @@ GENERATED KEYS
 
        o   iiiii is the key identifier (or footprint).
 
-       dnssec-keygen creates two file, with names based on the printed string.
-       Knnnn.+aaa+iiiii.key contains the public key, and
+       dnssec-keygen creates two files, with names based on the printed
+       string.  Knnnn.+aaa+iiiii.key contains the public key, and
        Knnnn.+aaa+iiiii.private contains the private key.
 
        The .key file contains a DNS KEY record that can be inserted into a
        zone file (directly or with a $INCLUDE statement).
 
-       The .private file contains algorithm specific fields. For obvious
+       The .private file contains algorithm-specific fields. For obvious
        security reasons, this file does not have general read permission.
 
        Both .key and .private files are generated for symmetric encryption
-       algorithm such as HMAC-MD5, even though the public and private key are
+       algorithms such as HMAC-MD5, even though the public and private key are
        equivalent.
 
 EXAMPLE
@@ -125,7 +125,7 @@ EXAMPLE
        Kexample.com.+003+26160
 
        In this example, dnssec-keygen creates the files
-       Kexample.com.+003+26160.key and Kexample.com.+003+26160.private
+       Kexample.com.+003+26160.key and Kexample.com.+003+26160.private.
 
 SEE ALSO
        dnssec-signzone(8), BIND 9 Administrator Reference Manual, RFC 2535,

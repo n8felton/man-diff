@@ -1,0 +1,148 @@
+freshclam(1)                    Clam AntiVirus                    freshclam(1)
+
+
+
+NAME
+       freshclam - update virus databases
+
+SYNOPSIS
+       freshclam [options]
+
+DESCRIPTION
+       freshclam is a virus database update tool for ClamAV.
+
+OPTIONS
+       Freshclam reads its configuration from freshclam.conf. The settings can
+       be overwritten with command line options.
+
+       -h, --help
+              Output help information and exit.
+
+       -V, --version
+              Print version number and exit.
+
+       -v, --verbose
+              Be verbose. This option causes freshclam  to  print  many  addi-
+              tional informations.
+
+       --quiet
+              Be quiet - output only error messages.
+
+       --no-warnings
+              Don't print and log warnings.
+
+       --stdout
+              Write all messages to stdout.
+
+       -l FILE, --log=FILE
+              Write download report to FILE.
+
+       --datadir=DIRECTORY
+              Install  new  database  in  DIRECTORY.  The  directory  must  be
+              writable for the '_clamav' user  or  unprivileged  user  running
+              freshclam.
+
+       -u USER, --user USER
+              Run  as  USER. By default (when started by root) freshclam drops
+              privileges and operates as the '_clamav' user.
+
+       -d, --daemon
+              Run in a daemon mode. This option requires --checks.   -p  FILE,
+              --pid=FILE Write daemon's pid to FILE.
+
+       --no-dns
+              This  option  forces  old non-DNS verification method (without a
+              TTL delay).
+
+       -c #n, --checks=#n
+              Check #n times per day for a new database. #n must be between  1
+              and 50.
+
+       --daemon-notify=/path/to/clamd.conf
+              Notify  the daemon about the new database. By default it reads a
+              hardcoded config file but you can  use  a  different  one.  Both
+              local and TCP sockets are supported.
+
+       -a IP, --local-address=IP
+              Use  (local)  IP for HTTP downloads. Useful for multi-homed sys-
+              tems. If binding fails for whatever reason, a warning is  issued
+              and freshclam behaves like without this flag.
+
+       --on-error-execute=COMMAND
+              Execute COMMAND if error occurred. Remember, that virus database
+              freshness is the most important thing in anti-virus system. With
+              this  option  freshclam  can alert you (eg. send SMS) when some-
+              thing is going wrong.
+
+       --on-update-execute=COMMAND
+              Execute COMMAND after successful update.
+
+       --on-outdated-execute=COMMAND
+              Execute COMMAND when freshclam reports outdated version. In  the
+              command string %v will be replaced by the new version number.
+
+       --list-mirrors
+              Pring mirror details from mirrors.dat (cache file for the mirror
+              manager).
+
+EXAMPLES
+       (0) Download database to default directory:
+
+              freshclam
+
+       (1) Download database to current directory:
+
+              freshclam --datadir=.
+
+       (2) Run as a daemon and check 2 times per day for new database:
+
+              freshclam -d -c 2
+
+RETURN CODES
+       0 : Database successfully updated.
+
+       1 : Database is up-to-date.
+
+       40: Unknown option passed.
+
+       50: Can't change directory.
+
+       51: Can't check MD5 sum.
+
+       52: Connection (network) problem.
+
+       53: Can't unlink file.
+
+       54: MD5 or digital signature verification error.
+
+       55: Error reading file.
+
+       56: Config file error.
+
+       57: Can't create new file.
+
+       58: Can't read database from remote server.
+
+       59: Mirrors are not fully synchronized (try again later).
+
+       60: Can't get information about '_clamav' user from /etc/passwd.
+
+       61: Can't drop privileges.
+
+       62: Can't initialize logger.
+
+FILES
+       /private/etc/freshclam.conf
+
+CREDITS
+       Please check the full documentation for credits.
+
+AUTHOR
+       Tomasz Kojm <tkojm@clamav.net>
+
+SEE ALSO
+       clamd(8), clamdscan(1), clamscan(1), sigtool(1), clamd.conf(5), clamav-
+       milter(8)
+
+
+

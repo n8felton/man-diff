@@ -1,0 +1,96 @@
+sigtool(1)                      Clam AntiVirus                      sigtool(1)
+
+
+
+NAME
+       sigtool - signature and database management tool
+
+SYNOPSIS
+       sigtool [options]
+
+DESCRIPTION
+       sigtool  can be used to generate MD5 checksums, convert data into hexa-
+       decimal format, list virus signatures and build/unpack/test/verify  CVD
+       databases and update scripts.
+
+OPTIONS
+       -h, --help
+              Output help information and exit.
+
+       -V, --version
+              Print version number and exit.
+
+       --quiet
+              Be quiet - output only error messages.
+
+       --stdout
+              Write all messages to stdout.
+
+       --hex-dump
+              Read data from stdin and write hex string to stdout.
+
+       --md5 [FILES]
+              Generate MD5 checksum from stdin or MD5 sigs for FILES.
+
+       --mdb [FILES]
+              Generate .mdb signatures for FILES.
+
+       --html-normalise=FILE
+              Create  normalised  HTML files comment.html, nocomment.html, and
+              script.html in current working directory.
+
+       --utf16-decode=FILE
+              Decode UTF16 encoded data.
+
+       --vba=FILE
+              Extract VBA/Word6 macros from given MS Office document.
+
+       --vba-hex=FILE
+              Extract Word6 macros from given MS Office document  and  display
+              the corresponding hex values.
+
+       -i, --info
+              Print  a CVD information and verify MD5 and a digital signature.
+
+       -b, --build
+              Build a CVD file. -s, --server is required.
+
+       --server
+              ClamAV Signing Service address (for virus  database  maintainers
+              only).
+
+       --unpack FILE, -u FILE
+              Unpack FILE (CVD) to a current directory.
+
+       --unpack-current
+              Unpack a local CVD file (main or daily) to current directory.
+
+       --diff=OLD NEW, -d OLD NEW
+              Create a diff file for OLD and NEW CVDs/INCDIRs.
+
+       --run-cdiff=FILE, -r FILE
+              Execute update script FILE in current directory.
+
+       --verify-cdiff=FILE, -r FILE
+              Verify DIFF against CVD/INCDIR.
+
+       -l, --list-sigs
+              List signature names.
+
+EXAMPLES
+       Generate hex string from testfile and save it to testfile.hex:
+
+              cat testfile | sigtool --hex-dump > testfile.hex
+
+CREDITS
+       Please check the full documentation for credits.
+
+AUTHOR
+       Tomasz Kojm <tkojm@clamav.net>
+
+SEE ALSO
+       clamd(8),  clamdscan(1), clamscan(1), freshclam(1), clamd.conf(5), cla-
+       mav-milter(8)
+
+
+
