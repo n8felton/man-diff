@@ -1,0 +1,663 @@
+DUMPKEYMAP(1)                                                    DUMPKEYMAP(1)
+
+
+
+NAME
+       dumpkeymap - Dianostic dump of a .keymapping file
+
+SYNOPSIS
+       dumpkeymap [options] [-] [file...]
+
+DESCRIPTION
+       dumpkeymap  prints a textual representation of each Apple/NeXT .keymap-
+       ping file mentioned on the command-line.  If no files are mentioned and
+       if  the  local  machine  is an Apple or NeXT installation, then the key
+       mapping currently in use by the WindowServer and the AppKit is  printed
+       instead.
+
+OPTIONS
+       -h --help
+              Display general program instructions and option summary.
+
+       -k --help-keymapping
+              Display  a  detailed  description  of  the  internal layout of a
+              .keymapping file.  This is the same  information  as  that  pre-
+              sented  in the Key Mapping Description section of this document.
+
+       -o --help-output
+              Display an explanation of the  output  generated  by  dumpkeymap
+              when  dissecting  a .keymapping file.  This is the same informa-
+              tion as that presented in the Output Description section of this
+              document.
+
+       -f --help-files
+              Display a summary of the various files and directories which are
+              related to key mappings.  This is the same information  as  that
+              presented in the Files section of this document.
+
+       -d --help-diagnostics
+              Display  a  list of the various diagnostic messages which may be
+              emitted by dumpkeymap.  This is the  same  information  as  that
+              presented in the Diagnostics section of this document.
+
+       -v --version
+              Display  the dumpkeymap version number and warranty information.
+
+       - --   Inhibit processing of options at  this  point  in  the  argument
+              list.   An occurrence of `-' or `--' in the argument list causes
+              all following arguments to be treated as file names even  if  an
+              argument begins with a `-' character.
+
+KEY MAPPING DESCRIPTION
+       The  following  sections  describe, in complete detail, the format of a
+       raw key mapping resource, as well as the format of the .keymapping file
+       which encapsulates one or more raw mappings.
+
+Types and Data
+       The following type definitions are employed throughout this discussion:
+
+              typedef unsigned char byte;
+              typedef unsigned short word;
+              typedef unsigned long dword;
+
+       Additionally, the type definition `number' is used generically to indi-
+       cate  a numeric value.  The actual size of the `number' type may be one
+       or two bytes depending upon how the data is  stored  in  the  key  map.
+       Although most key maps use byte-sized numeric values, word-sized values
+       are also allowed.
+
+       Multi-byte values in a key mapping file are stored in  big-endian  byte
+       order.
+
+Key Mapping File and Device Mapping
+       A  key  mapping  file  begins  with a magic-number and continues with a
+       variable number of device-specific key mappings.
+
+              struct KeyMappingFile {
+                  char magic_number[4];    // `KYM1'
+                  DeviceMapping maps[...]; // Variable number of maps
+              };
+
+              struct DeviceMapping {
+                  dword interface;  // Interface type
+                  dword handler_id; // Interface subtype
+                  dword map_size;   // Byte count of `map' (below)
+                  KeyMapping map;
+              };
+
+       The value of `interface' represents a family of keyboard  device  types
+       (such as Intel PC, ADB, NeXT, Sun Type5, etc.), and is generally speci-
+       fied  as  one  of  the  constant  values   NX_EVS_DEVICE_INTERFACE_ADB,
+       NX_EVS_DEVICE_INTERFACE_ACE,  etc.,  which  are  are  defined in IOHID-
+       Types.h on MacOS/X and Darwin, and in  ev_types.h  on  MacOS/X  Server,
+       OpenStep, and NextStep.
+
+       The  value of `handler_id' represents a specific keyboard layout within
+       the much broader `interface' family.  For instance, for a 101-key Intel
+       PC  keyboard  (of type NX_EVS_DEVICE_INTERFACE_ACE) the `handler_id' is
+       '0', whereas for a 102-key keyboard it is `1'.
+
+       Together, `interface' and  `handler_id'  identify  the  exact  keyboard
+       hardware  to  which  this  mapping  applies.   Programs which display a
+       visual representation of a keyboard layout, match `interface' and `han-
+       dler_id'  from  the  .keymapping file against the `interface' and `han-
+       dler_id' values found in each .keyboard file.
+
+Key Mapping
+       A key mapping completely defines the relationship  of  all  scan  codes
+       with  their associated functionality.  A KeyMapping structure is embed-
+       ded within the DeviceMapping structure in a  KeyMappingFile.   The  key
+       mapping  currently in use by the WindowServer and AppKit is also repre-
+       sented by a KeyMapping structure, and can be referred  to  directly  by
+       calling  NXGetKeyMapping()  and  accessing the `mapping' data member of
+       the returned NXKeyMapping structure.
+
+              struct KeyMapping {
+                  word number_size;           // 0=1 byte, non-zero=2 bytes
+                  number num_modifier_groups; // Modifier groups
+                  ModifierGroup modifier_groups[...];
+                  number num_scan_codes;      // Scan groups
+                  ScanGroup scan_table[...];
+                  number num_sequence_lists;  // Sequence lists
+                  Sequence sequence_lists[...];
+                  number num_special_keys;    // Special keys
+                  SpecialKey special_key[...];
+              };
+
+       The `number_size' flag determines the size, in bytes, of all  remaining
+       numeric values (denoted by the type definition `number') within the key
+       mapping.  If its value is zero, then numbers are represented by a  sin-
+       gle  byte.   If  it is non-zero, then numbers are represented by a word
+       (two bytes).
+
+Modifier Group
+       A modifier group defines all scan codes which map to a particular  type
+       of modifier, such as shift, control, etc.
+
+              enum Modifier {
+                  ALPHALOCK = 0,
+                  SHIFT,
+                  CONTROL,
+                  ALTERNATE,
+                  COMMAND,
+                  KEYPAD,
+                  HELP
+              };
+
+              struct ModifierGroup {
+                  number modifier;        // A Modifier constant
+                  number num_scan_codes;
+                  number scan_codes[...]; // Variable number of scan codes
+              };
+
+       The  scan_codes[]  array contains a list of all scan codes which map to
+       the specified modifier.  The shift, command,  and  alternate  modifiers
+       are  frequently mapped to two different scan codes, apiece, since these
+       modifiers often appear on both the left and right  sides  of  the  key-
+       board.
+
+Scan Group
+       There  is  one ScanGroup for each scan code generated by the given key-
+       board.  This number is given by KeyMapping::num_scan_codes.  The  first
+       scan  group represents hardware scan code 0, the second represents scan
+       code 1, etc.
+
+              enum ModifierMask {
+                  ALPHALOCK_MASK       = 1 << 0,
+                  SHIFT_MASK           = 1 << 1,
+                  CONTROL_MASK         = 1 << 2,
+                  ALTERNATE_MASK       = 1 << 3,
+                  CARRIAGE_RETURN_MASK = 1 << 4
+              };
+              #define NOT_BOUND 0xff
+
+              struct ScanGroup {
+                  number mask;
+                  Character characters[...];
+              };
+
+       For each scan code, `mask' defines which modifier combinations generate
+       characters.   If  `mask'  is  NOT_BOUND (0xff) then then this scan code
+       does not generate any characters ever, and its  characters[]  array  is
+       zero  length.  Otherwise, the characters[] array contains one Character
+       record for each modifier combination.
+
+       The number of records in characters[] is determined by computing (1  <<
+       bits_set_in_mask).  In other words, if mask is zero, then zero bits are
+       set,  so  characters[]  contains  only  one  record.   If   `mask'   is
+       (SHIFT_MASK  |  CONTROL_MASK),  then  two bits are set, so characters[]
+       contains four records.
+
+       The first record always represents the character which is generated  by
+       that key when no modifiers are active.  The remaining records represent
+       characters generated by the various modifier combinations.   Using  the
+       example  with  the shift and control masks set, record two would repre-
+       sent the character with the shift modifier active;  record  three,  the
+       control  modifier  active;  and record four, both the shift and control
+       modifiers active.
+
+       As a special  case,  ALPHALOCK_MASK  implies  SHIFT_MASK,  though  only
+       ALPHALOCK_MASK  appears  in `mask'.  In this case the same character is
+       generated for both the shift and alpha-lock modifiers, but  only  needs
+       to appear once in the characters[] array.
+
+       CARRIAGE_RETURN_MASK  does  not  actually  refer  to  a  modifier  key.
+       Instead, it is used to distinguish the scan code  which  is  given  the
+       special  pseudo-designation  of  carriage  return key.  Typically, this
+       mask appears solo in a ScanGroup record  and  only  the  two  Character
+       records  for control-M and control-C follow.  This flag may be a throw-
+       back to an earlier time or may be specially  interpreted  by  the  low-
+       level keyboard driver, but its purpose is otherwise enigmatic.
+
+Character
+       Each  Character  record indicates the character generated when this key
+       is pressed, as well as the character set which contains the  character.
+       Well  known character sets are `ASCII' and `Symbol'.  The character set
+       can also be one of the meta values FUNCTION_KEY or KEY_SEQUENCE.  If it
+       is  FUNCTION_KEY  then  `char_code'  represents  a generally well-known
+       function key such as those enumerated by FunctionKey.  If the character
+       set  is  KEY_SEQUENCE  then `char_code' represents is a zero-base index
+       into KeyMapping::sequence_lists[].
+
+              enum CharacterSet {
+                  ASCII        = 0x00,
+                  SYMBOL       = 0x01,
+                  ...
+                  FUNCTION_KEY = 0xfe,
+                  KEY_SEQUENCE = 0xff
+              };
+
+              struct Character {
+                  number set;       // CharacterSet of generated character
+                  number char_code; // Actual character generated
+              };
+
+              enum FunctionKey {
+                  F1 = 0x20, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12,
+                  INSERT, DELETE, HOME, END, PAGE_UP, PAGE_DOWN, PRINT_SCREEN,
+                  SCROLL_LOCK, PAUSE, SYS_REQUEST, BREAK, RESET, STOP, MENU,
+                  USER, SYSTEM, PRINT, CLEAR_LINE, CLEAR_DISPLAY, INSERT_LINE,
+                  DELETE_LINE, INSERT_CHAR, DELETE_CHAR, PREV, NEXT, SELECT
+              };
+
+Sequence
+       When Character::set contains the meta value KEY_SEQUENCE, the scan code
+       is  bound  to  a  sequence  of  keys rather than a single character.  A
+       sequence is a series of modifiers and characters  which  are  automati-
+       cally generated when the associated key is depressed.
+
+              #define MODIFIER_KEY 0xff
+
+              struct Sequence {
+                  number num_chars;
+                  Character characters[...];
+              };
+
+       Each  generated  Character is represented as previously described, with
+       the exception that MODIFIER_KEY may appear in  place  of  KEY_SEQUENCE.
+       When   the   value  of  Character::set  is  MODIFIER_KEY  then  Charac-
+       ter::char_code represents a modifier key rather than an actual  charac-
+       ter.   If  the modifier represented by `char_code' is non-zero, then it
+       indicates that the associated modifier key has been depressed.  In this
+       case,  the value is one of the constants enumerated by Modifier (SHIFT,
+       CONTROL, ALTERNATE, etc.).  If the value is zero then it means that the
+       modifier keys have been released.
+
+Special Key
+       A  special  key  is  one  which  is scanned directly by the Mach kernel
+       rather than by the WindowServer.  In general, events are not  generated
+       for special keys.
+
+              enum SpecialKeyType {
+                  VOLUME_UP = 0,
+                  VOLUME_DOWN,
+                  BRIGHTNESS_UP,
+                  BRIGHTNESS_DOWN,
+                  ALPHA_LOCK,
+                  HELP,
+                  POWER,
+                  SECONDARY_ARROW_UP,
+                  SECONDARY_ARROW_DOWN
+              };
+
+              struct SpecialKey {
+                  number type;      // A SpecialKeyType constant
+                  number scan_code; // Actual scan code
+              };
+
+OUTPUT
+       What follows is an explanation and description of the various pieces of
+       information emitted by dumpkeymap.
+
+       For a more thorough discussion of any particular piece  of  information
+       described  here, refer to the detailed description of the internal lay-
+       out of a key mapping provided by the Key  Mapping  Description  section
+       above.
+
+Conventions
+       Depending  upon  context,  some numeric values are displayed in decimal
+       notation, whereas others are displayed in hexadecimal notation.   Hexa-
+       decimal  numbers  are  denoted by a `0x' prefix (for instance, `0x7b'),
+       except when explicitly noted otherwise.
+
+Key Mapping Source
+       The first piece of information presented about a particular key mapping
+       is the source from which the data was gleaned.  For a .keymapping file,
+       the title `KEYMAP FILE' is emitted along with the path and name of  the
+       file  in  question.   For  the key mapping currently in use by the Win-
+       dowServer and AppKit, the title `ACTIVE KEYMAP' is emitted instead.
+
+Device Information
+       Each .keymapping file may contain one or more raw  key  mappings.   For
+       example,  a file which maps keys to a Dvorak-style layout might contain
+       raw mappings for Intel PC, ADB, NeXT, and Sun Type5 keyboards.
+
+       For each raw mapping, the following information is emitted:
+
+
+              o The title `KEYMAP' along with the mapping's relative  position
+                     in the .keymapping file.
+
+              o The `interface' identifier.
+
+              o The `handler_id' sub-identifier.
+
+              o The size of the raw mapping resource counted in bytes.
+
+       The  `interface' and `handler_id' values, taken together, define a spe-
+       cific keyboard device.  A .keyboard file, which  describes  the  visual
+       layout  of a keyboard, also contains `interface' and `handler_id' iden-
+       tifiers.  The .keyboard file corresponding to a particular key  mapping
+       can  be  found by matching the `interface' and `handler_id' values from
+       each resource.
+
+Modifiers
+       Each mapping may contain zero or more modifier records which  associate
+       hardware  scan codes with modifier descriptions such as shift, control,
+       alternate, etc.  The title `MODIFIERS' is printed along with the  count
+       of  modifier records which follow.  For each modifier record, the modi-
+       fier's name is printed along with a list of scan codes, in  hexadecimal
+       format, which generate that modifier value.  For example:
+
+              MODIFIERS [4]
+              alternate: 0x1d 0x60
+              control: 0x3a
+              keypad: 0x52 0x53 ... 0x63 0x62
+              shift: 0x2a 0x36
+
+Characters
+       Each mapping may contain zero or more character records which associate
+       hardware scan codes with the actual characters generated by those  scan
+       codes in the presence or absence of various modifier combinations.  The
+       title `CHARACTERS' is printed along with the count of character records
+       which follow.  Here is a highly abbreviated example:
+
+              CHARACTERS [9]
+              scan 0x00: -AC-L  "a" "A" "^A" "^A" ca c7 "^A" "^A"
+              scan 0x07: -AC-L  "x" "X" "^X" "^X" 01/b4 01/ce "^X" "^X"
+              scan 0x0a: ---S-  "<" ">"
+              scan 0x13: -ACS-  "2" "@" "^@" "^@" b2 b3 "^@" "^@"
+              scan 0x24: R----  "^M" "^C"
+              scan 0x3e: -----  [F4]
+              scan 0x4a: -----  [page up]
+              scan 0x60: -----  {seq#3}
+              scan 0x68: not-bound
+
+       For  each  record,  the  hexadecimal value of the hardware scan code is
+       printed, followed by a list  of  modifier  flag  combinations  and  the
+       actual  characters  generated  by this scan code with and without modi-
+       fiers applied.
+
+       The modifier flags field is composed of a combination of single  letter
+       representations of the various modifier types.  The letters stand for:
+
+              L - alpha-lock
+              S - shift
+              C - control
+              A - alternate
+              R - carriage-return
+
+       As  a special case, the alpha-lock flag also implies the shift flag, so
+       these two flags never appear together in the same record.
+
+       The combination of modifier flags determines the meaning and number  of
+       fields  which  follow.  The first field after the modifier flags always
+       represents the character that will be generated if no modifier keys are
+       depressed.   The remaining fields represent characters generated by the
+       various modifier combinations.  The order of the  fields  follows  this
+       general pattern:
+
+
+              o The  character  generated  by this scan code when no modifiers
+                     are in effect is listed first.
+
+              o If the `L' or `S' flag is active, then the  shifted  character
+                     generated by this scan code is listed next.
+
+              o If  the  `C' flag is active, then the control-character gener-
+                     ated by this scan code is listed next.   Furthermore,  if
+                     the `L' or `S' flag is also active, then the shifted con-
+                     trol-character is listed after that.
+
+              o If the `A' flag is active, then the alternate-character gener-
+                     ated  by  this scan code is listed next.  Furthermore, if
+                     the `L' or `S' flag is active, then  the  shifted  alter-
+                     nate-character  is listed after that.  If the `C' flag is
+                     also  active,  then  the  alternate-control-character  is
+                     listed  next.  Finally, if the `C' and `L' or `C' and `S'
+                     flags are also active, then  the  shifted  alternate-con-
+                     trol-character is listed.
+
+       The `R' flag does not actually refer to a modifier key.  Instead, it is
+       used to distinguish the scan code which is given  the  special  pseudo-
+       designation  of carriage return key.  Typically, this mask appears solo
+       and only the two fields for control-M and control-C follow.  This  flag
+       may  be  a throwback to an earlier time or may be specially interpreted
+       by the low-level keyboard driver, but its purpose  is  otherwise  enig-
+       matic.
+
+       Recalling  the  example from above, the following fields can be identi-
+       fied:
+
+              scan 0x00: -AC-L  "a" "A" "^A" "^A" ca c7 "^A" "^A"
+
+
+              o Lower-case `a' is generated when no modifiers are active.
+
+              o Upper-case `A' is  generated  when  shift  or  alpha-lock  are
+                     active.
+
+              o Control-A is generated when control is active.
+
+              o Control-A is generated when control and shift are active.
+
+              o The character represented by the hexadecimal code 0xca is gen-
+                     erated when alternate is active.
+
+              o The character represented by 0xc7 is generated when  alternate
+                     and shift (or alpha-lock) are active.
+
+              o Control-A  is generated when alternate and control are active.
+
+              o Control-A is generated when alternate, control and  shift  (or
+                     alpha-lock) are active.
+
+       The notation used to represent a particular generated character varies.
+
+
+              o Printable ASCII characters are quoted, as in "x" or "X".
+
+              o Control-characters are quoted and prefixed  with  `^',  as  in
+                     "^X".
+
+              o Characters  with  values greater than 127 (0x7f) are displayed
+                     as hexadecimal values without the `0x' prefix.
+
+              o Characters in a non-ASCII character set (such as `Symbol') are
+                     displayed  as  two  hexadecimal  numbers  separated  by a
+                     slash, as in `01/4a'.  The first number is the  character
+                     set's  identification code (such as `01' for the `Symbol'
+                     set), and the second number is the value of the generated
+                     character.
+
+              o Non-printing  special  function  characters are displayed with
+                     the function's common name enclosed in  brackets,  as  in
+                     `[page up]' or `[F4]'.
+
+              o If  the binding represents a key sequence rather than a single
+                     character, then the sequence's identification  number  is
+                     enclosed in braces, as in `{seq#3}'.
+
+       Recalling  a few examples from above, the following interpretations can
+       be made:
+
+              scan 0x07: -AC-L  "x" "X" "^X" "^X" 01/b4 01/ce "^X" "^X"
+              scan 0x3e: -----  [F4]
+              scan 0x4a: -----  [page up]
+              scan 0x60: -----  {seq#3}
+
+
+              o "x" and "X" are printable ASCII characters.
+
+              o "^X" is a control-character.
+
+              o `01/b4' and `01/ce' represent the  character  codes  0xb4  and
+                     0xce in the `Symbol' character set.
+
+              o Scan code 0x3e generates function-key `F4', and scan code 0x4a
+                     generates function-key `page up'.
+
+              o Scan code 0x60 is bound to key sequence #3.
+
+       Finally, if a scan code is not bound to  any  characters,  then  it  is
+       annotated  with  the  label `not-bound', as with example scan code 0x68
+       from above.
+
+Sequences
+       A scan code (modified and unmodified) can be bound to  a  key  sequence
+       rather  than  generating  a  single  character or acting as a modifier.
+       When it is bound to a key sequence, a series of  character  invocations
+       and  modifier  actions are automatically generated rather than a single
+       keystroke.
+
+       Each mapping may contain zero or more key sequence records.  The  title
+       `SEQUENCES'  is  printed along with the count of sequence records which
+       follow.  For example:
+
+              SEQUENCES [3]
+              sequence 0: "f" "o" "o"
+              sequence 1: {alternate} "b" "a" "r" {unmodify}
+              sequence 2: [home] "b" "a" "z"
+
+       The notation used to represent the sequence of generated characters  is
+       identical  to  the notation already described in the Characters section
+       above, with the exception  that  modifier  actions  may  be  interposed
+       between generated characters.  Such modifier actions are represented by
+       the modifier's name enclosed in braces.  The special name  `{unmodify}'
+       indicates the release of the modifier keys.
+
+       Thus, the sequences in the above example can be interpreted as follows:
+
+
+              o Sequence #0 generates `foo'.
+
+              o Sequence #1 invokes the alternate modifier,  generates  `bar',
+                     and then releases alternate.
+
+              o Sequence #2 invokes the home key and then generates `baz'.  In
+                     a text editor, this would probably result in `baz'  being
+                     prepended  to  the  line  of  text  on  which  the cursor
+                     resides.
+
+
+Special Keys
+       Certain keyboards feature keys which perform some type of special  pur-
+       pose  function  rather than generating a character or acting as a modi-
+       fier.  For instance, Apple keyboards often contain  a  power  key,  and
+       NeXT  keyboards have historically featured screen brightness and volume
+       control keys.
+
+       Each mapping may contain zero or more special-key records  which  asso-
+       ciate  hardware  scan  codes  with such special purpose functions.  The
+       title `SPECIALS' is printed along with the count of records which  fol-
+       low.   For  each  record,  the special function's name is printed along
+       with a list of scan codes, in hexadecimal format, which  are  bound  to
+       that function.  For example:
+
+              SPECIALS [6]
+              alpha-lock: 0x39
+              brightness-down: 0x79
+              brightness-up: 0x74
+              power: 0x7f
+              sound-down: 0x77
+              sound-up: 0x73
+
+FILES
+       *.keymapping
+              A  key  mapping file which precisely defines the relationship of
+              all hardware-specific keyboard scan-codes with their  associated
+              functionality.
+
+       *.keyboard
+              A  file  describing  the physical layout of keys on a particular
+              type of keyboard.  Each `key' token in  this  file  defines  the
+              position  and  shape  of the key on the keyboard, as well as the
+              associated scan code which that key  generates.   A  .keymapping
+              file, on the other hand, defines the characters which are gener-
+              ated by a particular scan code depending upon the state  of  the
+              various  modifier  keys  (such  as  shift,  control, etc.).  The
+              `interface' and `handler_id' values from a .keymapping file  are
+              matched  against  those in each .keyboard file in order to asso-
+              ciate a particular .keyboard file with a key  mapping.   Various
+              GUI  programs  use the .keyboard file to display a visual repre-
+              sentation of a keyboard for the user.   Since  these  files  are
+              just plain text, they can be easily viewed and interpreted with-
+              out the aid of a specialized  program,  thus  dumpkeymap  leaves
+              these files alone.
+
+       /System/Library/Keyboards
+       /Network/Library/Keyboards
+       /Local/Library/Keyboards
+       /Library/Keyboards
+              Repositories  for  .keymapping  and .keyboard files for MacOS/X,
+              Darwin, and MacOS/X Server.
+
+       /NextLibrary/Keyboards
+       /LocalLibrary/Keyboards
+              Repositories for .keymapping and .keyboard  files  for  OpenStep
+              and NextStep.
+
+       $(HOME)/Library/Keyboards
+              Repository for personal .keymapping and .keyboard files.
+
+DIGANOSTICS
+       The  following  diagnostic messages may be issued to the standard error
+       stream.
+
+       Unrecognized option.
+              An  unrecognized  option  was  specified  on  the  command-line.
+              Invoke dumpkeymap with the --help option to view a list of valid
+              options.
+
+       Insufficient data in keymapping data stream.
+              The key mapping file or data stream is corrupt.  Either the file
+              has  been  incorrectly truncated or a field, such as those which
+              indicates the number of variable records which follow,  contains
+              a corrupt value.
+
+       The following diagnostic messages have significance only when trying to
+       print .keymapping files mentioned on the command-line.
+
+       Bad magic number.
+              The mentioned file is not a .keymapping file.  The  file's  con-
+              tent does not start with the string `KYM1'.
+
+       Unable to open key mapping file.
+              The  call to fopen() failed; probably because the specified path
+              is invalid or dumpkeymap does not have permission  to  read  the
+              file.
+
+       Unable to determine key mapping file size.
+              The call to fstat() failed, thus memory can not be allocated for
+              loading the file.
+
+       Unable to read key mapping file.
+              The call to fread() failed.
+
+       The following diagnostic messages have significance only when trying to
+       print  the  currently active key mapping when no .keymapping files have
+       been mentioned on the command-line.
+
+       Unable to open event status driver.
+              The call to NXOpenEventStatus() failed.
+
+       Bad key mapping length.
+              The call to NXKeyMappingLength() returned a bogus value.
+
+       Unable to get current key mapping.
+              The call to NXGetKeyMapping() failed.
+
+       The following diagnostic messages have  significance  only  when  using
+       dumpkeymap on a non-Apple/NeXT platform.
+
+       Must specify at least one .keymapping file.
+              No  .keymapping  files  were  mentioned on the command-line.  On
+              non-Apple/NeXT platforms, there is no  concept  of  a  currently
+              active  .keymapping file, so at least one file must be mentioned
+              on the command-line.
+
+AUTHOR
+       Eric Sunshine <sunshine@sunshineco.com> wrote dumpkeymap and this docu-
+       ment,  the dumpkeymap user's manual.  Both dumpkeymap and this document
+       are copyright (C)1999,2000 by Eric Sunshine  <sunshine@sunshineco.com>.
+       All rights reserved.
+
+       The  implementation of dumpkeymap is based upon information gathered on
+       September 3, 1997 by Eric Sunshine <sunshine@sunshineco.com>  and  Paul
+       S.  McCarthy  <zarnuk@zarnuk.com>  during an effort to reverse engineer
+       the format of the NeXT .keymapping file.
+
+       Version 4 -- 1 December 2000
+
+
+

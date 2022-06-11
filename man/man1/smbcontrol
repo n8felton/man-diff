@@ -1,0 +1,181 @@
+SMBCONTROL(1)                                                    SMBCONTROL(1)
+
+
+
+NAME
+       smbcontrol - send messages to smbd, nmbd or winbindd processes
+
+SYNOPSIS
+       smbcontrol [-i] [-s]
+
+       smbcontrol [destination] [message-type] [parameter]
+
+DESCRIPTION
+       This tool is part of the samba(7) suite.
+
+       smbcontrol  is a very small program, which sends messages to a smbd(8),
+       a nmbd(8), or a winbindd(8) daemon running on the system.
+
+OPTIONS
+       -h|--help
+          Print a summary of command line options.
+
+       -s <configuration file>
+          The file specified contains the configuration  details  required  by
+          the  server.  The  information in this file includes server-specific
+          information such as what printcap file to use, as well  as  descrip-
+          tions  of  all  the  services  that  the  server  is to provide. See
+          smb.conf for more information. The default configuration  file  name
+          is determined at compile time.
+
+       -i
+          Run  interactively. Individual commands of the form destination mes-
+          sage-type parameters can be entered on STDIN. An empty command  line
+          or a "q" will quit the program.
+
+       destination
+          One of nmbd, smbd or a process ID.
+
+          The  smbd  destination causes the message to "broadcast" to all smbd
+          daemons.
+
+          The nmbd destination causes the message to be sent to the nmbd  dae-
+          mon specified in the nmbd.pid file.
+
+          If  a  single  process ID is given, the message is sent to only that
+          process.
+
+       message-type
+          Type of message to send. See the section MESSAGE-TYPES for  details.
+
+       parameters
+          any parameters required for the message-type
+
+MESSAGE-TYPES
+       Available message types are:
+
+       close-share
+          Order  smbd to close the client connections to the named share. Note
+          that this doesn't affect client connections  to  any  other  shares.
+          This  message-type  takes  an  argument  of the share name for which
+          client connections will be closed, or the "*" character  which  will
+          close  all  currently  open  shares.  This may be useful if you made
+          changes to the access controls on the share. This message  can  only
+          be sent to smbd.
+
+       debug
+          Set debug level to the value specified by the parameter. This can be
+          sent to any of the destinations.
+
+       force-election
+          This message causes the nmbd daemon to force  a  new  browse  master
+          election.
+
+       ping
+          Send  specified number of "ping" messages and wait for the same num-
+          ber of reply "pong" messages. This can be sent to any of the  desti-
+          nations.
+
+       profile
+          Change  profile  settings  of  a daemon, based on the parameter. The
+          parameter can be "on" to turn on profile stats collection, "off"  to
+          turn off profile stats collection, "count" to enable only collection
+          of count stats (time stats are disabled), and "flush"  to  zero  the
+          current profile stats. This can be sent to any smbd or nmbd destina-
+          tions.
+
+       debuglevel
+          Request debuglevel of a certain daemon and write it to stdout.  This
+          can be sent to any of the destinations.
+
+       profilelevel
+          Request  profilelevel  of  a  certain daemon and write it to stdout.
+          This can be sent to any smbd or nmbd destinations.
+
+       printnotify
+          Order smbd to send a  printer  notify  message  to  any  Windows  NT
+          clients  connected to a printer. This message-type takes the follow-
+          ing arguments:
+
+
+             queuepause printername
+                Send a queue pause change notify message to the printer speci-
+                fied.
+
+             queueresume printername
+                Send  a  queue  resume  change  notify message for the printer
+                specified.
+
+             jobpause printername unixjobid
+                Send a job pause change notify message  for  the  printer  and
+                unix jobid specified.
+
+             jobresume printername unixjobid
+                Send  a  job  resume change notify message for the printer and
+                unix jobid specified.
+
+             jobdelete printername unixjobid
+                Send a job delete change notify message for  the  printer  and
+                unix jobid specified.
+
+             Note  that this message only sends notification that an event has
+             occured. It doesn't actually cause the event to happen.
+
+             This message can only be sent to smbd.
+
+       samsync
+          Order smbd to synchronise sam database from  PDC  (being  BDC).  Can
+          only be sent to smbd.
+
+          Note
+          Not working at the moment
+
+       samrepl
+          Send  sam  replication  message,  with specified serial. Can only be
+          sent to smbd. Should not be used manually.
+
+       dmalloc-mark
+          Set a mark for dmalloc. Can be sent to  both  smbd  and  nmbd.  Only
+          available if samba is built with dmalloc support.
+
+       dmalloc-log-changed
+          Dump  the  pointers that have changed since the mark set by dmalloc-
+          mark. Can be sent to both smbd and nmbd. Only available if samba  is
+          built with dmalloc support.
+
+       shutdown
+          Shut down specified daemon. Can be sent to both smbd and nmbd.
+
+       pool-usage
+          Print  a human-readable description of all talloc(pool) memory usage
+          by the specified daemon/process. Available for both smbd and nmbd.
+
+       drvupgrade
+          Force clients of printers using specified  driver  to  update  their
+          local version of the driver. Can only be sent to smbd.
+
+       reload-config
+          Force  daemon  to reload smb.conf configuration file. Can be sent to
+          smbd, nmbd, or winbindd.
+
+VERSION
+       This man page is correct for version 3.0 of the Samba suite.
+
+SEE ALSO
+       nmbd(8) and smbd(8).
+
+AUTHOR
+       The original Samba software  and  related  utilities  were  created  by
+       Andrew  Tridgell.  Samba  is now developed by the Samba Team as an Open
+       Source project similar to the way the Linux kernel is developed.
+
+       The original Samba man pages were written by Karl Auer.  The  man  page
+       sources  were converted to YODL format (another excellent piece of Open
+       Source  software,  available  at  ftp://ftp.icce.rug.nl/pub/unix/)  and
+       updated  for the Samba 2.0 release by Jeremy Allison. The conversion to
+       DocBook for Samba 2.2 was done by Gerald Carter. The conversion to Doc-
+       Book XML 4.2 for Samba 3.0 was done by Alexander Bokovoy.
+
+
+
+

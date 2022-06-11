@@ -1,0 +1,61 @@
+IDMAP_ODSAM(8)                                                  IDMAP_ODSAM(8)
+
+
+
+NAME
+       idmap_odsam - Open Directory ID mapping backend for winbindd
+
+SYNOPSIS
+       The idmap_odsam plugin is the default backend used by Mac OS X for map-
+       ping SIDs and user and group IDs using Open  Directory.  It  implements
+       both the "idmap" and "idmap alloc" APIs.
+
+
+       idmap_odsam  should always be used in conjunction with the odsam passdb
+       backend.
+
+
+IDMAP OPTIONS
+       odsam: msglevel = LEVEL
+              LEVEL is the integer log level at which idmap_odsam should  emit
+              log messages.  The lower LEVEL is, the more verbose the log mes-
+              sages.
+
+
+       odsam: traceall = BOOL
+              If this is true, idmap_odsam will emit log messages for all Open
+              Directory  calls. If it is false (the default), it will only log
+              errors.
+
+
+IDMAP ALLOC OPTIONS
+       The idmap_odsam does not allocate any mappings. On Mac OS  X,  all  SID
+       mappings  should  be  made  by modifying the appropriate Open Directory
+       record.
+
+
+EXAMPLES
+            [global]
+                idmap domain = default
+                idmap config default:default = yes
+                idmap config default:backend = odsam
+
+                idmap alloc backend = odsam
+
+                passdb backend = odsam
+
+                odsam: msglevel = 0    # Log at debugging levels
+                odsam: traceall = no   # Do not trace Open Directory calls
+
+
+
+BUGS
+       Please report bugs to Apple.
+
+
+SEE ALSO
+       DirectoryService(8), smb.conf(5), winbindd(8)
+
+
+
+

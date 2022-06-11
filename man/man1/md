@@ -1,0 +1,75 @@
+md(1)                     BSD General Commands Manual                    md(1)
+
+NAME
+     md -- process raw dependency files produced by cpp -MD
+
+SYNOPSIS
+     md [-d] [-f] [-m makefile] [-u makefile] [-o outputfile] [-v] [-x]
+        [-D c|d|m|o|t|D]
+
+DESCRIPTION
+     The md command basically does two things:
+
+     Process the raw dependency files produced by the cpp -MD option.  There
+     is one line in the file for every #include encountered, but there are
+     repeats and patterns like .../dir1/../dir2 that appear which should
+     reduce to .../dir2.  md canonicalizes and flushes repeats from the depen-
+     dency list.  It also sorts the file names and "fills" them to a 78 char-
+     acter line.
+
+     md also updates the makefile directly with the dependency information, so
+     the .d file can be thrown away (see d option).  This is done to save
+     space.  md assumes that dependency information in the makefile is sorted
+     by .o file name and it procedes to merge in (add/or replace [as appropri-
+     ate]) the new dependency lines that it has generated.  For time effi-
+     ciency, md assumes that any .d files it is given that were created before
+     the creation date of the "makefile" were processed already.  It ignores
+     them unless the force flag [f] is given.
+
+FLAG SUMMARY
+     -D c|D|d|m|o|t
+             Specify debugging option(s):
+
+             c       show file contents
+
+             D       show very low level debugging
+
+             d       show new dependency crunching
+
+             m       show generation of makefile
+
+             o       show files being opened
+
+             t       show time comparisons
+
+     -d      Delete the .d file after it is processed
+
+     -f      Force an update of the dependencies in the makefile, even if the
+             makefile is more recent than the .n file.  (This implies that md
+             has been run already.)
+
+     -m makefile
+             Specify the makefile to be upgraded.  The defaults are makefile
+             and then Makefile.
+
+     -o outputfile
+             Specify an output file (other than a makefile) for the dependen-
+             cies.
+
+     -u makefile
+             Like -m, but the file will be created if necessary.
+
+     -v      Set the verbose flag.
+
+     -x      Expunge old dependency information from the makefile.
+
+SEE ALSO
+     make(1)
+
+BUGS
+     Old, possibly not used by anyone.
+
+HISTORY
+     The md utility was written by Robert V. Baron at Carnegie-Mellon Univer-
+     sity.
+

@@ -1,0 +1,40 @@
+XMKMF(1)                                                              XMKMF(1)
+
+
+
+NAME
+       xmkmf - create a Makefile from an Imakefile
+
+SYNOPSIS
+       xmkmf [ -a ] [ topdir [ curdir ] ]
+
+DESCRIPTION
+       The xmkmf command is the normal way to create a Makefile from an Imake-
+       file shipped with third-party software.
+
+       When invoked with no arguments in a directory containing an  Imakefile,
+       the  imake  program  is  run with arguments appropriate for your system
+       (configured into xmkmf when X was built) and generates a Makefile.
+
+       When invoked with the -a option, xmkmf builds the Makefile in the  cur-
+       rent  directory, and then automatically executes ``make Makefiles'' (in
+       case there are subdirectories), ``make includes'', and ``make  depend''
+       for  you.  This is the normal way to configure software that is outside
+       the X Consortium build tree.
+
+       If working inside the X Consortium build tree (unlikely unless you  are
+       an  X  developer,  and even then this option is never really used), the
+       topdir argument should be specified as the relative pathname  from  the
+       current directory to the top of the build tree.  Optionally, curdir may
+       be specified as a relative pathname from the top of the build  tree  to
+       the current directory.  It is necessary to supply curdir if the current
+       directory has subdirectories, or the Makefile will not be able to build
+       the  subdirectories.   If  a  topdir is given, xmkmf assumes nothing is
+       installed on your system and looks for files in the build tree  instead
+       of using the installed versions.
+
+SEE ALSO
+       imake(1)
+
+
+

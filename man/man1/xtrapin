@@ -1,0 +1,144 @@
+xtrap(1)                                                              xtrap(1)
+
+
+
+NAME
+       xtrapreset, xtrapinfo, xtrapstats, xtrapout, xtrapin, xtrapchar, xtrap-
+       proto - XTrap sample clients
+
+SYNTAX
+       xtrapreset [ -d[isplay] display ]
+
+       xtrapinfo [ -d[isplay] display ]
+
+       xtrapstats [ -d[isplay] display ]
+
+       xtrapout [ -f script ] [ -e ] [ -d[isplay] display ] [ -v ]
+
+       xtrapin [ -f script ] [ -d[isplay] display ]
+
+       xtrapchar [ -v ] [ -d[isplay] display ]
+
+       xtrapproto [ -d[isplay] display ]
+
+DESCRIPTION
+       These commands are SAMPLE CLIENTS provided  with  the  XTrap  X  Server
+       Extension  Sources,  Version 3.3.  XTrap is an X Server extension which
+       facilitates the capturing of  server  protocol  and  synthesizing  core
+       input  events.  Information on how to obtain these sources can be found
+       in the SOURCES section below.
+
+       The xtrapreset command is the simplest XTrap client in that  it  merely
+       performs  an XQueryExtension() against XTrap.  The name "reset" is his-
+       torical.  The display argument is parsed by the X Toolkit and specifies
+       the display where XTrap is to be loaded; see X(1).
+
+       xtrapinfo  displays general configuration information as a result of an
+       GetAvailable XTrap request to  the  specified  server.   It  is  simply
+       designed  to test the request/response mechanism of the XTrap extension
+       and client library as well as  display  the  configuration  information
+       that it finds.
+
+       xtrapstats  tests  the event and request vectoring of the server exten-
+       sion by configuring XTrap to collect usage statistics on all core input
+       events  and  requests.   It  has a primitive command-line interface for
+       showing the counters, zeroing out the counters, and quitting  the  pro-
+       gram.
+
+       xtrapout  tests  the  output  transport from the XTrap extension to the
+       XTrap client library.  As an aside, since xtrapout has  the  capability
+       of  "recording"  events and requests it receives, xtrapout is ideal for
+       providing input to test xtrapin.  Since events are the only concern for
+       the  input transport, the -e flag can be specified to indicate that all
+       input events (and only events) should be recorded by xtrapout.   script
+       is  specified  primarily  for non-U*IX machines which don't support I/O
+       re-direction easily.  The -v flag is used to  force  recording  of  all
+       requests and input events.
+
+       xtrapin  is used to test the input transport to the XTrap server exten-
+       sion.  As stated earlier, it's input can be provided by xtrapout  using
+       the -e qualifier.  While it's primary function is for testing XTrap and
+       serving as an example for XTrap functionality, it can  reasonably  used
+       as a primitive "playback" client for X sessions.
+
+       xtrapchar parses ANSI character sequences including application program
+       sequences to synthesize input events to  X  Window  servers  using  the
+       XTrap  server  extension.   The intent of this program is to serve as a
+       sample implementation for interfacing character-based alternative input
+       sources  into  X  servers  (e.g.   voice recognition systems).  Another
+       application might be "remote keyboards".  The -v flag causes  the  pro-
+       gram  to  display XTrap configuration information and echo's characters
+       processed to stdout.  If present, this must be the first argument.
+
+       Note: xtrapchar has only been used with Digital Workstations using  the
+       LK201  compatible keyboard.  Though reasonable effort was done to main-
+       tain portability,  no claims are made as to the current level of porta-
+       bility to non-DEC servers for this program.
+
+       The  xtrapproto command is a regression test designed to test the basic
+       XTrap protocol between a client and server.  If a given  implementation
+       is  suspect, the results of this test should be sent to an XTrap imple-
+       mentor and/or developer.
+
+OPTIONS
+       -d[isplay] display
+           Specifies the server to record from or playback to; see
+
+
+       -e  Record only (and all) events.  Should be used when  creating  input
+           for
+
+
+       -f script
+           The pathname of the script to be recorded / played back.
+
+
+       -v  Verbose mode.
+
+
+DIAGNOSTICS
+       X Toolkit Error: Can't load DEC-XTRAP extension
+
+       The  XTrap  X server extension has not been linked into the specified X
+       server.
+
+SOURCES
+       Sources have been posted on UseNet systems  via  anonymous  ftp.   They
+       are:  East  Coast  (USA):   export@lcs.mit.edu:contrib/XTrap_v32*.tar.Z
+       West Coast (USA):   gatekeeper@pa.dec.com:X11/contrib/XTrap_v32*.tar.Z
+
+
+IMPORTANT NOTE
+       Digital participated in the X Consortium's xtest  working  group  which
+       chose  to  evolve  XTrap  functionality into a new extension for X11/R6
+       known as the RECORD extension (XTrap input synthesis  functionality  is
+       currently  covered  by  the XTEST extension).  It is strongly suggested
+       that users of XTrap technology begin developing against RECORD/XTEST as
+       it  is  the intention of the X Consortium to drive these two extensions
+       in the standards process for providing the protocol capturing/synthesis
+       functionality.   Some  members  of the xtest working group are actively
+       researching migration issues between XTrap and RECORD.  If  you'd  like
+       to contribute, please participate!  Contact your local X Consortium Rep
+       for details on how to be added to the xtest mailing list.
+
+       If you encounter problems, have questions, etc. with XTrap, please con-
+       tact via mail, phone, etc. at:
+
+               Ken Miller      miller@zk3.dec.com      (VOICE) 603-881-6221
+               (FAX)   603 881-2257
+
+       or paper mail at:
+
+               Digital Equipment Corp.
+               Ken Miller @ ZKO3-3/Y25
+               110 Spitbrook Rd.
+               Nashua, NH 03062
+
+       Naturally email is preferred and will get the fastest response.
+
+SEE ALSO
+       X(1)
+
+
+
+

@@ -1,0 +1,13 @@
+ntpd-wrapper(8)           BSD System Manager's Manual          ntpd-wrapper(8)
+
+NAME
+     ntpd-wrapper -- Wrapper for ntpdate/ntpd called by launchd
+
+SYNOPSIS
+     /usr/libexec/ntpd-wrapper
+
+DESCRIPTION
+     Invokes ntpdate followed by non-forking ntpd for launchd job org.ntp.ntpd
+
+     Not intended for end users.
+

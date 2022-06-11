@@ -1,0 +1,25 @@
+AMAVISD-AGENT(8)                                              AMAVISD-AGENT(8)
+
+
+
+NAME
+       amavisd-agent - Amavisd agent
+
+SYNOPSIS
+       amavisd-agent
+
+DESCRIPTION
+       Amavisd-agent SNMP-like counters updated by amavisd-new.
+
+
+OPTIONS
+        Debug Debug option.
+
+FILES
+       N/A
+
+SEE ALSO
+
+
+
+

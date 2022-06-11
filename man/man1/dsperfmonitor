@@ -1,0 +1,32 @@
+dsperfmonitor(1)          BSD General Commands Manual         dsperfmonitor(1)
+
+NAME
+     dsperfmonitor -- A Directory Tool for monitoring plugin performance in
+     Directory Services
+
+SYNOPSIS
+     dsperfmonitor -a | -d | -dump | -flush
+
+DESCRIPTION
+     The dsperfmonitor tool is a command line utility for enabling internal
+     plugin performance monitoring in the DirectoryService daemon.  This tool
+     allows you active and deactivate/dump information on what API calls are
+     made to plugins, how long they took to respond, and what the last 5
+     errors in any API were.
+
+     The options are as follows:
+
+     options:
+
+     -a       Acivate performance monitoring
+
+     -d       Deactivate performance monitoring and dump a tab delimited
+              result to /var/log/system.log
+
+     -dump    Dump a tab delimited result to /var/log/system.log
+
+     -flush   Reset statistics
+
+SEE ALSO
+     DirectoryService(8) dscl(1) dirt(1) DirectoryServiceAttributes(7)
+

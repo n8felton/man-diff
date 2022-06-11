@@ -1,0 +1,197 @@
+XSLTPROC(1)                     xsltproc Manual                    XSLTPROC(1)
+
+
+
+NAME
+       xsltproc - command line xslt processor
+
+SYNOPSIS
+       xsltproc [-V | -v | -o file | --timing | --repeat | --debug | --novalid
+                | --noout | --maxdepth val | --html | --param name value |
+                --stringparam name value | --nonet | --path paths |
+                --load-trace | --catalogs | --xinclude | --profile |
+                --dumpextensions | --nowrite | --nomkdir | --writesubtree]
+                [stylesheet] [file1] [file2] [....]
+
+
+INTRODUCTION
+        xsltproc is a command line tool for applying XSLT stylesheets  to  XML
+       documents.  It  is part of libxslt, the XSLT C library for GNOME. While
+       it was developed as part of the GNOME project, it can operate  indepen-
+       dently of the GNOME desktop.
+
+
+        xsltproc  is  invoked  from  the  command  line  with  the name of the
+       stylesheet to be used followed by the name of  the  file  or  files  to
+       which  the  stylesheet is to be applied. It will use the standard input
+       if a filename provided is - .
+
+
+       If a stylesheet is included in an XML document with a  Stylesheet  Pro-
+       cessing  Instruction,  no stylesheet need be named at the command line.
+       xsltproc will automatically detect the included stylesheet and use  it.
+
+
+       By  default, output is to stdout. You can specify a file for output us-
+       ing the -o option.
+
+
+COMMAND LINE OPTIONS
+       -V or --version
+              Show the version of libxml and libxslt used.
+
+
+       -v or --verbose
+              Output each step taken by xsltproc in processing the  stylesheet
+              and the document.
+
+
+       -o or --output file
+              Direct output to the file named file. For multiple outputs, also
+              known as "chunking", -o directory/ directs the output files to a
+              specified directory. The directory must already exist.
+
+
+       --timing
+              Display  the  time  used for parsing the stylesheet, parsing the
+              document and applying the stylesheet and saving the result. Dis-
+              played in milliseconds.
+
+
+       --repeat
+              Run the transformation 20 times. Used for timing tests.
+
+
+       --debug
+              Output  an  XML  tree  of the transformed document for debugging
+              purposes.
+
+
+       --novalid
+              Skip loading the document's DTD.
+
+
+       --noout
+              Do not output the result.
+
+
+       --maxdepth value
+              Adjust the maximum depth of the template  stack  before  libxslt
+              concludes it is in an infinite loop. The default is 500.
+
+
+       --html The input document is an HTML file.
+
+
+       --param name value
+              Pass a parameter of name name and value value to the stylesheet.
+              You may pass multiple name/value pairs up to a maximum of 32. If
+              the  value being passed is a string rather than a node identifi-
+              er, use --stringparam instead.
+
+
+       --stringparam name value
+              Pass a paramenter of name name and value value where value is  a
+              string  rather than a node identifier. (Note: The string must be
+              utf-8.)
+
+
+       --nonet
+              Do not use the Internet to fetch DTD's, entities or documents.
+
+
+       --path paths
+              Use the list (separated by space or column) of filesystem  paths
+              specified by paths to load DTDs, entities or documents.
+
+
+       --load-trace
+              Display  to  stderr all the documents loaded during the process-
+              ing.
+
+
+       --catalogs
+              Use the SGML catalog specified in SGML_CATALOG_FILES to  resolve
+              the  location  of  external entities. By default, xsltproc looks
+              for the catalog specified in XML_CATALOG_FILES. If that  is  not
+              specified, it uses /etc/xml/catalog.
+
+
+       --xinclude
+              Process  the  input  document  using the Xinclude specification.
+              More details on this can be found in the Xinclude specification:
+              http://www.w3.org/TR/xinclude/: http://www.w3.org/TR/xinclude/
+
+
+       --profile or --norman
+              Output  profiling information detailing the amount of time spent
+              in each part of the stylesheet. This  is  useful  in  optimizing
+              stylesheet performance.
+
+
+       --dumpextensions
+              Dumps the list of all registered extensions on stdout.
+
+
+       --nowrite
+              Refuses to write to any file or resource.
+
+
+       --nomkdir
+              Refuses to create directories.
+
+
+       --writesubtree path
+              Allow file write only within the path subtree.
+
+
+RETURN VALUES
+       xsltproc's return codes provide information that can be used when call-
+       ing it from scripts.
+
+
+       0: normal
+
+
+       1: no argument
+
+
+       2: too many parameters
+
+
+       3: unknown option
+
+
+       4: failed to parse the stylesheet
+
+
+       5: error in the stylesheet
+
+
+       6: error in one of the documents
+
+
+       7: unsupported xsl:output method
+
+
+       8: string parameter contains both quote and double-quotes
+
+
+       9: internal processing error
+
+
+       10: processing was stopped by a terminating message
+
+
+MORE INFORMATION
+       libxml web page:http://www.xmlsoft.org/: http://www.xmlsoft.org/
+
+
+       W3C XSLT page:http://www.w3.org/TR/xslt: http://www.w3.org/TR/xslt
+
+
+AUTHOR
+       John Fleck.
+
+
+

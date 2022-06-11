@@ -1,0 +1,72 @@
+GROFF_MMSE(7)                                                    GROFF_MMSE(7)
+
+
+
+NAMN
+       groff_mmse - svenska mm makro for groff
+
+SYNTAX
+       groff -mmse [ flaggor...  ] [ filer...  ]
+
+BESKRIVNING
+       mmse  ar  en svensk variant av mm. Alla texter ar oversatta. En A4 sida
+       far text som ar 13 cm bred, 3.5 cm indragning samt ar 28.5 cm hog.  Det
+       finns  stod for brevuppstallning enligt svensk standard for vanster och
+       hogerjusterad text.
+
+       COVER kan anvanda se_ms som argument. Detta ger ett  svenskt  forsatts-
+       blad.  Se groff_mm(7) for ovriga detaljer.
+
+BREV
+       Tillgangliga brevtyper:
+
+       .LT SVV
+              Vansterstalld    loptext    med    adressat    i   position   T0
+              (vansterstallt).
+
+       .LT SVH
+              Hogerstalld  loptext  med  adressat  i   position   T4   (passar
+              fonsterkuvert).
+
+       Foljande extra LO-variabler anvands.
+
+       .LO DNAMN namn
+              Anger dokumentets namn.
+
+       .LO MDAT datum
+              Mottagarens datum, anges under Ert datum: (LetMDAT).
+
+       .LO BIL strang
+              Anger  bilaga,  nummer eller strang med Bilaga (LetBIL) som pre-
+              fix.
+
+       .LO KOMP text
+              Anger kompletteringsuppgift.
+
+       .LO DBET beteckning
+              Anger dokumentbeteckning eller dokumentnummer.
+
+       .LO BET beteckning
+              Anger beteckning (arendebeteckning i form av diarienummer  eller
+              liknande).
+
+       .LO SIDOR antal
+              Anger  totala  antalet  sidor och skrivs ut efter sidnumret inom
+              parenteser.
+
+       Om makrot .TP ar definierat anropas det efter utskrift av  brevhuvudet.
+       Dar lagger man lampligen in postadress och annat som brevfot.
+
+SKRIVET AV
+       Jorgen Hagg, Lund, Sweden <Jorgen.Hagg@axis.se>
+
+FILER
+       /usr/share/groff/1.19.2/tmac/tmac.mse
+       /usr/share/groff/1.19.2/tmac/mm/se_*.cov
+
+SE OCKSA
+       groff(1), troff(1), tbl(1), pic(1), eqn(1)
+       groff_mm(7)
+
+
+

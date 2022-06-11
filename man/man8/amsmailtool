@@ -1,0 +1,42 @@
+amsmailtool(8)            BSD System Manager's Manual           amsmailtool(8)
+
+NAME
+     amsmailtool -- Mac OS X Server mail migration tool.
+
+SYNOPSIS
+     amsmailtool [-source <path>] [-destination <path>]
+     amsmailtool [-migrate.10.1] [-source <path>] [-destination <path>]
+     amsmailtool [-migrate.10.2] [-source <path>] [-destination <path>]
+
+DESCRIPTION
+     The amsmailtool is used to migrate existing Apple Mail Services (AMS)
+     10.1 & 10.2  Mail Databases to the current Cyrus mail data format.  By
+     default, amsmailtool will scan the default AMS mail database location,
+     /Library/AppleMailServer/ first for a 10.2 mail database and then for a
+     10.1 amd then migrate mail to the defalut destintion /var/spool/imap/ for
+     the first database it finds.  The tool will match user's short names from
+     the existing database and match them to the current directory to create
+     new user mail accounts.
+
+OPTIONS
+     The following options are available:
+
+     -source  Use this option to specify an alternate source location for the
+              AMS mail database.
+
+     -destination
+              Use this option to specify an alternate destination location for
+              migrated mail.
+
+     -migrate.10.1
+              Specify to migrate form a 10.1 AMS mail database only
+
+     -migrate.10.2
+              Specify to migrate form a 10.2 AMS mail database only
+
+FILES & DIRECTORIES
+     /usr/bin/cyrus/tools/amsmailtool  AMS Mail Tool
+     /Library/AppleMailServer/         Default sourec directory
+     /var/spool/imap/
+     Default destination directory
+

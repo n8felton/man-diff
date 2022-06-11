@@ -1,0 +1,62 @@
+PDB_ODSAM(8)                                                      PDB_ODSAM(8)
+
+
+
+NAME
+       pdb_odsam - Open Directory account information database for smbd
+
+SYNOPSIS
+       The  pdb_odsam plugin is the default account information database back-
+       end used on Mac OS X. It makes users and groups record from Open Direc-
+       tory available to Samba.
+
+
+       idmap_odsam  should always be used in conjunction with the odsam passdb
+       backend.
+
+
+OPTIONS
+       odsam: map guest to guest = BOOL
+              If this is true (the default), pdb_odsam map the  literal  user-
+              name "guest" to the configured guest account. This makes "guest"
+              an alias for the configured guest account regardless of  whether
+              an account named "guest" exists or not.
+
+
+       odsam: msglevel = LEVEL
+              LEVEL  is  the  integer log level at which pdb_odsam should emit
+              log messages.  The lower LEVEL is, the more verbose the log mes-
+              sages.
+
+
+       odsam: traceall = BOOL
+              If  this  is true, pdb_odsam will emit log messages for all Open
+              Directory calls. If it is false (the default), it will only  log
+              errors.
+
+
+EXAMPLES
+            [global]
+                idmap domain = default
+                idmap config default:default = yes
+                idmap config default:backend = odsam
+
+                idmap alloc backend = odsam
+
+                passdb backend = odsam
+
+                odsam: msglevel = 0    # Log at debugging levels
+                odsam: traceall = no   # Do not trace Open Directory calls
+
+
+
+BUGS
+       Please report bugs to Apple.
+
+
+SEE ALSO
+       DirectoryService(8), smb.conf(5), smbd(8)
+
+
+
+

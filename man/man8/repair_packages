@@ -1,0 +1,50 @@
+repair_packages(8)        BSD System Manager's Manual       repair_packages(8)
+
+NAME
+     repair_packages -- verify or repair filesystem permissions and flags for
+     packages.
+
+SYNOPSIS
+     repair_packages [arguments]
+
+DESCRIPTION
+     repair_packages is used by Disk Utility to verify or repair permissions
+     on installed packages.
+
+ARGUMENTS
+     --volume      Perform all operations on the specified volume or home
+                   directory.  The root volume '/' will be used if unspeci-
+                   fied.
+
+     --list-standard-pkgs
+                   Output the list of package-id strings corresponding to
+                   receipts in the installer's receipt database that will be
+                   verified or repaired by the --standard-pkgs flag.
+
+     --verify      Verify the specified package(s).
+
+     --repair      Repair the specified package(s).
+
+     --pkg package-id
+                   Add the specified package to the list of packages to verify
+                   or repair.
+
+     --standard-pkgs
+                   Add the standard packages to the list of packages to verify
+                   or repair.  Use --list-standard-pkgs to view this list.
+
+     --output-format #
+                   Use a special output format selected by #. Different output
+                   formats may be optimized for human or machine readability.
+                   The default output-format is '0', and is a verbose, human-
+                   readable format.
+
+SEE ALSO
+     pkgutil(1)
+
+     http://lists.apple.com/archives/installer-dev
+
+BUGS
+     repair_packages does not verify file contents or restore missing files;
+     It can only verify or repair filesystem permissions.
+

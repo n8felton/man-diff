@@ -1,0 +1,20 @@
+LaunchCFMApp(7)      BSD Miscellaneous Information Manual      LaunchCFMApp(7)
+
+NAME
+     LaunchCFMApp -- launches a PEF ( cfm ) executable
+
+SYNOPSIS
+     LaunchCFMApp file
+
+DESCRIPTION
+     Launch a PEF ( preferred executable format ) application using the Code
+     Fragment Manager ( CFM ).  Typically, this is only run manually when a
+     CFM application needs to be debugged in gdb.
+
+FILES
+     /System/Library/Frameworks/Carbon.framework/Versions/A/Support/LaunchCFMApp
+
+BUGS
+     The PEF executable to run must be the first file argument.  Before Mac OS
+     X 10.3 this tool may crash if run with no arguments.
+

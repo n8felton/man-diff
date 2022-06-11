@@ -1,0 +1,19 @@
+PMAP_DUMP(8)              BSD System Manager's Manual             PMAP_DUMP(8)
+
+NAME
+     pmap_set -- set the list of registered RPC programs
+
+SYNOPSIS
+     pmap_set
+
+DESCRIPTION
+     The pmap_set command can be used to restart a running portmapper or to
+     set the list of registered RPC programs on the local host. If you want to
+     use the program to restart the portmapper you have to redirect the output
+     of to a file. After this you can restart the portmapper and restore the
+     list of the registered RPC programs by feeding the output of to the
+     pmap_set command.
+
+SEE ALSO
+     pmap_dump(8), portmap(8)
+

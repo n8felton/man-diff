@@ -1,0 +1,159 @@
+NAMED-CHECKZONE(8)                   BIND9                  NAMED-CHECKZONE(8)
+
+
+
+NAME
+       named-checkzone, named-compilezone - zone file validity checking or
+       converting tool
+
+SYNOPSIS
+       named-checkzone [-d] [-j] [-q] [-v] [-c class] [-f format] [-F format]
+                       [-i mode] [-k mode] [-m mode] [-M mode] [-n mode]
+                       [-o filename] [-s style] [-S mode] [-t directory]
+                       [-w directory] [-D] [-W mode] {zonename} {filename}
+
+       named-compilezone [-d] [-j] [-q] [-v] [-c class] [-C mode] [-f format]
+                         [-F format] [-i mode] [-k mode] [-m mode] [-n mode]
+                         [-o filename] [-s style] [-t directory]
+                         [-w directory] [-D] [-W mode] {zonename} {filename}
+
+DESCRIPTION
+       named-checkzone checks the syntax and integrity of a zone file. It
+       performs the same checks as named does when loading a zone. This makes
+       named-checkzone useful for checking zone files before configuring them
+       into a name server.
+
+       named-compilezone is similar to named-checkzone, but it always dumps
+       the zone contents to a specified file in a specified format.
+       Additionally, it applies stricter check levels by default, since the
+       dump output will be used as an actual zone file loaded by named. When
+       manaully specified otherwise, the check levels must at least be as
+       strict as those specified in the named configuration file.
+
+OPTIONS
+       -d
+           Enable debugging.
+
+       -q
+           Quiet mode - exit code only.
+
+       -v
+           Print the version of the named-checkzone program and exit.
+
+       -j
+           When loading the zone file read the journal if it exists.
+
+       -c class
+           Specify the class of the zone. If not specified "IN" is assumed.
+
+       -i mode
+           Perform post load zone integrity checks. Possible modes are "full"
+           (default), "full-sibling", "local", "local-sibling" and "none".
+
+           Mode "full" checks that MX records refer to A or AAAA record (both
+           in-zone and out-of-zone hostnames). Mode "local" only checks MX
+           records which refer to in-zone hostnames.
+
+           Mode "full" checks that SRV records refer to A or AAAA record (both
+           in-zone and out-of-zone hostnames). Mode "local" only checks SRV
+           records which refer to in-zone hostnames.
+
+           Mode "full" checks that delegation NS records refer to A or AAAA
+           record (both in-zone and out-of-zone hostnames). It also checks
+           that glue addresses records in the zone match those advertised by
+           the child. Mode "local" only checks NS records which refer to
+           in-zone hostnames or that some required glue exists, that is when
+           the nameserver is in a child zone.
+
+           Mode "full-sibling" and "local-sibling" disable sibling glue checks
+           but are otherwise the same as "full" and "local" respectively.
+
+           Mode "none" disables the checks.
+
+       -f format
+           Specify the format of the zone file. Possible formats are "text"
+           (default) and "raw".
+
+       -F format
+           Specify the format of the output file specified. Possible formats
+           are "text" (default) and "raw". For named-checkzone, this does not
+           cause any effects unless it dumps the zone contents.
+
+       -k mode
+           Perform "check-names" checks with the specified failure mode.
+           Possible modes are "fail" (default for named-compilezone), "warn"
+           (default for named-checkzone) and "ignore".
+
+       -m mode
+           Specify whether MX records should be checked to see if they are
+           addresses. Possible modes are "fail", "warn" (default) and
+           "ignore".
+
+       -M mode
+           Check if a MX record refers to a CNAME. Possible modes are "fail",
+           "warn" (default) and "ignore".
+
+       -n mode
+           Specify whether NS records should be checked to see if they are
+           addresses. Possible modes are "fail" (default for
+           named-compilezone), "warn" (default for named-checkzone) and
+           "ignore".
+
+       -o filename
+           Write zone output to filename. This is mandatory for
+           named-compilezone.
+
+       -s style
+           Specify the style of the dumped zone file. Possible styles are
+           "full" (default) and "relative". The full format is most suitable
+           for processing automatically by a separate script. On the other
+           hand, the relative format is more human-readable and is thus
+           suitable for editing by hand. For named-checkzone this does not
+           cause any effects unless it dumps the zone contents. It also does
+           not have any meaning if the output format is not text.
+
+       -S mode
+           Check if a SRV record refers to a CNAME. Possible modes are "fail",
+           "warn" (default) and "ignore".
+
+       -t directory
+           chroot to directory so that include directives in the configuration
+           file are processed as if run by a similarly chrooted named.
+
+       -w directory
+           chdir to directory so that relative filenames in master file
+           $INCLUDE directives work. This is similar to the directory clause
+           in named.conf.
+
+       -D
+           Dump zone file in canonical format. This is always enabled for
+           named-compilezone.
+
+       -W mode
+           Specify whether to check for non-terminal wildcards. Non-terminal
+           wildcards are almost always the result of a failure to understand
+           the wildcard matching algorithm (RFC 1034). Possible modes are
+           "warn" (default) and "ignore".
+
+       zonename
+           The domain name of the zone being checked.
+
+       filename
+           The name of the zone file.
+
+RETURN VALUES
+       named-checkzone returns an exit status of 1 if errors were detected and
+       0 otherwise.
+
+SEE ALSO
+       named(8), RFC 1035, BIND 9 Administrator Reference Manual.
+
+AUTHOR
+       Internet Systems Consortium
+
+COPYRIGHT
+       Copyright (C) 2004-2007 Internet Systems Consortium, Inc. ("ISC")
+       Copyright (C) 2000-2002 Internet Software Consortium.
+
+
+

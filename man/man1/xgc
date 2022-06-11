@@ -1,0 +1,40 @@
+XGC(1)                                                                  XGC(1)
+
+
+
+NAME
+       xgc - X graphics demo
+
+SYNOPSIS
+       xgc [-toolkitoption ...]
+
+DESCRIPTION
+       The  xgc program demonstrates various features of the X graphics primi-
+       tives.  Try the buttons, see what they do; we haven't the time to docu-
+       ment them, perhaps you do?
+
+OPTIONS
+       Xgc accepts all of the standard X Toolkit command line options.
+
+X DEFAULTS
+       This program accepts the usual defaults for toolkit applications.
+
+ENVIRONMENT
+       DISPLAY to get the default host and display number.
+
+       XENVIRONMENT
+               to  get  the  name of a resource file that overrides the global
+               resources stored in the RESOURCE_MANAGER property.
+
+SEE ALSO
+       X(7)
+
+BUGS
+       This program isn't really finished yet.
+       See X(7) for a full statement of rights and permissions.
+
+AUTHORS
+       Dan Schmidt, MIT
+
+
+

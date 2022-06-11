@@ -1,0 +1,30 @@
+YPPUSH(8)                 BSD System Manager's Manual                YPPUSH(8)
+
+NAME
+     yppush -- force distribution of YP map
+
+SYNOPSIS
+     yppush [-d domainname] [-h hostname] [-v] mapname
+
+DESCRIPTION
+     yppush is used to distribute an YP map from a master server to any slave
+     server in the domain. All servers of the domain is fetched from the YP
+     map ypservers.
+
+     The options are as follows:
+
+     -d domainname
+             Don't use default domain, use the specified domain.
+
+     -h hostname
+             Distribute map only to one host and not to the hosts in the
+             ypserver map.
+
+     -v      Verbose. Announce what the program is doing.
+
+SEE ALSO
+     yp(8), ypserv(8)
+
+AUTHOR
+     Mats O Jansson
+

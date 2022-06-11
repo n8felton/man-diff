@@ -1,0 +1,269 @@
+raidutil(8)               BSD System Manager's Manual              raidutil(8)
+
+NAME
+     raidutil -- Manage, manipulate, and view RAID objects.
+
+SYNOPSIS
+     raidutil [global options] verb direct-object arguments ...
+
+DESCRIPTION
+     raidutil utilizes the CoreRAID framework to manipulate RAID devices.
+
+GLOBAL OPTIONS
+     There are several global options that may be used with raidutil. These
+     options are not specific to any particular verb. Instead they have a
+     global effect upon the way that raidutil performs.  These global options
+     are:
+
+     -c <ControllerType> | --controller <ControllerType>
+              This option (controller) allows the user to specify a controller
+              type.
+
+     -h | --help
+              This option (help) will print the standard "usage" text.
+
+     -t | --terse
+              This option (terse) will minimize superfluous text.
+
+     -v | --verbose
+              This option (verbose) will maximize the amount of detailed info-
+              mation the program will provide.
+
+     -V | --version
+              This option (Version) will print out version information about
+              this program.
+
+VERBS, DIRECT OBJECTS, AND SPECIFIC ARGUMENTS
+     acknowledge event -n <EventNumber>
+              Marks an event as acknowledged by specifiying an identifying
+              event number.  The -n may also be expressed as --number.
+
+     create raidset -n <NewRAIDSet> -d <ListOfDriveBays> -r <RaidLevel>
+              Create a RAIDSet specifiying: a RAIDSet name; a list of drive
+              bays; the RAID level.  The -n, -d, and -r flags may also be
+              expressed as --name, --drives, and --raidlevel, respectively.
+
+     create volume -n <NewVolumeName> -r <NameOfRAIDSet> -s <SizeOfVolume>
+              Create a volume specifiying: a volume name; a RAIDSet to build
+              the volume on; the size of the volume.  The -n, -d, and -s flags
+              may also be expressed as --name, --raidset, and --size, respec-
+              tively.
+
+     delete raidset -n <NameOfRAIDSet> [-f]
+              Remove a RAIDSet.  The name of the RAIDSet is specified using
+              the -n argument.  The -n flag may also be expressed as --name.
+              The optional -f flag may also be expressed as --force.
+
+     delete volume -n <NameOfVolume> [-r <RAIDSet>] [-f]
+              Remove a volume.  The name of the volume is specified using the
+              -n argument.  The -n flag may also be expressed as --name.  The
+              optional -r flag may also be expressed as --raidset.  The
+              optional -f flag may also be expressed as --force.
+
+     list [devices]
+              List all known RAID devices.  This is the default behavior if no
+              direct object is specified.
+
+     list status
+              Prints an overview of status information for the targeted RAID
+              device.
+
+     list driveinfo
+              Lists relevant information about any disk drives associated with
+              the targeted RAID device.
+
+     list eventinfo [-c n]
+              Lists event messages.  When provided, the optional 'count' argu-
+              ment, will limit the output to the last 'n' event messages.
+
+     list raidsetinfo
+              Lists relevant information about any RAIDSet associated with the
+              targeted RAID device.
+
+     list volumeinfo
+              Lists relevant information about any volumes associated with the
+              targeted RAID device.
+
+     list versioninfo
+              List version information about the targeted RAID device.
+
+     modify drive [arguments listed below]
+              This will allow the user to modify specific attributes of the
+              targeted drive.
+              --addglobalspare -d <DriveBayNumber>
+              --removeglobalspare -d <DriveBayNumber>
+              --addlocalspare -d <DriveBayNumber> -r <RAIDSet>
+              --removelocalspare -d <DriveBayNumber>
+              --adopt -d <DriveBayNumber>
+
+     modify raidset [arguments listed below]
+              This will allow the user to modify specific attributes of the
+              targeted RAIDSet.
+              --addcapacity -n <RAIDSet> -d <ListOfDrives> [-Y | -N]
+              --addmirror -n <RAIDSet> -d <ListOfDrives> [-Y | -N]
+              --migratetoraid5 -n <RAIDSet> -d <ListOfDrives> [-Y | -N]
+              --scrub -n <RAIDSet> -p <ServicePriority>
+
+     modify volume [arguments listed below]
+              This will allow the user to modify specific attributes of the
+              targeted volume.
+              --rewrite -n <VolumeName>  [-r <RAIDSet>] -p <ServicePriority>
+              --scrub -n <VolumeName>  [-r <RAIDSet>] -p <ServicePriority>
+
+              NOTE: Valid values for <ServicePriority> are:  low, medium,
+              high.
+
+EXAMPLES
+     raidutil create raidset -n set2 -d 1,2 -r J+
+              This creates a RAIDSet named "set2", using the drives in bays
+              one and two, with a raid level of "Enhanced JBOD."
+
+     raidutil create volume -n volume1 -r set1 -s 1.5T
+              This creates a volume named "volume1", on the RAIDSet named
+              "set1".  The size of the volume will be 1.5 tebibytes.
+
+     raidutil delete raidset -n setX
+              This deletes a RAIDSet named "setX." Any volumes associated with
+              this RAIDSet will also be destroyed.
+
+     raidutil delete raidset -n setX --force
+              Regardless of whether there are any mounted file systems associ-
+              ated with this group, this command deletes a RAIDSet named
+              "setX." Any volumes associated with this group will also be
+              destroyed.
+
+     raidutil delete volume -n myVolume
+              This deletes a volume named "myVolume."
+
+     raidutil delete volume -n myVolume -r BigRAIDSet
+              This specifically deletes a volume named "myVolume," that exists
+              on the RAIDSet named BigRAIDSet.
+
+     raidutil delete volume -n myVolume:BigRAIDSet
+              This specifically deletes a volume named "myVolume," that exists
+              on the group named BigRAIDSet.  Make note that this example uses
+              a method of overloading the volume name with the group name in
+              order to specify the group.
+
+     raidutil list devices
+              This will print out a list of all known RAID devices.
+
+     raidutil list version
+              This will print out version information for the RAID device.
+
+COMPATIBILITY
+   Specifying volumes
+     When performing certain actions, it may be desirable to explicitly spec-
+     ify the group that a volume is built upon.  For example, when removing a
+     volume, one might want to specify the associated group for clarity.  In
+     these cases, an optional argument is generally available for this pur-
+     pose.  An example of this is:
+
+           # raidutil delete volume -n myVolume -r theBigRAIDSet
+
+     A shortcut exists whereby the RAIDSet may be specified as a suffix to the
+     volume name.  For example, this is equivelent to the previous command:
+
+           # raidutil delete volume -n myVolume:theBigRAIDSet
+
+     The RAIDSet name is simply added to the volume name using the colon char-
+     acter as a separator.  This shortcut is supported by all of the "modify
+     volume" actions.
+
+   Specifying Sizes
+     When specifying data that indicates a numeric size, the value will be
+     assumed to be expressed in mebibytes (MiB) unless otherwise indicated.  A
+     mebibyte is a unit similar to a megabyte (MB).  Historically there has
+     been some confusion as to the correct value of a megabyte.  It was some-
+     times assumed to be exactly one million, or ten raised to the power of
+     six.  Other times, it was assumed to be 1,048,576 bytes, or two raised to
+     the power of twenty.
+
+     In 1998, the International Electrotechnical Commission (IEC) addressed
+     this issue by defining the mebibyte.  A mebibyte is the value of
+     1,048,576 bytes, whereas the definition for a megabyte is still vague.
+
+     For our purposes, we will treat all size units as 1024 based numbers.  We
+     will allow the user to use the historically prevalent two character nota-
+     tion (KB, MB, GB, TB, and PB) but they will be treated as their more mod-
+     ern counterparts (KiB, MiB, GiB, TiB, and PiB).
+
+     Values may be expressed in bytes by ending the value with the letter "B".
+
+     Other units for measure storage space follow suit, as shown by the fol-
+     lowing table:
+
+           kibibyte (KiB) 2^10 = 1024 bytes
+           mebibyte (MiB) 2^20 = 1024 * 1024 bytes
+           gibibyte (GiB) 2^30 = 1024 * 1024 * 1024 bytes
+           tebibyte (TiB) 2^40 = 1024 * 1024 * 1024 * 1024 bytes
+           pebibyte (PiB) 2^50 = 1024 * 1024 * 1024 * 1024 * 1024 bytes
+
+     For the purposes of entering size information to this program, the
+     default units are mebibytes (MiB).  This program will support values
+     expressed in the following units.  Acceptable abbreviations are listed
+     after the name:
+
+           one byte = 1B         ---  B
+           kibibyte = 1024B      ---  K, KB, KiB
+           mebibyte = 1024K      ---  M, MB, MiB
+           gibibyte = 1024M      ---  G, GB, GiB
+           tebibyte = 1024G      ---  T, TB, TiB
+           pebibyte = 1024T      ---  P, PB, PiB
+
+     For example, each of the following commands will all create a volume
+     named "theVolume" with a size of 600 mebibytes, on the RAIDSet named
+     "RAIDSet":
+
+           # raidutil create volume -n theVolume -s 614400K -r RAIDSet-A
+
+           # raidutil create volume -n theVolume -s 600 -r RAIDSet
+
+           # raidutil create volume -n theVolume -s 600M -r RAIDSet
+
+           # raidutil create volume -n theVolume -s 0.5859375GiB -r RAIDSet
+
+           # raidutil create volume -n theVolume -s 0.00057220459Ti -r RAIDSet
+
+           # raidutil create volume -n theVolume -s 0.000000558793545P -r
+           RAIDSet
+
+   Special Size Values For Creating Volumes
+     In place of a numeric value, the user may provide the word all.  When
+     this is done the program will attempt to use the maximum valid value.
+     For example, the following command would create a  volume named
+     "BigVolume", on the RAIDSet named "BigRAIDSet", using all available space
+     on that RAIDSet:
+
+           # raidutil create volume -n BigVolume -s all -r BigRAIDSet
+
+     Similarly, the user may provide a value that indicates a percentage of
+     available space.  This is done by providing a numeric value between 1 and
+     100 that is followed by the `%' character.  For example, the following
+     command would create a  volume named "BigVolume", on the RAIDSet named
+     "BigRAIDSet", using all available space on that RAIDSet:
+
+           # raidutil create volume -n BigVolume -s 100% -r BigRAIDSet
+
+     The following command would create a  volume named "MyVolume", on the
+     RAIDSet named "MyRAIDSet", using one fifth of all available space on that
+     RAIDSet:
+
+           # raidutil create volume -n MyVolume -s 20% -r MyRAIDSet
+
+     It should be noted that, all percentage values are rounded down to the
+     nearest whole number.  Thus, 33.333% becomes 33%, and 17.9321% becomes
+     17%.  Computed values are based on the RAIDSet available capacity
+     attribute.
+
+     NOTE:  The use of mebibyte and related units is strongly endorsed by IEC,
+     IEEE and CIPM.  The mebibyte and related units are defined in the IEC
+     document IEC 60027-1.
+
+EXIT STATUS
+     The raidutil utility exits 0 on success, and >0 if an error occurs.
+
+SEE ALSO
+     diskutil(8), hdid(8), hdiutil(1), ufs.util(8), msdos.util(8),
+     hfs.util(8), drutil(1), diskarbitrationd(8)
+

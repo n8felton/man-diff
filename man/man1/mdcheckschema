@@ -1,0 +1,16 @@
+MDCHECKSCHEMA(1)          BSD General Commands Manual         MDCHECKSCHEMA(1)
+
+NAME
+     mdcheckschema -- simple mdimporter schema validation tool
+
+SYNOPSIS
+     mdcheckschema schema.xml [...]
+
+DESCRIPTION
+     The mdcheckschema command validates the mdimporter schema files provided
+     as arguments and indicates whether the schema could be successfully
+     parsed.
+
+SEE ALSO
+     mdfind(1), mdimport(1), mdutil(1), mdls(1)
+

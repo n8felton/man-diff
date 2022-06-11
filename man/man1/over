@@ -1,0 +1,34 @@
+OVER(1)                              OVER                              OVER(1)
+
+
+
+NAME
+       over - pretty print and scroll source code on terminal
+
+
+SYNOPSIS
+       over [FILE]...
+
+
+DECRIPTION
+       Pretty  print  source  code in the FILEs.  The language is guessed with
+       the states program and enscript is used  to  do  the  formatting.   The
+       highlighting rules are defined in `/usr/share/enscript/hl/enscript.st'.
+
+       The FILEs are paged through less for more convenient display.
+
+
+FILES
+       /usr/share/enscript/hl/enscript.st      rules for various languages
+
+
+SEE ALSO
+       enscript(1), states(1)
+
+
+AUTHOR
+       Markku Rossi <mtr@iki.fi> <http://www.iki.fr/~mtr>
+
+
+
+

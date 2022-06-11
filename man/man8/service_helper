@@ -1,0 +1,12 @@
+service_helper(8)         BSD System Manager's Manual        service_helper(8)
+
+NAME
+     service_helper -- helper program for enabling and disabling services
+
+SYNOPSIS
+     service_helper
+
+DESCRIPTION
+     The service_helper program assists in enabling and disabling various sys-
+     tem services.  It is not intended to be invoked by the user.
+

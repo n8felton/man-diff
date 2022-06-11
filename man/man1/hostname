@@ -1,0 +1,22 @@
+HOSTNAME(1)               BSD General Commands Manual              HOSTNAME(1)
+
+NAME
+     hostname -- set or print name of current host system
+
+SYNOPSIS
+     hostname [-s] [name-of-host]
+
+DESCRIPTION
+     The hostname utility prints the name of the current host.  The super-user
+     can set the hostname by supplying an argument.
+
+     Options:
+
+     -s    Trim off any domain information from the printed name.
+
+SEE ALSO
+     gethostname(3)
+
+HISTORY
+     The hostname command appeared in 4.2BSD.
+

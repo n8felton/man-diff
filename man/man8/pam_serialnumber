@@ -1,0 +1,29 @@
+pam_serialnumber(8)       BSD System Manager's Manual      pam_serialnumber(8)
+
+NAME
+     pam_serialnumber -- Authentication for remote installation of Mac OS X
+     Server module for PAM
+
+SYNOPSIS
+     [service-name] module-type control-flag pam_serialnumber [options]
+
+DESCRIPTION
+     The authentication for remote installation of Mac OS X Server module for
+     PAM, pam_serialnumber, provides simple root authentication for the remote
+     installation and setup of Mac OS X Server.  It does so by authenticating
+     the root user with a password matching the first eight characters of the
+     authenticating computer's serial number.
+
+     The module will only authenticate if the filesystem root, ``/'', is
+     mounted as read-only.
+
+     If the serial number can not be read, for whatever reason, authenticating
+     with the password "12345678" will be allowed instead.
+
+     This authentication modules is intended to only be used with Mac OS X
+     Server installation and setup.  Any other usage may be a security risk
+     and is not recommended.
+
+SEE ALSO
+     pam.conf(5), pam(8)
+

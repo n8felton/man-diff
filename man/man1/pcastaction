@@ -1,0 +1,39 @@
+pcastaction(1)                                                  pcastaction(1)
+
+
+
+SYNOPSIS
+       pcastaction command [options] [args]
+
+OVERVIEW
+       The pcastaction tool is a tool built to facilitate writing Podcast Pro-
+       ducer workflows. It wraps a large set of commands needed  for  creating
+       video  or  audio podcasts. Actions include annotating QuickTime movies,
+       video editing, sending emails, posting blog entries.
+
+       The available subcommands are:
+         unpack
+         shell
+         preflight
+         postflight
+         encode
+         annotate
+         qceffect
+         watermark
+         title
+         merge
+         iTunes
+         iTunesU
+         mail
+         archive
+         publish
+         groupblog
+         template
+         approval
+
+       Run `pcastaction help` to access the built-in tool  documentation.  You
+       can also run `pcastaction <subcommand> help` for more information about
+       the different commands.
+
+
+

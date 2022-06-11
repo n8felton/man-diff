@@ -1,0 +1,58 @@
+MVN(1)                User Contributed Perl Documentation               MVN(1)
+
+
+
+NAME
+       mvn - Maven - a Java based project management and comprehension tool.
+
+SYNOPSIS
+       mvn [options] [<goal(s)>] [<phase(s)>]
+
+DESCRIPTION
+       Maven is a software project management and comprehension tool.  Based
+       on the concept of a project object model (POM), Maven can manage a
+       project's build, reporting and documentation from a central piece of
+       information.  Builds, documentation, source metrics, and source cross-
+       references are all controlled by your POM.
+
+       Maven has many goals, but in a nutshell Maven aims to make the
+       developer's life easier by providing a well defined project structure,
+       well defined development processes to follow, and a coherent body of
+       documentation that keeps your developers and clients apprised of what's
+       happening with your project.  Maven alleviates a lot of what most
+       developers consider drudgery and lets them get on with the task at
+       hand.  This is essential in OSS projects where there aren't many people
+       dedicated to the task of documenting and propagating the critical
+       information about your project which is necessary in order to attract
+       potential new developers and clients.
+
+OPTIONS
+        -q, --quiet                    Quiet output - only show errors
+        -C, --strict-checksums         Fail the build if checksums don't match
+        -c, --lax-checksums            Warn if checksums don't match
+        -P, --activate-profiles        Comma-delimited list of profiles to activate
+        -ff, --fail-fast               Stop at first failure in reactorized builds
+        -fae, --fail-at-end            Only fail the build afterwards; allow all non-impacted builds to continue
+        -B, --batch-mode               Run in non-interactive (batch) mode
+        -fn, --fail-never              NEVER fail the build, regardless of project result
+        -up, --update-plugins          Synonym for cpu
+        -N, --non-recursive            Do not recurse into sub-projects
+        -npr, --no-plugin-registry     Don't use ~/.m2/plugin-registry.xml for plugin versions
+        -U, --update-snapshots         Forces a check for updated releases and snapshots on remote repositories
+        -cpu, --check-plugin-updates   Force upToDate check for any relevant registered plugins
+        -npu, --no-plugin-updates      Suppress upToDate check for any relevant registered plugins
+        -D, --define                   Define a system property
+        -X, --debug                    Produce execution debug output
+        -e, --errors                   Produce execution error messages
+        -f, --file                     Force the use of an alternate POM file.
+        -h, --help                     Display help information
+        -o, --offline                  Work offline
+        -r, --reactor                  Execute goals for project found in the reactor
+        -s, --settings                 Alternate path for the user settings file
+        -v, --version                  Display version information
+
+SEE ALSO
+       http://maven.apache.org
+
+
+

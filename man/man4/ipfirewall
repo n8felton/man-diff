@@ -1,0 +1,188 @@
+IPFIREWALL(4)            BSD Kernel Interfaces Manual            IPFIREWALL(4)
+
+NAME
+     ipfirewall -- IP packet filter and traffic accounting
+
+SYNOPSIS
+     #include <sys/types.h>
+     #include <sys/queue.h>
+     #include <netinet/in.h>
+     #include <netinet/ip_fw.h>
+
+     int
+     setsockopt(raw_socket, IPPROTO_IP, ipfw option, struct ipfw, size);
+
+DESCRIPTION
+     IPFirewall (sometimes referred to as "ipfw") is a system facility which
+     allows filtering, redirecting, and other operations on IP packets travel-
+     ling through network interfaces.  Packets are matched by applying an
+     ordered list of pattern rules against each packet until a match is found,
+     at which point the corresponding action is taken.  Rules are numbered
+     from 1 to 65534; multiple rules may share the same number.
+
+     There is one rule that always exists, rule number 65535.  This rule nor-
+     mally causes all packets to be dropped.  Hence, any packet which does not
+     match a lower numbered rule will be dropped.  However, the kernel compile
+     time option IPFIREWALL_DEFAULT_TO_ACCEPT allows the administrator to
+     change this fixed rule to permit everything.
+
+     The buffer passed down via the socket-option call should contain a
+     "struct ip_fw" that is initialized with the required parameters for the
+     firewall command being invoked.  This structure is consistently required
+     for every firewall command, even though in some cases the majority of its
+     fields will go unused.  The reason for this is the API versioning that
+     the firewall supports for the sake of backward compatibility.  The
+     version field of this structure should always be set to
+     IP_FW_CURRENT_API_VERSION or an EINVAL error will be returned.
+
+   Commands
+     The following socket options are used to manage the rule list:
+
+     IP_FW_ADD    inserts the rule into the rule list
+
+     IP_FW_DEL    deletes all rules having the matching rule number
+
+     IP_FW_GET    returns the (first) rule having the matching rule number
+
+     IP_FW_ZERO   zeros the statistics associated with all rules having the
+                  matching rule number.  If the rule number is zero, all rules
+                  are zeroed.
+
+     IP_FW_FLUSH  removes all rules (except 65535).
+
+     When the kernel security level is greater than 2, only IP_FW_GET is
+     allowed.
+
+   Rule Structure
+     Rules are described by the following structure:
+
+     /* One ipfw rule */
+     struct ip_fw {
+         u_int32_t version;              /* Version of this structure.  Should always be */
+                                         /* set to IP_FW_CURRENT_API_VERSION by clients. */
+         void *context;                  /* Context that is usable by user processes to */
+                                         /* identify this rule. */
+         u_int64_t fw_pcnt,fw_bcnt;          /* Packet and byte counters */
+         struct in_addr fw_src, fw_dst;      /* Source and destination IP addr */
+         struct in_addr fw_smsk, fw_dmsk;    /* Mask for src and dest IP addr */
+         u_short fw_number;                  /* Rule number */
+         u_int fw_flg;                       /* Flags word */
+     #define IP_FW_MAX_PORTS 10              /* A reasonable maximum */
+             union {
+             u_short fw_pts[IP_FW_MAX_PORTS];        /* Array of port numbers to match */
+     #define IP_FW_ICMPTYPES_MAX     128
+     #define IP_FW_ICMPTYPES_DIM     (IP_FW_ICMPTYPES_MAX / (sizeof(unsigned) * 8))
+             unsigned fw_icmptypes[IP_FW_ICMPTYPES_DIM]; /* ICMP types bitmap */
+             } fw_uar;
+         u_int fw_ipflg;                     /* IP flags word */
+         u_char fw_ipopt,fw_ipnopt;          /* IP options set/unset */
+         u_char fw_tcpopt,fw_tcpnopt;        /* TCP options set/unset */
+         u_char fw_tcpf,fw_tcpnf;            /* TCP flags set/unset */
+         long timestamp;                     /* timestamp (tv_sec) of last match */
+         union ip_fw_if fw_in_if, fw_out_if; /* Incoming and outgoing interfaces */
+         union {
+             u_short fu_divert_port;         /* Divert/tee port (options IPDIVERT) */
+             u_short fu_pipe_nr;             /* queue number (option DUMMYNET) */
+             u_short fu_skipto_rule;         /* SKIPTO command rule number */
+             u_short fu_reject_code;         /* REJECT response code */
+             struct sockaddr_in fu_fwd_ip;
+         } fw_un;
+         u_char fw_prot;                     /* IP protocol */
+             /*
+              * N'of src ports and # of dst ports in ports array (dst ports
+              * follow src ports; max of 10 ports in all; count of 0 means
+              * match all ports)
+              */
+         u_char fw_nports;
+         void *pipe_ptr;                    /* flow_set ptr for dummynet pipe */
+         void *next_rule_ptr ;              /* next rule in case of match */
+         uid_t fw_uid;                       /* uid to match */
+         int fw_logamount;                   /* amount to log */
+         u_int64_t fw_loghighest;            /* highest number packet to log */
+     };
+
+     The ip_fw.h header also contains macros for setting the fw_ports field and various
+     flags and constants for setting other fields.
+
+   Rule Actions
+     Each rule has an action described by the IP_FW_F_COMMAND bits in the
+     flags word:
+
+     IP_FW_F_DENY    drop packet
+
+     IP_FW_F_REJECT  drop packet; send rejection via ICMP or TCP
+
+     IP_FW_F_ACCEPT  accept packet
+
+     IP_FW_F_COUNT   increment counters; continue matching
+
+     IP_FW_F_DIVERT  divert packet to a divert(4) socket
+
+     IP_FW_F_TEE     copy packet to a divert(4) socket; continue
+
+     IP_FW_F_SKIPTO  skip to rule number fu_skipto_rule
+
+     In the case of IP_FW_F_REJECT, if the fu_reject_code is a number from 0
+     to 255, then an ICMP unreachable packet is sent back to the original
+     packet's source IP address, with the corresponding code.  Otherwise, the
+     value must be 256 and the protocol IPPROTO_TCP, in which case a TCP reset
+     packet is sent instead.
+
+     With IP_FW_F_SKIPTO, all succeeding rules having rule number less than
+     fu_skipto_rule are skipped.
+
+   Kernel Options
+     Options in the kernel configuration file:
+
+     options IPFIREWALL                enable ipfirewall
+
+     options IPFIREWALL_VERBOSE        enable firewall logging
+
+     options IPFIREWALL_VERBOSE_LIMIT  limit firewall logging
+
+     options IPDIVERT                  enable divert(4) sockets
+
+     When packets match a rule with the IP_FW_F_PRN bit set, and if
+     IPFIREWALL_VERBOSE has been enabled,a message is written to /dev/klog
+     with the LOG_SECURITY facility (see syslog(3)) for further logging by
+     syslogd(8); IPFIREWALL_VERBOSE_LIMIT limits the maximum number of times
+     each rule can cause a log message. These variables are also available via
+     the sysctl(3) interface.
+
+RETURN VALUES
+     The setsockopt() function returns 0 on success.  Otherwise, -1 is
+     returned and the global variable errno is set to indicate the error.
+
+ERRORS
+     The setsockopt() function will fail if:
+
+     [EINVAL]           The IP option field was improperly formed; an option
+                        field was shorter than the minimum value or longer
+                        than the option buffer provided.
+
+     [EINVAL]           A structural error in ip_fw structure occurred
+                        (n_src_p+n_dst_p too big, ports set for ALL/ICMP pro-
+                        tocols etc.).
+
+     [EINVAL]           The version field of the ip_fw structure was set to a
+                        value not supported by the currently-installed
+                        IPFirewall, or no ip_fw structure was passed to it at
+                        all.
+
+     [EINVAL]           An invalid rule number was used.
+
+SEE ALSO
+     setsockopt(2), divert(4), ip(4), ipfw(8), sysctl(8), syslogd(8)
+
+BUGS
+     The ``tee'' rule is not yet implemented (currently it has no effect).
+
+     This man page still needs work.
+
+HISTORY
+     The ipfw facility was initially written as package to BSDI by Daniel
+     Boulet <danny@BouletFermat.ab.ca>.  It has been heavily modified and
+     ported to FreeBSD by Ugen J.S. Antsilevich <ugen@NetVision.net.il>.
+
+     Several enhancements added by Archie Cobbs <archie@FreeBSD.org>.
+

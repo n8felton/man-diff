@@ -1,0 +1,39 @@
+
+ZFS.UTIL(8)               BSD System Manager's Manual              ZFS.UTIL(8)
+
+NAME
+     zfs.util -- ZFS file system utility
+
+SYNOPSIS
+     zfs.util [-m mountflag1 mountflag2 mountflag3 mountflag4] device node
+
+     zfs.util [-p mountflag1 mountflag2 mountflag3 mountflag4] device
+
+     zfs.util [-u] device
+
+     zfs.util [-n] device name
+
+DESCRIPTION
+     The zfs.util command supports the mounting, probing, and unmounting of
+     ZFS file systems.
+
+     Options:
+           -m mountflag1 mountflag2 mountflag3 mountflag4
+                       mount
+           -n          set name
+           -p mountflag1 mountflag2 mountflag3 mountflag4
+                       probe for mounting
+           -u          unmount
+
+     mountflags above are either:
+           o   removable or fixed
+           o   readonly or writeable
+           o   suid or nosuid
+           o   dev or nodev
+
+SEE ALSO
+     diskarbitrationd(8)
+
+HISTORY
+     The zfs.util command first appeared in Mac OS X 10.5 (Leopard).
+

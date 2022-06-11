@@ -1,0 +1,811 @@
+zpool(8)                  BSD System Manager's Manual                 zpool(8)
+
+
+
+NAME
+       zpool - configures ZFS storage pools
+
+SYNOPSIS
+       zpool [-?]
+
+
+       zpool create [-fn] [-R root] [-m mountpoint] pool vdev ...
+
+
+       zpool destroy [-f] pool
+
+
+       zpool add [-fn] pool vdev
+
+
+       zpool remove pool vdev
+
+
+       zpool  list [-H] [-o field[,field]*] [pool] ...
+
+
+       zpool iostat [-v] [pool] ... [interval [count]]
+
+
+       zpool status [-xv] [pool] ...
+
+
+       zpool offline [-t] pool device ...
+
+
+       zpool online pool device ...
+
+
+       zpool clear pool [device] ...
+
+
+       zpool attach [-f] pool device new_device
+
+
+       zpool detach pool device
+
+
+       zpool replace [-f] pool device [new_device]
+
+
+       zpool scrub [-s] pool ...
+
+
+       zpool export [-f] pool
+
+
+       zpool import [-d dir] [-D]
+
+
+       zpool import [-d dir] [-D] [-f] [-o opts] [-R root] pool | id
+           [newpool]
+
+
+       zpool import [-d dir] [-D] [-f] [-a]
+
+
+       zpool upgrade
+
+
+       zpool upgrade -v
+
+
+       zpool upgrade [-a | pool]
+
+
+       zpool history [pool] ...
+
+
+DESCRIPTION
+       The  zpool  command  configures  ZFS storage pools. A storage pool is a
+       collection of devices that provides physical storage and data  replica-
+       tion for ZFS datasets.
+
+       All datasets within a storage pool share the same space. See zfs(8) for
+       information on managing datasets.
+
+   ZFS Read-only Implementation
+       ZFS on OSX is implemented as a readonly filesystem  by  default.   This
+       means  that  only  the ZFS subcommands that do non write operations are
+       permitted. Permitted subcommands  are  list,  iostat,  status,  online,
+       offline, scrub, import, and history.
+
+       A full ZFS implementation that allows all subcommands and is read/write
+       is available for download at http://developer.apple.com/.
+
+       To determine which version of ZFS is loaded(readonly or writable):
+
+         # kextstat | grep zfs
+
+       com.apple.filesystems.zfs.readonly  is  the  readonly   kext   version.
+       com.apple.filesystems.zfs is the writable kext version.
+
+
+   Virtual Devices (vdevs)
+       A "virtual device" describes a single device or a collection of devices
+       organized according to certain performance and  fault  characteristics.
+       The following virtual devices are supported:
+
+       disk      A  block  device, typically located under "/dev". ZFS can use
+                 individual slices or partitions, though the recommended  mode
+                 of  operation  is to use whole disks. A disk can be specified
+                 by a full path, or it can be a shorthand name  (the  relative
+                 portion of the path under "/dev"). A whole disk can be speci-
+                 fied by omitting the  slice  or  partition  designation.  For
+                 example,  "disk1s2"  is  equivalent  to  "/dev/disk1s2". When
+                 given a whole disk, ZFS automatically  labels  the  disk,  if
+                 necessary.
+
+
+       file      A  regular  file.  The  use  of  files  as a backing store is
+                 strongly discouraged. It is designed primarily for experimen-
+                 tal  purposes,  as  the  fault tolerance of a file is only as
+                 good as the file system of which it is a part. A file must be
+                 specified by a full path.
+
+
+       mirror    A  mirror  of  two  or more devices. Data is replicated in an
+                 identical fashion across all components of a mirror. A mirror
+                 with  N  disks  of  size X can hold X bytes and can withstand
+                 (N-1) devices failing before data integrity is compromised.
+
+
+       raidz     A variation on RAID-5 that allows for better distribution  of
+       raidz1    parity  and eliminates the "RAID-5 write hole" (in which data
+       raidz2    and parity become inconsistent after a power loss). Data  and
+                 parity is striped across all disks within a raidz group.
+
+                 A raidz group can have either single- or double-parity, mean-
+                 ing that the raidz group can  sustain  one  or  two  failures
+                 respectively  without  losing  any data. The raidz1 vdev type
+                 specifies a single-parity raidz group  and  the  raidz2  vdev
+                 type  specifies  a  double-parity raidz group. The raidz vdev
+                 type is an alias for raidz1.
+
+                 A raidz group with N disks of size X with P parity disks  can
+                 hold approximately (N-P)*X bytes and can withstand one device
+                 failing before data integrity  is  compromised.  The  minimum
+                 number  of devices in a raidz group is one more than the num-
+                 ber of parity disks. The recommended number is between 3  and
+                 9.
+
+
+       spare     A  special  pseudo-vdev  which  keeps  track of available hot
+                 spares for a pool. For more information, see the "Hot Spares"
+                 section.
+
+
+       Virtual  devices  cannot be nested, so a mirror or raidz virtual device
+       can only contain files or disks. Mirrors of mirrors (or other  combina-
+       tions) are not allowed.
+
+       A pool can have any number of virtual devices at the top of the config-
+       uration (known as "root vdevs"). Data is dynamically distributed across
+       all  top-level  devices  to  balance data among devices. As new virtual
+       devices are added, ZFS automatically places data on the newly available
+       devices.
+
+       Virtual  devices are specified one at a time on the command line, sepa-
+       rated by whitespace. The keywords "mirror" and "raidz" are used to dis-
+       tinguish  where  a group ends and another begins. For example, the fol-
+       lowing creates two root vdevs, each a mirror of two disks:
+
+         # zpool create mypool mirror disk1s1 disk0s1 mirror disk1s2 disk0s2
+
+
+
+   Device Failure and Recovery
+       ZFS supports a rich set of mechanisms for handling device  failure  and
+       data corruption. All metadata and data is checksummed, and ZFS automat-
+       ically repairs bad data from a good copy when corruption is detected.
+
+       In order to take advantage of these features, a pool must make  use  of
+       some  form  of redundancy, using either mirrored or raidz groups. While
+       ZFS supports running in a non-redundant configuration, where each  root
+       vdev  is  simply a disk or file, this is strongly discouraged. A single
+       case of bit corruption can render some or all of your data unavailable.
+
+       A  pool's  health  status  is described by one of three states: online,
+       degraded, or faulted. An online pool has  all  devices  operating  nor-
+       mally. A degraded pool is one in which one or more devices have failed,
+       but the data is still available due to  a  redundant  configuration.  A
+       faulted  pool has one or more failed devices, and there is insufficient
+       redundancy to replicate the missing data.
+
+   Hot Spares
+       ZFS allows devices to be associated with pools as "hot  spares".  These
+       devices  are  not  actively used in the pool, but when an active device
+       fails, it is automatically replaced by a hot spare. To  create  a  pool
+       with hot spares, specify a "spare" vdev with any number of devices. For
+       example,
+
+         # zpool create pool mirror disk0 disk1 spare disk2 disk3
+
+
+
+       Spares can be shared across multiple pools, and can be added  with  the
+       "zpool add" command and removed with the "zpool remove" command. Once a
+       spare replacement is initiated, a new "spare" vdev  is  created  within
+       the  configuration  that will remain there until the original device is
+       replaced. At this point, the  hot  spare  becomes  available  again  if
+       another device fails.
+
+       An  in-progress spare replacement can be cancelled by detaching the hot
+       spare. If the original faulted device is detached, then the  hot  spare
+       assumes  its  place in the configuration, and is removed from the spare
+       list of all active pools.
+
+   Alternate Root Pools
+       The "zpool create -R" and "zpool import -R"  commands  allow  users  to
+       create  and import a pool with a different root path. By default, when-
+       ever a pool is created or imported on a system, it is permanently added
+       so that it is available whenever the system boots. For removable media,
+       or when in recovery situations, this may not always  be  desirable.  An
+       alternate  root pool does not persist on the system. Instead, it exists
+       only until exported or the system is rebooted, at which point  it  will
+       have to be imported again.
+
+       In  addition,  all mount points in the pool are prefixed with the given
+       root, so a pool can be constrained to a particular  area  of  the  file
+       system. This is most useful when importing unknown pools from removable
+       media, as the mount points of any file systems cannot be trusted.
+
+       When creating an alternate root pool, the default mount point  is  "/",
+       rather than the normal default "/Volumes/pool".
+
+   Subcommands
+       All  subcommands  that modify state are logged persistently to the pool
+       in their original form.
+
+       The zpool command provides subcommands to create  and  destroy  storage
+       pools, add capacity to storage pools, and provide information about the
+       storage pools. The following subcommands are supported:
+
+       zpool -?
+
+           Displays a help message.
+
+
+       zpool create [-fn] [-R root] [-m mountpoint] pool vdev ...
+
+           Creates a new storage pool containing the virtual devices specified
+           on  the  command  line. The pool name must begin with a letter, and
+           can only contain alphanumeric  characters  as  well  as  underscore
+           ("_"),  dash  ("-"),  and  period  (".").  The pool names "mirror",
+           "raidz", and "spare" are reserved, as are names beginning with  the
+           pattern  "c[0-9]". The vdev specification is described in the "Vir-
+           tual Devices" section.
+
+           The command verifies that each device specified is  accessible  and
+           not  currently  in  use  by another subsystem. There are some uses,
+           such as being currently mounted, or specified as the dedicated dump
+           device,  that  prevents a device from ever being used by ZFS. Other
+           uses, such as having a preexisting HFS file system, can be overrid-
+           den with the -f option.
+
+           The  command also checks that the replication strategy for the pool
+           is consistent. An attempt to combine  redundant  and  non-redundant
+           storage  in a single pool, or to mix disks and files, results in an
+           error unless -f is specified. The use of differently sized  devices
+           within  a  single raidz or mirror group is also flagged as an error
+           unless -f is specified.
+
+           Unless the -R option is  specified,  the  default  mount  point  is
+           "/Volumes/pool".  The  mount point must not exist or must be empty,
+           or else the root dataset cannot be mounted. This can be  overridden
+           with the -m option.
+
+           -f               Forces use of vdevs, even if they appear in use or
+                            specify a conflicting replication level.  Not  all
+                            devices can be overridden in this manner.
+
+
+           -n               Displays  the  configuration  that  would  be used
+                            without actually creating  the  pool.  The  actual
+                            pool  creation  can still fail due to insufficient
+                            privileges or device sharing.
+
+
+           -R root          Creates the pool with an alternate root.  See  the
+                            "Alternate  Root  Pools" section. The root dataset
+                            has its mount point set to "/"  as  part  of  this
+                            operation.
+
+
+           -m mountpoint    Sets  the  mount  point  for the root dataset. The
+                            default mount point is "/Volumes/pool". The  mount
+                            point  must  be  an  absolute  path,  "legacy", or
+                            "none". For  more  information  on  dataset  mount
+                            points, see zfs(8).
+
+
+
+       zpool destroy [-f] pool
+
+           Destroys the given pool, freeing up any devices for other use. This
+           command tries to unmount any active datasets before destroying  the
+           pool.
+
+           -f    Forces  any  active  datasets contained within the pool to be
+                 unmounted.
+
+
+
+       zpool add [-fn] pool vdev ...
+
+           Adds the specified virtual devices to  the  given  pool.  The  vdev
+           specification  is  described  in the "Virtual Devices" section. The
+           behavior of the -f option, and  the  device  checks  performed  are
+           described in the "zpool create" subcommand.
+
+           -f    Forces  use of vdevs, even if they appear in use or specify a
+                 conflicting replication level. Not all devices can  be  over-
+                 ridden in this manner.
+
+
+           -n    Displays  the  configuration that would be used without actu-
+                 ally adding the vdevs. The actual  pool  creation  can  still
+                 fail due to insufficient privileges or device sharing.
+
+           Do  not  add a disk that is currently configured as a quorum device
+           to a zpool. Once a disk is in a zpool, that disk can then  be  con-
+           figured as a quorum device.
+
+
+       zpool remove pool vdev
+
+           Removes  the  given vdev from the pool. This command currently only
+           supports removing hot spares. Devices which are part  of  a  mirror
+           can  be  removed  using  the "zpool detach" command. Raidz and top-
+           level vdevs cannot be removed from a pool.
+
+
+       zpool list [-H] [-o field[,field*]] [pool] ...
+
+           Lists the given pools along with a health status and  space  usage.
+           When given no arguments, all pools in the system are listed.
+
+           -H          Scripted  mode.  Do  not  display headers, and separate
+                       fields by a single tab instead of arbitrary space.
+
+
+           -o field    Comma-separated list of fields to display.  Each  field
+                       must be one of:
+
+                         name            Pool name
+                         size            Total size
+                         used            Amount of space used
+                         available       Amount of space available
+                         capacity        Percentage of pool space used
+                         health          Health status
+
+
+                       The default is all fields.
+
+           This command reports actual physical space available to the storage
+           pool. The physical space can be different from the total amount  of
+           space  that  any contained datasets can actually use. The amount of
+           space used in a raidz configuration depends on the  characteristics
+           of the data being written. In addition, ZFS reserves some space for
+           internal accounting that the zfs(8) command takes into account, but
+           the  zpool  command  does  not.  For non-full pools of a reasonable
+           size, these effects should be invisible. For small pools, or  pools
+           that  are  close  to being completely full, these discrepancies may
+           become more noticeable.
+
+
+       zpool iostat [-v] [pool] ... [interval [count]]
+
+           Displays I/O statistics for the given pools. When given  an  inter-
+           val, the statistics are printed every interval seconds until Ctrl-C
+           is pressed. If no pools are specified, statistics for every pool in
+           the system is shown. If count is specified, the command exits after
+           count reports are printed.
+
+           -v    Verbose statistics. Reports usage statistics  for  individual
+                 vdevs  within  the pool, in addition to the pool-wide statis-
+                 tics.
+
+
+
+       zpool status [-xv] [pool] ...
+
+           Displays the detailed health status for the given pools. If no pool
+           is  specified,  then  the status of each pool in the system is dis-
+           played.
+
+           If a scrub or resilver is in progress,  this  command  reports  the
+           percentage done and the estimated time to completion. Both of these
+           are only approximate, because the amount of data in  the  pool  and
+           the other workloads on the system can change.
+
+           -x    Only  display  status for pools that are exhibiting errors or
+                 are otherwise unavailable.
+
+
+           -v    Displays verbose data error information, printing out a  com-
+                 plete  list  of  all data errors since the last complete pool
+                 scrub.
+
+
+
+       zpool offline [-t] pool device ...
+
+           Takes the specified physical device offline. While  the  device  is
+           offline, no attempt is made to read or write to the device.
+
+           This command is not applicable to spares.
+
+           -t    Temporary. Upon reboot, the specified physical device reverts
+                 to its previous state.
+
+
+
+       zpool online pool device ...
+
+           Brings the specified physical device online.
+
+           This command is not applicable to spares.
+
+
+       zpool clear pool [device] ...
+
+           Clears device errors in a pool. If no arguments are specified,  all
+           device  errors  within the pool are cleared. If one or more devices
+           is specified, only  those  errors  associated  with  the  specified
+           device or devices are cleared.
+
+
+       zpool attach [-f] pool device new_device
+
+           Attaches  new_device  to  an  existing  zpool  device. The existing
+           device cannot be part of a raidz configuration. If  device  is  not
+           currently  part  of  a mirrored configuration, device automatically
+           transforms into a two-way  mirror  of  device  and  new_device.  If
+           device  is part of a two-way mirror, attaching new_device creates a
+           three-way mirror, and so on. In either case, new_device  begins  to
+           resilver immediately.
+
+           -f    Forces  use  of new_device, even if its appears to be in use.
+                 Not all devices can be overridden in this manner.
+
+
+
+       zpool detach pool device
+
+           Detaches device from a mirror. The operation is  refused  if  there
+           are no other valid replicas of the data.
+
+
+       zpool replace [-f] pool old_device [new_device]
+
+           Replaces  old_device with new_device. This is equivalent to attach-
+           ing new_device, waiting for it  to  resilver,  and  then  detaching
+           old_device.
+
+           The size of new_device must be greater than or equal to the minimum
+           size of all the devices in a mirror or raidz configuration.
+
+           If new_device is not specified, it  defaults  to  old_device.  This
+           form of replacement is useful after an existing disk has failed and
+           has been physically replaced. In this case, the new disk  may  have
+           the  same /dev path as the old device, even though it is actually a
+           different disk. ZFS recognizes this.
+
+           -f    Forces use of new_device, even if its appears to be  in  use.
+                 Not all devices can be overridden in this manner.
+
+
+
+       zpool scrub [-s] pool ...
+
+           Begins  a scrub. The scrub examines all data in the specified pools
+           to verify that it checksums correctly. For  replicated  (mirror  or
+           raidz)  devices,  ZFS  automatically  repairs any damage discovered
+           during the scrub. The "zpool status" command reports  the  progress
+           of  the  scrub and summarizes the results of the scrub upon comple-
+           tion.
+
+           Scrubbing and resilvering are very similar operations. The  differ-
+           ence  is  that  resilvering only examines data that ZFS knows to be
+           out of date (for example, when attaching a new device to  a  mirror
+           or  replacing  an  existing device), whereas scrubbing examines all
+           data to discover silent errors due to hardware faults or disk fail-
+           ure.
+
+           Because scrubbing and resilvering are I/O-intensive operations, ZFS
+           only allows one at a time. If a scrub is already in  progress,  the
+           "zpool  scrub"  command  terminates it and starts a new scrub. If a
+           resilver is in progress, ZFS does not allow a scrub to  be  started
+           until the resilver completes.
+
+           -s    Stop scrubbing.
+
+
+
+       zpool export [-f] pool ...
+
+           Exports  the given pools from the system. All devices are marked as
+           exported, but are still considered in use by other subsystems.  The
+           devices can be moved between systems (even those of different endi-
+           anness) and imported as long as a sufficient number of devices  are
+           present.
+
+           Before  exporting  the  pool,  all  datasets  within  the  pool are
+           unmounted.
+
+           For pools to be portable, you must give  the  zpool  command  whole
+           disks, not just slices, so that ZFS can label the disks with porta-
+           ble EFI labels. Otherwise, disk drivers on platforms  of  different
+           endianness will not recognize the disks.
+
+           -f    Forcefully  unmount all datasets, using the "unmount -f" com-
+                 mand.
+
+
+
+       zpool import [-d dir] [-D]
+
+           Lists pools available to import. If the -d option is not specified,
+           this command searches for devices in "/dev" with the prefix "disk".
+           The -d option can be specified multiple times, and all  directories
+           are searched. If the device appears to be part of an exported pool,
+           this command displays a summary of the pool with the  name  of  the
+           pool,  a numeric identifier, as well as the vdev layout and current
+           health of the device for each  device  or  file.  Destroyed  pools,
+           pools that were previously destroyed with the "-zpool destroy" com-
+           mand, are not listed unless the -D option is specified.
+
+           The numeric identifier is unique, and can be used  instead  of  the
+           pool  name when multiple exported pools of the same name are avail-
+           able.
+
+           -d dir    Searches for devices or files in dir. The -d  option  can
+                     be specified multiple times.
+
+
+           -D        Lists destroyed pools only.
+
+
+
+       zpool import [-d dir] [-D] [-f] [-o opts] [-R root] pool | id [newpool]
+
+           Imports a specific pool. A pool can be identified by  its  name  or
+           the  numeric  identifier.  If  newpool  is  specified,  the pool is
+           imported using the name newpool. Otherwise, it is imported with the
+           same name as its exported name.
+
+           If a device is removed from a system without running "zpool export"
+           first, the device appears  as  potentially  active.  It  cannot  be
+           determined  if  this  was a failed export, or whether the device is
+           really in use from another host. To import a pool  in  this  state,
+           the -f option is required.
+
+           -d dir     Searches  for devices or files in dir. The -d option can
+                      be specified multiple times.
+
+
+           -D         Imports destroyed pool. The -f option is also  required.
+
+
+           -f         Forces  import,  even  if  the pool appears to be poten-
+                      tially active.
+
+
+           -o opts    Comma-separated list of mount options to use when mount-
+                      ing  datasets within the pool. See zfs(8) for a descrip-
+                      tion of dataset properties and mount options.
+
+
+           -R root    Imports pool(s) with an alternate root. See the  "Alter-
+                      nate Root Pools" section.
+
+
+
+       zpool import [-d dir] [-D] [-f] [-a]
+
+           Imports all pools found in the search directories. Identical to the
+           previous command, except that all pools with a sufficient number of
+           devices  available  are  imported. Destroyed pools, pools that were
+           previously destroyed with the "-zpool destroy" command, will not be
+           imported unless the -D option is specified.
+
+           -d dir    Searches  for  devices or files in dir. The -d option can
+                     be specified multiple times.
+
+
+           -D        Imports destroyed pools  only.  The  -f  option  is  also
+                     required.
+
+
+           -f        Forces import, even if the pool appears to be potentially
+                     active.
+
+
+
+       zpool upgrade
+
+           Displays all pools formatted using a different ZFS on-disk version.
+           Older  versions  can continue to be used, but some features may not
+           be available. These pools can be upgraded using "zpool upgrade -a".
+           Pools  that  are formatted with a more recent version are also dis-
+           played, although these pools will be inaccessible on the system.
+
+
+       zpool upgrade -v
+
+           Displays ZFS versions supported by the current software.  The  cur-
+           rent ZFS versions and all previous supportedversions are displayed,
+           along with an explanation of the features provided with  each  ver-
+           sion.
+
+
+       zpool upgrade [-a | pool]
+
+           Upgrades the given pool to the latest on-disk version. Once this is
+           done, the pool will no longer  be  accessible  on  systems  running
+           older versions of the software.
+
+           -a    Upgrades all pools.
+
+
+
+       zpool history [pool] ...
+
+           Displays  the  command history of the specified pools (or all pools
+           if no pool is specified).
+
+
+EXAMPLES
+       Example 1 Creating a RAID-Z Storage Pool
+
+       The following command creates a pool with a single raidz root vdev that
+       consists of six disks.
+
+
+         # zpool create tank raidz disk0 disk1 disk2 disk3 disk4 disk5
+
+
+
+       Example 2 Creating a Mirrored Storage Pool
+
+       The  following command creates a pool with two mirrors, where each mir-
+       ror contains two disks.
+
+
+         # zpool create tank mirror disk0 disk1 mirror disk2 disk3
+
+
+
+       Example 3 Creating a ZFS Storage Pool by Using Slices
+
+       The following command creates an unmirrored pool using two disk slices.
+
+
+         # zpool create tank disk0s1 disk0s4
+
+
+
+       Example 4 Creating a ZFS Storage Pool by Using Files
+
+       The following command creates an unmirrored pool using files. While not
+       recommended, a pool based on files can be useful for experimental  pur-
+       poses.
+
+
+         # zpool create tank /path/to/file/a /path/to/file/b
+
+
+
+       Example 5 Adding a Mirror to a ZFS Storage Pool
+
+       The  following  command  adds  two  mirrored  disks to the pool "tank",
+       assuming the pool is already made up of two-way mirrors. The additional
+       space is immediately available to any datasets within the pool.
+
+
+         # zpool add tank mirror disk1 disk2
+
+
+
+       Example 6 Listing Available ZFS Storage Pools
+
+       The  following command lists all available pools on the system. In this
+       case, the pool zion is faulted due to a missing device.
+
+
+       The results from this command are similar to the following:
+
+
+         # zpool list
+             NAME              SIZE    USED   AVAIL    CAP  HEALTH     ALTROOT
+             pool             67.5G   2.92M   67.5G     0%  ONLINE     -
+             tank             67.5G   2.92M   67.5G     0%  ONLINE     -
+             zion                 -       -       -     0%  FAULTED    -
+
+
+
+       Example 7 Destroying a ZFS Storage Pool
+
+       The following command destroys the pool "tank" and  any  datasets  con-
+       tained within.
+
+
+         # zpool destroy -f tank
+
+
+
+       Example 8 Exporting a ZFS Storage Pool
+
+       The following command exports the devices in pool tank so that they can
+       be relocated or later imported.
+
+
+         # zpool export tank
+
+
+
+       Example 9 Importing a ZFS Storage Pool
+
+       The following command displays available pools, and  then  imports  the
+       pool "tank" for use on the system.
+
+
+       The results from this command are similar to the following:
+
+
+         # zpool import
+          pool: tank
+            id: 15451357997522795478
+         state: ONLINE
+         action: The pool can be imported using its name or numeric identifier.
+         config:
+
+                tank        ONLINE
+                  mirror    ONLINE
+                    disk1s2  ONLINE
+                    disk2s3  ONLINE
+
+         # zpool import tank
+
+
+
+       Example 10 Upgrading All ZFS Storage Pools to the Current Version
+
+       The  following  command  upgrades  all ZFS Storage pools to the current
+       version of the software.
+
+
+         # zpool upgrade -a
+         This system is currently running ZFS version 2.
+
+
+
+       Example 11 Managing Hot Spares
+
+       The following command creates a new pool with an available hot spare:
+
+
+         # zpool create tank mirror disk0 disk1 spare disk2
+
+
+
+       If one of the disks were to fail, the pool  would  be  reduced  to  the
+       degraded  state.  The failed device can be replaced using the following
+       command:
+
+
+         # zpool replace tank disk0 disk3
+
+
+
+       Once the data has been resilvered, the spare is  automatically  removed
+       and  is  made available should another device fails.  The hot spare can
+       be permanently removed from the pool using the following command:
+
+
+         # zpool remove tank disk2
+
+
+
+EXIT STATUS
+       The following exit values are returned:
+
+       0    Successful completion.
+
+
+       1    An error occurred.
+
+
+       2    Invalid command line options were specified.
+
+
+SEE ALSO
+       zfs(8), zfs.util(8)
+
+
+HISTORY
+       The zpool command first appeared in Mac OS X 10.5 (Leopard).
+
+
+

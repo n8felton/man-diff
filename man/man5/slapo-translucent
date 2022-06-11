@@ -1,0 +1,64 @@
+SLAPO-TRANSLUCENT(5)                                      SLAPO-TRANSLUCENT(5)
+
+
+
+NAME
+       slapo-translucent - Translucent Proxy overlay
+
+SYNOPSIS
+       /etc/openldap/slapd.conf
+
+DESCRIPTION
+       The  Translucent Proxy overlay can be used with a backend database such
+       as slapd-bdb(5) to create a  "translucent  proxy".   Entries  retrieved
+       from  a  remote LDAP server may have some or all attributes overridden,
+       or new attributes added, by entries in the local database before  being
+       presented to the client.
+
+       A search operation is first populated with entries from the remote LDAP
+       server, the attributes of which are then overridden with any attributes
+       defined  in  the  local database. Local overrides may be populated with
+       the add, modify , and modrdn operations, the use of which is restricted
+       to the root user.
+
+       A  compare  operation will perform a comparison with attributes defined
+       in the local database record (if any) before  any  comparison  is  made
+       with data in the remote database.
+
+CONFIGURATION
+       The  Translucent  Proxy overlay uses a remote LDAP server which is con-
+       figured with the options  shown  in  slapd-ldap(5).   These  slapd.conf
+       options  are specific to the Translucent Proxy overlay; they may appear
+       anywhere after the overlay directive and before any subsequent database
+       directive.
+
+       translucent_strict
+              By default, attempts to delete attributes in either the local or
+              remote  databases  will  be  silently  ignored.   The   translu-
+              cent_strict  directive causes these modifications to fail with a
+              Constraint Violation.
+
+       translucent_no_glue
+              This configuration option disables  the  automatic  creation  of
+              "glue"  records  for  an  add or modrdn operation, such that all
+              parents of an entry added to the local database must be  created
+              by hand. Glue records are always created for a modify operation.
+
+CAVEATS
+       The Translucent Proxy overlay will disable schema checking in the local
+       database,  so  that  an entry consisting of overlay attributes need not
+       adhere to the complete schema.
+
+       Because the translucent overlay does not perform any DN rewrites,   the
+       local  and  remote database instances must have the same suffix.  Other
+       configurations will probably fail with No Such Object and other errors.
+
+FILES
+       /etc/openldap/slapd.conf
+              default slapd configuration file
+
+SEE ALSO
+       slapd.conf(5), slapd-ldap(5).
+
+
+

@@ -1,0 +1,91 @@
+dsexport(1)               BSD General Commands Manual              dsexport(1)
+
+NAME
+     dsexport
+
+SYNOPSIS
+     dsexport filePath DSNodePath recordType [<options>] [<DSProxy>]
+
+              The first three arguments are required and order dependent. All
+              other arguments may or may not be required, depending on what
+              operation the tool is performing.
+
+DESCRIPTION
+     dsexport is a tool for exporting records from Open Directory.
+
+OPTIONS
+     filePath              is a path to the file to be created and in which
+                           the data should be exported to. If the file already
+                           exists it will be overwritten.
+
+     DSNodePath            is the path to the DS node where the records will
+                           be read from.
+
+     recordType            is the type of DS record to be exported from the
+                           node. If the record type does not have a 'dsRec-
+                           TypeStandard:' or a 'dsRecTypeNative:' prefix the
+                           tool will search the node to see if the record type
+                           is a supported standard attribute and if this is
+                           the case it will export those records. If not the
+                           record type is considered to be native. Standard
+                           Record types are defined in DirServicesConst.h
+
+     [-r <recordName>]     is a list of the DS recordNames we wish to export
+                           from the Node. The names are to be separated by a
+                           comma (","). If no record names are specified the
+                           tool exports all the records on the specified node.
+                           Example: '-r admin, root, user1'
+
+     [-e <attributesToBeExcluded>]
+                           is a list of attribute types that should not be
+                           exported for every record. The attributes types are
+                           to be separated by a comma (",").
+
+                           The following record types are always excluded:
+                           'dsAttrTypeStandard:AppleMetaNodeLocation, dsAttr-
+                           TypeStandard:RecordType, dsAttrTypeNative:object-
+                           Class'
+
+     --N                   is the flag to tell the tool to export the native
+                           attributes as well as the standard attributes. By
+                           default the tool only exports standard attributes.
+
+DSPROXY
+     This is to be used in order to connect to a proxy machine. All three
+     options are needed. If you do not specify the password as an argument the
+     tool will prompt you for it.
+
+     [-a <proxyAddress>]   is the address of the proxy machine the user wishes
+                           to use.
+
+     [-u <proxyUser>]      Specifies user name to use for the proxy connection
+
+     [-p <proxyPassword>]  Specifies password to use for the proxy connection.
+                           For proxy connections name/password are required.
+                           If the this option is not specified and the user
+                           has specified a proxy machine and username the tool
+                           will prompt the user for the password.
+
+NOTES
+     When using an LDAP node please be aware that this tool can only export as
+     many records as the LDAP server is willing to return. This means that if
+     you have several thousand users you might want to raise the maximum num-
+     ber of search results that the server returns. This can be done in Server
+     Admin (my.server.com>OpenDirectory>Settings> Protocols tab). By default
+     this is set to 11000 results.
+
+EXAMPLES
+     Export all userRecords from the local node to export.out:
+
+           $ dsexport export.out /Local/Default dsRecTypeStandard:Users
+
+     Export the group records for admin and staff from the LDAPv3 Node on a
+     proxy machine 'proxy.machine.com':
+
+           $ dsexport export.out /LDAPv3/127.0.0.1 dsRecTypeStandard:Groups -r
+           admin, staff -a proxy.machine.com -u diradmin -p pass
+
+FILES
+SEE ALSO
+     DirectoryService(1)
+

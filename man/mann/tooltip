@@ -1,0 +1,63 @@
+tooltip(n)                    Tooltip management                    tooltip(n)
+
+
+
+______________________________________________________________________________
+
+NAME
+       tooltip - Tooltip management
+
+SYNOPSIS
+       package require Tcl  8.4
+
+       package require tooltip  ?1.1?
+
+       ::tooltip::tooltip command ?options?
+
+       clear ?pattern?
+
+       delay ?millisecs?
+
+       disable
+
+       enable
+
+       ::tooltip::tooltip pathName ?options? ?message?
+
+_________________________________________________________________
+
+DESCRIPTION
+       This  package provides tooltips, a small text message that is displayed
+       when the mouse hovers over a widget.
+
+
+       ::tooltip::tooltip command ?options?
+              commands:
+
+       clear ?pattern?
+
+       delay ?millisecs?
+
+       disable
+
+       enable
+
+       ::tooltip::tooltip pathName ?options? ?message?
+              This command arranges for widget pathName to display  a  tooltip
+              with message ?message?
+
+              -index
+
+              -item
+
+EXAMPLE
+       package require tooltip
+       pack [label .l -text "label"]
+       tooltip::tooltip .l "This is a label widget"
+
+
+KEYWORDS
+       balloon, help, hover, tooltip
+
+
+

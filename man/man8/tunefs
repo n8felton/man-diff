@@ -1,0 +1,101 @@
+TUNEFS(8)                 BSD System Manager's Manual                TUNEFS(8)
+
+NAME
+     tunefs -- tune up an existing file system
+
+SYNOPSIS
+     tunefs [-AN] [-a maxcontig] [-d rotdelay] [-e maxbpg] [-m minfree]
+            [-o optimize_preference] [-t trackskew] [special | filesys]
+
+DESCRIPTION
+     The tunefs utility is designed to change the dynamic parameters of a file
+     system which affect the layout policies.  The tunefs utility cannot be
+     run on an active file system.  To change an active file system, it must
+     be downgraded to read-only or unmounted.
+
+     The -N flag displays all the settable options (after any changes from the
+     tuning options) but does not cause any of them to be changed.
+
+     The -A flag causes the values to be updated in all the alternate
+     superblocks instead of just the standard superblock.  If this option is
+     not used, then use of a backup superblock by fsck(8) will lose anything
+     changed by tunefs.  The -A flag is ignored when the -N flag is specified.
+
+     The parameters which are to be changed are indicated by the flags given
+     below:
+
+     -a maxcontig
+             This specifies the maximum number of contiguous blocks that will
+             be laid out before forcing a rotational delay (see -d below).
+             The default value is one, since most device drivers require an
+             interrupt per disk transfer.  Device drivers that can chain sev-
+             eral buffers together in a single transfer should set this to the
+             maximum chain length.
+
+     -d rotdelay
+             This specifies the expected time (in milliseconds) to service a
+             transfer completion interrupt and initiate a new transfer on the
+             same disk.  It is used to decide how much rotational spacing to
+             place between successive blocks in a file.
+
+     -e maxbpg
+             This indicates the maximum number of blocks any single file can
+             allocate out of a cylinder group before it is forced to begin
+             allocating blocks from another cylinder group.  Typically this
+             value is set to about one quarter of the total blocks in a cylin-
+             der group.  The intent is to prevent any single file from using
+             up all the blocks in a single cylinder group, thus degrading
+             access times for all files subsequently allocated in that cylin-
+             der group.  The effect of this limit is to cause big files to do
+             long seeks more frequently than if they were allowed to allocate
+             all the blocks in a cylinder group before seeking elsewhere.  For
+             file systems with exclusively large files, this parameter should
+             be set higher.
+
+     -f avgfilesize
+             Specify the expected average file size.
+
+     -m minfree
+             Specify the percentage of space held back from normal users; the
+             minimum free space threshold.  The default value used is 10%.
+             This value can be set to zero, however up to a factor of three in
+             throughput will be lost over the performance obtained at a 10%
+             threshold.  If the value is raised above the current usage level,
+             users will be unable to allocate files until enough files have
+             been deleted to get under the higher threshold.
+
+     -o space | time
+             The file system can either try to minimize the time spent allo-
+             cating blocks, or it can attempt to minimize the space fragmenta-
+             tion on the disk.  Optimization for space has much higher over-
+             head for file writes.  If the value of minfree (see above) is
+             less than 10%, then the file system should optimize for space to
+             avoid running out of full sized blocks.  For values of minfree
+             greater than or equal to 10%, fragmentation is unlikely to be
+             problematical, and the file system can be optimized for time.
+
+     -s avgfpdir
+             Specify the expected number of files per directory.
+
+     -t trackskew
+             This specifies the skew in sectors from one track to the next in
+             a cylinder.  The default value is zero, indicating that each
+             track in a cylinder begins at the same rotational position.
+
+     At least one of the above flags is required.
+
+SEE ALSO
+     fs(5), dumpfs(8), fsck(8), newfs(8)
+
+     M. McKusick, W. Joy, S. Leffler, and R. Fabry, "A Fast File System for
+     UNIX", ACM Transactions on Computer Systems 2, 3, pp 181-197, August
+     1984, (reprinted in the BSD System Manager's Manual, SMM:5).
+
+BUGS
+     This program should work on mounted and active file systems.
+
+     You can tune a file system, but you can't tune a fish.
+
+HISTORY
+     The tunefs command appeared in 4.2BSD.
+

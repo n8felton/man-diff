@@ -1,0 +1,21 @@
+RC(8)                     BSD System Manager's Manual                    RC(8)
+
+NAME
+     rc -- command script for boot
+
+SYNOPSIS
+     rc
+     rc.local
+
+DESCRIPTION
+     Prior to Mac OS X 10.5, the rc script was used to bootstrap the OS. As of
+     Leopard, the system is self-bootstrapped via launchd(8) which uses the
+     launchctl(1) bootstrap subcommand to read in launchd jobs from the stan-
+     dard locations.  For compatibility reasons, the rc.local script still
+     continues to work.
+
+     The startup file rc.local reside in /etc.
+
+SEE ALSO
+     launchd(8), launchctl(1)
+

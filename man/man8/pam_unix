@@ -1,0 +1,84 @@
+PAM_UNIX(8)               BSD System Manager's Manual              PAM_UNIX(8)
+
+NAME
+     pam_unix -- UNIX PAM module
+
+SYNOPSIS
+     [service-name] module-type control-flag pam_unix [options]
+
+DESCRIPTION
+     The UNIX authentication service module for PAM, pam_unix provides func-
+     tionality for two PAM categories: authentication and account management.
+     In terms of the module-type parameter, they are the ``auth'' and
+     ``account'' features.  It also provides a null function for session man-
+     agement.
+
+   UNIX Authentication Module
+     The UNIX authentication component provides functions to verify the iden-
+     tity of a user (pam_sm_authenticate()), which obtains the relevant
+     passwd(5) entry.  It prompts the user for a password and verifies that
+     this is correct with crypt(3).
+
+     The following options may be passed to the authentication module:
+
+     debug           syslog(3) debugging information at LOG_DEBUG level.
+
+     use_first_pass  If the authentication module is not the first in the
+                     stack, and a previous module obtained the user's pass-
+                     word, that password is used to authenticate the user.  If
+                     this fails, the authentication module returns failure
+                     without prompting the user for a password.  This option
+                     has no effect if the authentication module is the first
+                     in the stack, or if no previous modules obtained the
+                     user's password.
+
+     try_first_pass  This option is similar to the use_first_pass option,
+                     except that if the previously obtained password fails,
+                     the user is prompted for another password.
+
+     auth_as_self    This option will require the user to authenticate them-
+                     self as the user given by getlogin(2), not as the account
+                     they are attempting to access.  This is primarily for
+                     services like su(1), where the user's ability to retype
+                     their own password might be deemed sufficient.
+
+     nullok          If the password database has no password for the entity
+                     being authenticated, then this option will forgo password
+                     prompting, and silently allow authentication to succeed.
+
+   UNIX Account Management Module
+     The UNIX account management component provides a function to perform
+     account management, pam_sm_acct_mgmt().  The function verifies that the
+     authenticated user is allowed to login to the local user account by
+     checking the password expiry date.
+
+     The following options may be passed to the management module:
+
+     debug           syslog(3) debugging information at LOG_DEBUG level.
+
+   UNIX Password Management Module
+     The UNIX password management component provides a function to perform
+     account management, pam_sm_chauthtok().  The function changes the user's
+     password.
+
+     The following options may be passed to the password module:
+
+     debug           syslog(3) debugging information at LOG_DEBUG level.
+
+     no_warn         suppress warning messages to the user.  These messages
+                     include reasons why the user's authentication attempt was
+                     declined.
+
+     local_pass      forces the password module to change a local password in
+                     favour of a NIS one.
+
+     nis_pass        forces the password module to change a NIS password in
+                     favour of a local one.
+
+FILES
+     /etc/master.passwd  default UNIX password database.
+
+SEE ALSO
+     passwd(1), getlogin(2), crypt(3), syslog(3), pam.conf(5), passwd(5),
+     pam(8)
+

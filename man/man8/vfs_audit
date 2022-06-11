@@ -1,0 +1,75 @@
+VFS_AUDIT(8)                                                      VFS_AUDIT(8)
+
+
+
+NAME
+       vfs_audit - record selected Samba VFS operations in the system log
+
+SYNOPSIS
+       vfs objects = audit
+
+DESCRIPTION
+       This VFS module is part of the samba(7) suite.
+
+       The vfs_audit VFS module records selected client operations to the sys-
+       tem log using syslog(3).
+
+       The following Samba VFS operations are recorded:
+
+          connect
+
+          disconnect
+
+          opendir
+
+          mkdir
+
+          rmdir
+
+          open
+
+          close
+
+          rename
+
+          unlink
+
+          chmod
+
+          fchmod
+
+          chmod_acl
+
+          fchmod_acl
+
+       This module is stackable.
+
+OPTIONS
+       audit:facility = FACILITY
+          Log messages to the named syslog(3) facility.
+
+       audit:priority = PRIORITY
+          Log messages with the named syslog(3) priority.
+
+EXAMPLES
+       Log operations on all shares using the LOCAL1 facility and NOTICE  pri-
+       ority:
+
+
+               [global]
+            vfs objects = audit
+            audit:facility = LOCAL1
+            audit:priority = NOTICE
+
+
+VERSION
+       This man page is correct for version 3.0.25 of the Samba suite.
+
+AUTHOR
+       The  original  Samba  software  and  related  utilities were created by
+       Andrew Tridgell. Samba is now developed by the Samba Team  as  an  Open
+       Source project similar to the way the Linux kernel is developed.
+
+
+
+

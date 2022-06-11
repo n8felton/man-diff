@@ -1,0 +1,21 @@
+MAKEKEY(8)                BSD System Manager's Manual               MAKEKEY(8)
+
+NAME
+     makekey -- make encrypted keys or passwords
+
+SYNOPSIS
+     makekey
+
+DESCRIPTION
+     Makekey encrypts a key and salt which it reads from the standard input,
+     writing the result to the standard output.  The key and salt values are
+     expected to be ten and two bytes, respectively, in length.  See crypt(3)
+     for more information on what characters the key and salt can contain and
+     how the encrypted value is calculated.
+
+SEE ALSO
+     crypt(1), login(1), crypt(3)
+
+HISTORY
+     A makekey command appeared in Version 7 AT&T UNIX.
+

@@ -1,0 +1,127 @@
+NAMED(8)                             BIND9                            NAMED(8)
+
+
+
+NAME
+       named - Internet domain name server
+
+SYNOPSIS
+       named [-4] [-6] [-c config-file] [-d debug-level] [-f] [-g] [-n #cpus]
+             [-p port] [-s] [-t directory] [-u user] [-v] [-x cache-file]
+
+DESCRIPTION
+       named is a Domain Name System (DNS) server, part of the BIND 9
+       distribution from ISC. For more information on the DNS, see RFCs 1033,
+       1034, and 1035.
+
+       When invoked without arguments, named will read the default
+       configuration file /etc/named.conf, read any initial data, and listen
+       for queries.
+
+OPTIONS
+       -4
+           Use IPv4 only even if the host machine is capable of IPv6.  -4 and
+           -6 are mutually exclusive.
+
+       -6
+           Use IPv6 only even if the host machine is capable of IPv4.  -4 and
+           -6 are mutually exclusive.
+
+       -c config-file
+           Use config-file as the configuration file instead of the default,
+           /etc/named.conf. To ensure that reloading the configuration file
+           continues to work after the server has changed its working
+           directory due to to a possible directory option in the
+           configuration file, config-file should be an absolute pathname.
+
+       -d debug-level
+           Set the daemon's debug level to debug-level. Debugging traces from
+           named become more verbose as the debug level increases.
+
+       -f
+           Run the server in the foreground (i.e. do not daemonize).
+
+       -g
+           Run the server in the foreground and force all logging to stderr.
+
+       -n #cpus
+           Create #cpus worker threads to take advantage of multiple CPUs. If
+           not specified, named will try to determine the number of CPUs
+           present and create one thread per CPU. If it is unable to determine
+           the number of CPUs, a single worker thread will be created.
+
+       -p port
+           Listen for queries on port port. If not specified, the default is
+           port 53.
+
+       -s
+           Write memory usage statistics to stdout on exit.
+                  Note: This option is mainly of interest to BIND 9 developers
+                  and may be removed or changed in a future release.
+
+       -t directory
+           chroot() to directory after processing the command line arguments,
+           but before reading the configuration file.
+                  Warning: This option should be used in conjunction with the
+                  -u option, as chrooting a process running as root doesn't
+                  enhance security on most systems; the way chroot() is
+                  defined allows a process with root privileges to escape a
+                  chroot jail.
+
+       -u user
+           setuid() to user after completing privileged operations, such as
+           creating sockets that listen on privileged ports.
+                  Note: On Linux, named uses the kernel's capability mechanism
+                  to drop all root privileges except the ability to bind() to
+                  a privileged port and set process resource limits.
+                  Unfortunately, this means that the -u option only works when
+                  named is run on kernel 2.2.18 or later, or kernel
+                  2.3.99-pre3 or later, since previous kernels did not allow
+                  privileges to be retained after setuid().
+
+       -v
+           Report the version number and exit.
+
+       -x cache-file
+           Load data from cache-file into the cache of the default view.
+                  Warning: This option must not be used. It is only of
+                  interest to BIND 9 developers and may be removed or changed
+                  in a future release.
+
+SIGNALS
+       In routine operation, signals should not be used to control the
+       nameserver; rndc should be used instead.
+
+       SIGHUP
+           Force a reload of the server.
+
+       SIGINT, SIGTERM
+           Shut down the server.
+
+       The result of sending any other signals to the server is undefined.
+
+CONFIGURATION
+       The named configuration file is too complex to describe in detail here.
+       A complete description is provided in the BIND 9 Administrator
+       Reference Manual.
+
+FILES
+       /etc/named.conf
+           The default configuration file.
+
+       /var/run/named.pid
+           The default process-id file.
+
+SEE ALSO
+       RFC 1033, RFC 1034, RFC 1035, rndc(8), lwresd(8), named.conf(5), BIND 9
+       Administrator Reference Manual.
+
+AUTHOR
+       Internet Systems Consortium
+
+COPYRIGHT
+       Copyright (C) 2004-2007 Internet Systems Consortium, Inc. ("ISC")
+       Copyright (C) 2000, 2001, 2003 Internet Software Consortium.
+
+
+

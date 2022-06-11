@@ -1,0 +1,90 @@
+SOFTWAREUPDATE(8)         BSD System Manager's Manual        SOFTWAREUPDATE(8)
+
+NAME
+     softwareupdate -- system software update tool
+
+SYNOPSIS
+     softwareupdate command [args ...]
+
+DESCRIPTION
+     Software Update checks for new and updated versions of your software
+     based on information about your computer and current software.
+
+     Invoke softwareupdate by specifying a command followed by zero or more
+     args.
+
+     The following modes are available:
+
+     -l | --list
+                 List all available updates.
+
+     -d | --download
+
+     -i | --install
+                 Each update specified by args is downloaded and unarchived,
+                 and also installed.  The install flag requires root.  args
+                 can be one of the following:
+
+                 item ...    One or more update names.
+
+                 -a | --all  All appropriate updates.
+
+                 -r | --req  All required updates.
+
+     --ignore ...
+                 Manages the per-user list of ignored updates.
+
+     --reset-ignored
+                 Clears the list of all ignored updates.
+
+     --schedule  Manages the per-user scheduler preferences.  args should be
+                 one of the following words:
+
+                 on | off    Enable or disable automatic checking.
+
+     -h | --help
+                 Print command usage.
+
+EXAMPLES
+     The following examples are shown as given to the shell:
+
+     softwareupdate --list
+
+           * iPhoto-2.0
+                   iPhoto, 2.0, 34100K [recommended]
+           * iSync-1.0
+                   iSync, 1.0, 4840K [recommended]
+           * StuffItExpander7-7.0
+                   StuffIt Expander Security Update, 7.0, 4420K [recommended]
+           - iCal-1.0.2
+                   iCal, 1.0.2, 6520K
+           * AirPortSW-4.1
+                   AirPort Software, 4.1, 13880K [recommended] [restart]
+
+     softwareupdate --install iCal-1.0.2
+
+           Software Update Tool
+           Copyright 2002-2003 Apple Computer, Inc.
+
+           Installing iCal:
+           0...10...20...30...40...50...60...70...80...90...100 Done.
+
+     softwareupdate --ignore iCal iPhoto
+
+           Ignored updates:
+           (iPod, SafariUpdate)
+
+     softwareupdate --schedule
+
+           Automatic check is on
+
+ENVIRONMENT
+     COMMAND_LINE_INSTALL  Set when downloading or installing using the
+                           softwareupdate command. Scripts can check for the
+                           existence of this variable to determine if they are
+                           executing in a command line environment (i.e. there
+                           may be no WindowServer available).
+
+FILES
+     /usr/sbin/softwareupdate  Software Update tool
+

@@ -1,0 +1,52 @@
+appleping(1)                                                      appleping(1)
+
+
+
+NAME
+       appleping  -  exercises  the  AppleTalk network by sending packets to a
+       named host
+
+
+SYNOPSIS
+       appleping net-node [ packet-size [ npackets ]]
+
+       appleping name:type[@zone] [ packet-size [ npackets ]]
+
+
+ARGUMENTS
+       name:type[@zone]
+               Specifies the host by its name, type, and zone. If you  do  not
+               specify a value for zone, appleping uses the local zone.
+
+       net-node
+               Specifies  the host by its network node number. To see the net-
+               work node number for a particular  system,  run  atlookup.  The
+               network and node numbers must be in hexadecimal.
+
+       npackets
+               Specifies how many packets to send before terminating.
+
+       packet-size
+               Specifies  in  bytes  the  size  of  each packet.  The value of
+               packet-size must be between 14 and 599. The default packet size
+               is 64 bytes.
+
+
+DESCRIPTION
+       appleping  repeatedly  sends AppleTalk Echo Protocol request packets to
+       the specified computer and reports whether a reply  was  received.  The
+       appleping  command  continues to send packets and to display the result
+       until the number of packets specified by npackets is reached  or  until
+       you  issue  the  interrupt  character  (usually by pressing CONTROL-C).
+       Before exiting, appleping displays a summary of statistics.
+
+
+FILES
+       /usr/bin/appleping Executable file
+
+
+SEE ALSO
+       appletalk(8), atlookup(1)
+
+
+

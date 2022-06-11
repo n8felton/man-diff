@@ -1,0 +1,62 @@
+YPBIND(8)                 BSD System Manager's Manual                YPBIND(8)
+
+NAME
+     ypbind -- create and maintain a binding to a YP server
+
+SYNOPSIS
+     ypbind [-ypset] [-ypsetme] [-insecure]
+
+DESCRIPTION
+     ypbind finds the server for a particular YP domain and stores information
+     about it in a binding file. This binding information includes the IP
+     address of the server associated with that particular domain and which
+     port the server is using.  This information is stored in the directory
+     /var/yp/binding in a file named with the convention DOMAINNAME.version.
+     (The YP system only supplies information on version 2.)
+
+     When ypbind starts the primary domain (or gets the first request for a
+     new domain), it checks if a file for the domain in question exists in the
+     directory /var/yp/binding (ie. /var/yp/binding/DOMAINNAME.ypservers).  If
+     such a file exists, it will list the hosts which ypbind should restrict
+     its server search to.  Otherwise, ypbind assumes it will need to use
+     broadcasts to find a valid server.  Using either of these techniques,
+     ypbind will search for a server willing to serve maps for the client's
+     domain.  Once a binding is established, ypbind maintains this binding by
+     periodically communicating with the server to which it is bound.  If the
+     binding is somehow lost, e.g by server reboot, ypbind marks the domain as
+     unbound and attempts to re-establish the binding.  When the binding is
+     once again successful, ypbind marks the domain as bound and resumes its
+     periodic check.
+
+     The options are as follows:
+
+     -ypset    ypset(8) may be used to change the server to which a domain is
+               bound.
+
+     -ypsetme  ypset(8) may be used only from this machine to change the
+               server to which a domain is bound.
+
+     -insecure
+               permit binding to a ypserv(8) on a non-reserved port.  This is
+               needed if receiving maps from SunOS 3.x or Ultrix.
+
+     -d        enable debugging output.
+
+     The -ypset and -ypsetme options are dangerous and should be avoided.  For
+     greatest security, the use of a server list in
+     /var/yp/binding/DOMAINNAME.ypservers is recommended.  The file should
+     contain a list of valid YP server hostnames, with one hostname per line.
+     The comment character is #.
+
+FILES
+     /var/yp/binding/DOMAINNAME.version - binding file for domainname
+     /var/yp/binding/DOMAINNAME.ypservers - server list for this particular
+     domain
+
+SEE ALSO
+     domainname(1), ypcat(1), ypmatch(1), yppoll(8), ypset(8), ypwhich(1),
+     ypserv(8), yp(8)
+
+AUTHOR
+     Theo de Raadt
+

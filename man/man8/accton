@@ -1,0 +1,19 @@
+ACCTON(8)                 BSD System Manager's Manual                ACCTON(8)
+
+NAME
+     accton -- enable/disable system accounting
+
+SYNOPSIS
+     accton [file]
+
+DESCRIPTION
+     With an argument naming an existing file, accton causes system accounting
+     information for every process executed to be placed at the end of the
+     file.  If no argument is given, accounting is turned off.
+
+SEE ALSO
+     lastcomm(1), acct(5)
+
+HISTORY
+     The accton command has existed nearly forever, but this man page is new.
+

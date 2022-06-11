@@ -1,0 +1,26 @@
+COMPILEHELP(1)            BSD General Commands Manual           COMPILEHELP(1)
+
+NAME
+     compileHelp -- command-line utility to merge contextual help rtf snippets
+     into one resource
+
+SYNOPSIS
+     compileHelp [-f | -force] [-m Helpfile | -merge Helpfile]
+                 [-o File | -output File] [-help]
+
+DESCRIPTION
+     The compileHelp command
+
+Options
+     -f, -force  Force the output file to be created, even with no input
+                 files.
+
+     -m, -merge HELPFILE
+                 Merge the contents of HELPFILE.  HELPFILE should the output
+                 of a previous invocation of compileHelp.
+
+     -o, -output FILE
+                 Write output to FILE.
+
+     -help       Print usage message.
+

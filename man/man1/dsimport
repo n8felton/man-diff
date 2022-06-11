@@ -1,0 +1,152 @@
+dsimport(1)               BSD General Commands Manual              dsimport(1)
+
+NAME
+     dsimport
+
+SYNOPSIS
+     dsimport [-ags] filePath DSnodePath <O|M|A|I|N> -u username [<options>]
+
+              The first four arguments are required and order dependent. -u is
+              required. All other arguments may or may not be required,
+              depending on what operation the tool is performing.
+
+DESCRIPTION
+     dsimport is a tool for importing records in Open Directory.
+
+USAGE
+     -a                    Import XML as exported by Appleshare IP 6.x.
+
+     -g                    Import a delimited file.
+
+     -s                    Import XML as exported by Users and Groups from Mac
+                           OS X 10.1.x Server
+
+     filePath              is a path to the file to be imported.
+
+     DSNodePath            is the path to the DS node that the imported
+                           records will be added to.
+
+     username              is the admin name for authentication
+
+     <O/M/A/I/N>           is one of O,M, I, A or N. This parameter controls
+                           how duplicate records are handled.
+
+     O                     signals overwrite of any existing records that have
+                           the same record name. All previous attribute values
+                           are deleted.
+
+     M                     signals that the info from the import should be
+                           merged into any existing record. This merge prefers
+                           the new values, old values are kept only if no new
+                           value is present. This option does not create a
+                           record if one did not already exist.
+
+     I                     signals that any imported record should be ignored
+                           if a record with the same name already exists.
+
+     A                     signals that data should be appended to fields
+                           within existing records. This option does not cre-
+                           ate a record if one did not already exist.
+
+     N                     signals that no duplicate checking should be done.
+
+     [-p pword]            is the admin's password for import operations. Used
+                           to authenticate to the directory node specified for
+                           import. If not specified, a secure prompt will be
+                           provided.
+
+     [-T <xDSStandardUser || xDSStandardGroup>]
+                           Used for delimited import of files that lack field
+                           descriptions. These files must have fields in one
+                           of the following orders:
+
+                           xDSStandardUser contains the following fields in
+                           the following order: RecordName  Password  UniqueID
+                           PrimaryGroupID DistinguishedName  NFSHomeDirectory
+                           UserShell
+
+                           xDSStandardGroup contains the following fields in
+                           the following order: RecordName Password Primary-
+                           GroupID GroupMembership
+
+     [-s <StartingIDNum>]  Indicates the ID number to start with when the
+                           import tool generates user IDs for for any import
+                           file that lacks UID as part of the import data.
+
+     [-recordFormat <recordFormatString>]
+                           Passes in the delimiters and attributes and record
+                           type to specify the order and names of attributes
+                           in the file to be imported. An example record for-
+                           mat string:
+
+                           0x0A 0x5C 0x3A 0x2C dsRecTypeStandard:Users 7 dsAt-
+                           trTypeStandard:RecordName  dsAttrTypeStandard:Pass-
+                           word dsAttrTypeStandard:UniqueID dsAttrTypeS-
+                           tandard:PrimaryGroupID dsAttrTypeStandard:RealName
+                           dsAttrTypeStandard:NFSHomeDirectory dsAttrTypeS-
+                           tandard:UserShell
+
+     [-r <GroupID>]        is the group ID used for any  records that do not
+                           specify primary group ID.
+
+     [-v]                  signals verbose status output
+
+     [-d <abcd>]           Passes the four delimiters ( end of record, escape,
+                           end of field, and end of value, in that order) for
+                           a delimited export. these values must be passed as
+                           hex strings. example 0x16  (22 decimal)
+
+     [-y IP]               Connects to a remote machine at the network address
+                           specified for proxy DS access.
+
+     [-yrnm <username>]    Specifies user name to use for the proxy connection
+
+     [-yrpwd <password>]   Specifies password to use for the proxy connection.
+                           For proxy connections name/password are required.
+                           If -yrnm is specified, but not -yrpwd, then a
+                           secure prompt will be specified.
+
+     [-n <recordKeyIndex>]
+                           Set which attribute (by index) is used for the
+                           imported records' key for matching duplicate
+                           records. This is used for delimited imports only.
+                           If none specified, zero is assumed. recordKeyIndex
+                           is a zero-based index which indicates which
+                           attribute will be the recordKey.
+
+     [-userpreset <preset name>]
+                           Designate a preset record to be applied to imported
+                           user records.
+
+     [-grouppreset <preset name>]
+                           Designate a preset record to be applied to imported
+                           group records.
+
+     [-f <attribute name> <attribute value>]
+                           Force a specific value for the named attribute for
+                           all records during the import. The new value will
+                           overwrite any value specified in the import file.
+                           Multiple values may be specified by using the value
+                           delimeter between values. This option may be speci-
+                           fied multiple times for multiple attributes.
+
+     [-V]                  Prints version number.
+
+     [-h]                  Outputs this usage text.
+
+     [-x]                  Don't import and erase delimited file after conver-
+                           sion from XML. Helps debug XML.
+
+EXAMPLES
+     To import a standard dsexport file into the Local database:
+
+           dsimport -g myimportFile /Local/Default I -u administrator -p
+           adminpassword
+
+FILES
+     /usr/bin/dsimport
+     ~/Library/Logs/ImportExport
+
+SEE ALSO
+     DirectoryService(1)
+

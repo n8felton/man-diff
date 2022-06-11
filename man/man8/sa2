@@ -1,0 +1,45 @@
+sa2(8)                    BSD System Manager's Manual                   sa2(8)
+
+NAME
+     sa2 -- Generate a system activity daily report file.
+
+SYNOPSIS
+     /usr/lib/sa/sa2 [-dgpu] [-n mode] [-e time] [-f filename] [-i seconds]
+                     [-s time]
+
+DESCRIPTION
+     The sa2 command is a shell script used to invoke the system activity
+     reporter sar for purposes of generating the standard default daily report
+     file.  The report file generated is, /var/log/sa/sardd where the dd rep-
+     resents the current day of the month.  The sa2 options are the same as
+     those documented in sar(1).
+
+     When sa2 runs, it will also remove data and report files, found in
+     /var/log/sa, that are more than one week old.
+
+     The sa2 command is intended to be started by cron.
+
+EXAMPLE CRON ENTRY
+     # Starting at 8am collect system activity records
+     # every 20 minutes for 12 hours
+     # 20 minutes = 1200 seconds
+     # 12 hours with 3 samples each hour = 36 loops
+
+     0 8 * * 1-5 /usr/lib/sa/sa1 1200 36
+
+     # After the 12 hour period,
+     # collect a system activity report
+
+     30 20 * * 1-5 /usr/lib/sa/sa2 -A
+
+
+FILES
+     /var/log/sa/sardd  Default daily report file.
+     /var/log/sa/sadd   Default daily data file.
+
+                        dd are digits that represent the day of the month.
+
+SEE ALSO
+     crontab(1), fs_usage(1), netstat(1), sar(1), sc_usage(1), top(1),
+     vm_stat(1), crontab(5), iostat(8), sa1(8), sadc(8)
+

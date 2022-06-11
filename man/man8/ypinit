@@ -1,0 +1,31 @@
+YPINIT(8)                 BSD System Manager's Manual                YPINIT(8)
+
+NAME
+     ypinit -- create an YP server (master or slave)
+
+SYNOPSIS
+     ypinit -m [domainname]
+     ypinit -s master_server [domainname]
+     ypinit -u [domainname]
+
+DESCRIPTION
+     Ypinit is the utiliy to setup an YP server, or changing the ypserver map.
+
+     The options are as follows:
+
+     -m      Setup a master YP server. If domainname is not given the default
+             domainname will be used.
+
+     -s      Setup a slave YP server.  domainname is not given the default
+             domainname will be used.  master_server must be a running YP mas-
+             ter server.
+
+     -u      Update the ypserver map on a YP master server. If domainname is
+             not given the default domainname will be used.
+
+SEE ALSO
+     yp(8), ypserv(8)
+
+AUTHOR
+     Mats O Jansson <moj@stacken.kth.se>
+

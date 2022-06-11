@@ -1,0 +1,32 @@
+security_privportserve... BSD General Commands Manualsecurity_privportserve...
+
+NAME
+     security_privportserver -- Authorization-based trampoline to acquire
+     privileged ports
+
+SYNOPSIS
+     security_privportserver
+
+DESCRIPTION
+     security_privportserver is used by the Authorization framework call
+     AuthorizationBindPrivilegedPort() to allow a process to bind to a privi-
+     leged port without requiring the client application to run as root.  The
+     tool will acquire the requested ports if the client is granted sys-
+     tem.privilege.port.connect and system.privilege.port.accept rights in a
+     Security Authorization evaluation.
+
+     This command is not intended to be invoked directly.
+
+FILES
+     /etc/authorization
+
+              The authorization database can be configured to allow or disal-
+              low the use of this function.
+
+HISTORY
+     security_privportserver was first introduced in Mac OS X version 10.3
+     (Panther).
+
+AUTHORS
+     Perry Kiehtreiber
+

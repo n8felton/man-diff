@@ -1,0 +1,53 @@
+TRACEROUTE6(8)            BSD System Manager's Manual           TRACEROUTE6(8)
+
+NAME
+     traceroute6 -- print the route IPv6 packets will take to the destination
+
+SYNOPSIS
+     traceroute6 [-dlnrv] [-f firsthop] [-g gateway] [-m hoplimit] [-p port]
+                 [-q probes] [-s src] [-w waittime] target [datalen]
+
+DESCRIPTION
+     -d      Debug mode.
+
+     -f firsthop
+             Specify how many hops to skip in trace.
+
+     -g gateway
+             Specify intermediate gateway (traceroute6 uses routing header).
+
+     -m hoplimit
+             Specify maximum hoplimit.
+
+     -l      Print both host hostnames and numeric addresses.  Normally
+             traceroute6 prints only hostnames if -n is not specified, and
+             only numeric addresses if -n is specified.
+
+     -n      Do not resolve numeric address to hostname.
+
+     -p port
+             Set UDP port number to port.
+
+     -q probes
+             Set the number of probe per hop count to probes.
+
+     -r
+
+     -s src  Src specifies the source IPv6 address to be used.
+
+     -v      Be verbose.
+
+     -w waittime
+             Specify the delay time between probes.
+
+RETURN VALUES
+     The traceroute6 command will exit with 0 on success, and non-zero on
+     errors.
+
+SEE ALSO
+     ping(8), ping6(8), traceroute(8)
+
+HISTORY
+     The traceroute6 command first appeared in WIDE hydrangea IPv6 protocol
+     stack kit.
+

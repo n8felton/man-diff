@@ -1,0 +1,63 @@
+mcxquery(1)               BSD General Commands Manual              mcxquery(1)
+
+NAME
+     mcxquery -- Managed Client (MCX) compositor query tool
+
+SYNOPSIS
+     mcxquery [options] [-user recordName] [-group recordName]
+              [-computer spec]
+
+              options:
+
+              -o path                    output path
+
+              -format space | tab | xml  output format
+
+DESCRIPTION
+     mcxquery is a utility to determine the effective managed preferences for
+     a user logging in to a workgroup from a specific computer.
+
+     -user      Specify the short name of the user record to read managed
+                preferences from. If this parameter is omitted, or a value of
+                "=" specified, the short name of the currently logged in con-
+                sole user will be used.
+
+     -group     Specify the short name of the group record to read managed
+                preferences from. A value of "=" may be specified to mean the
+                name of the workgroup (if any) chosen for the current login
+                session.
+
+     -computer  Specify the computer record to read managed preferences from.
+                The computer can be specified using either an Ethernet MAC
+                address (e.g. "11:22:33:44:55:66") or the short name of the
+                computer record itself (e.g. "lab1_12"). If this parameter is
+                omitted, or a value of "=" specified, the record for the cur-
+                rent computer will be used.
+
+EXAMPLES
+     mcxquery -user jane -group science -computer lab1_12
+              Displays the managed preferences that would be in effect if user
+              "jane" logged in using workgroup "science" from the computer
+              specified in the "lab1_12" computer record.
+
+     mcxquery -user jane -group science -computer 11:22:33:44:55:66
+              Displays the managed preferences that would be in effect if user
+              "jane" logged in using workgroup "science" from a computer with
+              an Ethernet MAC address of 11:22:33:44:55:66.
+
+     mcxquery -user = -group = -computer guest
+              Displays the managed preferences that would be in effect if the
+              current user logged in using the current workgroup into a com-
+              puter not specified by any computer record (i.e. a "guest" com-
+              puter).
+
+     mcxquery -user jane -group math
+              Displays the managed preferences that would be in effect if the
+              user "jane" logged into the "math" workgroup on the current com-
+              puter.
+
+     mcxquery -o /tmp/report.txt -format xml -user jane
+              Writes the managed preferences that would be in effect if user
+              "jane" logged into the current computer without a workgroup.
+              The report is written in XML format to /tmp/report.txt.
+

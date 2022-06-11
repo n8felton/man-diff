@@ -1,0 +1,44 @@
+dnsextd(8)                BSD System Manager's Manual               dnsextd(8)
+
+NAME
+     dnsextd -- BIND Extension Daemon
+
+SYNOPSIS
+     dnsextd
+
+DESCRIPTION
+     dnsextd is a daemon invoked at boot time, running alongside BIND 9, to
+     implement two EDNS0 extensions to the standard DNS protocol.
+
+     dnsextd allows clients to perform DNS Updates with an attached lease
+     lifetime, so that if the client crashes or is disconnected from the net-
+     work, its address records will be automatically deleted after the lease
+     expires.
+
+     dnsextd allows clients to perform long-lived queries. Instead of rapidly
+     polling the server to discover when information changes, long-lived
+     queries enable a client to indicate its interest in some set of data, and
+     then be notified asynchronously by the server whenever any of that data
+     changes.
+
+     dnsextd has no user-specifiable command-line argument, and users should
+     not run dnsextd manually.
+
+SEE ALSO
+     mDNS(1) mDNSResponder(8)
+
+     For information on Dynamic DNS Update, see RFC 2136 "Dynamic Updates in
+     the Domain Name System (DNS UPDATE)"
+
+     For information on Dynamic DNS Update Leases, see
+     http://files.dns-sd.org/draft-dns-update-leases.txt
+
+     For information on Long-Lived Queries, see
+     http://files.dns-sd.org/draft-dns-llq.txt
+
+BUGS
+     dnsextd bugs are tracked in Apple Radar component "mDNSResponder".
+
+HISTORY
+     The dnsextd daemon first appeared in Mac OS X 10.4 (Tiger).
+

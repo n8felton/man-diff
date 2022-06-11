@@ -1,0 +1,78 @@
+FTPUSERS(5)                 BSD File Formats Manual                FTPUSERS(5)
+
+NAME
+     ftpusers, ftpchroot -- tnftpd(8) access control file
+
+DESCRIPTION
+     The ftpusers file provides user access control for tnftpd(8) by defining
+     which users may login.
+
+     If the ftpusers file does not exist, all users are denied access.
+
+     A ``\'' is the escape character; it can be used to escape the meaning of
+     the comment character, or if it is the last character on a line, extends
+     a configuration directive across multiple lines.  A ``#'' is the comment
+     character, and all characters from it to the end of line are ignored
+     (unless it is escaped with the escape character).
+
+     The syntax of each line is:
+           userglob[:groupglob][@host] [directive [class]]
+
+     These elements are:
+
+           userglob   matched against the user name, using fnmatch(3) glob
+                      matching (e.g, `f*').
+
+           groupglob  matched against all the groups that the user is a member
+                      of, using fnmatch(3) glob matching (e.g, `*src').
+
+           host       either a CIDR address (refer to inet_net_pton(3)) to
+                      match against the remote address (e.g, `1.2.3.4/24'), or
+                      an fnmatch(3) glob to match against the remote hostname
+                      (e.g, `*.NetBSD.org').
+
+           directive  If ``allow'' or ``yes'' the user is allowed access.  If
+                      ``deny'' or ``no'', or directive is not given, the user
+                      is denied access.
+
+           class      defines the class to use in ftpd.conf(5).
+
+     If class is not given, it defaults to one of the following:
+
+           chroot  If there is a match in /etc/ftpchroot for the user.
+
+           guest   If the user name is ``anonymous'' or `ftp'.
+
+           real    If neither of the above is true.
+
+     No further comparisons are attempted after the first successful match.
+     If no match is found, the user is granted access.  This syntax is back-
+     ward-compatible with the old syntax.
+
+     If a user requests a guest login, the tnftpd(8) server checks to see that
+     both ``anonymous'' and ``ftp'' have access, so if you deny all users by
+     default, you will need to add both ``anonymous allow'' and ``ftp allow''
+     to /etc/ftpusers in order to allow guest logins.
+
+   /etc/ftpchroot
+     The file /etc/ftpchroot is used to determine which users will have their
+     session's root directory changed (using chroot(2)), either to the direc-
+     tory specified in the ftpd.conf(5) chroot directive (if set), or to the
+     home directory of the user.  If the file does not exist, the root direc-
+     tory change is not performed.
+
+     The syntax is similar to ftpusers, except that the class argument is
+     ignored.  If there's a positive match, the session's root directory is
+     changed.  No further comparisons are attempted after the first successful
+     match.  This syntax is backward-compatible with the old syntax.
+
+FILES
+     /etc/ftpchroot                     List of normal users who should have
+                                        their ftp session's root directory
+                                        changed by using chroot(2).
+     /etc/ftpusers                      This file.
+     /usr/share/ftpd/examples/ftpusers  A sample ftpusers file.
+
+SEE ALSO
+     fnmatch(3), inet_net_pton(3), ftpd.conf(5), tnftpd(8)
+

@@ -1,0 +1,48 @@
+KDESTROY(1)                                                        KDESTROY(1)
+
+
+
+NAME
+       kdestroy - destroy Kerberos tickets
+
+SYNOPSIS
+       kdestroy [-q] [-a | -A | -c cache_name | -p principal_name]
+
+DESCRIPTION
+       The kdestroy utility destroys the user's active Kerberos authentication
+       tickets by writing zeros to the specified credentials cache  that  con-
+       tains  them.   If  the  credentials cache is not specified, the default
+       credentials cache is destroyed.  kdestroy will destroy both Kerberos  4
+       and Kerberos 5 tickets if they are present.
+
+OPTIONS
+       -q     Run  quietly.   Normally kdestroy prints an error if it fails to
+              destroy the user's tickets.  The -q flag suppresses this  behav-
+              ior.
+
+       -a     Destroy all credentials caches (same as -A).  This option cannot
+              be combined with -c or -p.
+
+       -A     Destroy all credentials caches (same as -a).  This option cannot
+              be combined with -c or -p.
+
+       -c cache_name
+              Use  cache_name as the credentials (ticket) cache name and loca-
+              tion. This option cannot be combined with -a, -A or -p.
+
+              The default credentials cache may vary between systems.
+
+       -p principal_name
+              Destroy all credentials caches which contain tickets for princi-
+              pal_name.  principal_name  should be in the Kerberos 5 principal
+              format.  This option cannot be combined with -a, -A or -c.
+
+       Most Kerberos installations recommend that you place  the  kdestroy  -A
+       command  in your .logout file, so that your tickets are destroyed auto-
+       matically when you log out.
+
+SEE ALSO
+       kinit(1), klist(1), kpasswd(1), kswitch(1)
+
+
+

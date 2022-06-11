@@ -1,0 +1,93 @@
+ENVIRON(7)           BSD Miscellaneous Information Manual           ENVIRON(7)
+
+NAME
+     environ -- user environment
+
+SYNOPSIS
+     extern char **environ;
+
+DESCRIPTION
+     An array of strings called the environment is made available by execve(2)
+     when a process begins.  By convention these strings have the form
+     ``name=value''.  The following names are used by various commands:
+
+     BLOCKSIZE  The size of the block units used by several commands, most
+                notably df(1), du(1) and ls(1).  BLOCKSIZE may be specified in
+                units of a byte by specifying a number, in units of a kilobyte
+                by specifying a number followed by ``K'' or ``k'', in units of
+                a megabyte by specifying a number followed by ``M'' or ``m''
+                and in units of a gigabyte by specifying a number followed by
+                ``G'' or ``g''.  Sizes less than 512 bytes or greater than a
+                gigabyte are ignored.
+
+     EXINIT     A startup list of commands read by ex(1), edit(1), and vi(1).
+
+     HOME       A user's login directory, set by login(1) from the password
+                file passwd(5).
+
+     PATH       The sequence of directories, separated by colons, searched by
+                csh(1), sh(1), system(3), execvp(3), etc, when looking for an
+                executable file.  PATH is set to ``/usr/bin:/bin'' initially
+                by login(1).
+
+     PRINTER    The name of the default printer to be used by lpr(1), lpq(1),
+                and lprm(1).
+
+     SHELL      The full pathname of the user's login shell.
+
+     TERM       The kind of terminal for which output is to be prepared.  This
+                information is used by commands, such as nroff(1) or plot(1)
+                which may exploit special terminal capabilities.  See
+                /usr/share/misc/termcap (termcap(5)) for a list of terminal
+                types.
+
+     TERMCAP    The string describing the terminal in TERM, or, if it begins
+                with a '/', the name of the termcap file.  See TERMPATH below,
+                termcap(5), and termcap.
+
+     TERMPATH   A sequence of pathnames of termcap files, separated by colons
+                or spaces, which are searched for terminal descriptions in the
+                order listed.  Having no TERMPATH is equivalent to a TERMPATH
+                of ``$HOME/.termcap:/etc/termcap''.  TERMPATH is ignored if
+                TERMCAP contains a full pathname.
+
+     TMPDIR     The directory in which to store temporary files.  Most appli-
+                cations use either ``/tmp'' or ``/var/tmp''.  Setting this
+                variable will make them use another directory.
+
+     TZ         The timezone to use when displaying dates.  The normal format
+                is a pathname relative to ``/usr/share/zoneinfo''.  For exam-
+                ple, the command ``env TZ=US/Pacific date'' displays the cur-
+                rent time in California.  See tzset(3) for more information.
+
+     LOGNAME    The login name of the user.
+
+     USER       Deprecated synonym of LOGNAME (for backwards compatibility).
+
+     Further names may be placed in the environment by the export command and
+     name=value arguments in sh(1), or by the setenv command if you use
+     csh(1).  It is unwise to change certain sh(1) variables that are fre-
+     quently exported by .profile files, such as MAIL, PS1, PS2, and IFS,
+     unless you know what you are doing.
+
+PROGRAMMING
+     Programs can query and modify the environment, using the environment rou-
+     tines getenv(3), putenv(3), setenv(3) and unsetenv(3).  Direct access can
+     be made through the global variable environ, though it is recommended
+     that changes to the enviroment still be made through the environment rou-
+     tines.
+
+     Shared libraries and bundles don't have direct access to environ, which
+     is only available to the loader ld(1) when a complete program is being
+     linked.  The environment routines can still be used, but if direct access
+     to environ is needed, the _NSGetEnviron() routine, defined in
+     <crt_externs.h>, can be used to retrieve the address of environ at run-
+     time.
+
+SEE ALSO
+     csh(1), ex(1), login(1), sh(1), getenv(3), putenv(3), setenv(3),
+     unsetenv(3), execve(2), execle(3), system(3), termcap(3), termcap(5)
+
+HISTORY
+     The environ manual page appeared in 4.2BSD.
+

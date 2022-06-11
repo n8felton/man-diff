@@ -1,0 +1,22 @@
+STDETHERS(8)              BSD System Manager's Manual             STDETHERS(8)
+
+NAME
+     stdethers -- a YP filter program
+
+SYNOPSIS
+     stdethers [file]
+
+DESCRIPTION
+     Stdethers is used to get ride of some unwanted information in file or
+     stdin. This program is used by YP when creating some YP maps.
+
+     The options are as follows:
+
+     file    Use this file as input instead of stdin.
+
+SEE ALSO
+     yp(8), ypserv(8)
+
+AUTHOR
+     Mats O Jansson <moj@stacken.kth.se>
+

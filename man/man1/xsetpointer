@@ -1,0 +1,19 @@
+xsetpointer(1)                                                  xsetpointer(1)
+
+
+
+NAME
+       xsetpointer - set an X Input device as the main pointer
+
+SYNOPSIS
+       xsetpointer -l | device-name
+
+DESCRIPTION
+       Xsetpointer  sets  an  XInput  device as the main pointer.  When called
+       with the -l flag it lists the available devices.
+
+AUTHOR
+       Frederic Lepied
+
+
+

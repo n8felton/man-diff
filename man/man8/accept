@@ -1,0 +1,55 @@
+accept(8)                         Apple Inc.                         accept(8)
+
+
+
+NAME
+       accept/reject - accept/reject jobs sent to a destination
+
+SYNOPSIS
+       accept [ -E ] [ -U username ] [ -h hostname[:port] ] destination(s)
+       reject [ -E ] [ -U username ] [ -h hostname[:port] ] [ -r reason ] des-
+       tination(s)
+
+DESCRIPTION
+       accept instructs the printing system to accept print jobs to the speci-
+       fied destinations.
+
+       reject instructs the printing system to reject print jobs to the speci-
+       fied destinations. The -r option sets the reason  for  rejecting  print
+       jobs. If not specified the reason defaults to "Reason Unknown".
+
+OPTIONS
+       The following options are supported by both accept and reject:
+
+       -E
+            Forces encryption when connecting to the server.
+
+       -U username
+            Sets the username that is sent when connecting to the server.
+
+       -h hostname[:port]
+            Chooses an alternate server.
+
+       -r "reason"
+            Sets the reason string that is shown for a printer that is reject-
+            ing jobs.
+
+COMPATIBILITY
+       Unlike the System V printing system, CUPS allows printer names to  con-
+       tain  any  printable  character  except SPACE, TAB, "/", or "#".  Also,
+       printer and class names are not case-sensitive.
+
+       The CUPS versions of accept and reject may ask the user for  an  access
+       password  depending  on the printing system configuration. This differs
+       from the System V versions which require the root user to execute these
+       commands.
+
+SEE ALSO
+       cancel(1), cupsenable(8), lp(1), lpadmin(8), lpstat(1),
+       http://localhost:631/help
+
+COPYRIGHT
+       Copyright 2007 by Apple Inc.
+
+
+

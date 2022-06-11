@@ -1,0 +1,67 @@
+XON(1)                                                                  XON(1)
+
+
+
+NAME
+       xon - start an X program on a remote machine
+
+SYNOPSIS
+       xon remote-host [-access] [-debug] [-name window-name] [-nols] [-screen
+       screen-no] [-user user-name] [command ...]
+
+DESCRIPTION
+       Xon runs the specified  command  (default  xterm  -ls)  on  the  remote
+       machine  using rsh, remsh, or rcmd.  Xon passes the DISPLAY, XAUTHORITY
+       and XUSERFILESEARCHPATH environment variables to the remote command.
+
+       When no command is specified, xon runs 'xterm  -ls'.   It  additionally
+       specifies the application name to be 'xterm-remote-host' and the window
+       title to be '-fIremote-host'.
+
+       Xon can only work when the remote host will allow you to log in without
+       a password, by having an entry in the .rhosts file permitting access.
+
+OPTIONS
+       Note  that  the  options  follow  the remote host name (as they do with
+       rlogin).
+
+
+       -access
+              Runs xhost locally to add the remote host  to  the  host  access
+              list  in  the  X  server.  This won't work unless xhost is given
+              permission to modify the access list.
+
+       -debug Normally, xon disconnects the remote process from stdin,  stdout
+              and  stderr to eliminate the daemon processes which usually con-
+              nect them across the  network.   Specifying  the  -debug  option
+              leaves  them  connected  so  that error messages from the remote
+              execution are sent back to the originating host.
+
+       -name window-name
+              This specifies a different application name and window title for
+              the default command (xterm).
+
+       -nols  Normally  xon  passes  the  -ls option to the remote xterm; this
+              option suspends that behaviour.
+
+       -screen screen-no
+              This changes the screen number of the DISPLAY variable passed to
+              the remote command.
+
+       -user user-name
+              By  default,  xon  simply  uses rsh/remsh/rcmd to connect to the
+              remote machine using the same user name as on the local machine.
+              This option cause xon to specify an alternative user name.  This
+              will not work unless you have authorization to access the remote
+              account,  by  placing  an  appropriate entry in the remote users
+              .rhosts file.
+
+BUGS
+       Xon can get easily confused when the remote-host, user-name or  various
+       environment variable values contain white space.
+
+       Xon  has  no way to send the appropriate X authorization information to
+       the remote host.
+
+
+

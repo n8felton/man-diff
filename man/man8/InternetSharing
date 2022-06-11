@@ -1,0 +1,62 @@
+InternetSharing(8)        BSD System Manager's Manual       InternetSharing(8)
+
+NAME
+     InternetSharing -- simple NAT/router configuration daemon
+
+SYNOPSIS
+     InternetSharing -d
+
+DESCRIPTION
+     InternetSharing is the back-end for the Internet Sharing feature.  It is
+     responsible for configuring the network interfaces, the DHCP server
+     bootpd(8), the network address translation daemon natd(8), and the Inter-
+     net domain name server named(8).  named(8) is run in caching-only mode
+     and allows the DHCP server to always offer the same DNS server address to
+     the DHCP clients, regardless of the value of the actual DNS server
+     addresses.
+
+     The single command line option -d places additional debugging information
+     to stdout/stderr.
+
+     InternetSharing is launched by launchd(8) both at start-up and when the
+     user turns Internet Sharing on in the Sharing preferences pane.
+
+     By default, InternetSharing configures the IP addresses for non-AirPort
+     interfaces starting at 192.168.2.1, walking up by one class C network
+     (subnet mask 255.255.255.0) for each subsequent interface i.e.
+     192.168.3.1, 192.168.4.1, 192.168.5.1, and so on.  The AirPort interface
+     by default is assigned 10.0.2.1.
+
+CONFIGURATION
+     InternetSharing reads the property list com.apple.nat.plist stored in the
+     /Library/Preferences/SystemConfiguration.
+
+     Details of the com.apple.nat.plist are subject to change and are not com-
+     pletely documented here.  The plist is a contract between the Sharing
+     preferences pane and InternetSharing. Any details provided here are for
+     informational purposes only.
+
+     The plist is a dictionary with a single sub-dictionary called NAT con-
+     taining properties to control which interfaces to use and other settings.
+     It may also have a sub-dictionary called AirPort that is used to config-
+     ure the AirPort interface when it is put into access point mode.
+
+     One property worth mentioning is SharingNetworkNumberStart.  This prop-
+     erty controls the behavior of InternetSharing when it configures IP
+     addresses for the local interfaces.  The property is encoded as a string
+     containing the dotted decimal network IP address, assumed to be a class C
+     network.  For example:
+             <key>SharingNetworkNumberStart</key>
+             <string>192.168.100.0</string>
+
+     If the SharingNetworkNumberStart appears directly in the NAT dictionary,
+     it controls the starting IP address chosen for the non-AirPort inter-
+     faces.  If the property appears within the AirPort sub-dictionary, it
+     controls the IP address assigned to the AirPort interface.
+
+     The purpose of the property is to allow the user to avoid address colli-
+     sions with existing NAT'd networks.
+
+SEE ALSO
+     bootpd(8), launchd(8), natd(8), named(8)
+

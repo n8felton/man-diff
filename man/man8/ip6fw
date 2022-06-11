@@ -1,0 +1,322 @@
+IP6FW(8)                  BSD System Manager's Manual                 IP6FW(8)
+
+NAME
+     ip6fw -- controlling utility for IPv6 firewall
+
+SYNOPSIS
+     ip6fw [-q] [-p preproc [-D macro[=value]] [-U macro]] pathname
+     ip6fw [-f | -q] flush
+     ip6fw [-q] zero [number ...]
+     ip6fw delete number ...
+     ip6fw [-aftN] list [number ...]
+     ip6fw [-ftN] show [number ...]
+     ip6fw [-q] add [number] action [log] proto from src to dst
+           [via name | ipv6no] [options]
+
+DESCRIPTION
+     To ease configuration, rules can be put into a file which is processed
+     using ip6fw as shown in the first synopsis line.  An absolute pathname
+     must be used.  The file will be read line by line and applied as argu-
+     ments to the ip6fw utility.
+
+     Optionally, a preprocessor can be specified using -p preproc where
+     pathname is to be piped through.  Useful preprocessors include cpp(1) and
+     m4(1).  If preproc doesn't start with a slash (`/') as its first charac-
+     ter, the usual PATH name search is performed.  Care should be taken with
+     this in environments where not all file systems are mounted (yet) by the
+     time ip6fw is being run (e.g. when they are mounted over NFS).  Once -p
+     has been specified, optional -D and -U specifications can follow and will
+     be passed on to the preprocessor.  This allows for flexible configuration
+     files (like conditionalizing them on the local hostname) and the use of
+     macros to centralize frequently required arguments like IP addresses.
+
+     The ip6fw code works by going through the rule-list for each packet,
+     until a match is found.  All rules have two associated counters, a packet
+     count and a byte count.  These counters are updated when a packet matches
+     the rule.
+
+     The rules are ordered by a ``line-number'' from 1 to 65534 that is used
+     to order and delete rules.  Rules are tried in increasing order, and the
+     first rule that matches a packet applies.  Multiple rules may share the
+     same number and apply in the order in which they were added.
+
+     If a rule is added without a number, it is numbered 100 higher than the
+     previous rule.  If the highest defined rule number is greater than 65434,
+     new rules are appended to the last rule.
+
+     The delete operation deletes the first rule with number number, if any.
+
+     The list command prints out the current rule set.
+
+     The show command is equivalent to `ip6fw -a list'.
+
+     The zero operation zeroes the counters associated with rule number
+     number.
+
+     The flush operation removes all rules.
+
+     Any command beginning with a `#', or being all blank, is ignored.
+
+     One rule is always present:
+
+                       65535 deny all from any to any
+
+     This rule is the default policy, i.e., don't allow anything at all.  Your
+     job in setting up rules is to modify this policy to match your needs.
+
+     The following options are available:
+
+     -a    While listing, show counter values.  See also ``show'' command.
+
+     -f    Don't ask for confirmation for commands that can cause problems if
+           misused (ie; flush).  Note, if there is no tty associated with the
+           process, this is implied.
+
+     -q    While adding, zeroing or flushing, be quiet about actions (implies
+           '-f').  This is useful for adjusting rules by executing multiple
+           ip6fw commands in a script (e.g. sh /etc/rc.firewall), or by pro-
+           cessing a file of many ip6fw rules, across a remote login session.
+           If a flush is performed in normal (verbose) mode, it prints a mes-
+           sage.  Because all rules are flushed, the message cannot be deliv-
+           ered to the login session, the login session is closed and the
+           remainder of the ruleset is not processed.  Access to the console
+           is required to recover.
+
+     -t    While listing, show last match timestamp.
+
+     -N    Try to resolve addresses and service names in output.
+
+     action:
+
+         allow             Allow packets that match rule.  The search termi-
+                           nates.  Aliases are pass, permit, and accept.
+
+         deny              Discard packets that match this rule.  The search
+                           terminates.  Drop is an alias for deny.
+
+         reject            (Deprecated.) Discard packets that match this rule,
+                           and try to send an ICMPv6 host unreachable notice.
+                           The search terminates.
+
+         unreach code      Discard packets that match this rule, and try to
+                           send an ICMPv6 unreachable notice with code code,
+                           where code is a number from zero to 255, or one of
+                           these aliases: noroute, admin, notneighbor, addr,
+                           or noport, The search terminates.
+
+         reset             TCP packets only.  Discard packets that match this
+                           rule, and try to send a TCP reset (RST) notice.
+                           The search terminates (not working yet).
+
+         count             Update counters for all packets that match rule.
+                           The search continues with the next rule.
+
+         skipto number     Skip all subsequent rules numbered less than
+                           number.  The search continues with the first rule
+                           numbered number or higher.
+
+     If the kernel was compiled with IPV6FIREWALL_VERBOSE, then when a packet
+     matches a rule with the ``log'' keyword or a clear/resetlog is performed,
+     a message will be logged to syslogd(8), or, if that fails, to the con-
+     sole.  If the kernel was compiled with the IPV6FIREWALL_VERBOSE_LIMIT
+     option, then logging will cease after the number of packets specified by
+     the option are received for that particular chain entry.  When this limit
+     is reached, the limit and rule number will be logged.  Logging may then
+     be re-enabled by clearing the packet counter for that entry.
+
+     The syslogd(8) logging and the default log limit are adjustable dynami-
+     cally through the sysctl(8) interface.
+
+     proto:
+
+         ipv6              All packets match.  The alias all has the same
+                           effect.
+
+         tcp               Only TCP packets match.
+
+         udp               Only UDP packets match.
+
+         ipv6-icmp         Only ICMPv6 packets match.
+
+         <number|name>     Only packets for the specified protocol matches
+                           (see /etc/protocols for a complete list).
+
+     src and dst:
+
+         <address/prefixlen> [ports]
+
+     The <address/prefixlen> may be specified as:
+
+         ipv6no            An ipv6number of the form fec0::1:2:3:4.
+
+         ipv6no/prefixlen  An ipv6number with a prefix length of the form
+                           fec0::1:2:3:4/112.
+
+     The sense of the match can be inverted by preceding an address with the
+     ``not'' modifier, causing all other addresses to be matched instead.
+     This does not affect the selection of port numbers.
+
+     With the TCP and UDP protocols, optional ports may be specified as:
+
+         {port|port-port}[,port[,...]]
+
+     Service names (from /etc/services) may be used instead of numeric port
+     values.  A range may only be specified as the first value, and the length
+     of the port list is limited to IPV6_FW_MAX_PORTS (as defined in
+     /usr/src/sys/netinet6/ip6_fw.h) ports.
+
+     Fragmented packets which have a non-zero offset (i.e. not the first frag-
+     ment) will never match a rule which has one or more port specifications.
+     See the frag option for details on matching fragmented packets.
+
+     Rules can apply to packets when they are incoming, or outgoing, or both.
+     The in keyword indicates the rule should only match incoming packets.
+     The out keyword indicates the rule should only match outgoing packets.
+
+     To match packets going through a certain interface, specify the interface
+     using via:
+
+         via ifX           Packet must be going through interface ifX.
+
+         via if*           Packet must be going through interface ifX, where X
+                           is any unit number.
+
+         via any           Packet must be going through some interface.
+
+         via ipv6no        Packet must be going through the interface having
+                           IPv6 address ipv6no.
+
+     The via keyword causes the interface to always be checked.  If recv or
+     xmit is used instead of via, then the only receive or transmit interface
+     (respectively) is checked.  By specifying both, it is possible to match
+     packets based on both receive and transmit interface, e.g.:
+
+           ip6fw add 100 deny ip from any to any out recv ed0 xmit ed1
+
+     The recv interface can be tested on either incoming or outgoing packets,
+     while the xmit interface can only be tested on outgoing packets.  So out
+     is required (and in invalid) whenever xmit is used.  Specifying via
+     together with xmit or recv is invalid.
+
+     A packet may not have a receive or transmit interface: packets originat-
+     ing from the local host have no receive interface. while packets destined
+     for the local host have no transmit interface.
+
+     Additional options:
+
+         frag              Matches if the packet is a fragment and this is not
+                           the first fragment of the datagram.  frag may not
+                           be used in conjunction with either tcpflags or
+                           TCP/UDP port specifications.
+
+         in                Matches if this packet was on the way in.
+
+         out               Matches if this packet was on the way out.
+
+         ipv6options spec  Matches if the IPv6 header contains the comma sepa-
+                           rated list of options specified in spec.  The sup-
+                           ported IPv6 options are: hopopt (hop-by-hop options
+                           header), route (routing header), frag (fragment
+                           header), esp (encapsulating security payload), ah
+                           (authentication header), nonxt (no next header),
+                           and opts (destination options header).  The absence
+                           of a particular option may be denoted with a ``!''
+                           (not working yet).
+
+         established       Matches packets that have the RST or ACK bits set.
+                           TCP packets only.
+
+         setup             Matches packets that have the SYN bit set but no
+                           ACK bit.  TCP packets only.
+
+         tcpflags spec     Matches if the TCP header contains the comma sepa-
+                           rated list of flags specified in spec.  The sup-
+                           ported TCP flags are: fin, syn, rst, psh, ack, and
+                           urg.  The absence of a particular flag may be
+                           denoted with a ``!''.  A rule which contains a
+                           tcpflags specification can never match a fragmented
+                           packet which has a non-zero offset.  See the frag
+                           option for details on matching fragmented packets.
+
+         icmptypes types   Matches if the ICMPv6 type is in the list types.
+                           The list may be specified as any combination of
+                           ranges or individual types separated by commas.
+
+CHECKLIST
+     Here are some important points to consider when designing your rules:
+
+         o   Remember that you filter both packets going in and out.  Most
+             connections need packets going in both directions.
+
+         o   Remember to test very carefully.  It is a good idea to be near
+             the console when doing this.
+
+         o   Don't forget the loopback interface.
+
+FINE POINTS
+     There is one kind of packet that the firewall will always discard, that
+     is an IPv6 fragment with a fragment offset of one.  This is a valid
+     packet, but it only has one use, to try to circumvent firewalls.
+
+     If you are logged in over a network, loading the KLD version of ip6fw is
+     probably not as straightforward as you would think (not supported).  I
+     recommend this command line:
+
+                       kldload /modules/ip6fw_mod.o && \
+                       ip6fw add 32000 allow all from any to any
+
+     Along the same lines, doing an
+
+                       ip6fw flush
+
+     in similar surroundings is also a bad idea.
+
+PACKET DIVERSION
+     not supported.
+
+EXAMPLES
+     This command adds an entry which denies all tcp packets from
+     hacker.evil.org to the telnet port of wolf.tambov.su from being forwarded
+     by the host:
+
+           ip6fw add deny tcp from hacker.evil.org to wolf.tambov.su 23
+
+     This one disallows any connection from the entire hackers network to my
+     host:
+
+           ip6fw add deny all from fec0::123:45:67:0/112 to my.host.org
+
+     Here is a good usage of the list command to see accounting records and
+     timestamp information:
+
+           ip6fw -at l
+
+     or in short form without timestamps:
+
+           ip6fw -a l
+
+SEE ALSO
+     ip(4), ipfirewall(4), protocols(5), services(5), reboot(8), sysctl(8),
+     syslogd(8)
+
+BUGS
+     WARNING!!WARNING!!WARNING!!WARNING!!WARNING!!WARNING!!WARNING!!
+
+     This program can put your computer in rather unusable state.  When using
+     it for the first time, work on the console of the computer, and do NOT do
+     anything you don't understand.
+
+     When manipulating/adding chain entries, service and protocol names are
+     not accepted.
+
+AUTHORS
+     Ugen J. S. Antsilevich,
+     Poul-Henning Kamp,
+     Alex Nash,
+     Archie Cobbs.
+
+     API based upon code written by Daniel Boulet for BSDI.
+
+HISTORY
+     A ip6fw utility first appeared in FreeBSD 4.0.
+

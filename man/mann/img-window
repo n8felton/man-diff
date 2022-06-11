@@ -1,0 +1,60 @@
+img-window(n)                                                    img-window(n)
+
+
+
+NAME
+       img-window - Img, Tk Windows (window)
+
+SYNOPSIS
+       package require Tk
+
+       package require img::window  ?1.3?
+
+       image create photo ?name? ?options?
+
+
+DESCRIPTION
+       The  package img::window is a sub-package of Img. It can be loaded as a
+       part of the complete Img support, via package require Img,  or  on  its
+       own, via package require img::window.
+
+       Like  all packages of Img it does not provide new commands, but extends
+       the existing Tk command image.  More specifically  img::window  extends
+       Tk's photo image type.
+
+       The name of the new format handler is window.
+
+       This  handler  does not provide additional configuration options.  This
+       handler is special. Instead of reading or writing  image  data  from  a
+       file  or  string  it allows the embedding of a Tk widget into the photo
+       image. In other words, it takes a snapshot of the contents of a Tk win-
+       dow.
+
+       All of the above means that in a call like
+
+       image create photo ?name? ?options?
+
+       [1]    Image data in window format (option -data) is detected automati-
+              cally. Image data is considered to be in the  window  format  if
+              the  value  given  to option -data is the name of an existing Tk
+              window.
+
+              Note that the standard option -file is  not  supported  by  this
+              handler.
+
+       [2]    The format name window is recognized by the option -format.
+
+SEE ALSO
+       img-bmp,  img-gif,  img-ico,  img-intro, img-jpeg, img-pcx, img-pixmap,
+       img-png, img-ppm, img-ps, img-sgi, img-sun, img-tga, img-tiff, img-win-
+       dow, img-xbm, img-xpm
+
+KEYWORDS
+       image handling, tk, window
+
+COPYRIGHT
+       Copyright (c) 1995-2003 Jan Nijtmans <nijtmans@users.sourceforge.com>
+
+
+
+

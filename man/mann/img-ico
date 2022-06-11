@@ -1,0 +1,85 @@
+img-ico(n)                                                          img-ico(n)
+
+
+
+NAME
+       img-ico - Img, Windows Icon Format (ico)
+
+SYNOPSIS
+       package require Tk
+
+       package require img::ico  ?1.3?
+
+       image create photo ?name? ?options?
+
+
+DESCRIPTION
+       The  package  img::ico  is  a sub-package of Img. It can be loaded as a
+       part of the complete Img support, via package require Img,  or  on  its
+       own, via package require img::ico.
+
+       Like  all packages of Img it does not provide new commands, but extends
+       the existing Tk command image so  that  it  supports  files  containing
+       raster  images  in  the  Windows  Icon  Format (ico). More specifically
+       img::ico extends Tk's photo image type.
+
+       The name of the new format handler is ico.  This handler  provides  new
+       additional  configuration  options.  See  section  ICO OPTIONS for more
+       detailed explanations.
+
+       All of the above means that in a call like
+
+       image create photo ?name? ?options?
+
+       [1]    Image data in ico format (options -data and -file)  is  detected
+              automatically.
+
+       [2]    The  format  name  ico  is recognized by the option -format.  In
+              addition the value for the option is treated  as  list  and  may
+              contain  any  of  the  special  options  listed  in  section ICO
+              OPTIONS.
+
+SUPPORTED ICO TYPES
+         1-bit pixels: Black and White.
+         4-bit pixels: Grayscale or indexed.
+         8-bit pixels: True-color (RGB, each channel 8 bit).
+
+        List of currently supported features:
+
+        Type   |     Read      |     Write     |
+               | -file | -data | -file | -data |
+        ----------------------------------------
+         1-bit | Yes   | Yes   | No    | No    |
+         4-bit | Yes   | Yes   | No    | No    |
+         8-bit | Yes   | Yes   | Yes   | Yes   |
+
+
+ICO OPTIONS
+       The handler provides the following options:
+
+       -verbose bool
+              This option is supported for reading and writing.
+
+              If set to true, additional information about  the  loaded/stored
+              image is printed to stdout. Default is false.
+
+       -index n
+              This option is supported for reading only.
+
+              Read  the n'th image. The first image is at index 0.  Default is
+              0.
+
+SEE ALSO
+       img-bmp, img-gif, img-ico, img-intro,  img-jpeg,  img-pcx,  img-pixmap,
+       img-png, img-ppm, img-ps, img-sgi, img-sun, img-tga, img-tiff, img-win-
+       dow, img-xbm, img-xpm
+
+KEYWORDS
+       ico, image handling, tk
+
+COPYRIGHT
+       Copyright (c) 1995-2003 Jan Nijtmans <nijtmans@users.sourceforge.com>
+
+
+
+

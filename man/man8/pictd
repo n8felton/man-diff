@@ -1,0 +1,14 @@
+PICTD(8)                  BSD System Manager's Manual                 PICTD(8)
+
+NAME
+     pictd -- general helper tool
+
+SYNOPSIS
+     pictd
+
+DESCRIPTION
+     pictd is a helper tool for the Cocoa frameworks.
+
+     There are no configuration options to pictd.  Users should not run pictd
+     manually.
+

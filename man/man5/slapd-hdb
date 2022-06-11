@@ -1,0 +1,170 @@
+SLAPD-BDB(5)                                                      SLAPD-BDB(5)
+
+
+
+NAME
+       slapd-bdb, slapd-hdb - Berkeley DB backends to slapd
+
+SYNOPSIS
+       /etc/openldap/slapd.conf
+
+DESCRIPTION
+       The  bdb  backend  to slapd(8) is the recommended primary backend for a
+       normal slapd database.  It uses the Sleepycat Berkeley DB (BDB) package
+       to store data.  It makes extensive use of indexing and caching to speed
+       data access.
+
+       hdb is a variant of the bdb backend that uses a  hierarchical  database
+       layout which supports subtree renames. It is otherwise identical to the
+       bdb behavior, and all the same configuration options apply.
+
+       It is noted that these options are intended to complement  Berkeley  DB
+       configuration  options  set  in  the environment's DB_CONFIG file.  See
+       Berkeley  DB  documentation  for  details  on  DB_CONFIG  configuration
+       options.   Where  there  is  overlap, settings in DB_CONFIG take prece-
+       dence.
+
+CONFIGURATION
+       These slapd.conf options apply to the bdb  and  hdb  backend  database.
+       That  is,  they must follow a "database bdb" or "database hdb" line and
+       come before any subsequent "backend" or "database" lines.  Other  data-
+       base options are described in the slapd.conf(5) manual page.
+
+       cachesize <integer>
+              Specify  the  size in entries of the in-memory entry cache main-
+              tained by the bdb or hdb backend database instance.  The default
+              is 1000 entries.
+
+       cachefree <integer>
+              Specify  the number of entries to free from the entry cache when
+              the cache reaches the cachesize limit.  The default is 1  entry.
+
+       checkpoint <kbyte> <min>
+              Specify the frequency for checkpointing the database transaction
+              log.  A checkpoint operation flushes  the  database  buffers  to
+              disk  and writes a checkpoint record in the log.  The checkpoint
+              will occur if either <kbyte> data has been written or <min> min-
+              utes  have  passed  since  the  last checkpoint.  Both arguments
+              default to zero, in which case they are ignored. When the  <min>
+              argument is non-zero, an internal task will run every <min> min-
+              utes to perform the checkpoint.  See the Berkeley  DB  reference
+              guide for more details.
+
+       dbconfig <Berkeley-DB-setting>
+              Specify  a configuration directive to be placed in the DB_CONFIG
+              file of the database directory. The dbconfig directive is just a
+              convenience  to  allow  all necessary configuration to be set in
+              the slapd.conf file.  The options set using this directive  will
+              only be written to the DB_CONFIG file if no such file existed at
+              server startup time. This allows one to set initial values with-
+              out  overwriting/destroying  a  DB_CONFIG  file that was already
+              customized through other means.  This directive may be specified
+              multiple times, as needed.  For example:
+                   dbconfig set_cachesize 0 1048576 0
+                   dbconfig set_lg_bsize 2097152
+
+       dbnosync
+              Specify that on-disk database contents should not be immediately
+              synchronized with in memory changes.  Enabling this  option  may
+              improve  performance  at  the expense of data security.  See the
+              Berkeley DB reference guide for more details.
+
+       directory <directory>
+              Specify the directory where the BDB files containing this  data-
+              base  and associated indexes live.  A separate directory must be
+              specified for each  database.   The  default  is  /var/db/openl-
+              dap/openldap-data.
+
+       dirtyread
+              Allow  reads  of  modified  but not yet committed data.  Usually
+              transactions are  isolated  to  prevent  other  operations  from
+              accessing  uncommitted  data.   This  option may improve perfor-
+              mance, but may also return  inconsistent  results  if  the  data
+              comes  from  a transaction that is later aborted.  In this case,
+              the modified data is discarded  and  a  subsequent  search  will
+              return a different result.
+
+       idlcachesize <integer>
+              Specify  the  size of the in-memory index cache, in index slots.
+              The default is zero. A  larger  value  will  speed  up  frequent
+              searches  of indexed entries. An hdb database needs a large idl-
+              cachesize for good search performance, typically three times the
+              cachesize (entry cache size) or larger.
+
+       index {<attrlist>|default} [pres,eq,approx,sub,<special>]
+              Specify the indexes to maintain for the given attribute (or list
+              of attributes).   Some  attributes  only  support  a  subset  of
+              indexes.   If only an <attr> is given, the indices specified for
+              default are maintained.  Note that setting a  default  does  not
+              imply  that  all attributes will be indexed. Also, for best per-
+              formance, an eq  index  should  always  be  configured  for  the
+              objectClass attribute.
+
+              A  number  of  special  index  parameters may be specified.  The
+              index type sub can be decomposed  into  subinitial,  subany, and
+              subfinal  indices.   The special type nolang may be specified to
+              disallow use of this index by language  subtypes.   The  special
+              type  nosubtypes  may be specified to disallow use of this index
+              by  named  subtypes.    Note:   changing   index   settings   in
+              slapd.conf(5)  requires  rebuilding  indices,  see slapindex(8);
+              changing index settings dynamically by LDAPModifying "cn=config"
+              automatically causes rebuilding of the indices online in a back-
+              ground task.
+
+       linearindex
+              Tell slapindex to index one attribute at a time. By default, all
+              indexed  attributes  in an entry are processed at the same time.
+              With this option, each indexed attribute is processed  individu-
+              ally,  using  multiple  passes through the entire database. This
+              option improves slapindex performance  when  the  database  size
+              exceeds the dbcache size. When the dbcache is large enough, this
+              option is not needed and will  decrease  performance.   Also  by
+              default,  slapadd  performs  full  indexing  and  so  a separate
+              slapindex run is not needed. With this option, slapadd  does  no
+              indexing and slapindex must be used.
+
+       lockdetect {oldest|youngest|fewest|random|default}
+              Specify  which transaction to abort when a deadlock is detected.
+              The default is random.
+
+       mode <integer>
+              Specify the file protection mode  that  newly  created  database
+              index files should have.  The default is 0600.
+
+       searchstack <depth>
+              Specify  the  depth  of the stack used for search filter evalua-
+              tion.  Search filters are evaluated on a  stack  to  accommodate
+              nested AND / OR clauses. An individual stack is assigned to each
+              server thread.  The depth of the stack determines how complex  a
+              filter  can be evaluated without requiring any additional memory
+              allocation. Filters that are nested deeper than the search stack
+              depth  will cause a separate stack to be allocated for that par-
+              ticular search operation. These allocations  can  have  a  major
+              negative  impact  on server performance, but specifying too much
+              stack will also consume a great deal  of  memory.   Each  search
+              stack  uses 512K bytes per level. The default stack depth is 16,
+              thus 8MB per thread is used.
+
+       shm_key <integer>
+              Specify a key for a shared memory BDB  environment.  By  default
+              the  BDB  environment  uses  memory  mapped files. If a non-zero
+              value is specified, it will be used as the  key  to  identify  a
+              shared memory region that will house the environment.
+
+ACCESS CONTROL
+       The bdb and hdb backends honor access control semantics as indicated in
+       slapd.access(5).
+
+FILES
+       /etc/openldap/slapd.conf
+              default slapd configuration file
+
+       DB_CONFIG
+              Berkeley DB configuration file
+
+SEE ALSO
+       slapd.conf(5), slapd(8), slapadd(8), slapcat(8), slapindex(8), Berkeley
+       DB documentation.
+
+
+

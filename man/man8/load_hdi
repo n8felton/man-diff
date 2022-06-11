@@ -1,0 +1,17 @@
+
+load_hdi(8)               BSD System Manager's Manual              load_hdi(8)
+
+NAME
+     load_hdi -- disk image driver loader
+
+SYNOPSIS
+     load_hdi
+
+DESCRIPTION
+     load_hdi is used to load the disk image driver.  load_hdi is invoked by
+     the DiskImages framework when it needs to attach images and the user
+     client in IOHDIXController.kext is not available.
+
+SEE ALSO
+     hdid(8), hdiutil(1)
+

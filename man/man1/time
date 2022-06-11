@@ -1,0 +1,49 @@
+TIME(1)                   BSD General Commands Manual                  TIME(1)
+
+NAME
+     time -- time command execution
+
+SYNOPSIS
+     time [-lp] utility
+
+DESCRIPTION
+     The time utility executes and times utility.  After the utility finishes,
+     time writes the total time elapsed, the time consumed by system overhead,
+     and the time used to execute utility to the standard error stream.  Times
+     are reported in seconds.
+
+     Available options:
+
+     -l      The contents of the rusage structure are printed.
+
+     -p      The output is formatted as specified by IEEE Std 1003.2-1992
+             (``POSIX.2'').
+
+     The csh(1) has its own and syntactically different builtin version of
+     time.  The utility described here is available as /usr/bin/time to csh
+     users.
+
+DIAGNOSTICS
+     The time utility shall exit with one of the following values:
+
+     1-125   An error occurred in the time utility.
+
+     126     The utility was found but could not be invoked.
+
+     127     The utility could not be found.
+
+     Otherwise, the exit status of time shall be that of utility.
+
+SEE ALSO
+     csh(1), getrusage(2)
+
+FILES
+     /usr/include/sys/resource.h
+
+STANDARDS
+     The time utility conforms to IEEE Std 1003.2-1992 (``POSIX.2'').
+
+BUGS
+     The granularity of seconds on microprocessors is crude and can result in
+     times being reported for CPU usage which are too large by a second.
+

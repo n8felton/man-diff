@@ -1,0 +1,37 @@
+fwkpfv(1)                 BSD General Commands Manual                fwkpfv(1)
+
+NAME
+     fwkpfv -- FireWire kprintf viewer
+
+SYNOPSIS
+     fwkpfv [-o] [-c] [-n] [-i]
+
+DESCRIPTION
+     Use fwkpfv to receive FireWire kprintf logging. FireWireKPrintf redirects
+     "kprintf()" logging to FireWire. Kernel printfs or "kprintfs" are used by
+     many kernel services as a low level logging mechanism. They can also be
+     used in third party kernel extensions. FireWire kprintfs are available
+     very early in the kernel's startup and right until the cpu is powered
+     down at sleep, restarted, or shutdown. Similarly, they are available
+     almost as soon as the cpu is powered when waking. They can be useful for
+     debugging kernel code (including KEXTs), particularly sleep/wake issues
+     where the display and/or ethernet is unavailable.
+
+OPTIONS
+     The available options are as follows:
+
+     -o     Append output logging to /Library/Logs/FireWireKPrintf.log.
+
+     -c     Open log file with Console.app. Only valid with "-o".
+
+     -n     Create a new log file, rather than append. Only valid with "-o".
+
+     -i     Prefix target machine's ID to each log.
+
+FILES
+     /usr/bin/fwkpfv
+             is installed as part of the Mac OS X Developer Tools.
+
+AUTHORS
+     This utility was written by Carlos Calderon
+

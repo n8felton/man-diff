@@ -1,0 +1,94 @@
+img-sun(n)                                                          img-sun(n)
+
+
+
+NAME
+       img-sun - Img, Sun Raster Format (sun)
+
+SYNOPSIS
+       package require Tk
+
+       package require img::sun  ?1.3?
+
+       image create photo ?name? ?options?
+
+
+DESCRIPTION
+       The  package  img::sun  is  a sub-package of Img. It can be loaded as a
+       part of the complete Img support, via package require Img,  or  on  its
+       own, via package require img::sun.
+
+       Like  all packages of Img it does not provide new commands, but extends
+       the existing Tk command image so  that  it  supports  files  containing
+       raster  images  in  the  Sun  Raster  Format  (sun).  More specifically
+       img::sun extends Tk's photo image type.
+
+       The name of the new format handler is sun.  This handler  provides  new
+       additional  configuration  options.  See  section  SUN OPTIONS for more
+       detailed explanations.
+
+       All of the above means that in a call like
+
+       image create photo ?name? ?options?
+
+       [1]    Image data in sun format (options -data and -file)  is  detected
+              automatically.
+
+       [2]    The  format  name  sun  is recognized by the option -format.  In
+              addition the value for the option is treated  as  list  and  may
+              contain  any  of  the  special  options  listed  in  section SUN
+              OPTIONS.
+
+SUPPORTED SUN TYPES
+         1-bit pixels: Black and White.
+         8-bit pixels: Grayscale or indexed.
+        24-bit pixels: True-color (RGB, each channel 8 bit).
+        32-bit pixels: True-color with alpha channel (RGBA, each channel 8 bit).
+
+        List of currently supported features:
+
+        Type   |     Read      |     Write     |
+               | -file | -data | -file | -data |
+        ----------------------------------------
+         1-bit | Yes   | Yes   | No    | No    |
+         8-bit | Yes   | Yes   | No    | No    |
+        24-bit | Yes   | Yes   | Yes   | Yes   |
+        32-bit | Yes   | Yes   | Yes   | Yes   |
+
+        All images types may be either uncompressed or run-length encoded.
+
+
+SUN OPTIONS
+       The handler provides the following options:
+
+       -verbose bool
+              This option is supported for reading and writing.
+
+              If set to true, additional information about  the  loaded/stored
+              image is printed to stdout. Default is false.
+
+       -compression type
+              This option is supported for writing only.
+
+              Set the compression mode to either none or rle.  Default is rle.
+
+       -matte bool
+              This option is supported for reading and writing.
+
+              If set to false, a matte (alpha) channel is ignored during read-
+              ing or writing. Default is true.
+
+SEE ALSO
+       img-bmp,  img-gif,  img-ico,  img-intro, img-jpeg, img-pcx, img-pixmap,
+       img-png, img-ppm, img-ps, img-sgi, img-sun, img-tga, img-tiff, img-win-
+       dow, img-xbm, img-xpm
+
+KEYWORDS
+       image handling, sun, tk
+
+COPYRIGHT
+       Copyright (c) 1995-2003 Jan Nijtmans <nijtmans@users.sourceforge.com>
+
+
+
+

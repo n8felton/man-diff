@@ -1,0 +1,13 @@
+
+dserr(8)                  BSD System Manager's Manual                 dserr(8)
+
+NAME
+     dserr -- prints a description for an error code.
+
+SYNOPSIS
+     dserr errcode
+
+
+DESCRIPTION
+     dserr prints a description for an error code.
+

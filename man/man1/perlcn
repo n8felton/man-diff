@@ -1,0 +1,129 @@
+PERLCN(1)              Perl Programmers Reference Guide              PERLCN(1)
+
+
+
+NAME
+       perlcn - 1/4oIaODIA Perl O,AI
+
+DESCRIPTION
+       >>9|OA'u1/2 Perl uAIiuO!
+
+       'O 5.8.0 oaecaE1/4, Perl 3/4B+-,AEIeEAEuA Unicode (I3O>>Ae) OSO(R),
+       O2A~'oOSO(R)AEDi9|aA9|iOiIuOOIauA+-aAe.1/2E1/2; CJK (ODEOo<<)
+       +-aECAEaODuAO>>2c.Y.  Unicode EC1u1/4EDOuA+-ex1/4, EOI1/4o-
+       ,CEA1/2cEIEuODuAxO.u: I-:-.1/2EA1/2c, 9|<<.1/2EA1/2c,
+       OO1/4oA1/2OB1/4auAO>>CD (ILAoIA, DoAuNCIA, NCA2(R)IA, IL2(R)A'IA,
+       Oi9|EIA, OiuOo2IA, uEuE). EuO2EYAEAE9|aOOx-:-OuIuI3OeAE1/2I" (Ec PC
+       1/4oAo1/2oEb).
+
+       Perl +-3/4EiOO Unicode 1/2oDD2Ux-:-. Oa+-iE3/4 Per_
+       AU2cuAxO.u'(R)Ey3/4YcEOA Unicode +-iE3/4; Perl uAo E1/2OeEa.u
+       (AyEcOy1ae+-iE3/4E1/2+-E9|O) O2AU9|O Unicode 1/2oDD2Ux-:-.
+       OUEaEe1/4oEa3oE+-, IaAE'|AiOO Unicode
+       O(R)CouA+-aAe.1/2E1/2'ae.AuAEy3/4Y, Perl Ia1(C)AE Encode Oa,oALce,
+       cEOOEAAaCaOxuO9|AEi1/4oD'Ee3/4EODuA+-aAeEy3/4Y.
+
+       Encode NOEiALceOSO(R)IAAD1/4oIaODIAuA+-aAe.1/2E1/2 ('gb2312' +-iE3/4
+       'euc-cn'):
+                                       _
+           euc-cn      Unix NOEixO.u1/4 , O23/4IECEx3AEuA1u+-eAe
+           gb2312-raw  I'3/4'|AiuA (uI+-EIO) GB2312 xO.u+-i
+           gb12345     I'3/4'|AiuAOD1uOA.+-IaODIA+-aAe
+           iso-ir-165  GB2312 + GB6345 + GB8565 + DAOoxO.u
+           cp936       xOAeO3 936, O2cEOOOA 'GBK' (A(C)3a1u+-eAe) O,A-:-
+           hz          7 +-EIOOY3oE1/2 GB2312 +-aAe
+
+       3/4UAyA'Eu, 1/2<< EUC-CN +-aAeuAuuo,xa3E Unicode, ioDe1/4uEeIAADO,Ai:
+
+           perl -Mencoding=euc-cn,STDOUT,utf8 -pe1 < file.euc-cn > file.utf8
+
+       Perl O2AU,1/2AE "piconv", O>>OSIeE<<OO Perl D'3EuAxO.uxa>>>>1x3/4B3IDo,
+       OA."EcIA:
+
+           piconv -f euc-cn -t utf8 < file.euc-cn > file.utf8
+           piconv -f utf8 -t euc-cn < file.utf8 > file.euc-cn
+
+       AiIa, AuOA encoding ALce, AacEOOCaOxD'3oOOxO.uIauYI>>uA3IDoAe,
+       EcIAEuE3/4:
+
+           #!/usr/_in/env perl
+           # AEo9|  euc-cn xO'(R)1/2aIo; +-ex1/4Ea3oEe1/4o+-ex1/4'iIo9|1/4EeIa euc-cn +-aAe
+           use encoding 'euc-cn', STDIN => 'euc-cn', STDOUT => 'euc-cn';
+           print length("AaeIO");            #  2 (E<<OyoA+-iE3/4xO.u)
+           print length('AaeIO');            #  4 (uYOyoA+-iE3/4xO1/2U)
+           print index("x>>x>>1/2I>>a", ">>x>>1/2"); # -1 (2>>ouo~'ExOxO.u'(R))
+           print index('x>>x>>1/2I>>a', '>>x>>1/2'); #  1 ('OuU9|b,oxO1/2UcaE1/4)
+
+       OUxiooO>>ADAyxOAi, "x>>" uAuU9|b,oxO1/2UOe "x>>"
+       uAuUO>>,oxO1/2U1/2aoI3E EUC-CN AeuA ">>x"; "x>>" uAuU9|b,oxO1/2UOoOe
+       "1/2I" uAuUO>>,oxO1/2U1/2aoI3E ">>1/2".  Oa1/2a3/4oAEOOCo EUC-CN
+       Ae+-E9|O'|AiEI3L1/4uuAIEIa.
+
+       9|iIauAODIA+-aAe
+
+       Ec1uDeOa,u9|auAODIA+-aAe, cEOO'O CPAN (<http://www.cpan.org/>) IAOO
+       Encode::HanExtra ALce. EuAcCoIa1(C)IAAD+-aAe.1/2E1/2:
+
+           gb18030     A(C)3a1yuA1u+-eAe, ouo~.+-IaODIA
+
+       AiIa, Encode::HanConvert ALceOoIa1(C)AE1/4o.+-xa>>>>OAuAA1/2OO+-aAe:
+
+           big5-simp   Big5 .+-IaODIAOe Unicode 1/4oIaODIA>>Yxa
+           gbk-trad    GBK 1/4oIaODIAOe Unicode .+-IaODIA>>Yxa
+
+       EoIeOU GBK Oe Big5 O(R)1/4a>>Yxa, Ce2Ic1/4,AALceAU,1/2uA b2g.pl Oe
+       g2b.pl A1/2OS3IDo, >>oOU3IDoAUE1OAIAADD'.":
+
+           use Encode::HanConvert;
+           $euc_cn = big5_to_gb($big5); # 'O Big5 xaIa GBK
+           $big5 = gb_to_big5($euc_cn); # 'O GBK xaIa Big5
+
+       1/2oO>>21/2uADAIc
+
+       Ce2Ic1/4 Perl AU,1/2uA'oAcEuA-:-IA1/4b (2>>DOE<<ECOAOcIAD'uA),
+       A'NSIo,u9|a1OOU Perl uAOaE9|, OO1/4o Unicode uAE1OA.1/2E1/2. 2>>1y,
+       Ia2cuAxEO'Iau+-.a,>>:
+
+       Ia1(C) Perl xEO'uAIoO.
+
+
+       <http://www.perl.com/>
+           Perl uAExO3 (OEA.A3An1<<E3/4I~>>x)
+
+       <http://www.cpan.org/>
+           Perl xUoIua2OIo (Comprehensive Perl Archive Network)
+
+       <http://lists.perl.org/>
+           Perl OEuYAUI3O>>AA
+
+       NSIo Perl uAIoO.
+
+
+       <http://www.oreilly.com.cn/html/perl.html>
+           1/4oIaODIAoaeuAA.A3An Perl Ee1/2a
+                     _
+       Perl E1OAOB1/4 >>a
+
+
+       <http://www.pm.org/groups/asia.shtml#China>
+           OD1u Perl IAE1axeO>>AA
+
+       Unicode Ia1OIoO.
+
+
+       <http://www.unicode.org/>
+           Unicode NSEoNS>>a (Unicode +-ex1/4uAOAE9|"OB)
+
+       <http://www.cl.cam.ac.uk/%7Emgk25/unicode.html>
+           Unix/Linux EIuA UTF-8 1/4o Unicode 'ocIIE
+
+SEE ALSO
+       Encode, Encode::CN, encoding, perluniintro, perlunicode
+
+AUTHORS
+       Jarkko Hietaniemi <jhi@iki.fi>
+
+       Autrijus Tang (IAExUoo) <autrijus@autrijus.org>
+
+
+

@@ -1,0 +1,120 @@
+ip6config(8)              BSD System Manager's Manual             ip6config(8)
+
+NAME
+     ip6config -- Configure IPv6 and 6to4 IPv6 tunnelling
+
+SYNOPSIS
+     ip6config [-h] command interface
+
+DESCRIPTION
+     The ip6config script can be used to start up or shut down IPv6 on active
+     interfaces. It can also be used to configure a 6to4 tunnel and start or
+     stop router advertisement.
+
+     When IPv6 is enabled on an interface the protocol is attached to the
+     interface, at which point the default settings in the kernel allow it to
+     acquire a link-local address and listen for router advertisements.
+
+     6to4 is a mechanism by which your IPv6 address(es) are derived from an
+     assigned IPv4 address, and which involves automatic tunnelling to one or
+     more remove 6to4 hubs, which will then forward your v6 packets on the
+     6bone etc. Replies are routed back to you over IPv4 via (possibly) other
+     6to4 capable remote gateways. As such, IPv6-in-IPv4-encapsulated packets
+     are accepted from all v4-hosts.
+
+     From your (single) IPv4 address, you get a whole IPv6 /48 network, which
+     allows you to split your network in 2^16 subnets, with 2^64 hosts each.
+     You need to setup routing for your internal network properly, help is
+     provided for setting up the border router here.
+
+     This script takes the burden to calculate your IPv6 address from existing
+     IPv4 address and runs the commands to setup (and tear down) automatic
+     6to4 IPv6 tunnelling.
+
+     Finally, router advertisement for an internal network can be started and
+     stopped. This uses sysctl to set net.inet6.ip6.forwarding and
+     net.inet6.ip6.accept_rtadv to the proper values for routing.
+
+     Possible options are:
+
+     -h   Show usage.
+
+     Possible commands are:
+
+     start-v6      Start IPv6 on given interface using default kernel set-
+                   tings. Attaches protocol to the interface. If interface is
+                   "all", all valid interfaces will be configured.
+
+     stop-v6       Stop IPv6 on given interface. Detaches protocol from the
+                   interface. If interface is "all", all valid interfaces will
+                   be configured.
+
+     start-stf     Configure 6to4 IPv6. The stf(4) interface is configured,
+                   and a default route to a remote 6to4 gateway is estab-
+                   lished. In addition, the internal network interface is
+                   assigned an address.
+
+     stop-stf      Stops 6to4 IPv6. All addresses are removed from the stf(4)
+                   device, and the default route is removed.
+
+     start-rtadvd  Starts router advertizement and IPv6 packet forwarding,
+                   turning the machine into a IPv6 router.  rtadvd(8) is
+                   invoked with a custom config file created under /var/run.
+                   Clients just need to be told to accept router advertize-
+                   ments, i.e.  the `net.inet6.ip6.accept_rtadv' sysctl needs
+                   to be set to `1'.  You can arrange that by setting
+                   ``ip6mode=autohost'' in /etc/rc.conf.
+
+     stop-rtadvd   Stops router advertizement and IPv6 packet forwarding.
+                   rtadvd(8) is stopped, and the rtadvd.conf(5) config file is
+                   removed from /var/run.
+
+REQUIREMENTS
+     Besides IPv4 connectivity, you need support for IPv6 and the stf(4)
+     device in your kernel. This is provided beginning with Darwin Kernel Ver-
+     sion 6.0.
+
+     No special values are needed in /etc/rc.conf to run this script, but see
+     comment on setting up IPv6-clients `behind' your 6to4 router for the
+     rtadvd-start command!
+
+CONFIGURATION
+     The default IPv6 configuration for an interface assigns a link-local
+     address to it and sets the interface to receive router advertisements.
+     No further configuration is necessary for basic functionality.  However,
+     various settings can be modified by using sysctl.
+
+     The ip6config script reads its 6to4 configuration from a config file
+     named 6to4.conf.  The 6to4.conf file is in perl(1) syntax, and contains
+     several variables that can be tuned to adjust your setup.
+
+     in_if         The inside interface. If non-empty, this interface is
+                   assigned the IPv6 address 2002:x:x:v6_innernet:hostbits6,
+                   see below.  This is only useful on machines that have more
+                   than one network interface, e.g. with a modem and a local
+                   ethernet.
+
+     v6_net        The subnet address you want to use on the address of your
+                   outbound interface. Defaults to ``1''.
+
+     v6_innernet   The subnet address you want to use on the address of your
+                   inbound interface. Defaults to ``2''.
+
+     hostbits6     The lower 64 bits of both the inbound and outbound inter-
+                   face's addresses.
+
+     peer          Name of the remote 6to4 server that'll take our IPv6-in-
+                   IPv4 encapsulated packets and route them on via IPv6. A
+                   special value of ``6to4-anycast'' can be used for the any-
+                   cast service defined in RFC 3068.  Other possible values
+                   are given in the example config file.
+
+SEE ALSO
+     stf(4), ``6to4 IPv6 Explained'' at http://www.feyrer.de/NetBSD/6to4.html,
+     NetBSD IPv6 Documentation at
+     http://www.netbsd.org/Documentation/network/ipv6/, RFC 3068.
+
+HISTORY
+     The ip6config 6to4 utility and manpage portions were written by Hubert
+     Feyrer <hubert@feyrer.de> for NetBSD.
+

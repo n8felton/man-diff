@@ -1,0 +1,94 @@
+PAM_WINBIND(7)                                                  PAM_WINBIND(7)
+
+
+
+NAME
+       pam_winbind - PAM module for Winbind
+
+DESCRIPTION
+       This tool is part of the samba(7) suite.
+
+       pam_winbind  is  a  PAM  module that can authenticate users against the
+       local domain by talking to the Winbind daemon.
+
+OPTIONS
+       pam_winbind supports several options which can either be set in the PAM
+       configuration  files  or in the pam_winbind configuration file situated
+       at /etc/security/pam_winbind.conf. Options from the  PAM  configuration
+       file take precedence to those from the configuration file.
+
+       debug
+          Gives debugging output to syslog.
+
+       debug_state
+          Gives detailed PAM state debugging output to syslog.
+
+       require_membership_of=[SID or NAME]
+          If  this option is set, pam_winbind will only succeed if the user is
+          a member of the given SID or NAME. A SID can be either a  group-SID,
+          a  alias-SID  or even a user-SID. It is also possible to give a NAME
+          instead of the SID. That name must have the  form:  MYDOMAIN\mygroup
+          or  MYDOMAIN\myuser.  pam_winbind will, in that case, lookup the SID
+          internally. Note that NAME may not contain any spaces.  It  is  thus
+          recommended to only use SIDs. You can verify the list of SIDs a user
+          is a member of with wbinfo --user-sids=SID.
+
+       try_first_pass
+
+
+       use_first_pass
+          By default, pam_winbind tries to get the authentication token from a
+          previous  module.  If no token is available it asks the user for the
+          old password. With this option, pam_winbind aborts with an error  if
+          no authentication token from a previous module is available.
+
+       use_authtok
+          Set  the  new password to the one provided by the previously stacked
+          password module. If this option is not set pam_winbind will ask  the
+          user for the new password.
+
+       krb5_auth
+          pam_winbind can authenticate using Kerberos when winbindd is talking
+          to an Active Directory domain  controller.  Kerberos  authentication
+          must  be  enabled  with this parameter. When Kerberos authentication
+          can not succeed (e.g. due to clock skew), winbindd will fallback  to
+          samlogon  authentication  over MSRPC. When this parameter is used in
+          conjunction with winbind refresh tickets,  winbind  will  keep  your
+          Ticket Granting Ticket (TGT) uptodate by refreshing it whenever nec-
+          essary.
+
+       krb5_ccache_type=[type]
+          When pam_winbind is configured to  try  kerberos  authentication  by
+          enabling  the  krb5_auth  option,  it can store the retrieved Ticket
+          Granting Ticket (TGT) in a credential cache. The type of  credential
+          cache  can  be  set  with  this option. Currently the only supported
+          value is: FILE. In that case a  credential  cache  in  the  form  of
+          /tmp/krb5cc_UID  will  be  created,  where  UID is replaced with the
+          numeric user id. Leave empty  to  just  do  kerberos  authentication
+          without having a ticket cache after the logon has succeeded.
+
+       cached_login
+          Winbind  allows  to  logon  using  cached  credentials  when winbind
+          offline logon is enabled. To use this feature from  the  PAM  module
+          this option must be set.
+
+       silent
+          Do not emit any messages.
+
+
+SEE ALSO
+       wbinfo(1), winbindd(8), smb.conf(5)
+
+VERSION
+       This man page is correct for version 3.0 of Samba.
+
+AUTHOR
+       The  original  Samba  software  and  related  utilities were created by
+       Andrew Tridgell. Samba is now developed by the Samba Team  as  an  Open
+       Source project similar to the way the Linux kernel is developed.
+
+       This manpage was written by Jelmer Vernooij and Guenther Deschner.
+
+
+
+

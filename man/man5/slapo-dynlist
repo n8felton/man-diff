@@ -1,0 +1,123 @@
+SLAPO-DYNLIST(5)                                              SLAPO-DYNLIST(5)
+
+
+
+NAME
+       slapo-dynlist - Dynamic List overlay
+
+SYNOPSIS
+       /etc/openldap/slapd.conf
+
+DESCRIPTION
+       The  dynlist overlay to slapd(8) allows expansion of dynamic groups and
+       more.  Any time an entry with a specific objectClass is being returned,
+       the  LDAP  URI-valued  occurrences of a specific attribute are expanded
+       into the corresponding entries, and the values of the attributes listed
+       in  the  URI are added to the original entry.  No recursion is allowed,
+       to avoid potential infinite loops.  The  resulting  entry  must  comply
+       with the LDAP data model, so constraints are enforced.  For example, if
+       a SINGLE-VALUE attribute is listed, only the first value results in the
+       final entry.
+
+
+CONFIGURATION
+       The  config directives that are specific to the dynlist overlay must be
+       prefixed by dynlist-, to avoid potential conflicts with directives spe-
+       cific to the underlying database or to other stacked overlays.
+
+
+       overlay dynlist
+              This directive adds the dynlist overlay to the current database,
+              or to the frontend, if used before any  database  instantiation;
+              see slapd.conf(5) for details.
+
+
+       This slapd.conf configuration option is define for the dynlist overlay.
+       It may have multiple occurrences, and it must appear after the  overlay
+       directive.
+
+       dynlist-attrset <group-oc> <URL-ad> [<member-ad>]
+              The  value  <group-oc> is the name of the objectClass that trig-
+              gers the dynamic expansion of the data.
+
+              The value <URL-ad> is the name of the attributeDescription  that
+              cointains  the  URI  that is expanded by the overlay; if none is
+              present, no  expansion  occurs.   If  the  intersection  of  the
+              attributes  requested  by  the search operation (or the asserted
+              attribute for compares) and the attributes listed in the URI  is
+              empty,  no expansion occurs for that specific URI.  It must be a
+              subtype of labeledURI.
+
+              The value <member-ad>  is  optional;  if  present,  the  overlay
+              behaves  as  a dynamic group: this attribute will list the DN of
+              the entries resulting from the internal search.  In  this  case,
+              the  <attrs>  portion  of the URI must be absent, and the DNs of
+              all the entries resulting from the  expansion  of  the  URI  are
+              listed  as  values  of this attribute.  Compares that assert the
+              value of the <member-ad> attribute of  entries  with  <group-oc>
+              objectClass apply as if the DN of the entries resulting from the
+              expansion of the URI were present in  the  <group-oc>  entry  as
+              values of the <member-ad> attribute.
+
+       The  dynlist  overlay  may  be  used with any backend, but it is mainly
+       intended for use with local storage backends.  In case the  URI  expan-
+       sion is very resource-intensive and occurs frequently with well-defined
+       patterns, one should consider adding a proxycache later on in the over-
+       lay stack.
+
+
+EXAMPLE
+       This example collects all the email addresses of a database into a sin-
+       gle entry; first of all, make sure that slapd.conf contains the  direc-
+       tives:
+
+
+           include /path/to/dyngroup.schema
+           # ...
+
+           database <database>
+           # ...
+
+           overlay dynlist
+           dynlist-attrset groupOfURLs memberURL
+
+       and that slapd loads dynlist.la, if compiled as a run-time module; then
+       add to the database an entry like
+
+           dn: cn=Dynamic List,ou=Groups,dc=example,dc=com
+           objectClass: groupOfURLs
+           cn: Dynamic List
+           memberURL: ldap:///ou=People,dc=example,dc=com?mail?sub?(objectClass=person)
+
+       If no <attrs> are provided in the URI, all (non-operational) attributes
+       are collected.
+
+       This  example  implements  the  dynamic  group  feature  on  the member
+       attribute:
+
+
+           include /path/to/dyngroup.schema
+           # ...
+
+           database <database>
+           # ...
+
+           overlay dynlist
+           dynlist-attrset groupOfURLs memberURL member
+
+
+
+FILES
+       /etc/openldap/slapd.conf
+              default slapd configuration file
+
+SEE ALSO
+       slapd.conf(5), slapd(8).  The slapo-dynlist(5) overlay supports dynamic
+       configuration via back-config.
+
+ACKNOWLEDGEMENTS
+       This  module  was  written  in  2004  by Pierangelo Masarati for SysNet
+       s.n.c.
+
+
+

@@ -1,0 +1,14 @@
+PBS(8)                    BSD System Manager's Manual                   PBS(8)
+
+NAME
+     pbs -- general helper tool
+
+SYNOPSIS
+     pbs
+
+DESCRIPTION
+     pbs is a helper tool for the Cocoa frameworks.
+
+     There are no configuration options to pbs.  Users should not run pbs man-
+     ually.
+

@@ -1,0 +1,58 @@
+launchd(8)                BSD System Manager's Manual               launchd(8)
+
+NAME
+     launchd -- System wide and per-user daemon/agent manager
+
+SYNOPSIS
+     launchd [-d] [-D] [-s] [-S SessionType] [-- command [args ...]]
+
+DESCRIPTION
+     launchd manages processes, both for the system as a whole and for indi-
+     vidual users.  The primary and preferred interface to launchd is via the
+     launchctl(1) tool which (among other options) allows the user or adminis-
+     trator to load and unload jobs.  Where possible, it is preferable for
+     jobs to launch on demand based on criteria specified in their respective
+     configuration files.
+
+     When run with a command, a specific instance of launchd is created and
+     the command is implicitly added to the list of jobs maintained by
+     launchd.  If the command exits, that instance of launchd will clean up
+     all jobs maintained by itself and exit. All children of the command will
+     use that instance of launchd.
+
+     During boot launchd is invoked by the kernel to run as the first process
+     on the system and to further bootstrap the rest of the system.
+
+OPTIONS
+     -D       Debug. Prints syslog messages to stderr and adjusts logging via
+              syslog(3) to LOG_DEBUG.
+
+OPTIONS WHEN RUN AS PID 1
+     -s       Single user mode. Instructs launchd to give a shell prompt
+              before booting the system.
+
+ENVIRONMENTAL VARIABLES
+     LAUNCHD_SOCKET
+              This variable is exported when invoking a command via the
+              launchd command line. It informs launchctl how to find the cor-
+              rect launchd to talk to.
+
+NOTES
+     In Darwin it is preferable to have your daemon launch via launchd instead
+     of modifying rc or creating a SystemStarter Startup Item.
+
+     At some point in the future, we hope to completely phase out the use of
+     rc.
+
+FILES
+     ~/Library/LaunchAgents         Per-user agents provided by the user.
+     /Library/LaunchAgents          Per-user agents provided by the adminis-
+                                    trator.
+     /Library/LaunchDaemons         System wide daemons provided by the admin-
+                                    istrator.
+     /System/Library/LaunchAgents   Mac OS X Per-user agents.
+     /System/Library/LaunchDaemons  Mac OS X System wide daemons.
+
+SEE ALSO
+     launchctl(1), launchd.plist(5), rc(8), SystemStarter(8)
+

@@ -1,0 +1,74 @@
+KEXTUNLOAD(8)             BSD System Manager's Manual            KEXTUNLOAD(8)
+
+NAME
+     kextunload -- terminates and unloads kernel extensions
+
+SYNOPSIS
+     kextunload [-b bundle_id] ...  [-c class_name] ...  [-h] [-p] [ -v [0-6]
+                | -q ] [ extension ] ...
+
+DESCRIPTION
+     The kextunload program is used to terminate and unregister I/O Kit
+     objects associated with a kernel extension (kext) and to unload the code
+     and personalities for that kext.  In order to unload a kext, kextunload
+     must be invoked with superuser privileges.
+
+     If another loaded kext has a dependency on a kext being unloaded, the
+     unload will fail.  You can determine whether a kext has dependents using
+     the kextstat(8) tool.
+
+     kextunload is a formal interface for unloading kexts in the Darwin OS and
+     in Mac OS X.  Software and installers can rely on its presence and invoke
+     it in order to unload kexts.
+
+     The arguments and options are:
+
+     extension
+              The pathname of a kext to unload.  All instances of classes
+              associated with the kext are terminated, and personalities and
+              code are unloaded from the kernel.
+
+     -b bundle_id
+              Unload code and personalities for the kext whose CFBundleIdenti-
+              fier is bundle_id.
+
+     -c class_name
+              Terminate all instances of class class_name if possible but do
+              not unload code or personalities.  New load requests for devices
+              driven by these instances may result in the same class being
+              instantiated at any time.
+
+     -h       Print a help message describing each option flag.
+
+     -m bundle_id
+              Same as -b (remains for backward compatibility).
+
+     -p       Don't remove personalities when unloading (unnecessary when
+              using the -c option).  New load requests for devices driven by
+              the kext may result in the same kext being loaded at any time.
+
+     -q       Quiet mode; print no informational or error messages.  This
+              option excludes -v.
+
+     -v [0-6]
+              Verbose mode; print information about the kext scanning and
+              loading process (note that this is generally not useful when
+              unloading).  See the man page for kextload(8) to see what each
+              verbose level prints.  This option excludes -q.
+
+DIAGNOSTICS
+     kextunload exits with a zero status upon success, or prints an error mes-
+     sage and exits with a nonzero status upon failure.  An error when multi-
+     ple kexts are being unloaded causes kextunload to exit immediately, so
+     that some kexts may remain loaded even if they could have been unloaded
+     without error.
+
+BUGS
+     The kernel's kext unloading facility does not provide detailed failure
+     information.  Thus it is impossible to tell whether the problem was that
+     the kext wasn't loaded or that another kext has a dependency on it, etc.
+     These conditions can be checked using kextstat(8).
+
+SEE ALSO
+     kextcache(8), kextd(8), kextload(8), kextstat(8)
+

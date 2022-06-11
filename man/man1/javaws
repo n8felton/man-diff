@@ -1,0 +1,144 @@
+javaws(1)                                                            javaws(1)
+
+
+
+NAME
+       javaws - Java Web Start command launcher
+
+SYNOPSIS
+       javaws [ [ options ] ]   [ URL ]
+
+PARAMETERS
+       Options may be in any order. For a discussion of a specific option, see
+       OPTIONS below.
+
+       options
+             Command-line options. See OPTIONS below.
+
+       URL   Uniform Resource Locator (URL) of the JNLP (Java Network  Launch-
+             ing Protocol) file.
+
+
+       The  javaws  command  launches  Java  Web Start, which is the reference
+       implementation of the Java Network Launching Protocol (JNLP).  Java Web
+       Start launches Java application/applets hosted on a network.
+
+       Without  any  options  javaws  will  launch  the Java Application Cache
+       Viewer.
+
+       If a URL specifying a JNLP (Java Network Launching  Protocol)  file  is
+       specified,  javaws will launch the Java application/applet specified in
+       the JNLP file.
+
+OPTIONS
+       The javaws launcher has a set of options that are supported in the cur-
+       rent release.  However, the options may be removed in a future release.
+       All -X options are non-standard and subject to change.
+
+       -online
+             Runs in online mode (default behavior).
+
+       -offline
+             Runs Java Web Start in offline mode.
+
+       -Xclearcache
+             Clears the user's cache.  Java Web Start will exit after the com-
+             mand has completed.
+
+       -uninstall URL
+             Removes  a  specific application/applet from the user's cache, as
+             indicated by the URL for the JNLP file. Java Web Start will  exit
+             after the command has completed.
+
+       -import
+             Imports  the  application  specified  by  the URL into the user's
+             cache (without running it)
+
+       -silent
+             Iimports in silent mode, when used with --import (ie. no UI  will
+             be displayed).
+
+       -codebase URL
+             Replaces the codebase with URL
+              (URL   must  be valid) in the JNLP file specified when importing
+             the resources.
+
+       -system
+             Uses the system cache instead of the user cache.
+
+       -shortcut
+             Allows the creation of shortcuts during silent import.
+
+       -association
+             Allows the creation of associations during silent import.
+
+       -open arguments
+             Replaces the arguments in the JNLP file with "-open arguments".
+
+       -print arguments
+             Replaces the arguments in the JNLP file with "-print  arguments".
+
+       -userConfig property-name
+             Clears the specified deployment property
+              property-name. Java Web Start will then exit.
+
+       -userConfig  property-name property-value
+             Sets  the  specified  deployment  property-name  to the specified
+             property-value. Java Web Start will then exit.
+
+       -updateVersions
+             Updates the Java Web Start configuration file based on  the  cur-
+             rent machine's settings. Java Web Start will then exit.
+
+       -Xnosplash
+             Disable the display of the initial splash screen.
+
+       -viewer
+             Runs  the  Java  Application  Cache  Viewer (default if no URL is
+             specified).
+
+       -wait The javaws process will not exit until the application exits.
+
+EXIT STATUS
+       The following exit values are returned:
+
+       0     Successful completion.
+
+       >0    An error occurred.
+
+FILES
+       ~/Library/Caches/Java/deployment.properties
+             User configuration file for Java Deployment Products
+
+       /System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home/deploy-
+       ment.config
+             Enterprise configuration file for Java Deployment Products.
+
+       /System/Library/Frameworks/JavaVM.framework/Ver-
+       sions/1.5.0/Home/lib/deployment.config
+             Alternate Enterprise configuration file for Java Deployment Prod-
+             ucts.
+
+       $HOME/.mailcap
+             User's   mailcap   file   to   specify  helper  applications  for
+             Netscape/Mozilla Browser
+
+       $HOME/.mime.types
+             User's  mime-type  file  to  specify  mime-types   supported   in
+             Netscape/Mozilla Browser
+
+       /etc/mailcap
+             System   mailcap   file   to   specify  helper  applications  for
+             Netscape/Mozilla Browser
+
+       /etc/mime.types
+             System  mime-type  file  to  specify  mime-types   supported   in
+             Netscape/Mozilla Browser
+
+
+       java(1), jar(1), pack200(1), attributes(5)
+
+       http://java.sun.com/j2se/1.5.0/docs
+
+
+

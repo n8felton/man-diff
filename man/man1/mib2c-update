@@ -1,0 +1,15 @@
+mib2c-update(1)                    Net-SNMP                    mib2c-update(1)
+
+
+
+NAME
+       mib2c-update - script to merge custom code into updated mib2c code
+
+SYNOPSIS
+       mib2c-update
+
+DESCRIPTION
+       merges custom code into updated mib2c code
+
+
+

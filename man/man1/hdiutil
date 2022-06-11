@@ -1,0 +1,1480 @@
+
+HDIUTIL(1)                BSD General Commands Manual               HDIUTIL(1)
+
+NAME
+     hdiutil -- manipulate disk images (attach, verify, burn, etc)
+
+SYNOPSIS
+     hdiutil verb [options]
+
+DESCRIPTION
+     hdiutil uses the DiskImages framework to manipulate disk images.  Common
+     verbs include attach, detach, verify, create, convert, and burn.
+
+     The rest of the verbs are: help, info, load, checksum, chpass, eject
+     (historical synonym for detach), flatten, unflatten, imageinfo, mount
+     (historical synonym for attach), mountvol, unmount, plugins, udifrez,
+     internet-enable, resize, segment, compact, makehybrid, and pmap.
+
+COMMON OPTIONS
+     The following option descriptions apply to all verbs:
+
+     -verbose be verbose; default is less output.  This option can help the
+              user decipher why a particular operation failed.  At a minimum,
+              the probing of any specified images will be detailed.
+     -quiet   minimize output in most cases.  -debug and -verbose negate
+              almost all of -quiet's functionality.
+     -debug   be very verbose.  This option is good if a large amount of
+              information about what hdiutil and the DiskImages framework are
+              doing is needed.  -debug and -verbose generate almost entirely
+              independent outputs.
+
+     Many hdiutil verbs understand the following options:
+
+     -plist         provide result output in plist format.  Other programs
+                    invoking hdiutil are expected to use -plist rather than
+                    try to parse the usual output.  The usual output will
+                    remain consistent but unstructured.
+     -puppetstrings provide progress output that is easy for another program
+                    to parse.  Any program trying to interpret hdiutil's
+                    progress should use -puppetstrings.
+
+     -srcimagekey key=value
+                    specify a key/value pair for the disk image recognition
+                    system.  (-imagekey is normally a synonym)
+     -tgtimagekey key=value
+                    specify a key/value pair for any image created.
+                    (-imagekey is only a synonym if there is no input image).
+
+     -encryption [AES-128|AES-256]
+                    specify a particular type of encryption or, if not speci-
+                    fied, the default encryption algorithm.  Two default algo-
+                    rithm is the AES cipher with a 128-bit key.
+     -stdinpass     read a null-terminated passphrase from standard input.  If
+                    the standard input is a tty, the passphrase will be read
+                    with readpassphrase(3).  -stdinpass replaces -passphrase
+                    though the latter is still supported for compatibility.
+                    Beware that the password will contain any newlines before
+                    the NULL.  See the EXAMPLES section.
+     -agentpass     Used with pubkey option if you need to create an encrypted
+                    image protected by both a public key and a password. A
+                    dialog will be shown prompting for a password. This may be
+                    used instead of -stdinpass in this case. This behavior is
+                    the default if not specifying -pubkey
+     -recover keychain_file
+                    specify a keychain containing the secret corresponding to
+                    the certificate specified with -certificate when the image
+                    was created).  The correct alternate secret will unlock
+                    the image.
+     -certificate certificate_file
+                    specify a secondary access certificate for the image being
+                    created.
+     -pubkey PK1,PK2,...,PKn
+                    specify a list of public key hashes in ASCII hex for the
+                    image being created.  The hash(s) will be used to locate a
+                    public key used to protect an encrypted image.
+     -cacert cert   specify a certificate authority certificate.  cert can be
+                    either a PEM file or a directory of certificates processed
+                    by c_rehash(1).  See also --capath and --cacert in
+                    curl(1).
+     -insecurehttp  ignore SSL host validation failures.  Useful for self-
+                    signed servers for which the appropriate certificates are
+                    unavailable or if access to a server is desired when the
+                    server name doesn't match what is in the certificate.
+
+     -shadow [shadowfile]
+                    Use a shadow file in conjunction with the data in the
+                    image.  This option prevents modification of the original
+                    image and allows read-only images to be attached
+                    read/write.  When blocks are being read from the image,
+                    blocks present in the shadow file override blocks in the
+                    base image.  All data written to the attached device will
+                    be redirected to the shadow file.  If not specified,
+                    -shadow defaults to image.shadow. If the shadow file does
+                    not exist, it is created.  Verbs accepting -shadow also
+                    accept -cacert and -insecurehttp.
+
+     Verbs that create images automatically append the correct extension to
+     any filenames if the extension is not already present.  The creation
+     engine also examines the filename extension of the provided filename and
+     changes its behavior accordingly.  For example, a sparse image can be
+     created without specifying -type SPARSEBUNDLE simply by appending the
+     .sparsebundle extension to the provided filename.
+
+VERBS
+     Each verb is listed with its description and individual arguments.  Argu-
+     ments to the verbs can be passed in any order.  A sector is 512 bytes.
+
+     help       display minimal usage information for each verb.  hdiutil verb
+                -help will provide full usage information for that verb.
+
+     attach image [options]
+                attach a disk image to the system as a device.  attach, like
+                hdid(8), will return information about an already-attached
+                image as if it had attached it.  mount is a synonym for
+                attach.
+
+                Beware that an image freshly created and attached is treated
+                as a new removable device.  See hdid(8) and the EXAMPLES sec-
+                tion below for more details.
+
+                NOTE: The format of the output from the attach command is sub-
+                ject to change from release to release.  The normal output
+                displays the disk node, content hint, and mount point (if
+                any).  In particular, writers should NOT rely upon the content
+                hint being the same for a given partition type; for instance,
+                HFS partitions have the content hint "Apple_HFS" on an image
+                with an Apple partition map and "48465300-0000-11AA-
+                AA11-0030654" on an image with a GUID partition map.
+
+                Common options: -encryption, -stdinpass, -recover, -imagekey,
+                -shadow, -puppetstrings, and -plist.
+
+                Options:
+                -readonly          force the resulting device to be read-only
+                -readwrite         attempt to override the DiskImages frame-
+                                   work's decision to attach a particular
+                                   image read-only.  For example, -readwrite
+                                   can be used to modify the HFS filesystem on
+                                   a HFS/ISO hybrid CD image.
+                -nokernel          attach with a helper process.
+                -kernel            attempt to attach this image without a
+                                   helper process; fail if not possible.
+                -notremovable      prevent this image from being detached.
+                                   Only root can use this option.
+
+                -mount required|optional|suppressed
+                                   indicate whether filesystems in the image
+                                   should be mounted or not.  OS X 10.2.x and
+                                   earlier defaulted to optional behavior; the
+                                   default is now required.
+                -nomount           identical to -mount suppressed.
+                -mountroot path    mount volumes in path instead of in
+                                   /Volumes.  path must exist.  Note that
+                                   mountpoint paths must be less than MNAMELEN
+                                   characters (90 as of this writing).
+                -mountrandom path  like -mountroot, but mountpoint names are
+                                   randomized with mkdtemp(3).  Note that
+                                   mountpoint paths must be less than MNAMELEN
+                                   characters (90 as of this writing).
+                -mountpoint path   assuming only one volume, mount it at path
+                                   instead of in /Volumes. Note that mount-
+                                   point paths must be less than MNAMELEN
+                                   characters (90 as of this writing).  See
+                                   fstab(5) for ways a system administrator
+                                   can make particular volumes automatically
+                                   mount in particular filesystem locations by
+                                   editing the file /etc/fstab.
+                -union             perform a union mount
+                -private           suppress mount notifications to the rest of
+                                   the system.  Note that -private can confuse
+                                   programs using the Carbon File Manager and
+                                   should generally be avoided.
+                -nobrowse          mark the volumes non-browsable in applica-
+                                   tions such as the Finder.
+                -owners on|off     enable or disable owners for HFS+ volumes,
+                                   potentially overriding the system's default
+                                   value for the volume.
+                -drivekey key=value
+                                   specify a key/value pair to be attached to
+                                   the device in the IOKit registry.
+
+                The following options have corresponding elements in the
+                com.apple.frameworks.diskimages preferences domain and thus
+                can be rendered in both the positive and the negative:
+
+                -[no]verify       do [not] suppress verification of the image.
+                                  By default, hdiutil attach verifies all
+                                  images containing checksums before attaching
+                                  them.  To maintain backwards compatibility,
+                                  hdid(8) does not attempt to verify images
+                                  before attaching them.
+                -[no]ignorebadchecksums
+                                  specify whether bad checksums should be
+                                  ignored.  The default is to abort when a bad
+                                  checksum is detected.
+                -[no]idme         do [not] perform IDME actions on IDME
+                                  images.  IDME actions are normally only per-
+                                  formed when a browser downloads and attaches
+                                  an image.
+                -[no]idmereveal   do [not] reveal (in the Finder) the results
+                                  of IDME processing.
+                -[no]idmetrash    do [not] put IDME images in the trash after
+                                  processing.
+                -[no]autoopen     do [not] auto-open volumes (in the Finder)
+                                  after attaching an image.  By default, read-
+                                  only volumes are auto-opened in the Finder.
+                -[no]autoopenro   do [not] auto-open read-only volumes.
+                -[no]autoopenrw   do [not] auto-open read/write volumes.
+                -[no]autofsck     do [not] force automatic file system check-
+                                  ing before mounting a disk image.  If fsck
+                                  is successful and the image can be written,
+                                  fsck will only run once on any particular
+                                  instance of an image.
+
+     detach dev_name [-force]
+                detach a disk image and terminate any associated hdid process.
+                dev_name is a partial /dev node path (e.g. "disk1").  As of OS
+                X 10.4, dev_name can also be a mount point.  If Disk Arbitra-
+                tion is running, detach will use it to unmount any filesystems
+                and detach the image.  If not, detach will attempt to unmount
+                any filesystems and detach the image directly (using the
+                `eject' ioctl).  If Disk Arbitration is not running, it may be
+                necessary to unmount the filesystems with umount(8) before
+                detaching the image.  eject is a synonym for detach.
+
+                Options:
+                -force   Similar to umount -f.  Unmounts any filesystems and
+                         detaches the image, regardless of any open files on
+                         the image.
+
+     verify image [options]
+                compute the checksum of a read-only (or compressed) image, and
+                verify it against the value stored in the image.  verify
+                accepts the common options -encryption, -stdinpass,
+                -srcimagekey, -puppetstrings, and -plist.
+
+     create size_spec image
+                create a new image of the given size or from the provided
+                data.  If image already exists, -ov must be specified or
+                create will fail.  If image is attached, it must be detached
+                before it can be overwritten, even if -ov is specified.  To
+                make a cross-platform CD or DVD, use makehybrid.  See also
+                EXAMPLES below.
+
+                The size specified is the size of the image to be created.
+                Filesystem and partition layout overhead (64 sectors for the
+                default SPUD layout on PPC machines, 80 sectors for the
+                default GPTSPUD layout on Intel machines) will be deducted
+                before space is made for user data in any volume on the image.
+                Size specifiers:
+                -size ??b|??k|??m|??g|??t??p|??e
+                           Specify the size of the image in the style of
+                           mkfile(8) with the addition of tera-, peta-, and
+                           exa-bytes sizes (note that 'b' specifies a number
+                           of sectors, not bytes).  The larger sizes are use-
+                           ful when creating large sparse images.
+                -sectors sector_count
+                           Specify the size of the image file in 512 byte sec-
+                           tors.
+                -megabytes size
+                           Specify the size of the image file in megabytes
+                           (1024*1024 bytes).
+
+                -srcfolder source
+                           Derive the image size from the the filesystem
+                           entity source and copy the contents of source to
+                           the resulting image.  The filesystem type of the
+                           image volume will match that of the source as
+                           closely as possible unless overridden with -fs.
+                           Other size specifiers, such as -size, will override
+                           the default (size of the source directory plus some
+                           padding for filesystem overhead), allowing for more
+                           or less free space in the resulting filesystem.
+                           -srcfolder copies file by file, creating a fresh
+                           (theoretically defragmented) filesystem on the des-
+                           tination image.  Such an image would be good for
+                           use with asr(8).  -srcdir is a synonym.
+                -srcdevice device
+                           specifies that the blocks of device should be used
+                           to create a new image.  The image size will match
+                           the size of device.  resize can be used to adjust
+                           the size of a filesystem in any writable image.
+                           Both -srcdevice and -srcfolder can run into errors
+                           if there are bad blocks on a disk.  One way around
+                           this problem is to write over the files in question
+                           in the hopes that the drive will remap the bad
+                           blocks when it notices them.  Data will be lost,
+                           but the image creation operation will subsequently
+                           succeed.
+
+                Common options: -encryption, -stdinpass, -certificate,
+                -pubkey, -plist, -imagekey, -tgtimagekey, -puppetstrings, and
+                -plist.
+
+                -imagekey di-sparse-puma-compatible=TRUE and -imagekey
+                di-shadow-puma-compatible=TRUE will create, respectively,
+                sparse and shadow images that can be attached on OS X 10.1.
+                -imagekey encrypted-encoding-version can select between ver-
+                sion 1 and version 2 of the encrypted encoding.  The framework
+                preferences have a corresponding key to change the default for
+                all images.  Version 2 is not compatible with OS X 10.2 but is
+                more robust for SPARSE (UDSP) images.  Version 1 is the
+                default for non-sparse images.  As of OS X 10.4.7, sparse,
+                encrypted images always use version 2.
+
+                General options:
+                -align alignment
+                               specifies a size to which the final data parti-
+                               tion will be aligned.  The default is 4K.
+                -type UDIF|SPARSE|SPARSEBUNDLE
+                               UDIF is the default disk image type.  If speci-
+                               fied, a UDRW of the specified size will be cre-
+                               ated.  Specifying SPARSE creates a UDSP: a
+                               read/write single-file image which expands as
+                               is is filled with data.  SPARSEBUNDLE creates a
+                               UDSB: a read/write backed by a directory bun-
+                               dle.  The default for UDSP is to grow one
+                               megabyte at a time.  The default for UDSB is to
+                               create band files of up to 128 MB.
+                               sparse-band-size can be used (with -imagekey)
+                               to specify the number of sectors that will be
+                               added each time the image grows.  The maximum
+                               size of a sparse image (of either type) is
+                               bounded by the filesystem in the image, the
+                               partition map (if any).  SPARSE images are
+                               additionally bounded by an internal limit of
+                               128 petabytes.  compact can reclaim unused
+                               bands in a UDSP if it has an HFS+ filesystem on
+                               it.  As an alternative to sparse images, a UDRW
+                               can be resized with resize.  See USING PERSIS-
+                               TENT SPARSE IMAGES below for more information.
+                -fs filesystem
+                               where filesystem is one of HFS+, HFS+J, HFSX,
+                               HFS, MS-DOS, or UFS.  -fs will cause a filesys-
+                               tem of the specified type to be written to the
+                               image.  -fs may also change the default layout
+                               if that particular filesystem is not native to
+                               an Apple_HFS partition in an Apple Partition
+                               Map.
+                -volname volname
+                               The newly-created filesystem will be named
+                               volname.  The default name is `untitled'.
+                -uid uid       the root of the newly-created volume will be
+                               owned by the given numeric user id.  99 maps to
+                               the magic `unknown' user (see hdid(8)).
+                -gid gid       the root of the newly-created volume will be
+                               owned by the given numeric group id.  99 maps
+                               to `unknown'.
+                -mode mode     the root of the newly-created volume will have
+                               mode (in octal) mode.
+                -[no]autostretch do [not] suppress automatically making
+                               stretchable volumes when the volume size
+                               crosses the auto-stretch-size threshold
+                               (default: 256 MB).  See also asr(8).
+                -stretch max_stretch
+                               -stretch initializes HFS+ filesystem data such
+                               that it can later be stretched on older systems
+                               (which could only stretch within predefined
+                               limits) using hdiutil resize or by asr(8).
+                               max_stretch is specified like -size.
+                -fsargs newfs_args
+                               additional arguments to pass to whatever newfs
+                               program is implied by -fs.  newfs_hfs(8) has a
+                               number of options that can reduce the amount of
+                               space needed by the filesystem's data struc-
+                               tures.  Suppressing the journal with -fs HFS+
+                               and passing arguments such as -c c=64,a=16,e=16
+                               to -fsargs will minimize gaps at the front of
+                               the filesystem, allowing resize to squeeze more
+                               space from the filesystem.  For truly optimal
+                               filesystems, makehybrid should be used.
+                -layout layout
+                               Specify the partition layout of the image.
+                               layout can be anything specified in Medi-
+                               aKit.framework's MKDrivers.bundle.  NONE cre-
+                               ates an image with no partition map.  When such
+                               an image is attached, a single /dev entry will
+                               be created (e.g. /dev/disk1).  SPUD is an
+                               acronym for Single Partition UDIF.  SPUD cre-
+                               ates an image with a DDM and an Apple Partition
+                               Scheme partition map with a single entry for an
+                               Apple_HFS partition.  GPTSPUD creates an image
+                               with a GUID Partition Scheme partition map with
+                               a single entry for an Apple_HFS partition.
+                               When attached, multiple /dev entries will be
+                               created and the 2nd partition will be the data
+                               partition (e.g.  /dev/disk1, /dev/disk1s1,
+                               /dev/disk1s2; the second partition is disk1s2).
+                               Unless changed by -fs, the default is SPUD on
+                               PPC machines, and GPTSPUD on Intel machines.
+                               Other layouts include "UNIVERSAL HD" and "UNI-
+                               VERSAL CD" which add appropriate OS 9 driver
+                               partitions for those types of media.  OS 9
+                               drivers are not used by OS X nor by its Classic
+                               environment.
+                -partitionType partition_type
+                               Change the type of partition in a single-parti-
+                               tion disk image.  The default is Apple_HFS,
+                               though if the layout is not specified, the
+                               appropriate partition scheme and type will be
+                               automatically chosen depending on the argument
+                               to -fs.
+                -ov            overwrite an existing file.  The default is not
+                               to overwrite existing files.  See the note with
+                               create about not being allowed to overwrite
+                               attached images.
+                -attach        attach the image after creating it (plain
+                               attach -- use hdiutil attach for more options).
+                               Note that if no filesystem is specified via
+                               -fs, the attach will fail per the default
+                               attach -mount required behavior.
+
+                Image from source options (for -srcfolder and -srcdevice):
+                -format format Specify the final image format.  The default
+                               when a source is specified is UDZO.  format can
+                               be any of the format parameters used by
+                               convert.
+
+                Options specific to -srcdevice:
+                -segmentSize size_spec
+                               Specify that the image should be written in
+                               segments no bigger than size_spec (which fol-
+                               lows -size conventions).
+
+                Options specific to -srcfolder:
+                -[no]crossdev   do [not] cross device boundaries on the source
+                                filesystem.
+                -[no]scrub      do [not] skip temporary files when imaging a
+                                volume with -srcfolder.  Scrubbing is the
+                                default when the source is the root of a
+                                mounted volume.  Scrubbed items include
+                                trashes, temporary directories, swap, etc.
+                -[no]anyowners  do [not] require that the user invoking
+                                hdiutil own all of the files in the source.
+                -copyuid user   perform the copy as the given user.  Normally,
+                                the copy is performed to maintain fidelity as
+                                explained below.
+                -skipunreadable skip files that can't be read by the copying
+                                user and don't authenticate.
+
+                By default, create -srcfolder attempts to maintain the permis-
+                sions present in the source directory.  It prompts for authen-
+                tication if it detects an unreadable file, a file owned by
+                someone other than the user creating the image, or a SGID file
+                in a group that the copying user is not in.
+
+     convert image -format format -o outfile
+                convert image to type format and write the result to outfile.
+
+                As mentioned above, the correct filename extension will be
+                added only if it isn't part of the provided name.  Format is
+                one of:
+
+                      UDRW - UDIF read/write image
+                      UDRO - UDIF read-only image
+                      UDCO - UDIF ADC-compressed image
+                      UDZO - UDIF zlib-compressed image
+                      UDBZ - UDIF bzip2-compressed image (OS X 10.4+ only)
+                      UFBI - UDIF entire image with MD5 checksum
+                      UDRo - UDIF read-only (obsolete format)
+                      UDCo - UDIF compressed (obsolete format)
+                      UDTO - DVD/CD-R master for export
+                      UDxx - UDIF stub image
+                      UDSP - SPARSE (grows with content)
+                      UDSB - SPARSEBUNDLE (grows with content; bundle-backed)
+                      RdWr - NDIF read/write image (deprecated)
+                      Rdxx - NDIF read-only image (Disk Copy 6.3.3 format)
+                      ROCo - NDIF compressed image (deprecated)
+                      Rken - NDIF compressed (obsolete format)
+                      DC42 - Disk Copy 4.2 image
+
+                In addition to the compression offered by some formats, the
+                UDIF and NDIF read-only formats completely remove unused space
+                in HFS and UFS filesystems.  For UDZO, -imagekey
+                zlib-level=value allows the zlib compression level to be spec-
+                ified ala gzip(1).  The default compression level is 1
+                (fastest).
+
+                Options are any of:
+
+                Common options: -encryption, -stdinpass, -certificate,
+                -srcimagekey, -tgtimagekey, -shadow with friends,
+                -puppetstrings, and -plist.
+
+                Other options:
+                -align alignment
+                             The default is 4 (2K).
+                -pmap        add partition map.
+                             When converting a NDIF to a any variety of UDIF,
+                             or when converting an unpartitioned UDIF, the
+                             default is true.
+                -segmentSize [size_spec]
+                             Specify segmentation into size_spec-sized seg-
+                             ments as outfile is being written.  The default
+                             size_spec when -segmentSize is specified alone is
+                             2*1024*1024 (1 GB worth of sectors) for UDTO
+                             images and 4*1024*1024 (2 GB segments) for all
+                             other image types.  size_spec can also be speci-
+                             fied ??b|??k|??m|??g|??t??p|??e like create's
+                             -size flag.
+                -tasks task_count
+                             When converting an image into a compressed for-
+                             mat, specify the number of threads to use for the
+                             compression operation.  The default is the number
+                             of processors active in the current system.
+
+     burn image
+                Burn image to optical media in an attached burning device.  In
+                all cases, a prompt for media will be printed once an appro-
+                priate drive has been found.  Common options: -shadow with
+                friends, -srcimagekey, -encryption, -puppetstrings, and
+                -stdinpass.
+
+                Other options:
+                -device          specify a device to use for burning.  See
+                                 -list.
+                -testburn        don't turn on laser (laser defaults to on).
+                -anydevice       explicitly allow burning to devices not qual-
+                                 ified by Apple (kept for backwards compati-
+                                 bility as burn will burn to any device by
+                                 default as of OS X 10.4).
+
+                -[no]eject       do [not] eject disc after burning. The
+                                 default is to eject the disc.
+                -[no]verifyburn  do [not] verify disc contents after burn.
+                                 The default is to verify.
+
+                -[no]addpmap     do [not] add partition map if necessary.
+                                 Some filesystem types will not be recognized
+                                 when stored on optical media unless they are
+                                 enclosed in a partition map.  This option
+                                 will add a partition map to any bare filesys-
+                                 tem which needs a partition map in order to
+                                 be recognized when burned to optical media.
+                                 The default is to add the partition map if
+                                 needed.
+
+                -[no]skipfinalfree do [not] skip final free partition.  If
+                                 there is a partition map on the image speci-
+                                 fying an Apple_Free partition as the last
+                                 partition, that Apple_Free partition will not
+                                 be burned.  The burned partition map will
+                                 still reference the empty space.  The default
+                                 is to skip burning a final free partition.
+
+                -[no]optimizeimage do [not] optimize filesystem for burning.
+                                 Optimization can reduce the size of an HFS or
+                                 HFS+ volume to the size of the data contained
+                                 on the volume.  This option will change what
+                                 is burned such that the disc will have a dif-
+                                 ferent checksum than the image it came from.
+                                 The default is to burn all blocks of the disk
+                                 image (minus any trailing Apple_Free).
+
+                -[no]forceclose  do [not] force the disc to be closed after
+                                 burning.  Further burns to the disc will be
+                                 impossible.  The default is not to close the
+                                 disc.
+
+                -nounderrun      Disable the default buffer underrun protec-
+                                 tion.
+
+                -[no]synthesize  [Don't] Synthesize a hybrid filesystem for
+                                 the disc.  The default is to create a new
+                                 (HFS/ISO) filesystem when the source image's
+                                 blocks could not be legally burned to a disc.
+
+                -speed x_factor  1, 2, 4, 6, ...  `max'
+                                 The desired "x-factor".  e.g. 8 means the
+                                 drive will be instructed burn at "8x speed".
+                                 `max' will cause the burn to proceed at the
+                                 maximum speed of the drive.  `max' is the
+                                 default speed.  Slower speeds can produce
+                                 more reliable burns.  The speed factor is
+                                 relative to the media being burned (e.g.
+                                 -speed 2 has a different data rate when used
+                                 for a DVD burn vs. a CD burn).  Note that
+                                 some drives have a minimum burn speed in
+                                 which case any slower speed specified will
+                                 result in a burn at the drive's minimum
+                                 speed.
+
+                -sizequery       calculate the size of disc required (the size
+                                 returned is in sectors) without burning any-
+                                 thing.
+
+                -erase           prompt for optical media (DVD-RW/CD-RW) and
+                                 then, if the hardware supports it, quickly
+                                 erase the media.  If an image is specified,
+                                 it will be burned to the media after the
+                                 media has been erased.
+                -fullerase       erase all sectors of the disc (this usually
+                                 takes quit a bit longer than -erase).
+                -list            list all burning devices, with OpenFirmware
+                                 paths suitable for -device.
+
+     makehybrid -o image source
+                Generate a potentially-hybrid filesystem in a read-only disk
+                image using the DiscRecording framework's content creation
+                system.
+
+                source can either be a directory or a disk image.  The gener-
+                ated image can later be burned using burn, or converted to
+                another read-only format with convert.  By default, the
+                filesystem will be readable on most modern computing plat-
+                forms.  The generated filesystem is not intended for conver-
+                sion to read/write, but can safely have its files copied to a
+                read/write filesystem by ditto(8) or asr(8) (in file-copy
+                mode).
+
+                hdiutil supports generating El Torito-style bootable ISO9660
+                filesystems, which is commonly used for booting x86-based
+                hardware. The specification includes several emulation modes.
+                By default, an El Torito boot image emulates either a 1.2MB,
+                1.44MB, or 2.88MB floppy drive, depending on the size of the
+                image.  Also available are "No Emulation" and "Hard Disk
+                Emulation" modes, which allow the boot image to either be
+                loaded directly into memory, or be virtualized as a parti-
+                tioned hard disk, respectively. The El Torito options should
+                not be used for data CDs.
+
+                Filesystem options:
+                -hfs    Generate an HFS+ filesystem.  This filesystem can be
+                        present on an image simultaneously with an ISO9660 or
+                        Joliet or UDF filesystem.  On operating systems that
+                        understand HFS+ as well as ISO9660 and UDF, like Mac
+                        OS 9 or Mac OS X, it is usually the preferred filesys-
+                        tem.
+                -iso    Generate an ISO9660 Level 2 filesystem with Rock Ridge
+                        extensions.  This filesystem can be present on an
+                        image simultaneously with an HFS+ or Joliet or UDF
+                        filesystem.  ISO9660 is the standard cross-platform
+                        interchange format for CDs and some DVDs, and is
+                        understood by virtually all operating systems.  If an
+                        ISO9660 or Joliet filesystem is present on a disk
+                        image or CD, but not HFS+, Mac OS X will use the
+                        ISO9660 (or Joliet) filesystem.
+                -joliet Generate Joliet extensions to ISO9660.  This view of
+                        the filesystem can be present on an image simultane-
+                        ously with HFS+, and requires the presence of an
+                        ISO9660 filesystem.  Joliet supports Unicode file-
+                        names, but is only supported on some operating sys-
+                        tems.  If both an ISO9660 and Joliet filesystem are
+                        present on a disk image or CD, but not HFS+, Mac OS X
+                        will prefer the Joliet filesystem.
+                -udf    Generate a UDF filesystem. This filesystem can be
+                        present on an image simultaneously with HFS+, ISO9660,
+                        and Joliet. UDF is the standard interchange format for
+                        DVDs, although operating system support varies based
+                        on OS version and UDF version.
+
+                By default, if no filesystem is specified, the image will be
+                created with all four filesystems as a hybrid image.  When
+                multiple filesystems are selected, the data area of the image
+                is shared between all filesystems, and only directory informa-
+                tion and volume meta-data are unique to each filesystem.  This
+                means that creating a cross-platform ISO9660/HFS+ hybrid has a
+                minimal overhead when compared to a single filesystem image.
+
+                Other options (most take a single argument):
+                -hfs-blessed-directory Path to directory which should be
+                                       "blessed" for Mac OS X booting on the
+                                       generated filesystem.  This assumes the
+                                       directory has been otherwise prepared,
+                                       for example with bless -bootinfo to
+                                       create a valid BootX file.  (HFS+
+                                       only).
+                -hfs-openfolder        Path to a directory that will be opened
+                                       by the Finder automatically.  See also
+                                       the -openfolder option in bless(8)
+                                       (HFS+ only).
+                -hfs-startupfile-size  Allocate an empty HFS+ Startup File of
+                                       the specified size, in bytes (HFS+
+                                       only).
+
+                -abstract-file         Path to a file in the source directory
+                                       (and thus the root of the generated
+                                       filesystem) for use as the
+                                       ISO9660/Joliet Abstract file
+                                       (ISO9660/Joliet).
+                -bibliography-file     Path to a file in the source directory
+                                       (and thus the root of the generated
+                                       filesystem) for use as the
+                                       ISO9660/Joliet Bibliography file
+                                       (ISO9660/Joliet).
+                -copyright-file        Path to a file in the source directory
+                                       (and thus the root of the generated
+                                       filesystem) for use as the
+                                       ISO9660/Joliet Copyright file
+                                       (ISO9660/Joliet).
+                -application           Application string (ISO9660/Joliet).
+                -preparer              Preparer string (ISO9660/Joliet).
+                -publisher             Publisher string (ISO9660/Joliet).
+                -system-id             System Identification string
+                                       (ISO9660/Joliet).
+                -keep-mac-specific     Expose Macintosh-specific files (such
+                                       as .DS_Store) in non-HFS+ filesystems
+                                       (ISO9660/Joliet).
+                -eltorito-boot         Path to an El Torito boot image. By
+                                       default, floppy drive emulation is
+                                       used, so the image must be one of
+                                       1200KB, 1440KB, or 2880KB. If the image
+                                       has a different size, either
+                                       -no-emul-boot or -hard-disk-boot must
+                                       be used to enable "No Emulation" or
+                                       "Hard Disk Emulation" mode, respec-
+                                       tively (ISO9660/Joliet).
+                -hard-disk-boot        Use El Torito Hard Disk Emulation mode.
+                                       The image must represent a virtual
+                                       device with an MBR partition map and a
+                                       single partition
+                -no-emul-boot          Use El Torito No Emulation mode. The
+                                       system firmware will load the number of
+                                       sectors specified by -boot-load-size
+                                       and execute it, without emulating any
+                                       devices (ISO9660/Joliet).
+                -no-boot               Mark the El Torito image as non-
+                                       bootable. The system firmware may still
+                                       create a virtual device backed by this
+                                       data. This option is not recommended
+                                       (ISO9660/Joliet).
+                -boot-load-seg         For a No Emulation boot image, load the
+                                       data at the specified segment address.
+                                       This options is not recommended, so
+                                       that the system firmware can use its
+                                       default address (ISO9660/Joliet)
+                -boot-load-size        For a No Emulation boot image, load the
+                                       specified number of 512-byte emulated
+                                       sectors into memory and execute it. By
+                                       default, 4 sectors (2KB) will be loaded
+                                       (ISO9660/Joliet).
+                -eltorito-platform     Use the specified numeric platform ID
+                                       in the El Torito Boot Catalog Valida-
+                                       tion Entry or Section Header. Defaults
+                                       to 0 to identify x86 hardware
+                                       (ISO/Joliet).
+                -eltorito-specification For complex layouts involving multiple
+                                       boot images, a plist-formatted string
+                                       can be provided, using either OpenStep-
+                                       style syntax or XML syntax, represent-
+                                       ing an array of dictionaries. Any of
+                                       the El Torito options can be set in the
+                                       sub-dictionaries and will apply to that
+                                       boot image only. If
+                                       -eltorito-specification is provided in
+                                       addition to the normal El Torito com-
+                                       mand-line options, the specification
+                                       will be used to populate secondary non-
+                                       default boot entries.
+                -udf-version           Version of UDF filesystem to generate.
+                                       This can be either "1.02" or "1.50".
+                                       If not specified, it defaults to "1.50"
+                                       (UDF).
+
+                -default-volume-name   Default volume name for all filesys-
+                                       tems, unless overridden.  If not speci-
+                                       fied, defaults to the last path compo-
+                                       nent of source.
+                -hfs-volume-name       Volume name for just the HFS+ filesys-
+                                       tem if it should be different (HFS+
+                                       only).
+                -iso-volume-name       Volume name for just the ISO9660
+                                       filesystem if it should be different
+                                       (ISO9660 only).
+                -joliet-volume-name    Volume name for just the Joliet
+                                       filesystem if it should be different
+                                       (Joliet only).
+                -udf-volume-name       Volume name for just the UDF filesystem
+                                       if it should be different (UDF only).
+
+                -hide-all              A glob expression of files and directo-
+                                       ries that should not be exposed in the
+                                       generated filesystems.  The string may
+                                       need to be quoted to avoid shell expan-
+                                       sion, and will be passed to glob(3) for
+                                       evaluation.  Although this option can-
+                                       not be used multiple times, an arbi-
+                                       trarily complex glob expression can be
+                                       used.
+                -hide-hfs              A glob expression of files and directo-
+                                       ries that should not be exposed via the
+                                       HFS+ filesystem, although the data may
+                                       still be present for use by other
+                                       filesystems (HFS+ only).
+                -hide-iso              A glob expression of files and directo-
+                                       ries that should not be exposed via the
+                                       ISO filesystem, although the data may
+                                       still be present for use by other
+                                       filesystems (ISO9660 only).  Per above,
+                                       the Joliet hierarchy will supersede the
+                                       ISO hierarchy when the hybrid is
+                                       mounted as an ISO 9660 filesystem on
+                                       Mac OS X.  Therefore, if Joliet is
+                                       being generated (the default)
+                                       -hide-joliet will also be needed to
+                                       hide the file from mount_cd9660(8).
+                -hide-joliet           A glob expression of files and directo-
+                                       ries that should not be exposed via the
+                                       Joliet filesystem, although the data
+                                       may still be present for use by other
+                                       filesystems (Joliet only).  Because OS
+                                       X's ISO 9660 filesystem uses the Joliet
+                                       catalog if it is available,
+                                       -hide-joliet effectively supersedes
+                                       -hide-iso when the resulting filesystem
+                                       is mounted as ISO on OS X.
+                -hide-udf              A glob expression of files and directo-
+                                       ries that should not be exposed via the
+                                       UDF filesystem, although the data may
+                                       still be present for use by other
+                                       filesystems (UDF only).
+                -only-udf              A glob expression of objects that
+                                       should only be exposed in UDF.
+                -only-iso              A glob expression of objects that
+                                       should only be exposed in ISO.
+                -only-joliet           A glob expression of objects that
+                                       should only be exposed in Joliet.
+
+                -print-size            Preflight the data and calculate an
+                                       upper bound on the size of the image.
+                                       The actual size of the generated image
+                                       is guaranteed to be less than or equal
+                                       to this estimate.
+                -plistin               Instead of using command-line parame-
+                                       ters, use a standard plist from stan-
+                                       dard input to specific the parameters
+                                       of the hybrid image generation.  Each
+                                       command-line option should be a key in
+                                       the dictionary, without the leading
+                                       "-", and the value should be a string
+                                       for path and string arguments, a number
+                                       for number arguments, and a boolean for
+                                       toggle options.  The source argument
+                                       should use a key of "source" and the
+                                       image should use a key of "output".
+
+                If a disk image was specified for source, the image will be
+                attached and paths will be evaluated relative to the mount-
+                point of the image.  No absolute paths can be used in this
+                case.  If source is a directory, all argument paths should
+                point to files or directories either via an absolute path, or
+                via a relative path to the current working directory.
+
+                The volume name options, just like files in the filesystems,
+                may need to be mapped onto the legal character set for a given
+                filesystem or otherwise changed to obey naming restrictions.
+                Use drutil(1) as drutil filename myname to see how a given
+                string would be remapped.
+
+                The -abstract-file, -bibliography-file, -and -copyright-file
+                must exist directly in the source directory, not a sub-direc-
+                tory, and must have an 8.3 name for compatibility with ISO9660
+                Level 1.
+
+     compact image
+                scans the bands of a sparse (SPARSE or SPARSEBUNDLE) disk
+                image containing an HFS filesystem, removing those parts of
+                the image which are no longer being used by the filesystem.
+                Depending on the location of files in the hosted filesystem,
+                compact may or may not shrink the image.  For SPARSEBUNDLE
+                images, completely unused band files are simply removed.
+
+                Common options: -encryption, -stdinpass, -srcimagekey, -shadow
+                with friends, -puppetstrings, and -plist.
+
+     info       display information about DiskImages.framework, the disk image
+                driver, and any images that are currently attached.  hdiutil
+                info accepts -plist.
+
+     load       manually load the disk image driver.  Normally, the disk image
+                driver is loaded by the DiskImages framework whenever needed.
+                As of OS X 10.2, the driver will automatically unregister
+                itself after the last image is detached (it will then be
+                unloaded after about a minute without being used again).
+
+     checksum image -type type
+                Calculate the specified checksum on the image data, regardless
+                of image type.
+
+                Common options: -shadow with friends, -encryption, -stdinpass.
+                -srcimagekey, -puppetstrings, and -plist,
+
+                type is one of:
+                      UDIF-CRC32 - CRC-32 image checksum
+                      UDIF-MD5 - MD5 image checksum
+                      DC42 - Disk Copy 4.2
+                      CRC28 - CRC-32 (NDIF)
+                      CRC32 - CRC-32
+                      MD5 - MD5
+                      SHA - SHA
+                      SHA1 - SHA-1
+                      SHA256 - SHA-256
+                      SHA384 - SHA-384
+                      SHA512 - SHA-512
+
+     chpass image
+                change the passphrase for an encrypted image.  The default is
+                to change the password interactively.
+
+                Common options: -recover and -srcimagekey.  The options
+                -oldstdinpass and -newstdinpass allow, in the order specified,
+                the null-terminated old and new passwords to be read from the
+                standard input in the same manner as with -stdinpass.
+
+     unflatten image
+                unflatten a UDIF disk image, creating a dual-fork file in tra-
+                ditional format (resource-only; no XML).  If the resource fork
+                representation of the metadata becomes greater than 16 MB, the
+                operation will fail with error -39 ("End of fork").
+
+                Common options: -encryption, -stdinpass, and -srcimagekey.
+
+     flatten image
+                Flatten a read-only (or compressed) UDIF disk image into a
+                single-fork file.  By default, metadata will be stored both as
+                XML (for the kernel's use) and in an embedded resource fork
+                (for OS X 10.1 and earlier).  Note: UDBZ is not supported in-
+                kernel.
+
+                Common options: -srcimagekey, -encryption, and -stdinpass.
+                flatten is only required if the UDIF has previously been
+                unflattened.
+
+                Other options:
+                -noxml      don't embed XML data for in-kernel attachment.
+                            The image will never attach in-kernel.
+                -norsrcfork don't embed resource fork data.  The image will
+                            not attach on OS X versions prior to OS X 10.2.
+
+     fsid image
+                Print information about file systems on a given disk image.
+                As is usually the case, image can be a /dev entry correspond-
+                ing to a physical disk.  See the NOTE ON DEV ENTRY ACCESS sec-
+                tion.  More detailed information is presented for HFS file
+                systems.
+
+                Common options: -encryption, -stdinpass, -srcimagekey, and
+                -shadow with friends.
+
+     mountvol dev_name
+                Attempt to mount the filesystem in dev_name using Disk Arbi-
+                tration (similar to diskutil mount). XML output is available
+                from -plist.  Note that mountvol (rather than mount) will
+                remount a volume after it has been unmounted by unmount.
+                Images are attached and detached; volumes are mounted and
+                unmounted.  mountvol undoes a unmount operation.
+
+                mount/attach can be called on a /dev entry, but it will treat
+                the /dev entry as a disk image to be attached (creating
+                another /dev entry).  This is usually undesirable.
+
+     unmount volume [-force]
+                unmounts a mounted volume without detaching any associated
+                image.  volume is a /dev entry or the name of a mountpoint.
+                NOTE: unmount does NOT detach any disk image associated with
+                the volume.  Images are attached and detached; volumes are
+                mounted and unmounted.  mount (which is a synonym for attach)
+                will NOT remount an image-based volume if the image is already
+                attached but the volume is not mounted (i.e. if unmount has
+                been used on the filesystem).  mountvol will remount a volume
+                that has been unmounted by unmount.
+
+                Options:
+                -force unmount filesystem regardless of open files on that
+                       filesystem.  Similar to umount -f.
+
+     imageinfo image
+                Print out information about a disk image.
+
+                Common options: -encryption, -stdinpass, -srcimagekey, -shadow
+                with friends, and -plist.
+
+                Options are any of:
+                -format   just print out the image format
+                -checksum just print out the image checksum
+
+     plugins    print information about DiskImages framework plugins.  The
+                user, system, local, and network domains are searched for
+                plugins (i.e.  ~/Library/Plug-ins/DiskImages,
+                /System/Library/Plug-ins/DiskImages,
+                /Library/Plug-ins/DiskImages,
+                /Network/Library/Plug-ins/DiskImages). -plist is available.
+
+     internet-enable [-yes] | -no | -query image
+                Enable or disable post-processing for the image.  Without
+                arguments, IDME will be enabled.  If so enabled, upon first
+                encounter with Disk Copy (on OS X 10.2.3+) or a browser using
+                the feature for a download on OS X 10.3, the image will have
+                its visible contents copied into the directory containing the
+                image and the image will be put into the trash with IDME
+                turned off.
+
+                Common options: -encryption, -stdinpass, -srcimagekey, and
+                -plist.
+
+     resize size_spec image
+                Resize a disk image or the containers within it.  Given a
+                read/write partitioned UDIF, if the last partition is
+                Apple_HFS, attempt to resize the partition to the end of the
+                image, or to the last used block in the embedded HFS/HFS+
+                filesystem (depending on size_spec). On older systems, resize
+                was limited to pre-defined limits that depended on how the
+                filesystem was created.  As of OS X 10.4, resize can be used
+                to grow an HFS filesystem within an image to any size sup-
+                ported by HFS and the filesystem hosting the image.
+
+                resize is often used when a device image needs to be shrunk so
+                that the HFS/HFS+ partition can be converted to CD-R/DVD-R
+                format and still be burned.  Note that gaps cannot be
+                reclaimed as resize does not move data.  -fsargs can sometimes
+                be used to minimize filesystem-generated gaps.  resize can
+                grow a filesystem and image within the bounds of the image and
+                filesystem formats (e.g. roughly 2^63 bytes for HFS+ inside of
+                a UDRW on HFS+).
+
+                hdiutil burn does not burn Apple_Free partitions at the end of
+                the devices, so an image with a resized filesystem can be
+                burned to create a CD-R/DVD-R master that contains only the
+                actual data in the hosted filesystem (assuming minimal data
+                fragmentation).
+
+                Common options: -encryption, -stdinpass, -srcimagekey, -shadow
+                with friends, and -plist.
+
+                Size specifiers:
+                -size ??b|??k|??m|??g|??t??p|??e
+                -sectors sector_count | min | max
+                                 Specify the number of 512 byte sectors to
+                                 which the partition should be resized.  If
+                                 this falls outside the min/max values, an
+                                 error will be returned and the partition will
+                                 not be resized.  min automatically determines
+                                 the smallest size the partition can be
+                                 resized to and uses that value.  max automat-
+                                 ically determines the largest size to which
+                                 the partition can be grown and then uses that
+                                 value.
+
+                Other options:
+                -imageonly       only resize the image file, not the parti-
+                                 tion(s) inside of it.  This is the default
+                                 for UDIF images (more partitions can then be
+                                 added in the new free space).
+                -partitiononly   only resize the partition(s) in the image
+                                 (including their embedded filesystems).  This
+                                 is the default for NDIF images.  For a newly-
+                                 created single partition disk image where the
+                                 partition fills the image, the partition can
+                                 only be shrunk.  If there is an Apple_Free
+                                 partition after an existing partition, that
+                                 partition can be expanded into the space
+                                 marked by the Apple_Free.  Shrinking a parti-
+                                 tion results in a larger Apple_Free parti-
+                                 tion.
+                -partitionNumber partitionNumber
+                                 specifies which partition to resize (UDIF
+                                 only -- see HISTORY below).  partitionNumber
+                                 is 0-based, but, per hdiutil pmap, partition
+                                 0 is the partition map itself.
+
+                -growonly        only allow the image to grow
+                -shrinkonly      only allow the image to shrink
+                -nofinalgap      allow resize to entirely eliminate the trail-
+                                 ing free partition.  Such an image restored
+                                 to a hard drive will not boot OS 9 nor will
+                                 it allow OS X to boot on old-world (beige)
+                                 machines.
+
+                -limits          Displays the minimum, current, and maximum
+                                 sizes (in 512 byte sectors) that could be
+                                 passed given possible -imageonly or
+                                 -partitiononly flags.  In addition to any
+                                 filesystem constraints, the maximum size is
+                                 limited by available disk space for UDRW
+                                 images.  Does not modify the image.
+                -oldlimits       behaves like -limits except that it reports
+                                 the stretch sizes that OS X version 10.3
+                                 would have reported (useful if an image needs
+                                 to be used with asr(8) on an older system).
+
+     segment
+                segment -o firstSegname -segmentCount #segs image [opts]
+                segment -o firstSegname -segmentSize size image [opts]
+                segment a NDIF or UDIF disk image.  Segmented images work
+                around limitations in file size which are sometimes imposed by
+                filesystems, network protocols, or media.  Note: whether or
+                not the segments are encrypted is determined by the options
+                passed to segment and not by the state of the source image.
+
+                Common options: -encryption, -stdinpass, -srcimagekey,
+                -tgtimagekey, -puppetstrings, and -plist.
+
+                Options:
+                -segmentCount segment_count
+                             Specify the number of segments.  Only one of
+                             -segmentCount or -segmentSize will be honored.
+                -segmentSize segment_size
+                             Specify the segment size in sectors or in the
+                             style of mkfile(8) (here unqualified numbers are
+                             still sectors).  If the original image size is
+                             not an exact multiple of the segment size, the
+                             last segment will be shorter than the others.
+                             Only one of -segmentCount or -segmentSize will be
+                             honored.  Segmenting read/write (UDRW) images is
+                             not supported (as of OS X 10.3).
+
+                -firstSegmentSize segment_size
+                             Specify the first segment size in sectors in the
+                             same form as for -segmentSize.  Used for multi-CD
+                             restores.
+                -restricted  Make restricted segments for use in multi-CD
+                             restores.
+                -ov          overwrite any existing files.  See notes with
+                             create about not being allowed to overwrite
+                             attached images, etc.
+
+     pmap image_source [-options optstr]
+                display the partition map of an image or device.  image_source
+                is either a plain file or special file (i.e. a /dev/disk
+                entry).  See the NOTE ON DEV ENTRY ACCESS below.
+
+                Common options: -encryption, -stdinpass, -srcimagekey, and
+                -shadow with friends.
+
+                optstr defaults to "xsSgcvk" and can be any combination of the
+                following:
+
+                      r raw       - process all without modification
+                      x extended  - process 2K & 512 entries and merge
+                      s sectorize - return all quantities in sectors
+                      S sort      - sort all entries by block number
+                      g genfree   - account for all unmapped space
+                      c combfree  - combine adjacent freespace entries
+                      f fixfinal  - extend last partition to device end
+                      v volume synthesize - synthesize single volumes as
+                                            a single partition entry
+                      k skip zero-length - skip zero length entries
+                      K skip void/free   - skip all free & void partitions
+                      m merge free space - Merge small free partitions into
+                                           a previous partition if possible
+                      i ignore shims     - ignore small free partitions
+                                           caused by block alignment
+
+     udifrez [options] image
+                Attaches resources (software license agreements, for example)
+                to a disk image.
+
+                You must specify one of the following options:
+                -xml inputfile
+                          Copy resources from an XML file.
+                -rsrcfork inputfile
+                          Copy resources from the resource fork of a file.
+
+                You must also specify two files:
+                image
+                          the disk image you wish to modify.
+                inputfile
+                          a file containing the resources you wish to attach.
+
+EXAMPLES
+     Verifying:
+           hdiutil verify myimage.img
+               Verifies an image against its internal checksum.
+
+     Segmenting:
+           hdiutil segment -segmentSize 10m -o /tmp/aseg 30m.dmg
+               creates aseg.dmg, aseg.002.dmgpart, and aseg.003.dmgpart
+
+     Converting:
+           hdiutil convert master.dmg -format UDTO -o master
+               Converts master.dmg to a CD-R export image, appending
+               .toast to the filename.
+           hdiutil convert CDmaster.dmg -format UDTO -o CDmaster.cdr
+               Converts CDmaster.dmg to a CD-R export image named
+               CDmaster.cdr.
+           hdiutil convert /dev/disk1 -format UDRW -o devimage
+               Converts the disk /dev/disk1 to a read/write device image
+               file.  authopen(1) will be used if read access to
+               /dev/rdisk1 is not available.  Note use of the block-special
+               device.
+
+     Burning:
+           hdiutil burn myImage.dmg
+               Burns the image to available optical media and verifies
+               the burn.
+           hdiutil burn myRawImage.cdr -noverifyburn -noeject
+               Burns the image without verifying the burn or ejecting
+               the disc.  Volumes will be mounted after burning.
+
+     Creating a 50 MB encrypted image:
+           hdiutil create -encryption -size 50m e.dmg -fs HFS+J
+
+     Creating a 50 MB encrypted image protected with public key only:
+           hdiutil create -encryption -size 50m e.dmg -fs HFS+J
+              -pubkey F534A3B0C2AEE3B988308CC89AA04ABE7FDB5F30
+
+     Creating a 50 MB encrypted image protected with public key and password:
+           hdiutil create -encryption -size 50m e.dmg -fs HFS+J -agentpass
+              -pubkey F534A3B0C2AEE3B988308CC89AA04ABE7FDB5F30
+
+     Creating an encrypted single-partition (Apple Partition Map on PPC and
+     GUID Partition Scheme on Intel) disk image without user interaction:
+           echo -n pp|hdiutil create -encryption -stdinpass -size 9m sp.dmg
+
+     Creating a "1 GB" SPARSE image (a 1 GB filesystem in a growable file):
+           hdiutil create -type SPARSE -size 1g -fs HFS+ growableTo1g
+
+     Creating a "1 GB" SPARSEBUNDLE (a 1 GB filesystem in a growable bundle):
+           hdiutil create -type SPARSEBUNDLE -size 1g -fs HFS+ growableTo1g
+
+     Creating a new mounted volume backed by an image:
+           hdiutil create -volname Dick -size 1.3m -fs HFS -attach Moby.dmg
+
+     Using a shadow file to attach a read-only image read-write to modify it,
+     then convert it back to a read-only image. This method eliminates the
+     time/space required to convert a image to read-write before modifying it.
+           hdiutil attach -owners on Moby.dmg -shadow
+             /dev/disk2   Apple_partition_scheme
+             /dev/disk2s1 Apple_partition_map
+             /dev/disk2s2 Apple_HFS               /Volumes/Moby
+
+          ditto /Applications/Preview.app /Volumes/Moby
+
+          hdiutil detach /dev/disk2
+
+          hdiutil convert -format UDZO Moby.dmg -shadow
+
+     Using makehybrid.  Given the files:
+           albumlist.txt song2.wma     song4.m4a     song6.mp3     song8.mp3
+           song1.wma     song3.m4a     song5.mp3     song7.mp3
+
+     Create an HFS+/ISO9660/Joliet hybrid MusicBackup.iso with some common
+     content between filesystems. The HFS+ filesystem, typically only visible
+     on Macintosh systems, will not include the .wma files, but will show the
+     .m4a and .mp3 files. The Joliet filesystem will not show the .m4a and
+     .mp3 files, but will show the .wma files. The ISO9660 filesystem, typi-
+     cally the default filesystem for optical media on many platforms, will
+     only show the .mp3 files. All three filesystems will include the "album-
+     list.txt" files.  The -hide options take glob expressions as expanded by
+     glob(3).
+
+           hdiutil makehybrid -o MusicBackup.iso Music -hfs -iso -joliet \
+           -hide-hfs 'Music/*.wma' -hide-joliet 'Music/{*.m4a,*.mp3}' \
+           -hide-iso 'Music/*.{wma,m4a}'
+
+     (see also drutil(1) for making CD audio discs)
+
+     Image from directory (new-style):
+           hdiutil create -srcfolder mydir mydir.dmg
+
+     Image from directory (10.1-style; of historical interest):
+           du -s myFolder             # du(1) will count resource forks
+           10542
+           hdiutil create -sectors 10642 folder     # add ~1% for filesytem
+           hdid -nomount folder.dmg
+           ...
+           /dev/disk1s2            Apple_HFS
+           newfs_hfs -v myFolderImage /dev/rdisk1s2
+           hdiutil detach disk1
+           hdid folder.dmg
+           ...
+           /dev/disk1s2            Apple_HFS         /Volumes/myFolderImage
+           sudo mount -u -t hfs -o perm /dev/disk1s2 /Volumes/myFolderImage
+           # optionally enable owners; sudo unneeded if manually mounted
+
+           ditto -rsrcFork myFolder /Volumes/myFolderImage
+           hdiutil detach disk1s2                  # all done
+           hdiutil convert -format UDZO -o folder.z.dmg folder.dmg # compress
+
+     Manually changing ownership settings of a read-only disk image:
+           hdiutil attach myimage.dmg
+           ...
+           /dev/disk1s2            Apple_HFS         /Volumes/myVolume
+           sudo mount -ur -t hfs -o perm /dev/disk1s2 /Volumes/myVolume
+           # what if I prefer using /sbin/mount
+           disktool -p disk1s2             # try 'diskutil unmount' on Panther
+           mkdir /Volumes/myVolume
+
+     Forcing a known image to attach:
+           hdiutil attach -imagekey diskimage-class=CRawDiskImage myBlob.bar
+
+ENVIRONMENT
+     The following environment variables affect hdiutil and DiskImages:
+
+     com_apple_hdid_verbose
+                enable -verbose behavior for attach.
+
+     com_apple_hdid_debug
+                enable -debug behavior for attach.
+
+     com_apple_hdid_nokernel
+                similar to -nokernel but works even with, for example, create
+                -attach.
+
+     com_apple_hdid_kernel
+                attempt to attach in-kernel first (like attach -kernel). In OS
+                X 10.4.x, in-kernel was the default behavior for UDRW and
+                SPARSE images.  On OS X 10.5, these and other kernel-compati-
+                ble images, including RAM-based images described in hdid(8),
+                will attach with a user process unless attach --kernel is used
+                or the corresponding variable is set.  If an image is not
+                "kernel-compatible" and -kernel is specified, the attach will
+                fail.  (WARNING: ram:// images currently use wired memory when
+                attached in-kernel).
+
+     com_apple_diskimages_insecureHTTP
+                disable SSL peer verification the same way -insecurehttp does.
+                Useful for clients of DiskImages such as asr(8) which don't
+                support a similar command line option.
+
+ERRORS
+     DiskImages uses many frameworks and can encounter many error codes.  In
+     general, it tries to turn these errors numbers into localized strings for
+     the user.  For background, intro(2) is a good explanation of the initial
+     error domain, the BSD errno values.  For debugging, -verbose should gen-
+     erally provide enough information to figure out what has gone wrong.  The
+     following is a list of interesting errors that hdiutil may encounter:
+
+     [ENXIO]            Device not configured.  This error is returned by
+                        DiskImages when its kernel driver or framework helper
+                        cannot be contacted.  The former usually means the
+                        IOHDIXController kernel extension can't be loaded.
+                        The latter usually means Foundation's distributed
+                        objects RPC mechanism cannot be configured.  DO
+                        doesn't work under dead mach bootstrap contexts such
+                        as exist in a reattached screen(1) session.  Root
+                        users can take advantage of StartupItemContext(8) (in
+                        /usr/libexec) to access the startup item mach boot-
+                        strap context.
+
+     [EINVAL]           Invalid argument.  This error is used in many contexts
+                        and is often a clue that hdiutil's arguments are sub-
+                        tly non-sensical (e.g. an invalid layout name passed
+                        to create -layout).
+
+     [EFBIG]            File too large.  DiskImages uses this error explicitly
+                        when attempting to access a disk image over HTTP that
+                        is too large for the server to support Range requests.
+                        See hdid(8) for more details.
+
+     [EAUTH]            Authentication error.  Used by DiskImages when
+                        libcurl(3) is unable to verify its SSL peer.  See
+                        -insecurehttp for more information.
+
+     [EBUSY]            Resource busy.  Used if necessary exclusive access
+                        cannot be obtained.  For example, returned by create
+                        -ov when the image is attached.
+
+     EACCES vs. EPERM
+                        EACCES and EPERM are subtly different.  The latter
+                        "operation not permitted" tends to refer to an opera-
+                        tion that cannot be performed, often due to an incor-
+                        rect effective user ID.  On the other hand, "permis-
+                        sion denied" tends to mean that a particular access
+                        mode prevented the operation.
+
+USING PERSISTENT SPARSE IMAGES
+     As of OS X 10.5, a more reliable, efficient, and scalable sparse format,
+     UDSB (SPARSEBUNDLE), is recommended for persistent sparse images as long
+     as a backing bundle (directory) is acceptable.  SPARSE (USSP) images and
+     shadow files were designed for intermediate use when creating other
+     images (e.g. UDZO) when final image sizes are unknown.  As of OS X
+     10.3.2, partially-updated SPARSE images are properly handled and are thus
+     safe for persistent storage.  SPARSE images are not recommended for per-
+     sistent storage on versions of OS X earlier than 10.3.2 and should gener-
+     ally only be used when data sizes are truly unknown.  resize can resize
+     an HFS+ filesystem and the image containing it.
+
+     If more space is needed than is referenced by the hosted filesystem,
+     create -stretch and resize can help to grow or shrink the filesystem in
+     the image.  compact reclaims unused space in the image.  Beware that
+     sparse images can enhance the effects of any fragmentation in the
+     filesystem.
+
+     To prevent errors when a filesystem inside of a sparse image has more
+     free space than the volume holding the sparse image, HFS volumes inside
+     sparse images will report an amount of free space slightly less than the
+     amount of free space on the volume on which image resides.  The image
+     filesystem currently only behaves this way as a result of a direct attach
+     action and will not behave this way if, for example, the filesystem is
+     unmounted and remounted (e.g. with unmount and mountvol).
+
+NOTE ON DEV ENTRY ACCESS
+     Since any /dev entry can be treated as a raw disk image, it is worth not-
+     ing which devices can be accessed when and how.  /dev/rdisk nodes are
+     character-special devices, but are "raw" in the BSD sense and force
+     block-aligned I/O.  They are closer to the physical disk than the buffer
+     cache.  /dev/disk nodes, on the other hand, are buffered block-special
+     devices and are used primarily by the kernel's filesystem code.
+
+     It is not possible to read from a /dev/disk node while a filesystem is
+     mounted from it, but anyone with read access to the appropriate
+     /dev/rdisk node can use hdiutil verbs such as fsid on it.  The DiskImages
+     framework will attempt to use authopen(1) to open any device which it
+     can't open (due to EACCES) for reading with open(2).  This may cause
+     apparent hangs while trying to access /dev entries while logged in
+     remotely (an authorization panel is waiting on console).
+
+     Generally, the /dev/disk node is preferred for imaging devices (e.g.
+     convert or create -srcfolder operations), while /dev/rdisk is usable for
+     the quick pmap or fsid.  In particular, converting the blocks of a
+     mounted journaled filesystem to a read-only image will prevent the volume
+     in the image from mounting (the journal will be permanently dirty).
+
+COMPATIBILITY
+     OS X 10.0 supported the disk images of Disk Copy 6 on Mac OS 9.  OS X
+     10.1 added sparse, encrypted, and zlib-compressed images.  These images
+     will not be recognized on OS X 10.0 (or will attach read/write, possibly
+     allowing for their destruction).  As the sparse, shadow, and encrypted
+     formats have evolved, switches have been added to facilitate the creation
+     of images that are compatible with older OS versions (at the expense of
+     the performance and reliability improvements offered by the format
+     enhancements).  In particular, sparse images should not be expected to
+     attach on versions of OS X older than that which created them.
+
+     With OS X 10.2, the most common image formats went "in-kernel" (i.e. the
+     DiskImages kernel extension served them without a helper process), image
+     meta-data began being stored both as XML and in the embedded resource
+     fork, and the default Disk Copy.app "compressed" format became UDZO
+     (breaking compatibility with 10.0).  OS X 10.4 introduced bzip2 compres-
+     sion in the UDBZ format which provides smaller images (especially when
+     combined with makehybrid) at the expense of backwards compatibility.
+
+     In OS X 10.4.7, the resource forks previously embedded in UDIF images
+     were abandoned entirely to avoid metadata length limitations imposed by
+     resource fork structures.  As a result, UDIF images created on 10.4.7 and
+     later will not be recognized by either OS X 10.1 or OS X 10.0.  flatten
+     can be used to customize the type of metadata stored in the image.  OS X
+     10.5 introduced sparse bundle images which compact very efficiently.
+
+HISTORY
+     Disk images were first invented to electronically store and transmit rep-
+     resentations of floppy disks for manufacturing replication.  These images
+     of floppies are typically referred to as 'Disk Copy 4.2' images, in ref-
+     erence to the application that created these images and restored them to
+     floppy disks.  Disk Copy 4.2 images were block for block representations
+     of a floppy disk, with no notion of compression.  DART is a variant of
+     the Disk Copy 4.2 format that supported compression of the floppy image.
+
+     NDIF (New Disk Image Format) images were developed to replace the Disk
+     Copy 4.2 and DART image formats and to support images larger than a
+     floppy disk.  With NDIF and Disk Copy version 6, images could be
+     "attached" as mass storage devices under Mac OS 9.  Apple Data Compres-
+     sion (ADC) -- which carefully optimizes for fast decompression -- was
+     used to compress images that were typically created once and restored
+     many times during manufacturing.
+
+     UDIF (Universal Disk Image Format) device images picked up where NDIF
+     left off, allowing images to represent entire block devices and all the
+     data therein: DDM, Apple partition scheme partition map, disk-based driv-
+     ers, etc.  For example, it can represent bootable CD's which can then be
+     replicated from an image.  To be single-forked (vs. the dual-fork NDIF),
+     it began storing its metadata in an embedded resource.  UDIF is the
+     native image format for OS X.
+
+     Raw disk images from other operating systems (e.g. .iso files) will be
+     recognized as disk images and can be attached and mounted if OS X recog-
+     nizes the filesystems.  They can also be burned with hdiutil burn.
+
+WHAT'S NEW
+     In OS X 10.3, most Disk Copy functionality moved to Disk Utility and a
+     new background application DiskImageMounter handles attaching images.
+
+     As of OS X 10.4, encrypted images (such as those used for FileVault) can
+     be attached without a helper process and "image from folder" operations
+     no longer require more disk space than the final image.  Images contain-
+     ing exotic-to-CD filesystems (such as MS-DOS) can have their files burned
+     with burn -synthesize.  Significant hdiutil changes in 10.4 include the
+     addition of -puppetstrings to many verbs, -anydevice becoming the default
+     for burn, and signal handlers so that hdiutil can try to clean up before
+     quitting when canceled.  And in OS X 10.4.7, all read-only UDIFs (includ-
+     ing the compressed types) began being handled by a helper process to free
+     up resources in the kernel.
+
+SEE ALSO
+     authopen(1), hdid(8), diskutil, ditto(8), load_hdi(8), ioreg(8),
+     drutil(1), ufs.util(8), msdos.util(8), hfs.util(8), diskarbitrationd(8),
+     /usr/sbin/disktool (run with no arguments for usage),
+     /System/Library/CoreServices/DiskImageMounter.app.
+

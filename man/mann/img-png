@@ -1,0 +1,68 @@
+img-png(n)                                                          img-png(n)
+
+
+
+NAME
+       img-png - Img, Portable Network Graphics format (png)
+
+SYNOPSIS
+       package require Tk
+
+       package require img::png  ?1.3?
+
+       image create photo ?name? ?options?
+
+
+DESCRIPTION
+       The  package  img::png  is  a sub-package of Img. It can be loaded as a
+       part of the complete Img support, via package require Img,  or  on  its
+       own, via package require img::png.
+
+       Like  all packages of Img it does not provide new commands, but extends
+       the existing Tk command image so  that  it  supports  files  containing
+       raster  images  in  the  Portable  Network  Graphics format (png). More
+       specifically img::png extends Tk's photo image type.
+
+       The name of the new format handler is png.  This handler  provides  new
+       additional  configuration  options.  See  section  PNG OPTIONS for more
+       detailed explanations.
+
+       All of the above means that in a call like
+
+       image create photo ?name? ?options?
+
+       [1]    Image data in png format (options -data and -file)  is  detected
+              automatically.
+
+       [2]    The  format  name  png  is recognized by the option -format.  In
+              addition the value for the option is treated  as  list  and  may
+              contain  any  of  the  special  options  listed  in  section PNG
+              OPTIONS.
+
+PNG OPTIONS
+       The handler provides no true options at all, but accepts pairs of  keys
+       and  values  when  writing  a  PNG file. Each pair will be written as a
+       named text chunk where the key provides the name of the chunk  and  the
+       value its contents.  For example
+
+           png Author <name> Title <title> Description ...
+
+
+TRANSPARENCY
+       If you want to write images to disk which contain transparency informa-
+       tion (e.g. PNG with alpha channel) you need at least Tk 8.3.
+
+SEE ALSO
+       img-bmp, img-gif, img-ico, img-intro,  img-jpeg,  img-pcx,  img-pixmap,
+       img-png, img-ppm, img-ps, img-sgi, img-sun, img-tga, img-tiff, img-win-
+       dow, img-xbm, img-xpm
+
+KEYWORDS
+       image handling, png, tk
+
+COPYRIGHT
+       Copyright (c) 1995-2003 Jan Nijtmans <nijtmans@users.sourceforge.com>
+
+
+
+

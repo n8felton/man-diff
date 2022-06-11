@@ -1,0 +1,31 @@
+xvinfo(1)                                                            xvinfo(1)
+
+
+
+NAME
+       xvinfo - Print out X-Video extension adaptor information
+
+SYNOPSIS
+       xvinfo [-display displayname]
+
+DESCRIPTION
+       xvinfo  prints  out  the  capabilities of any video adaptors associated
+       with the display that are accesible through the X-Video extension.
+
+OPTIONS
+       -display display
+               This argument allows you to specify the server  to  query;  see
+               X(7).
+
+ENVIRONMENT
+       DISPLAY This variable may be used to specify the server to query.
+
+
+SEE ALSO
+       xdpyinfo(1)
+
+AUTHORS
+       Mark Vojkovich
+
+
+

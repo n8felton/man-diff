@@ -1,0 +1,12 @@
+WX_XSPP(1)            User Contributed Perl Documentation           WX_XSPP(1)
+
+
+
+NAME
+       XSP - XS++ preprocessor
+
+DOCUMENTATION
+       See "XSpp.pod" in the wxPerl distribution.
+
+
+

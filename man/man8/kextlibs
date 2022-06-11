@@ -1,0 +1,63 @@
+KEXTLIBS(8)               BSD System Manager's Manual              KEXTLIBS(8)
+
+NAME
+     kextlibs -- find OSBundleLibraries needed by a kext
+
+SYNOPSIS
+     kextlibs [options] kext_bundle
+
+DESCRIPTION
+     The kextlibs utility searches for library kexts that define symbols
+     needed for linking by kext_bundle, printing their bundle identifiers and
+     versions.  If any symbols are not found, or are found in multiple
+     libraries, they are printed to standard error after the library kext
+     informtion.
+
+     Run kextlibs with the -xml flag to get an XML fragment suitable for copy-
+     ing and pasting directly into an Info.plist file.
+
+     If no repository directories are explicitly specified, kextlibs searches
+     the system extensions folder.
+
+OPTIONS
+     -h
+     -help   Display a help message and exit.
+     -all-symbols
+             Print all symbols that remain unresolved or that are found in
+             more than one library kext.  Normally only the number of missing
+             and duplicate symbols is printed.
+     -c
+     -compatible-versions
+             Print the compatible rather than the current version.
+     -non-kpi
+             Search the compatibility kernel extension, com.apple.kernel.6.0,
+             rather than any of the com.apple.kpi.* system kexts.  Use of this
+             option is not recommended: The exact kernel component (mach, bsd,
+             libkern, or iokit) cannot be determined, and the compatible ver-
+             sion of com.apple.kernel is locked to the current version.
+     -r directory
+     -repository directory
+             Specifies a directory to search for dependencies.  You can use
+             this to get library declarations for a set of extensions other
+             than those of the running system, or to include a side directory
+             of library kexts.  Note: If you specify a directory with this
+             option, the system extensions folder is not implicitly searched.
+     -e
+     -system-extensions
+             Adds the system extensions folder to the list of directories to
+             search.  If you don't specify any directories or kexts, this is
+             used by default.
+     -xml    Print an XML fragment suitable for copying and pasting directly
+             into an Info.plist file.
+     --      End of options.
+
+DIAGNOSTICS
+     The kextlibs utility exits with a status of 0 on completion if all unde-
+     fined symbols are found exactly once; with a status of 1 if any undefined
+     symbols remain, or with a status of 2 if any symbols are found in more
+     than one library kext (whether or not any undefined symbols remain), and
+     with another nonzero status on some other problem.
+
+SEE ALSO
+     kextcache(8), kextload(8)
+

@@ -1,0 +1,34 @@
+QUOT(8)                   BSD System Manager's Manual                  QUOT(8)
+
+NAME
+     quot -- display total block usage per user for a file system
+
+SYNOPSIS
+     quot [-ncf] [filesystem ...]
+
+DESCRIPTION
+     The quot command displays the total count of blocks owned by a user for
+     the filesystem filesystem.  If the filesystem option filesystem is not
+     specified, the file systems listed in /etc/fstab are used.  The following
+     options are available:
+
+     -c      Display information on file size and block usage. The file sizes
+             are listed in the first column, the second column contains a
+             count of how many files of that size were found and the third
+             column lists the cumulative block usage for the displayed size
+             and all smaller files.
+
+     -f      For each user, the number of files (inodes) owned is displayed in
+             addition to the block usage.
+
+     -n      A list sorted by block usage is displayed.  This is the result of
+             quot executing the following command:
+
+                   ncheck filesystem | sort +0n | quot -n filesystem
+
+SEE ALSO
+     ls(1), du(1)
+
+HISTORY
+     The quot command appeared in Version 32V AT&T UNIX.
+

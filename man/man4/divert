@@ -1,0 +1,129 @@
+DIVERT(4)                BSD Kernel Interfaces Manual                DIVERT(4)
+
+NAME
+     divert -- kernel packet diversion mechanism
+
+SYNOPSIS
+     #include <sys/types.h>
+     #include <sys/socket.h>
+     #include <netinet/in.h>
+
+     int
+     socket(PF_INET, SOCK_RAW, IPPROTO_DIVERT);
+
+DESCRIPTION
+     Divert sockets are similar to raw IP sockets, except that they can be
+     bound to a specific divert port via the bind(2) system call.  The IP
+     address in the bind is ignored; only the port number is significant.  A
+     divert socket bound to a divert port will receive all packets diverted to
+     that port by some (here unspecified) kernel mechanism(s).  Packets may
+     also be written to a divert port, in which case they re-enter kernel IP
+     packet processing.
+
+     Divert sockets are normally used in conjunction with FreeBSD's packet
+     filtering implementation and the ipfw(8) program.  By reading from and
+     writing to a divert socket, matching packets can be passed through an
+     arbitrary ``filter'' as they travel through the host machine, special
+     routing tricks can be done, etc.
+
+READING PACKETS
+     Packets are diverted either as they are ``incoming'' or ``outgoing.''
+     Incoming packets are diverted after reception on an IP interface, whereas
+     outgoing packets are diverted before next hop forwarding.
+
+     Diverted packets may be read unaltered via read(2), recv(2), or
+     recvfrom(2).  In the latter case, the address returned will have its port
+     set to the some tag supplied by the packet diverter, (usually the ipfw
+     rule number) and the IP address set to the (first) address of the inter-
+     face on which the packet was received (if the packet was incoming) or
+     INADDR_ANY (if the packet was outgoing). In the case of an incoming
+     packet the interface name will also be placed in the 8 bytes following
+     the address, (assuming it fits).
+
+WRITING PACKETS
+     Writing to a divert socket is similar to writing to a raw IP socket; the
+     packet is injected ``as is'' into the normal kernel IP packet processing
+     and minimal error checking is done.  Packets are written as either incom-
+     ing or outgoing: if write(2) or send(2) is used to deliver the packet, or
+     if sendto(2) is used with a destination IP address of INADDR_ANY, then
+     the packet is treated as if it were outgoing, i.e., destined for a non-
+     local address.  Otherwise, the packet is assumed to be incoming and full
+     packet routing is done.
+
+     In the latter case, the IP address specified must match the address of
+     some local interface, or an interface name must be found after the IP
+     address.  If an interface name is found, that interface will be used and
+     the value of the IP address will be ignored (other than the fact that it
+     is not INADDR_ANY).  This is to indicate on which interface the packet
+     ``arrived.''
+
+     Normally, packets read as incoming should be written as incoming; simi-
+     larly for outgoing packets.  When reading and then writing back packets,
+     passing the same socket address supplied by recvfrom(2) unmodified to
+     sendto(2) simplifies things (see below).
+
+     The port part of the socket address passed to the sendto(2) contains a
+     tag that should be meaningful to the diversion module.  In the case of
+     ipfw(8) the tag is interpreted as the rule number after which rule pro-
+     cessing should restart.
+
+LOOP AVOIDANCE
+     Packets written into a divert socket (using sendto(2)) re-enter the
+     packet filter at the rule number following the tag given in the port part
+     of the socket address, which is usually already set at the rule number
+     that caused the diversion (not the next rule if there are several at the
+     same number). If the 'tag' is altered to indicate an alternative re-entry
+     point, care should be taken to avoid loops, where the same packet is
+     diverted more than once at the same rule.
+
+DETAILS
+     To enable divert sockets, your kernel must be compiled with the option
+     IPDIVERT.
+
+     If a packet is diverted but no socket is bound to the port, or if
+     IPDIVERT is not enabled in the kernel, the packet is dropped.
+
+     Incoming packet fragments which get diverted are fully reassembled before
+     delivery; the diversion of any one fragment causes the entire packet to
+     get diverted.  If different fragments divert to different ports, then
+     which port ultimately gets chosen is unpredictable.
+
+     Packets are received and sent unchanged, except that packets read as out-
+     going have invalid IP header checksums, and packets written as outgoing
+     have their IP header checksums overwritten with the correct value.  Pack-
+     ets written as incoming and having incorrect checksums will be dropped.
+     Otherwise, all header fields are unchanged (and therefore in network
+     order).
+
+     Binding to port numbers less than 1024 requires super-user access, as
+     does creating a socket of type SOCK_RAW.
+
+ERRORS
+     Writing to a divert socket can return these errors, along with the usual
+     errors possible when writing raw packets:
+
+     [EINVAL]           The packet had an invalid header, or the IP options in
+                        the packet and the socket options set were incompati-
+                        ble.
+
+     [EADDRNOTAVAIL]    The destination address contained an IP address not
+                        equal to INADDR_ANY that was not associated with any
+                        interface.
+
+SEE ALSO
+     bind(2), recvfrom(2), sendto(2), socket(2), ipfw(8)
+
+BUGS
+     This is an attempt to provide a clean way for user mode processes to
+     implement various IP tricks like address translation, but it could be
+     cleaner, and it's too dependent on ipfw(8).
+
+     It's questionable whether incoming fragments should be reassembled before
+     being diverted.  For example, if only some fragments of a packet destined
+     for another machine don't get routed through the local machine, the
+     packet is lost.  This should probably be a settable socket option in any
+     case.
+
+AUTHORS
+     Archie Cobbs <archie@FreeBSD.org>, Whistle Communications Corp.
+

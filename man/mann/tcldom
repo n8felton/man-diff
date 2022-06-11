@@ -1,0 +1,1537 @@
+TclDOM(n)                                                            TclDOM(n)
+
+
+
+NAME
+       ::dom::DOMImplementation ::dom::hasfeature ::dom::create ::dom::destroy
+       ::dom::parse   ::dom::serialize   ::dom::document   ::dom::documenttype
+       ::dom::node ::dom::element ::dom::event ::dom::selectNode ::dom::isNode
+       ::dom::xinclude ::dom::prefix2namespaceURI ::dom::trim -  Tcl  language
+       binding for the W3C Document Object Model
+
+
+SYNOPSIS
+       package require dom
+
+       ::dom::DOMImplementation method ? args ... ?
+
+       ::dom::hasfeature feature version
+
+       ::dom::create
+
+       ::dom::destroy token
+
+       ::dom::parse xml ? option value ... ?
+
+       ::dom::serialize token ? option value ... ?
+
+       ::dom::document method token ? args ... ?
+
+       ::dom::documenttype method token ? args ... ?
+
+       ::dom::node method token ? args ... ?
+
+       ::dom::element method token ? args ... ?
+
+       ::dom::event method token ? args ... ?
+
+       ::dom::selectNode token xpath ? option value ... ?
+
+       ::dom::isNode token
+
+       ::dom::xinclude doc
+
+       ::dom::prefix2namespaceURI node prefix
+
+       ::dom::trim doc
+
+
+DESCRIPTION
+       TclDOM  is  a  Tcl  language  binding for the W3C Document Object Model
+       (DOM).  DOM provides a view of a XML  (or  HTML)  document  as  a  tree
+       structure.  Currently, TclDOM only supports XML documents.
+
+
+       The package implements most of the DOM Level 1 interfaces and also some
+       Level 2 and Level 3 interfaces.  There are also a number  of  non-stan-
+       dard  commands  and methods provided for the convenience of application
+       developers (these are documented).
+
+
+       The DOM specification should be read in conjunction with this reference
+       manual,  as  it  explains the meaning and purpose of the various inter-
+       faces.  This manual is not a tutorial on how to use the DOM.
+
+
+       TclDOM also provides several implementations of the  API:   a  pure-Tcl
+       implementation,  a  C implementation (based on TclDOMPro) and another C
+       implementation based on the Gnome libxml2 library.
+
+
+PACKAGES AND NAMESPACES
+       TclDOM defines the dom package and also a Tcl namespace using that same
+       name.
+
+
+       Implementations  define their own package name and Tcl namespace within
+       the ::dom Tcl namespace:
+
+
+              Tcl implementation
+
+
+              Package dom::tcl, Tcl namespace ::dom::tcl.
+
+
+              TclDOMPro
+
+
+              Package dom::c, Tcl namespace ::dom::c.
+
+
+              libxml2
+
+
+              Package dom::libxml2, Tcl namespace ::dom::libxml2.
+
+
+
+       Each DOM Document is allocated a Tcl namespace  within  the  ::dom  Tcl
+       namespace.   All  storage  for  the  document  and commands are defined
+       within that Tcl namespace.
+
+
+TOKENS
+       The TclDOM API uses  tokens as identifiers for nodes within  the  docu-
+       ment tree.  This technique has been used to allow alternate implementa-
+       tions of TclDOM to be efficient, while retaining compatibility with the
+       pure-Tcl implementation.
+
+
+       The  format  of the token itself as well as the data structure referred
+       to by the token are  not public and an application should not  rely  on
+       these.   Instead,  an  application should use the accessor methods pro-
+       vided by the API.
+
+
+       There is no requirement to always use the same token for  a  node.   In
+       fact, an important performance optimisation for some implementations is
+       to create a new token when a node is accessed, regardless of whether  a
+       token  has  already  been  issued  for that node.  This implies that in
+       order to test whether two tokens refer to the same node it is not  suf-
+       ficient  to test the string values of the tokens; the isSameNode method
+       must be used for this purpose.  For example,
+
+
+       proc NodeCompare1 {A B} {
+           return [string equal $A $B] } proc NodeCompare2 {A B} {
+           return [$A isSameNode $B] }
+
+
+
+       In the above example, NodeCompare2 correctly determines whether its two
+       arguments refer to the same node.
+
+
+DOCUMENT AND NODE COMMANDS
+       Each  Document  and  Node has a Tcl command defined that may be used to
+       control the object.  This command may be used to invoke the methods  by
+       the  ::dom::document command (for Documents) or the ::dom::node command
+       (for all other Nodes).   If  a  Document'  or  Node's  Tcl  command  is
+       destroyed then the Document or Node is also destroyed.
+
+
+DOM INTERFACES
+       Each  Interface in the DOM specification is implemented with a Tcl com-
+       mand in the dom namespace.  A few interfaces have not  been  mapped  to
+       Tcl  commands  because Tcl already provides the required functionality,
+       for example the CharacterData interface.
+
+
+        methods for interfaces are methods (subcommands) of the  corresponding
+       Tcl command.
+
+
+       Each  attribute of an interface is a configuration option for an object
+       in the document tree.
+
+
+CONVENIENCE COMMANDS AND METHODS
+       DOM doesn't always provide an interface, method or attribute for  every
+       function  required.  For example, until DOM Level 3 for was no standard
+       for creating, parsing and serializing a document.  Sometimes using  the
+       standard  DOM  interface  is awkward.  TclDOM provides a number of non-
+       standard features to overcome these problems.
+
+
+       A major convenience is that each method of the DOMImplementation inter-
+       face  is  also  defined  as  a command.  For example, rather than using
+       dom::DOMImplementation create to create a  new  document,  the  shorter
+       command dom::create may be used.
+
+
+       Implementations  may  also  provide direct access to specific features.
+       Refer to the documentation for a DOM implementation.
+
+
+COMMANDS
+   ::dom::DOMImplementation
+       The ::dom::DOMImplementation command implements  the  DOMImplementation
+       DOM  interface.  It is used to provide implementation-specific features
+       not explicitly defined in the DOM specification.
+
+   Command Options
+       The following command options may be used.  These are also available as
+       commands.
+
+
+              hasFeature
+                      hasFeature feature
+
+              Provides a test for existence of a feature.  Returns 1 if a fea-
+              ture is implemented, 0 otherwise.
+
+
+              create  create type
+
+              Creates the root node of a new DOM document.  The document  ele-
+              ment  type  may  be specified as an argument, in which case that
+              element is created.  The return value is a  token  referring  to
+              the  root  node of the newly created document.  A Tcl command is
+              also created with the same name as the document's  token.   This
+              command is a shortcut for the ::dom::document command.
+
+
+
+
+              Non-standard  method.  DOM Level 2 introduced the createDocument
+              method.
+
+
+              createDocument
+                      createDocument nsURI type doctype
+
+              Creates the root node of a new DOM document.  The document  ele-
+              ment  namespace  URI and local-name (element type) may be speci-
+              fied as an argument, in which case that element is created.   If
+              the  document  type  is given then the newly created document is
+              configured to use that document type.  The  return  value  is  a
+              token  referring to the root node of the newly created document.
+              A Tcl command is also created with the same name  as  the  docu-
+              ment's  token.   This command is a shortcut for the ::dom::docu-
+              ment command.
+
+
+              createDocumentType
+                      createDocumentType name publicid systemid internaldtd
+
+              Creates a Document Type Declaration.   The  return  value  is  a
+              token  for  the  newly created document type declaration.  A Tcl
+              command is also created with  the  same  name  as  the  document
+              type's  token.   This command is a shortcut for the ::dom::docu-
+              menttype command.
+
+
+              createNode
+                      createNode token xpath
+
+              May create a node in the document.   token specifies  a  context
+              for  the  XPath expression given by  xpath.  The expression must
+              resolve to a node.  If the node exists then no further action is
+              taken.  Otherwise the node is created.  The token of the matched
+              or newly created node is returned.
+
+
+
+
+              Non-standard method.
+
+
+              destroy
+                      destroy token
+
+              This method frees all data structures associated with a DOM doc-
+              ument  or node.  The  token argument must refer to a valid token
+              for any document or any node in the tree of a document.
+
+
+              When the given token refers to a DOM document  then  the  entire
+              document  is  destroyed;  the  Tcl namespace for the document is
+              deleted and all document and node  commands  are  deleted.   All
+              tokens for the document or nodes in the document become invalid.
+
+
+              When the token refers to a node the node  is  removed  from  the
+              tree  before  it  is  destroyed.   If  the  node has children or
+              attributes, they will also be destroyed.  The  Tcl  command  for
+              the node is deleted.
+
+
+              isNode  isNode token
+
+              Tests  whether  the  given  token  is a valid token for some DOM
+              node.
+
+
+
+
+              Non-standard method.
+
+
+              parse   parse xml ? option value?
+
+              This method parses XML formatted text given by the  xml argument
+              and  constructs  a DOM tree for the document.  The return result
+              is the token of the root node of  the  newly  created  document.
+              The  document  will  also have a Tcl command associated with it,
+              see the createDocument method.
+
+
+              This method uses the TclXML package to perform the parsing oper-
+              ation.   The  dom package itself does not include an XML parser.
+              TclXML supports the use of multiple parser implementations.  The
+              -parser may be used to specify which XML parser class to use.
+
+
+              All options not listed below are passed to the TclXML parser.
+
+
+              Valid configuration options are:
+
+
+                      -parser  ? {} expat tcl?
+
+
+                     This  option  specifies the name of a TclXML parser class
+                     to use to parse the XML data.   The  given  parser  class
+                     must  be registered with the TclXML package.  If an empty
+                     string is given then the default parser  class  is  used.
+                     If  an  explicit  value is given and that parser class is
+                     not registered then the command will  fail,  despite  the
+                     fact that another parser may be available.
+
+
+                      -progresscommand script
+
+
+                     This  option  specifies  a Tcl command to be invoked from
+                     time to time while the DOM  tree  is  being  constructed.
+                     The script will be invoked after a certain number of ele-
+                     ment  start  tags  have  been  processed,  given  by  the
+                     -chunksize option.
+
+
+                      -chunksize integer
+
+
+                     This  option  specifies  how  many  element start tags to
+                     process before invoking the script given  by  the   -pro-
+                     gresscommand option.
+
+
+
+              selectNode
+                      selectNode token xpath ? option value ... ?
+
+              Resolves the XPath location path given by  xpath.   token is the
+              initial context for the location path.   Returns  the  resulting
+              nodeset as a (static) Tcl list.
+
+
+              The following options may be specified:
+
+
+                      -namespaces
+
+
+                     The  value for this option is a list of prefix-URI pairs.
+                     Each of these pairs defines an XML Namespace and its pre-
+                     fix  for the purposes of evaluating the XPath expression.
+                     The document itself may use a different  prefix  for  the
+                     same XML Namespace.
+
+
+                     This  option  may be repeated, in which case the lists of
+                     namespace pairs are merged and all of the XML  Namespaces
+                     registered.
+
+
+
+
+
+              Non-standard method.
+
+
+              serialize
+                      serialize token ? option value?
+
+              This  method returns the XML formatted text corresponding to the
+              node given by  token.  The text is  guaranteed  to  be  a  well-
+              formed XML document, unless the  -method option specifies a non-
+              XML output method.
+
+
+              Valid configuration options are:
+
+
+                      -method xml|html|text
+
+
+                     Specifies how the document tree is to  be  serialized  as
+                     text.   The allowed values correspond to the output meth-
+                     ods defined by the XSLT v1.0 W3C Recommendation.  The xml
+                     method  produces  output that conforms to the XML syntax.
+                     The html method produces output  that  conforms  to  HTML
+                     syntax.   The  text method serializes only the text nodes
+                     of the document and disables all output escaping.
+
+
+                      -indent boolean
+
+
+                     Specifies that the output is to be "pretty-printed",  ie.
+                     element  content  is indented to provide a visual indica-
+                     tion of nesting levels.
+
+
+                      -encoding encoding
+
+
+                     Specifies that the output is  to  be  encoded  using  the
+                     given  character encoding.  If the encoding is utf-8 (the
+                     default) then the output is treated as  a  string  within
+                     Tcl.   If any other encoding is specified then the output
+                     is treated as a ByteArray object (ie. as binary).
+
+
+                      -newline elementlist
+
+
+                     This option specifies a list of element types  for  which
+                     newline  characters  will  be  added before and after the
+                     start and end tags for those elements upon serialization.
+                     This  option is deprecated: the  -indent option should be
+                     used instead.
+
+
+                     White space is significant in XML,  so  the  dom  package
+                     never  adds  extra  white  space for purposes of "pretty-
+                     printing" the XML source document.   On  some  platforms,
+                     such as VMS, this can actually cause serious problems due
+                     to line length limitations.   This  option  provides  the
+                     convenience  of adding newlines to certain nominated ele-
+                     ment types for formatting the source into lines.
+
+
+                     Examples:
+
+
+                     Suppose the following DOM document is constructed:
+
+
+                     set  doc  [::dom::DOMImplementation   create]   set   top
+                     [::dom::document   createElement   $doc  Root]  set  node
+                     [::dom::document createElement $top  First]  ::dom::docu-
+                     ment  createElement  $node  Second  ::dom::document  cre-
+                     ateElement $top First
+
+
+
+                     Without the   -newline  option  the  serialized  document
+                     would be:
+
+
+                     ::dom::DOMImplementation serialize $doc
+
+                     <?xml  version="1.0"?> <!DOCTYPE Root> <Root><First><Sec-
+                     ond/></First><First/></Root>
+
+
+
+
+                     With the  -newline option the serialized  document  would
+                     be:
+
+
+                     ::dom::DOMImplementation serialize $doc -newline First
+
+                     <?xml  version="1.0"?>  <!DOCTYPE  Root>  <Root>  <First>
+                     <Second/> </First> <First/> </Root>
+
+
+
+
+
+              trim    trim token
+
+              This method removes any node containing only  white  space  from
+              the document tree of the node given by  token.
+
+
+   ::dom::document
+       This  command  implements  the Document interface in the DOM specifica-
+       tion.  The most important aspect of this command are its factory  meth-
+       ods for creating nodes.
+
+
+       The methods accepted by this command are as follows:
+
+
+              cget   cget token -option
+
+              This method returns the value of the given configuration option.
+
+
+              configure
+                     configure token ? option value ... ?
+
+              This method sets the value of the given configuration options.
+
+
+              Valid configuration options are:
+
+
+                      -doctype
+
+
+                     Specifies the token  of  the  Document  Type  Declaration
+                     node.
+
+
+                     This  is  a  read-only option.  Use the factory method to
+                     create a Document Type Declaration node.
+
+
+                      -implementation
+
+
+                     Specifies the token of the document's implementation.
+
+
+                     This is a read-only option.
+
+
+                      -documentElement
+
+
+                     Specifies the token of the  document's  document  element
+                     node.   A  document  node may only have one document ele-
+                     ment, but may have other types of children (such as  com-
+                     ments).
+
+
+                     This  is  a  read-only option.  Use the factory method to
+                     create the document element node.
+
+
+
+              createElement
+                     createElement token type
+
+              This method creates an element node as a child of the given node
+              specified  by   token  and  returns  the new node's token as its
+              result.   token must be a node of type element, document or doc-
+              umentFragment.   The  new,  child  element  is added as the last
+              child of  token's list of children.  The new element's  type  is
+              given by the  type argument.  The new element is created with an
+              empty attribute list.
+
+
+              A Tcl command is created with the same name as  the  new  node's
+              token.   This command is a shortcut for the ::dom::node command.
+
+
+              createElementNS
+                     createElementNS token nsuri qualname
+
+              This method creates an element node in an  XML  Namespace  as  a
+              child  of the given node specified by  token and returns the new
+              node's token as its result.   token must be a node of type  ele-
+              ment,  document  or documentFragment.  The new, child element is
+              added as the last child of  token's list of children.   The  new
+              element  is  created in the XML Namespace given by the namespace
+              URI  nsuri.  The new element's qualifed name (QName) is given by
+              the   qualname  argument.   Qualified  names  have the form pre-
+              fix:local-part.  The  new  element  is  created  with  an  empty
+              attribute list.
+
+
+              A  Tcl  command  is created with the same name as the new node's
+              token.  This command is a shortcut for the ::dom::node  command.
+
+
+              createDocumentFragment
+                     createDocumentFragment token
+
+              This  method  creates  a documentFragment node as a child of the
+              given node specified by  token and returns the new node's  token
+              as  its result.   token must be a node of type element, document
+              or documentFragment.
+
+
+              A Tcl command is created with the same name as  the  new  node's
+              token.   This command is a shortcut for the ::dom::node command.
+
+
+              createTextNode
+                     createTextNode token text
+
+              This method creates a textNode node as a child of the given node
+              specified  by   token  and  returns  the new node's token as its
+              result.   token must be a node of type element, document or doc-
+              umentFragment.   The  new,  child  textNode is added as the last
+              child of  token's list of children.  The new textNode is created
+              with its value set to  text.
+
+
+              A  Tcl  command  is created with the same name as the new node's
+              token.  This command is a shortcut for the ::dom::node  command.
+
+
+              createComment
+                     createComment token data
+
+              This  method creates a comment node as a child of the given node
+              specified by  token and returns the  new  node's  token  as  its
+              result.   token must be a node of type element, document or doc-
+              umentFragment.  The new, child comment  is  added  as  the  last
+              child  of  token's list of children.  The new comment is created
+              with its value set to  data.
+
+
+              A Tcl command is created with the same name as  the  new  node's
+              token.   This command is a shortcut for the ::dom::node command.
+
+
+              createCDATASection
+                     createCDATASection token text
+
+              TclDOM does not distinguish between textNodes  and  CDATASection
+              nodes.   Accordingly,  this  method creates a textNode node as a
+              child of the given node specified by  token and returns the  new
+              node's  token as its result.   token must be a node of type ele-
+              ment, document or documentFragment.  The new, child textNode  is
+              added  as  the last child of  token's list of children.  The new
+              node is created  with  its  value  set  to   text  and  has  the
+              attribute  -cdatasection set to the value 1.
+
+
+              A  Tcl  command  is created with the same name as the new node's
+              token.  This command is a shortcut for the ::dom::node  command.
+
+
+              createProcessingInstruction
+                     createProcessingInstruction token target data
+
+              This  method  creates a processingInstruction node as a child of
+              the given node specified by  token and returns  the  new  node's
+              token  as  its  result.    token must be a node of type element,
+              document or documentFragment.  The new, child processingInstruc-
+              tion  is  added  as the last child of  token's list of children.
+              The new node is created with its name set  to   target  and  its
+              value set to  data.
+
+
+              A  Tcl  command  is created with the same name as the new node's
+              token.  This command is a shortcut for the ::dom::node  command.
+
+
+              createAttribute
+                     createAttribute token name
+
+              This  method  creates  an  attribute  node for the given element
+              specified by  token and returns the  new  node's  token  as  its
+              result.    token  must  be  a  node  of  type  element.  The new
+              attribute is created with its name set to   name  and  an  empty
+              value.
+
+
+              A  Tcl  command  is created with the same name as the new node's
+              token.  This command is a shortcut for the ::dom::node  command.
+
+
+
+
+              This method is included for completeness with respect to the DOM
+              specification.   The  preferred  method  for   setting   element
+              attributes is to use the ::dom::element command.
+
+
+              createEntity
+                     createEntity token
+
+              Not currently implemented.
+
+
+              createEntityReference
+                     createEntityReference token name
+
+              Not currently implemented.
+
+
+              createEvent
+                     createEvent token name
+
+              This  method  creates an event node in the document specified by
+              token and returns the new node's token as  its  result.    token
+              must be a node of type document.  The event type is specified by
+              name.
+
+
+              A Tcl command is created with the same name as  the  new  node's
+              token.  This command is a shortcut for the ::dom::event command.
+
+
+              getElementsByTagName
+                     getElementsByTagName token name
+
+              This method searches the node given by the argument   token  for
+              child  elements  with  a  type matching the argument  name.  The
+              name * matches all elements.   All  descendants  of   token  are
+              searched.   This method returns a "live-list"; the return result
+              of this method is the name of a Tcl  variable,  the  content  of
+              which  is  a  Tcl  list  containing tokens for all elements that
+              match.
+
+
+              dtd    dtd validate
+
+              This method performs DTD validation upon the document.   If  the
+              method returns successfully, then the document is valid.  Other-
+              wise the document is invalid and the error returned contains the
+              reason.
+
+
+              schema submethod ? args ... ?
+
+              This  method  performs  XML Schema validation upon the document.
+              Schema validation is performed in two steps.  First the document
+              is compiled into a schema document.  Second, the schema document
+              is used to schema-validate an instance document.
+
+
+              Example:
+
+
+              set schema [dom::parse $XML] $schema schema compile set instance
+              [dom::parse $XML2] $schema schema validate $instance
+
+
+
+              If the document is changed after compiling, then schema document
+              must be recompiled.
+
+
+   dom::node
+       This command implements generic functions for DOM nodes.
+
+
+       The methods accepted by this command are as follows:
+
+
+              cget   cget token option
+
+              This method returns the value of the given configuration  option
+              for the node given by  token.
+
+
+              configure
+                     configure token ? option value ... ?
+
+              This method sets the value of the given configuration option for
+              the node given by  token.
+
+
+              Valid configuration options are as follows:
+
+
+                      -nodeName
+
+
+                     Returns the node name.  This is a read-only option.
+
+
+                     The DOM specification gives the meaning of names for dif-
+                     ferent  types  of  nodes.   For  example,  the  -nodeName
+                     option of an element node is the element type.
+
+
+                      -nodeType
+
+
+                     Returns the type of the node given by  token.  This is  a
+                     read-only option.
+
+
+                      -parentNode
+
+
+                     Returns  the  parent  node  of  the node given by  token.
+                     This is a read-only option.
+
+
+                      -childNodes
+
+
+                     Returns the name of a Tcl variable which contains a  list
+                     of  the  children of the node given by  token.  The vari-
+                     able contains the "live" list of  children.   This  is  a
+                     read-only option.
+
+
+                      -firstChild
+
+
+                     Returns the first child node of the node given by  token.
+                     This is a read-only option.
+
+
+                      -lastChild
+
+
+                     Returns the last child node of the node given by   token.
+                     This is a read-only option.
+
+
+                      -previousSibling
+
+
+                     Returns the parent's child node which appears before this
+                     node.  If this child is the first  child  of  its  parent
+                     then  returns  an  empty  string.   This  is  a read-only
+                     option.
+
+
+                      -nextSibling
+
+
+                     Returns the parent's child node which appears after  this
+                     node.  If this child is the last child of its parent then
+                     returns an empty string.  This is a read-only option.
+
+
+                      -attributes
+
+
+                     Returns the name of a Tcl array variable  which  contains
+                     the  attribute  list for an element node.  If the node is
+                     not an element type node then returns  an  empty  string.
+                     The  indices  of  the  array are attribute names, and the
+                     values of the  array  elements  are  their  corresponding
+                     attribute values.  This is a read-only option.
+
+
+                      -nodeValue data
+
+
+                     Specifies  the  value  of  a node.  The DOM specification
+                     gives the meaning of values for different types of nodes.
+                     For example, the  -nodeValue option of a textNode node is
+                     the node's text.
+
+
+
+              insertBefore
+                     insertBefore token newchild refchild
+
+              This method removes the node given by  newchild from its parent.
+              If  no  refchild argument is given then  newchild is appended to
+              token's list of children.  If the  refchild  argument  is  given
+              then  this  method adds  newchild as a child of  token.  The new
+              child node is positioned before the node  refchild  in   token's
+              list of children.  Returns an empty string.
+
+
+              replaceChild
+                     replaceChild token newchild oldchild
+
+              This method removes the node given by  newchild from its parent.
+              It then also removes the node given by   oldchild  from   token.
+              newchild is then added as a child of  token in  oldchild's orig-
+              inal position in the list of children.  The method  returns  the
+              token  oldchild, which will now have no parent.
+
+
+              removeChild
+                     removeChild token oldchild
+
+              This method removes the node given by  oldchild from its parent,
+              token.  The method returns the token  oldchild, which  will  now
+              have no parent.
+
+
+              appendChild
+                     appendChild token newchild
+
+              This method removes the node given by  newchild from its parent.
+              newchild is then appended to the end of the list of children for
+              node  token.  The method returns the token  newchild.
+
+
+              hasChildNodes
+                     hasChildNodes token
+
+              Returns 1 if the given node has any child nodes, 0 otherwise.
+
+
+              isSameNode
+                     isSameNode token ref
+
+              Returns  1  if the given node is the same node as the node given
+              by the  ref token, 0 otherwise.
+
+
+              cloneNode
+                     cloneNode token deep
+
+              This method makes a copy the node given by  token.  If the argu-
+              ment   deep  is  not  specified or has the value 0 then only the
+              node itself is copied, not its children.  If the argument   deep
+              has  the  value  1 then  token's children are also copied recur-
+              sively.  This method returns the  token  of  the  newly  created
+              node.  This new node will have no parent.
+
+
+              children
+                     children token
+
+              This  is  a  convenience  method which returns the list of child
+              nodes for the given node as a (static) Tcl list.
+
+
+              This is not a standard DOM method for this interface.
+
+
+              parent parent token
+
+              This is a convenience method which returns the parent  node  for
+              the given node.
+
+
+              This is not a standard DOM method for this interface.
+
+
+              path   path token
+
+              Returns  a  Tcl  list  of  the ancestor nodes of the given node,
+              starting with the root node.
+
+
+              This is not a standard DOM method for this interface.
+
+
+              createNode
+                     createNode token xpath
+
+              May create nodes in order to satisfy the  given  XPath  location
+              path.   The  initial  context  for the location path is the node
+              token.  For more detail, see the ::dom::createNode command.
+
+
+              This is not a standard DOM method for this interface.
+
+
+              selectNode
+                     selectNode token xpath
+
+              Returns a (static) Tcl list of nodes selected by the XPath loca-
+              tion  path  xpath.  The initial context for the location path is
+              the node  token.  For more  detail,  see  the  ::dom::selectNode
+              command.
+
+
+              This is not a standard DOM method for this interface.
+
+
+              stringValue
+                     stringValue token
+
+              Returns  the  string  value  of  the  node given by  token.  The
+              string value of a node is defined by  the  XPath  specification:
+              for  element  nodes it is the concatenation of the string values
+              of all descendant text nodes, for text nodes it  is  the  node's
+              character  data  value,  for attribute nodes it is the attribute
+              value, for comment nodes it is the comment data and for process-
+              ing instruction nodes it is the PI data.
+
+
+              This is not a standard DOM method for this interface.
+
+
+              addEventListener
+                     addEventListener token type listener ? option value ... ?
+
+              Register an event listener for the node given by  token  listen-
+              ing  for events of type  type.  The event mechanism functions as
+              described in the W3C DOM Level 2 Event module.
+
+
+              When an event of type  type occurs the script  listener is eval-
+              uated,  in  the  global context.  The token of the event node is
+              appended to the script.
+
+
+              If the  listener argument is omitted then the listener  for  the
+              given event type is returned.
+
+
+              Valid options are:
+
+
+                      -usecapture boolean
+
+
+                     If  true the listener is triggered in the event capturing
+                     phase.  If false the listener is triggered in  the  event
+                     bubbling phase.
+
+
+
+              removeEventListener
+                     removeEventListener  token  type  listener ? option value
+                     ... ?
+
+              Removes an event listener previously  registered  for  the  node
+              given by  token listening for events of type  type.
+
+
+              Valid options are:
+
+
+                      -usecapture boolean
+
+
+                     If  true the capturing listener is removed.  If false the
+                     bubbling listener is removed.
+
+
+
+              dispatchEvent
+                     dispatchEvent token event
+
+              Dispatches the event given by  event with  target  node   token.
+              The  event mechanism functions as described in the W3C DOM Level
+              2 Event module.  The event enters  the  capturing  phase  first,
+              followed  by  the  bubbling  phase.  During each phase any event
+              listeners registered for the same event type as the event  event
+              are  triggered;  their  script  is evaluated.  Unless the script
+              invokes the stopPropagation method of  the  dom::event  command,
+              all  registered event listeners will be triggered.  The order in
+              which listeners registered at a particular node for a particular
+              phase are triggered is undefined.
+
+
+   dom::element
+       This command provides functions for element type nodes.
+
+
+       Valid methods for this command are as follows:
+
+
+              cget   cget token option
+
+              This method returns the current setting of configuration options
+              for an element.  See the configure method for the list of  valid
+              configuration options.
+
+
+              configure
+                     configure token ? option value ... ?
+
+              This  method  sets  configuration  options for an element.  Note
+              that element type nodes only have read-only options.
+
+
+              Valid configuration options are as follows:
+
+
+                      -tagName name
+                            The tag name, or element type, of this element.
+
+                      -empty boolean
+
+
+                     Sets whether this element was specified as an empty  ele-
+                     ment  when  the  document was parsed.  That is, XML empty
+                     element syntax such as <Empty/> was used.
+
+
+                     This option has no effect upon output (serialization)  of
+                     the  XML document.  Empty element syntax is automatically
+                     used where appropriate.
+
+
+
+              getAttribute
+                     getAttribute token name
+
+              This method returns the attribute value of the  attribute  given
+              by  name.  If the attribute does not exist, then an empty string
+              is returned.
+
+
+              setAttribute
+                     setAttribute token name value
+
+              This method sets the attribute value of the attribute  given  by
+              name.   If  the  attribute  already  exists  then  its  value is
+              replaced, otherwise the attribute is created.
+
+
+              removeAttribute
+                     removeAttribute token name
+
+              This method deletes  the  attribute  given  by   name.   If  the
+              attribute does not exist then the method has no effect.
+
+
+              getAttributeNode
+                     getAttributeNode token name
+
+              Not implemented.
+
+
+              setAttributeNode
+                     setAttributeNode token name
+
+              Not implemented.
+
+
+              removeAttributeNode
+                     removeAttributeNode token name
+
+              Not implemented.
+
+
+              getAttributeNS
+                     getAttributeNS token ns name
+
+              This  method  returns the attribute value of the attribute given
+              by  name in the XML namespace  ns.  If the  attribute  does  not
+              exist, then an empty string is returned.
+
+
+              setAttributeNS
+                     setAttributeNS token ns name value
+
+              This  method  sets the attribute value of the attribute given by
+              name in the XML namespace  ns.  If the attribute already  exists
+              then  its value is replaced, otherwise the attribute is created.
+
+
+              removeAttributeNS
+                     removeAttributeNS token ns name
+
+              This method deletes the attribute given  by   name  in  the  XML
+              namespace   ns.  If the attribute does not exist then the method
+              has no effect.
+
+
+              getElementsByTagName
+                     getElementsByTagName token name
+
+              This method searches the node given by the argument   token  for
+              descendant  child  elements  with  a  type matching the argument
+              name.  The wildcard character * matches any element  type.   The
+              return  result  is  a  "live-list" which is represented by a Tcl
+              variable.  This method returns the name of the Tcl variable that
+              contains the list of tokens that match.
+
+
+              normalize
+                     normalize token
+
+              This  method recursively coalesces textNodes within the children
+              of the given node.  textNodes which are adjacent in the DOM tree
+              cannot be distinguished in the serialized XML document.
+
+
+   dom::processinginstruction
+       This command provides functions for processingInstruction type nodes.
+
+
+       Valid methods for this command are as follows:
+
+
+              cget   cget token option
+
+              This method returns the current setting of configuration options
+              for an element.  See the configure method for the list of  valid
+              configuration options.
+
+
+              configure
+                     configure token ? option value ... ?
+
+              This method sets configuration options for a processing instruc-
+              tion.
+
+
+              Valid configuration options are as follows:
+
+
+                      -target name
+                            This option sets  the  target  of  the  processing
+                            instruction.   This  is  a read-only configuration
+                            option.
+
+                      -data data
+
+
+                     This option sets the data of the processing  instruction.
+
+
+
+   dom::event
+       This command provides functions for event type nodes.
+
+
+       Valid methods for this command are as follows:
+
+
+              cget   cget token
+
+              This method retrieves configuration options for an event.
+
+
+              Valid configuration options are as follows:
+
+
+                      -altKey
+                            This  option  determines  whether the ALT modifier
+                            key has been specified for this event.
+
+                      -attrName -timeStamp
+                            This option gives the name of the attribute  asso-
+                            ciated with this event.
+
+                     This option gives the time at which the event was posted.
+                     The value is the number of milliseconds since the  epoch,
+                     which is compatible with the Tcl clock command.
+
+
+                     The implementation of this method depends on the Tcl_Get-
+                     Time function.This function only became publically avail-
+                     able  in  Tcl  8.4.   If a version of Tcl prior to 8.4 is
+                     being used, then this option will have the value 0.
+
+
+                      -type The type of this event.
+
+                      -view This option gives whether the view of the event.
+
+
+              configure
+                     configure token ? option value ... ?
+
+              This method sets the configuration options for an  event.   How-
+              ever,  all event options are read-only.  See the cget method for
+              the list of valid configuration options.
+
+
+              stopPropagation
+                     stopPropagation token
+
+              This method cancels further propagation of the event.
+
+
+              Invoking this method does not prevent  event  listeners  at  the
+              current node from being triggered.
+
+
+              preventDefault
+                     preventDefault token
+
+              This  method stops the default action for this event from occur-
+              ring.
+
+
+              initEvent
+                     initEvent token type bubbles cancelable
+
+              Initialise the event.
+
+
+               type gives the type of the  event.   Any  of  the  event  types
+              defined by the W3C DOM Level 2 Event module may be specified, or
+              a user-defined event type may be used instead.
+
+
+               bubbles indicates whether the event  will  enter  the  bubbling
+              phase  after the capturing phase.   cancelable indicates whether
+              the event may be cancelled.
+
+
+              initUIEvent
+                     initUIEvent token type bubbles cancelable view detail
+
+              Initialise a user interface event.  See  initEvent  for  further
+              information.
+
+
+               view  gives  the  view for the event (not supported by TclDOM).
+              detail provides extra data for the event.
+
+
+              initMouseEvent
+                     initMouseEvent token type bubbles cancelable view  detail
+                     screenX  screenY  clientX clientY ctrlKey altKey shiftKey
+                     metaKey button relatedNode
+
+              Initialise a mouse event.  See initUIEvent for further  informa-
+              tion.
+
+
+               screenX  and   screenY  give the coordinates at which the event
+              occurred relative to the screen.   screenX and  screenY give the
+              coordinates  at which the event occurred relative to the window.
+
+
+               ctrlKey,  altKey,   shiftKey,   metaKey  indicate  whether  the
+              respective modifier key was pressed when the event occurred.
+
+
+               button  indicates  which  button,  if any, was pressed when the
+              event occurred.
+
+
+               relatedNode specifies that a DOM node is  associated  with  the
+              event.
+
+
+              initMutationEvent
+                     initMutationEvent  token  type  bubbles cancelable relat-
+                     edNode prevValue newValue attrName
+
+              Initialise a tree mutation event event.  See initEvent for  fur-
+              ther information.
+
+
+               relatedNode  specifies  a DOM node to associate with the event.
+              prevValue gives the previous value of the node.   newValue gives
+              the  new  value  of  the  node.   attrName gives the name of the
+              attribute where the event is modifying an attribute value.
+
+
+              postUIEvent
+                     postUIEvent token type ? option value ... ?
+
+              Non-standard convenience method that  handles  posting  an  user
+              interface  event  with   token  as the target node.  This method
+              performs the following functions:
+
+
+               type gives the event type.
+
+
+              The following options are valid:
+
+
+                      -bubbles
+
+
+                     Indicates whether the event bubbles.
+
+
+                      -cancelable
+
+
+                     Indicates whether the event can be cancelled.
+
+
+                      -view
+
+                     The view.
+
+
+                      -detail
+
+
+                     Extra data for the event.
+
+
+
+              postMouseEvent
+                     postMouseEvent token type ? option value ... ?
+
+              Non-standard convenience method that  handles  posting  a  mouse
+              event  with  token as the target node.  This method performs the
+              following functions:
+
+
+               type gives the event type.
+
+
+              The following options are valid:
+
+
+                      -bubbles
+
+
+                     Indicates whether the event bubbles.
+
+
+                      -cancelable
+
+
+                     Indicates whether the event can be cancelled.
+
+
+                      -view
+
+                     The view.
+
+
+                      -detail
+
+
+                     Extra data for the event.
+
+
+                      -screenX
+
+
+                     Gives the screen X coordinate.
+
+
+                      -screenY
+
+
+                     Gives the screen Y coordinate.
+
+
+                      -clientX
+
+
+                     Gives the window X coordinate.
+
+
+                      -clientY
+
+
+                     Gives the window Y coordinate.
+
+
+                      -ctrlKey
+
+
+                     Indicates whether the control modifier key was pressed.
+
+
+                      -altKey
+
+
+                     Indicates whether the ALT modifier key was pressed.
+
+
+                      -shiftKey
+
+
+                     Indicates whether the shift modifier key was pressed.
+
+
+                      -metaKey
+
+
+                     Indicates whether the meta modifier key was pressed.
+
+
+                      -button
+
+
+                     Gives the button pressed.
+
+
+                      -relatedNode
+
+
+                     Gives a node to associate with the event.
+
+
+
+              postMutationEvent
+                     postMutationEvent token type ? option value ... ?
+
+              Non-standard convenience method that handles posting a  mutation
+              event  with  token as the target node.  This method performs the
+              following functions:
+
+
+               type gives the event type.
+
+
+              The following options are valid:
+
+
+                      -bubbles
+
+
+                     Indicates whether the event bubbles.
+
+
+                      -cancelable
+
+
+                     Indicates whether the event can be cancelled.
+
+
+                      -relatedNode
+
+
+                     Gives a node to associate with the event.
+
+
+                      -prevValue
+
+
+                     Gives the previous value of the target node.
+
+
+                      -newValue
+
+
+                     Gives the new value of the target node.
+
+
+                      -attrName
+
+
+                     Gives the name of the attribute modified.
+
+
+
+
+ERRORS
+       If an operation results in an error  condition,  an  error  message  is
+       returned as a structured Tcl list.  The list has members as follows:
+
+       {domain level code node line message int1 int2 string1 string2 string3}
+
+
+       The format of the list is described in the TclXML manual page.
+
+
+IMPLEMENTATIONS
+       This section documents the various implmentations of the TclDOM API.
+
+   Tcl Implementation
+       The Tcl implementation is provided by the dom::tcl package.
+
+   Limitations
+       This implementation is not able to preform the following functions:
+
+   libxml2 Implementation
+       The TclDOM/libxml2 implementation is a wrapper for  the  Gnome  libxml2
+       library.   It  is  provided by the dom::libxml2 package.  It is a high-
+       performance library, making use of Tcl objects for fast access to  tree
+       nodes.
+
+
+       On  MS  Windows,  it  is  necessary to load all required packages sepa-
+       rately.  For example:
+
+
+       package require xml package require xml::libxml2 package require dom
+
+
+   Limitations

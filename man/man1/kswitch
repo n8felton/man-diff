@@ -1,0 +1,31 @@
+KSWITCH(1)                                                          KSWITCH(1)
+
+
+
+NAME
+       kswitch - set the Kerberos system default credentials cache
+
+SYNOPSIS
+       kswitch [-c cache_name | -p principal_name]
+
+DESCRIPTION
+       The  kswitch  utility  sets the user's system default credentials cache
+       either from a credentials cache name or a principal name.  kswitch will
+       set the system default cache for both Kerberos 4 and Kerberos 5.
+
+OPTIONS
+       -c cache_name
+              set  cache_name  to the system default cache. This option cannot
+              be combined with -p.
+
+       -p principal_name
+              set the first cache containing  tickets  for  principal  princi-
+              pal_name  to  the system default cache. principal_name should be
+              in the Kerberos 5 principal format.  This option cannot be  com-
+              bined with -c.
+
+SEE ALSO
+       kinit(1), klist(1), kpasswd(1), kdestroy(1)
+
+
+

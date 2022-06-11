@@ -1,0 +1,17 @@
+INTRO(5)                    BSD File Formats Manual                   INTRO(5)
+
+NAME
+     intro -- introduction to file formats
+
+DESCRIPTION
+     This section contains information about file formats.
+
+SEE ALSO
+     apropos(1), intro(1), intro(8)
+
+FILES
+     /etc         location of most system configuration files
+
+HISTORY
+     The intro section manual page appeared in FreeBSD 2.2.
+

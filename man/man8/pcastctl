@@ -1,0 +1,99 @@
+pcastctl(8)               BSD System Manager's Manual              pcastctl(8)
+
+NAME
+     pcastctl -- Podcast Producer daemons control interface
+
+SYNOPSIS
+     pcastctl status target on|off|start|stop|restart
+
+OPTIONS
+     The available options are as follows:
+
+     status                         print status of running daemons
+
+     target                         affect a[gent] or s[erver] daemon
+
+     start|stop|restart             explicitly start/stop/restart daemon.
+                                    Note that 'restart' will kill all
+                                    instances of a given daemon, as will
+                                    'stop' if none is specified in the pid
+                                    file.
+
+RETURN VALUES
+     0 Completed succesfully.
+
+     1 Action failed
+
+     10 Not run as root.
+
+     50 Target not recognized: use 'a', or 's'.
+
+     51 Action not recognized: use start|stop|restart
+
+     52 Executables not found; may need to reinstall Podcast Producer.
+
+     53 Process directory not found; may need to reinstall Mac OS X.
+
+     54 Timeout waiting for action to complete.
+
+     55 Launchd manipulation failure.
+
+FILES
+     /usr/libexec/podcastproducer/pcastagentd
+             Podcast Producer agent daemon
+
+     /usr/share/podcastproducer/pcastserverd
+             Podcast Producer server daemon
+
+     /var/run/pcastagentd.pid
+             Podcast Producer agent process ID
+
+     /var/run/pcastserverd.pid
+             Podcast Producer server process ID
+
+     /System/Library/LaunchDaemons/com.apple.pcastagentd.plist
+             Launchd agent daemon control file
+
+     /System/Library/LaunchDaemons/com.apple.pcastserverd.plist
+             Launchd server daemon control file
+
+EXAMPLES
+     status of Podcast Producer agent daemon
+
+           $ pcastctl agent status
+
+     edit launchd configuration to launch server on system startup
+
+           $ pcastctl server on
+
+DIAGNOSTICS
+     Warning: Warning: ## copies of (pcastagentd|pcastserverd) already running
+
+     Trying to launch another daemon when one or more already running; will
+            usually succeed, but may cause unpredictable behavior.
+     See also RETURN VALUES, above.
+
+ERRORS
+     Error: failed to launch (executable)
+
+     Tried to start/restart a give daemon, but failed.
+
+     Error: process 'executable' not currently running
+
+     Tried to kill a process which did not exist.
+
+SEE ALSO
+     pcast(1) launchd(8)
+
+HISTORY
+     This program was first introduced in Mac OS X 10.5 "Leopard".  It was
+     inspired by xgridctl(8).
+
+BUGS
+     pcastctl(8) uses kill -TERM to allow the daemons a chance to die grace-
+     fully; there is currently no way to force a kill -KILL.
+
+     Bug reports can be sent to bugreport.apple.com
+
+     Feedback can be sent to podcastproducer@apple.com
+

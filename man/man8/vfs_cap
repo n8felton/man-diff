@@ -1,0 +1,44 @@
+VFS_CAP(8)                                                          VFS_CAP(8)
+
+
+
+NAME
+       vfs_cap - CAP encode filenames
+
+SYNOPSIS
+       vfs objects = cap
+
+DESCRIPTION
+       This VFS module is part of the samba(7) suite.
+
+       CAP  (Columbia  Appletalk  Protocol) encoding is a technique for repre-
+       senting non-ASCII filenames in ASCII. The vfs_cap VFS module translates
+       filenames to and from CAP format, allowing users to name files in their
+       native encoding.
+
+       CAP encoding is most commonly used in Japanese language environments.
+
+       This module is stackable.
+
+EXAMPLES
+       On a system using GNU libiconv, use CAP encoding to  support  users  in
+       the Shift_JIS locale:
+
+
+               [global]
+            dos charset = CP932
+            dos charset = CP932
+            vfs objects = cap
+
+
+VERSION
+       This man page is correct for version 3.0.25 of the Samba suite.
+
+AUTHOR
+       The  original  Samba  software  and  related  utilities were created by
+       Andrew Tridgell. Samba is now developed by the Samba Team  as  an  Open
+       Source project similar to the way the Linux kernel is developed.
+
+
+
+

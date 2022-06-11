@@ -1,0 +1,43 @@
+lpinfo(8)                         Apple Inc.                         lpinfo(8)
+
+
+
+NAME
+       lpinfo - show available devices or drivers
+
+SYNOPSIS
+       lpinfo [ -E ] [ -U username ] [ -h server[:port] ] [ -l ] -m
+       lpinfo [ -E ] [ -U username ] [ -h server[:port] ] [ -l ] -v
+
+DESCRIPTION
+       lpinfo lists the available devices or drivers known to the CUPS server.
+       The first form (-m) lists the available drivers, while the second  form
+       (-v) lists the available devices.
+
+OPTIONS
+       lpinfo accepts the following options:
+
+       -E
+            Forces encryption when connecting to the server.
+
+       -U username
+            Sets the username to use when connecting to the server.
+
+       -h server[:port]
+            Selects an alternate server.
+
+       -l
+            Shows a "long" listing of devices or drivers.
+
+COMPATIBILITY
+       The lpinfo command is unique to CUPS.
+
+SEE ALSO
+       lpadmin(8),
+       http://localhost:631/help
+
+COPYRIGHT
+       Copyright 2007 by Apple Inc.
+
+
+

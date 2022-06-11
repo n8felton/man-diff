@@ -1,0 +1,30 @@
+AMAVISD-RELEASE(8)                                          AMAVISD-RELEASE(8)
+
+
+
+NAME
+       amavisd-release - Amavisd release
+
+SYNOPSIS
+       amavisd-release
+
+DESCRIPTION
+       This  is amavisd-release which is an EXAMPLE quarantine release utility
+       program.  It uses AM.PDP protocol to send a request to  amavisd  daemon
+       to release a quarantined mail message.
+
+       Usage:
+          amavisd-release mail_file secret_id [alt_recip1 alt_recip2 ..]
+
+
+OPTIONS
+        Debug Debug option.
+
+FILES
+       N/A
+
+SEE ALSO
+
+
+
+

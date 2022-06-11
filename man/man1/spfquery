@@ -1,0 +1,152 @@
+SPFQUERY(1)           User Contributed Perl Documentation          SPFQUERY(1)
+
+
+
+NAME
+       spfquery - checks if an IP address is an SPF-authorized SMTP sender for
+       a domain
+
+VERSION
+       2.3
+
+SYNOPSIS
+       spfquery --mail-from|-m|--sender|-s email-address|domain --helo|-h
+       hostname --ip|-i ip-address [OPTIONS]
+
+       spfquery --helo|-h hostname --ip|-i ip-address [OPTIONS]
+
+       spfquery --file|-f filename|- [OPTIONS]
+
+       spfquery --version|-V
+
+       spfquery --help
+
+DESCRIPTION
+       spfquery performs Sender Policy Framework (SPF) authorization checks
+       based on the command-line arguments or data given in a file or on
+       standard input.  For information on SPF see <http://www.openspf.org>.
+
+       The --mail-from form checks if the given ip-address is an authorized
+       SMTP sender for the given envelope sender domain or email-address and
+       "HELO" hostname (so-called "MAIL FROM" check).  If a domain is given,
+       "postmaster" will be substituted for the localpart.
+
+       The --helo form checks if the given ip-address is an authorized SMTP
+       sender for the given "HELO" hostname (so-called "HELO" check).
+
+       The --file form reads "ip-address sender-address helo-hostname" tuples
+       from the file with the specified filename, or from standard input if
+       filename is -.
+
+       The --version form prints version information of spfquery.  The --help
+       form prints usage information for spfquery.
+
+OPTIONS
+       The --mail-from, --helo, and --file forms optionally take any of the
+       following additional OPTIONS:
+
+       --debug
+           Print out debug information.
+
+       --default-explanation string
+           Use the specified string as the default explanation if the SPF
+           record does not specify an explanation string itself.
+
+       --guess spf-terms
+           Use spf-terms as a default record if no SPF record is found.  This
+           is a non-standard feature.
+
+       --keep-comments
+       --no-keep-comments
+           Do (not) print any comments found when reading from a file or from
+           standard input.
+
+       --local spf-terms
+           Process spf-terms as local policy before resorting to a default
+           result (the implicit or explicit "all" mechanism at the end of the
+           domain's SPF record).  For example, this could be used for white-
+           listing one's secondary MXes: "mx:mydomain.example.org".
+
+       --max-lookup-count n
+           Perform a maximum of n SPF record lookups.  Defaults to 10.
+
+       --name hostname
+           Use hostname as the hostname of the local system instead of auto-
+           detecting it.
+
+       --override domain=spf-record
+       --fallback domain=spf-record
+           Set overrides and fallbacks.  Each option can be specified multiple
+           times.  For example: "--override example.org='v=spf1 -all'
+           --override '*.example.net'='v=spf1 a mx -all' --fallback
+           example.com='v=spf1 -all'".  This is a non-standard feature.
+
+       --rcpt-to email-addresses
+           Automatically allow the secondary MXes of the comma-separated list
+           of email-addresses.
+
+       --sanitize
+       --no-sanitize
+           Do (not) sanitize the output by condensing consecutive white-space
+           into a single space and replacing non-printable characters with
+           question marks.  Enabled by default.
+
+       --trusted
+       --no-trusted
+           Do (not) perform "trusted-forwarder.org" accreditation checking.
+           Disabled by default.  This is a non-standard feature.
+
+RESULT CODES
+       pass      The specified IP address is an authorized mailer for the
+                 sender domain/address.
+
+       fail      The specified IP address is not an authorized mailer for the
+                 sender domain/address.
+
+       softfail  The specified IP address is not an authorized mailer for the
+                 sender domain/address, however the domain is still in the
+                 process of transitioning to SPF.
+
+       neutral   The sender domain makes no assertion about the status of the
+                 IP address.
+
+       unknown   The sender domain has a syntax error in its SPF record.
+
+       error     A temporary DNS error occurred while resolving the sender
+                 policy.  Try again later.
+
+       none      There is no SPF record for the sender domain.
+
+EXIT CODES
+       0   pass
+
+       1   fail
+
+       2   softfail
+
+       3   neutral
+
+       4   unknown
+
+       5   error
+
+       6   none
+
+EXAMPLES
+           spfquery -i 11.22.33.44 -m user@example.com -h spammer.example.net
+           spfquery -f test_data
+           echo "127.0.0.1 user@example.com helohost.example.com" | spfquery -f -
+
+SEE ALSO
+       Mail::SPF::Query, spfd
+
+AUTHORS
+       This version of spfquery was written by Wayne Schlitt
+       <wayne@midwestcs.com>.
+
+       This man-page was written by Julian Mehnle <julian@mehnle.net>, based
+       on a man-page written by S. Zachariah Sprackett for an older version of
+       spfquery.
+
+
+

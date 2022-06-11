@@ -1,0 +1,57 @@
+MOUNT_FTP(8)              BSD System Manager's Manual             MOUNT_FTP(8)
+
+NAME
+     mount_ftp -- mount a FTP filesystem
+
+SYNOPSIS
+     mount_ftp [-o options] host[:port][/path] node
+
+DESCRIPTION
+     The mount_ftp command mounts a FTP-enabled server directory at
+     host[:port][/path] at the mount point indicated by node.
+
+     The user ID for all files and folders is set to the user's real user ID.
+     The group ID for all files and directories is set to unknown, and the
+     permissions default to read and execute for user, group and other.
+
+     The options are:
+
+     -o      Options passed to mount(2) are specified with the -o option fol-
+             lowed by a comma separated string of options. See the mount(8)
+             man page for possible options and their meanings. The rdonly
+             option will be set even if it was not specified because mount_ftp
+             does not allow files to be opened with write access on servers.
+
+     host[:port][/path]
+             The FTP-enabled server directory to mount as a volume. If port is
+             not specified, then port 21 is used. If path is not specified,
+             then the path "/" is used.
+
+     node    Path to mount point.
+
+EXAMPLES
+     The following example illustrates how to mount the FTP-enabled server
+     directory ftp.apple.com/ at the mount point /Volumes/mntpnt/
+
+           mount_ftp ftp.apple.com/ /Volumes/mntpnt/
+
+SEE ALSO
+     mount(2), unmount(2), mount(8)
+
+HISTORY
+     The mount_ftp command first appeared Mac OS X Version 10.2.
+
+RETURN VALUES
+     0                  mount_ftp successfully mounted the server directory.
+
+     [ENOENT]           The server directory could not be mounted by mount_ftp
+                        because the node path is invalid.
+
+     [ENODEV]           The server directory could not be mounted by mount_ftp
+                        because it is not FTP-enabled or because it does not
+                        exist, or because node does not have proper access.
+
+     [ECANCELED]        The server directory could not be mounted by mount_ftp
+                        because the user did not provide proper authentication
+                        credentials.
+

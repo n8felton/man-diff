@@ -1,0 +1,50 @@
+ERB(1)                    BSD General Commands Manual                   ERB(1)
+
+NAME
+     gem, gem_mirror, gem_server, gemlock, gemri, gemwhich,
+     index_gem_repository.rb, update_rubygems -- RubyGems helper programs
+
+SYNOPSIS
+     gem command [arguments...] [options...]
+     gem_server [options...]
+     gemlock [options] [libname ...]
+     gemri [options] [name ...]
+     gemwhich [options] [libname ...]
+     index_gem_repository.rb [options]
+     update_rubygems
+
+DESCRIPTION
+     These are various helper programs that are part of the RubyGems distribu-
+     tion, a sophisticated package manager for the Ruby programming language.
+
+     For more information about a specific program, you can use its --help
+     flag. There is also online documentation available at
+     "http://docs.rubygems.org".
+
+     gem is the main interface to the RubyGems packaging system.
+
+     gem_server is a tool to serve your entire set of installed gems to any-
+     one.
+
+     gemlock generates a series of require_gem commands that will lock down an
+     application or library to a particular version of their dependent gem.
+
+     gemri acts as a wrapper for the ri(1) command to read gems RI documenta-
+     tion.
+
+     gemwhich is a script that behaves like the which(1) command for ruby
+     libraries and gem repositories.
+
+     index_gem_repository.rb generates index files for your RubyGems server.
+
+     update_rubygems is an internal script used to update RubyGems.
+
+SEE ALSO
+     ruby(1)
+
+AUTHORS
+     RubyGems was originally developed at RubyConf 2003 by Rich Kilmer, Chad
+     Fowler, David Black, Paul Brannan and Jim Weirch, and has received a lot
+     of contributions since then. You can obtain the RubyGems sources at
+     http://rubyforge.org/projects/rubygems/.
+

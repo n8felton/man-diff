@@ -1,0 +1,15 @@
+BOOTLOG(8)                BSD System Manager's Manual               BOOTLOG(8)
+
+NAME
+     bootlog -- log a utmpx boot record
+
+SYOPSIS
+     bootlog
+
+DESCRIPTION
+     The bootlog command simply creates a utmpx(5) boot record at boot time.
+     It is run by launchd(8).
+
+SEE ALSO
+     utmpx(5), launchd(8)
+

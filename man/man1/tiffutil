@@ -1,0 +1,84 @@
+TIFFUTIL(1)               BSD General Commands Manual              TIFFUTIL(1)
+
+NAME
+     tiffutil - manipulates tiff files
+
+SYNOPSIS
+     tiffutil <option> [<arguments>] [-out <outfile>]
+
+DESCRIPTION
+     tiffutil lets you manipulate TIFF files. The list of options (also avail-
+     able by running the program without any options) follows:
+
+     tiffutil -none             infile                  [-out outfile]
+              -lzw              infile                  [-out outfile]
+              -packbits         infile                  [-out outfile]
+              -cat              infile1 [infile2 ...]   [-out outfile]
+              -catnosizecheck   infile1 [infile2 ...]   [-out outfile]
+              -cathidpicheck    infile1 [infile2 ...]   [-out outfile]
+              -extract          num infile              [-out outfile]
+              -info             infile
+              -verboseinfo      infile
+              -dump             infile
+
+     -none, -lzw, and -packbits options specify the compression format to be
+     applied to the images in the TIFF file.  -none specifies no compression;
+     -packbits specifies PackBits compression; -lzw specifies standard Lempel-
+     Ziv & Welch compression (no prediction scheme).
+
+     -cat allows combining multiple TIFF files into one.  The images are
+     copied without any change in tag values. If the real sizes (pixel size
+     divided by dpi) of the images being combined are not the same, a warning
+     will be generated. This makes sure that NSImage can successfully choose
+     the right size image out of the generated TIFF file.  Use -cathidpicheck
+     to perform a stricter check, conforming to Apple's guidelines for resolu-
+     tion independent bitmap images.  Use -catnosizecheck to bypass the size
+     check.
+
+     -extract allows extracting an individual image from a TIFF file; specify
+     num = 0 for the first image in the file.
+
+     -info prints information about TIFF images. -verboseinfo is the same,
+     except most of the tables are displayed in full. -dump simply lists all
+     of the tags in the file without trying to interpret them; it is handy
+     when trying to figure out why a TIFF file won't load or display properly.
+
+     For options which write images out, the output goes to "out.tiff" unless
+     an output file name is specified after a -out keyword.  This keyword and
+     the file must be the last items on the command line. -info, -verboseinfo,
+     and -dump write their output to the standard output.
+
+     If there are multiple images in a TIFF file the specified operation will
+     be performed on all of them.
+
+Premultiplying TIFF files with alpha (transparency)
+     When loading TIFF files into Cocoa apps, you might sometimes see the fol-
+     lowing warning in the console: "Warning: TIFF image with unknown extra
+     samples assumed to have unassociated alpha. RGB values have been premul-
+     tiplied."
+
+     Cocoa and Quartz expect bitmaps with alpha to have the color values pre-
+     multiplied. Whenever a TIFF file without premultiplication is loaded
+     using NSImage or NSBitmapImageRep, Cocoa will premultiply the image for
+     you. There's a slight performance hit to this, so it's best to premulti-
+     ply the images ahead of time.
+
+     Some paint applications do not do premultiplication, and in addition,
+     they are not quite clear in stating what they do with regards to alpha.
+     In those cases you will get the above warning.
+
+     tiffutil can be used to fix such files. Simply run the image through with
+     the -cat option:
+
+     tiffutil -cat orig.tiff -out new.tiff
+
+     This will read orig.tiff and write it out as new.tiff.
+
+CREDITS
+     Parts of tiffutil were based on the freely distributable "tiffcp" and
+     "tiffinfo" programs written by Sam Leffler and made available with v3.0
+     of his excellent TIFF library. The TIFF library and the tiffcp and
+     tiffinfo programs are:
+       Copyright (c) 1988, 1989, 1990, 1991, 1992 Sam Leffler
+       Copyright (c) 1991, 1992 Silicon Graphics, Inc.
+

@@ -1,0 +1,29 @@
+UPDATE(8)                 BSD System Manager's Manual                UPDATE(8)
+
+NAME
+     update -- flush internal filesystem caches to disk frequently
+
+SYNOPSIS
+     update [normal_interval [save_energy_interval]]
+
+DESCRIPTION
+     The update command helps protect the integrity of disk volumes by flush-
+     ing volatile cached filesystem data to disk at thirty second intervals.
+     Update uses the sync(2) function call to do the task.  The normal_inter-
+     val and save_energy_interval can be used to set the sync(2) interval in
+     seconds of the normal case and the case where the computer is trying to
+     save energy.
+
+     Update is invoked at startup time by launchd(8) when the system goes
+     multi-user.
+
+SEE ALSO
+     sync(2), fsck(8), launchd(8), sync(8)
+
+BUGS
+     It is possible on some systems that a sync occurring simultaneously with
+     a crash may cause file system damage. See fsck(8).
+
+HISTORY
+     An update command appeared in Version 6 AT&T UNIX.
+

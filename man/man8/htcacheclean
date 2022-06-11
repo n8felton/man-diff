@@ -1,0 +1,76 @@
+HTCACHECLEAN(8)                  htcacheclean                  HTCACHECLEAN(8)
+
+
+
+NAME
+       htcacheclean - Clean up the disk cache
+
+
+SYNOPSIS
+       htcacheclean [ -D ] [ -v ] [ -t ] [ -r ] [ -n ] -ppath -llimit
+
+
+       htcacheclean -b [ -n ] [ -t ] [ -i ] -dinterval -ppath -llimit
+
+
+
+SUMMARY
+       htcacheclean  is  used  to  keep  the  size of mod_disk_cache's storage
+       within a certain limit. This tool can run either manually or in  daemon
+       mode.  When  running  in  daemon  mode, it sleeps in the background and
+       checks the cache directories at regular intervals for cached content to
+       be removed. You can stop the daemon cleanly by sending it a TERM or INT
+       signal.
+
+
+
+OPTIONS
+       -dinterval
+              Daemonize and repeat cache cleaning every interval minutes. This
+              option  is mutually exclusive with the -D, -v and -r options. To
+              shutdown the daemon cleanly, just send it a SIGTERM or SIGINT.
+
+       -D     Do a dry run and don't delete anything. This option is  mutually
+              exclusive with the -d option.
+
+       -v     Be  verbose and print statistics. This option is mutually exclu-
+              sive with the -d option.
+
+       -r     Clean thoroughly. This assumes that the Apache web server is not
+              running  (otherwise  you  may  get  garbage  in the cache). This
+              option is mutually exclusive with the -d option and implies  the
+              -t option.
+
+       -n     Be  nice.  This causes slower processing in favour of other pro-
+              cesses. htcacheclean will sleep from time to time  so  that  (a)
+              the  disk  IO  will  be  delayed and (b) the kernel can schedule
+              other processes in the meantime.
+
+       -t     Delete all empty directories. By default only  cache  files  are
+              removed,  however  with  some configurations the large number of
+              directories created may require attention. If your configuration
+              requires  a  very large number of directories, to the point that
+              inode or file allocation table exhaustion may become  an  issue,
+              use of this option is advised.
+
+       -ppath Specify  path  as  the  root  directory  of the disk cache. This
+              should be the same value as specified with the CacheRoot  direc-
+              tive.
+
+       -llimit
+              Specify  limit  as the total disk cache size limit. The value is
+              expressed in bytes by default (or attaching B  to  the  number).
+              Attach K for Kbytes or M for MBytes.
+
+       -i     Be intelligent and run only when there was a modification of the
+              disk cache. This option is only possible together  with  the  -d
+              option.
+
+
+EXIT STATUS
+       htcacheclean returns a zero status ("true") if all operations were suc-
+       cessful, 1 otherwise.
+
+
+
+

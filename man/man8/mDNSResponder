@@ -1,0 +1,56 @@
+mDNSResponder(8)          BSD System Manager's Manual         mDNSResponder(8)
+
+NAME
+     mDNSResponder -- Multicast DNS daemon
+
+SYNOPSIS
+     mDNSResponder
+
+DESCRIPTION
+     mDNSResponder (also known as mdnsd on some systems) is a daemon invoked
+     at boot time to implement Multicast DNS and DNS Service Discovery.
+
+     mDNSResponder listens UDP port 5353 for Multicast DNS Query packets.
+     When it receives a query for which it knows an answer, mDNSResponder
+     issues the appropriate Multicast DNS Reply packet.
+
+     mDNSResponder also performs Multicast DNS Queries on behalf of client
+     processes, and maintains a cache of the replies.
+
+     mDNSResponder has no user-specifiable command-line argument, and users
+     should not run mDNSResponder manually.
+
+     To examine mDNSResponder's internal state, for debugging and diagnostic
+     purposes, send it a SIGINFO signal, and it will then dump a snapshot sum-
+     mary of its internal state to /var/log/system.log, e.g.
+
+           sudo killall -INFO mDNSResponder
+
+FILES
+     /usr/sbin/mDNSResponder
+
+SEE ALSO
+     mDNS(1)
+
+     For information on Multicast DNS, see http://www.multicastdns.org/
+
+     For information on DNS Service Discovery, see http://www.dns-sd.org/
+
+     For information on how to use the Multicast DNS and the DNS Service Dis-
+     covery APIs on Mac OS X and other platforms, see
+     http://developer.apple.com/bonjour/
+
+     For the source code to mDNSResponder, see
+     http://developer.apple.com/darwin/projects/bonjour/
+
+BUGS
+     mDNSResponder bugs are tracked in Apple Radar component "mDNSResponder".
+
+HISTORY
+     The mDNSResponder daemon first appeared in Mac OS X 10.2 (Jaguar).
+
+     Also available from the Darwin open source repository (though not offi-
+     cially supported by Apple) are mDNSResponder daemons for other platforms,
+     including Mac OS 9, Microsoft Windows, Linux, FreeBSD, NetBSD, Solaris,
+     and other POSIX systems.
+

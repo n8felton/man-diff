@@ -1,0 +1,37 @@
+USEREVENTAGENT(8)         BSD System Manager's Manual        USEREVENTAGENT(8)
+
+NAME
+     UserEventAgent -- utility to manage user callbacks in response to events
+
+SYNOPSIS
+     UserEventAgent [-vdflh] [directory]
+
+DESCRIPTION
+     The UserEventAgent utility is responsible for loading plugins that pro-
+     vide for system response to user-generated events.  It is not intended to
+     be run directly, but rather started by the system.  The few options it
+     has are intended as debugging aids.  Typically, allowing the system to
+     start UserEventAgent by itself, without any additional options, is the
+     ideal configuration.
+
+     The options are as follows:
+
+     -v    Verbose mode.  Error and status messages are written to stderr.
+
+     -d    Debug mode.  Each plugin will be forked off into its own child
+           process, to aid debugging.
+
+     -f    Force load.  Normally, the plugin directory must be owned by the
+           root user and wheel group; this flag overrides that check.
+
+     -l sessiontype
+           Some jobs only make sense in certain contexts. This flag instructs
+           UserEventAgent to only load plugins for the given session type; for
+           more info, see the documentation for launchctl(1)
+
+     -h    Help.  This displays usage information.
+
+     Optionally, a directory may be specified after all options on the command
+     line; this will cause this directory to be used instead of the default,
+     /System/Library/UserEventPlugins.
+

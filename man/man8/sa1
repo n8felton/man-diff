@@ -1,0 +1,41 @@
+sa1(8)                    BSD System Manager's Manual                   sa1(8)
+
+NAME
+     sa1 -- Generate a system activity daily data file.
+
+SYNOPSIS
+     /usr/lib/sa/sa1 [t n]
+
+DESCRIPTION
+     The sa1 command is a shell script used to invoke the system activity data
+     collector, sadc.  The binary sample data is collected at intervals t sec-
+     onds apart, in a loop n times.  The binary sample data is written to the
+     standard daily data file, /var/log/sa/sadd where the dd represents the
+     current day of the month.
+
+     sa1 is intended to be started by cron.
+
+EXAMPLE CRON ENTRY
+     # Starting at 8am collect system activity records
+     # every 20 minutes for 12 hours
+     # 20 minutes = 1200 seconds
+     # 12 hours with 3 samples each hour = 36 loops
+
+     0 8 * * 1-5 /usr/lib/sa/sa1 1200 36
+
+
+     # After the 12 hour period,
+     # collect a system activity report
+
+     30 20 * * 1-5 /usr/lib/sa/sa2 -A
+
+
+FILES
+     /var/log/sa/sadd  Default daily activity file that holds the binary sam-
+                       pling data.  dd are digits that represent the day of
+                       the month.
+
+SEE ALSO
+     crontab(1), fs_usage(1), netstat(1), sar(1), sc_usage(1), top(1),
+     vm_stat(1), crontab(5), iostat(8), sa2(8), sadc(8)
+

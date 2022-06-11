@@ -1,0 +1,28 @@
+CLRI(8)                   BSD System Manager's Manual                  CLRI(8)
+
+NAME
+     clri -- clear an inode
+
+SYNOPSIS
+     clri special_device inode_number ...
+
+DESCRIPTION
+     Clri is obsoleted for normal file system repair work by fsck(8).
+
+     Clri zeros out the inodes with the specified inode number(s) on the
+     filesystem residing on the given special_device.  The fsck(8) utility is
+     usually run after clri to reclaim the zero'ed inode(s) and the blocks
+     previously claimed by those inode(s).  Both read and write permission are
+     required on the specified special_device.
+
+     The primary purpose of this routine is to remove a file which for some
+     reason is not being properly handled by fsck(8).  Once removed, it is
+     anticipated that fsck(8) will be able to clean up the resulting mess.
+
+SEE ALSO
+     fsck(8), fsdb(8), icheck(8), ncheck(8)
+
+BUGS
+     If the file is open, the work of clri will be lost when the inode is
+     written back to disk from the inode cache.
+

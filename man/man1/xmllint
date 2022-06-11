@@ -1,0 +1,386 @@
+XMLLINT(1)                      xmllint Manual                      XMLLINT(1)
+
+
+
+NAME
+       xmllint - command line XML tool
+
+SYNOPSIS
+       xmllint [--version | --debug | --shell | --debugent | --copy |
+               --recover | --noent | --noout | --nonet | --path paths |
+               --load-trace | --htmlout | --nowrap | --valid | --postvalid |
+               --dtdvalid URL | --dtdvalidfpi FPI | --timing | --output file |
+               --repeat | --insert | --compress | --html | --xmlout | --push |
+               --memory | --maxmem nbbytes | --nowarning | --noblanks |
+               --nocdata | --format | --encode encoding | --dropdtd |
+               --nsclean | --testIO | --catalogs | --nocatalogs | --auto |
+               --xinclude | --noxincludenode | --loaddtd | --dtdattr |
+               --stream | --walker | --pattern patternvalue | --chkregister |
+               --relaxng | --schema | --c14n] [xmlfile]
+
+
+INTRODUCTION
+       The xmllint program parses one or more XML files, specified on the com-
+       mand line as xmlfile (or the standard input if the filename provided is
+       -  ). It prints various types of output, depending upon the options se-
+       lected. It is useful for detecting errors both in XML code and  in  the
+       XML parser itself.
+
+
+       It is included in libxml2.
+
+
+OPTIONS
+       --version
+              Display the version of libxml2 used.
+
+
+       --debug
+              Parse  a file and output an annotated tree of the in-memory ver-
+              sion of the document.
+
+
+       --shell
+              Run a navigating shell. Details on available commands  in  shell
+              mode are below.
+
+
+       --debugent
+              Debug the entities defined in the document.
+
+
+       --copy Test the internal copy implementation.
+
+
+       --recover
+              Output any parsable portions of an invalid document.
+
+
+       --noent
+              Substitute  entity values for entity references. By default, xm-
+              llint leaves entity references in place.
+
+
+       --nocdata
+              Substitute CDATA section by equivalent text nodes.
+
+
+       --nsclean
+              Remove redundant namespace declarations.
+
+
+       --noout
+              Suppress output. By default, xmllint outputs the result tree.
+
+
+       --nonet
+              Do not use the Internet to fetch DTD's or entities.
+
+
+       --nonet
+              Do not use the Internet to fetch DTD's or entities.
+
+
+       --path paths
+              Use the list (separated by space or column) of  filesystem  path
+              specified by paths to load DTDs or entities .
+
+
+       --load-trace
+              Display  to  stderr all the documents loaded during the process-
+              ing.
+
+
+       --htmlout
+              Output results as an HTML file. This causes  xmllint  to  output
+              the  necessary  HTML  tags surrounding the result tree output so
+              the results can be displayed in a browser.
+
+
+       --nowrap
+              Do not output HTML doc wrapper.
+
+
+       --valid
+              Determine if the document is a valid instance  of  the  included
+              Document  Type  Definition  (DTD). A DTD to be validated against
+              also can be specified at the command line using  the  --dtdvalid
+              option. By default, xmllint also checks to determine if the doc-
+              ument is well-formed.
+
+
+       --postvalid
+              Validate after parsing is completed.
+
+
+       --dtdvalid URL
+              Use the DTD specified by URL for validation.
+
+
+       --dtdvalidfpi FPI
+              Use the DTD specified by the Public Identifier FPI  for  valida-
+              tion,  note that this will require a Catalog exporting that Pub-
+              lic Identifier to work.
+
+
+       --timing
+              Output information about the time it takes  xmllint  to  perform
+              the various steps.
+
+
+       --output file
+              Define  a  file path where xmllint will save the result of pars-
+              ing. Usually the programs build a tree and save  it  on  stdout,
+              with  this  option  the result XML instance will be saved onto a
+              file.
+
+
+       --repeat
+              Repeat 100 times, for timing or profiling.
+
+
+       --insert
+              Test for valid insertions.
+
+
+       --compress
+              Turn on gzip compression of output.
+
+
+       --html Use the HTML parser.
+
+
+       --xmlout
+              Used in conjusntion with --html. Usually when HTML is parsed the
+              document is saved with the HTML serializer, but with this option
+              the resulting document is saved with the XML serializer. This is
+              primarily used to generate XHTML from HTML input.
+
+
+       --push Use the push mode of the parser.
+
+
+       --memory
+              Parse from memory.
+
+
+       --maxmem nnbytes
+              Test the parser memory support. nnbytes is the maximum number of
+              bytes the library is allowed to allocate. This can also be  used
+              to  make sure batch processing of XML files will not exhaust the
+              virtual memory of the server running them.
+
+
+       --nowarning
+              Do not emit warnings from the parser and/or validator.
+
+
+       --noblanks
+              Drop ignorable blank spaces.
+
+
+       --format
+              Reformat and reindent the output. The  $XMLLINT_INDENT  environ-
+              ment  variable  controls  the  indentation (default value is two
+              spaces " ").
+
+
+       --testIO
+              Test user input/output support.
+
+
+       --encode encoding
+              Output in the given encoding.
+
+
+       --catalogs
+              Use   the   catalogs   from    $SGML_CATALOG_FILES.    Otherwise
+              /etc/xml/catalog is used by default.
+
+
+       --nocatalogs
+              Do not use any catalogs.
+
+
+       --auto Generate a small document for testing purposes.
+
+
+       --xinclude
+              Do XInclude processing.
+
+
+       --noxincludenode
+              Do  XInclude  processing  but do not generate XInclude start and
+              end nodes.
+
+
+       --loaddtd
+              Fetch external DTD.
+
+
+       --dtdattr
+              Fetch external DTD and populate  the  tree  with  inherited  at-
+              tributes.
+
+
+       --dropdtd
+              Remove DTD from output.
+
+
+       --stream
+              Use  streaming  API - useful when used in combination with --re-
+              laxng or --valid options for validation of files  that  are  too
+              large to be held in memory.
+
+
+       --walker
+              Test  the  walker  module, which is a reader interface but for a
+              document tree, instead of using the reader API  on  an  unparsed
+              document  it  works on a existing in-memory tree. Used in debug-
+              ging.
+
+
+       --chkregister
+              Turn on node registration. Useful for developers testing libxml2
+              node tracking code.
+
+
+       --pattern patternvalue
+              Used  to  exercise  the pattern recognition engine, which can be
+              used with the reader interface to the parser. It allows  to  se-
+              lect  some  nodes in the document based on an XPath (subset) ex-
+              pression. Used for debugging.
+
+
+       --relaxng schema
+              Use RelaxNG file named schema for validation.
+
+
+       --schema schema
+              Use a W3C XML Schema file named schema for validation.
+
+
+       --c14n Use the W3C XML Canonicalisation (C14N) to serialize the  result
+              of parsing to stdout. It keeps comments in the result.
+
+
+SHELL
+        xmllint offers an interactive shell mode invoked with the --shell com-
+       mand. Available commands in shell mode include:
+
+
+       base   display XML base of the node
+
+
+       bye    leave shell
+
+
+       cat node
+              Display node if given or current node.
+
+
+       cd path
+              Change the current node to path (if given and unique) or root if
+              no argument given.
+
+
+       dir path
+              Dumps  information  about  the node (namespace, attributes, con-
+              tent).
+
+
+       du path
+              Show the structure of the subtree  under  path  or  the  current
+              node.
+
+
+       exit   Leave the shell.
+
+
+       help   Show this help.
+
+
+       free   Display memory usage.
+
+
+       load name
+              Load a new document with the given name.
+
+
+       ls path
+              List contents of path (if given) or the current directory.
+
+
+       pwd    Display the path to the current node.
+
+
+       quit   Leave the shell.
+
+
+       save name
+              Saves  the  current document to name if given or to the original
+              name.
+
+
+       validate
+              Check the document for error.
+
+
+       write name
+              Write the current node to the given filename.
+
+
+CATALOGS
+       Catalog behavior can be changed by redirecting queries  to  the  user's
+       own  set of catalogs. This can be done by setting the XML_CATALOG_FILES
+       environment variable to a list of catalogs. An empty one should deacti-
+       vate loading the default /etc/xml/catalog default catalog.
+
+
+DEBUGGING CATALOGS
+       Setting  the  environment  variable XML_DEBUG_CATALOG using the command
+       "export XML_DEBUG_CATALOG=" outputs debugging  information  related  to
+       catalog operations.
+
+
+ERROR RETURN CODES
+       On  the  completion  of  execution, Xmllint returns the following error
+       codes:
+
+
+       0      No error
+
+
+       1      Unclassified
+
+
+       2      Error in DTD
+
+
+       3      Validation error
+
+
+       4      Validation error
+
+
+       5      Error in schema compilation
+
+
+       6      Error writing output
+
+
+       7      Error in pattern (generated when [--pattern] option is used)
+
+
+       8      Error in Reader registration (generated when [--chkregister] op-
+              tion is used)
+
+
+       9      Out of memory error
+
+
+AUTHORS
+       John Fleck, Ziying Sherwin, Heiko Rupp.
+
+
+

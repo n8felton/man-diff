@@ -1,0 +1,54 @@
+MAKEDBM(8)                BSD System Manager's Manual               MAKEDBM(8)
+
+NAME
+     makedbm -- create a YP database
+
+SYNOPSIS
+     makedbm -u file
+     makedbm -U file
+     makedbm [-bls] [-i yp_input_file] [-o yp_output_file] [-d yp_domain_name]
+             [-m yp_master_name] infile outfile
+
+DESCRIPTION
+     Makedbm is the utiliy in YP that creates the database file containing the
+     YP map.  The databse format is a slightly modified version of ndbm.
+
+     The options are as follows:
+
+     -u      Dump a database to standard output.
+
+     -U      Same as -u but also try db(3) hash format.
+
+     -b      Interdomain. Include an entry in the database informing a YP
+             server to use DNS to get information about unknown hosts. This
+             option will only have effect on the two maps hosts.byname and
+             hosts.byaddr.
+
+     -l      Lowercase. Convert all keys to lower case before adding them to
+             the YP database.
+
+     -s      Secure map. Include an entry in the database informing ypxfr(8)
+             and ypserv(8) that the YP map is going to be handled as secure.
+
+     -i yp_input_file
+             Include an entry the in the map with the key YP_INPUT_FILE and
+             the argument as value.
+
+     -o yp_output_file
+             Include an entry the in the map with the key YP_OUTPUT_FILE and
+             the argument as value.
+
+     -d yp_domain_name
+             Include an entry the in the map with the key YP_DOMAIN_NAME and
+             the argument as value.
+
+     -m yp_master_name
+             Include an entry the in the map with the key YP_MASTER_NAME and
+             the argument as value.
+
+SEE ALSO
+     yp(8), db(3), ypxfr(8), ypserv(8)
+
+AUTHOR
+     Mats O Jansson <moj@stacken.kth.se>
+

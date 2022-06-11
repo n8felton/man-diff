@@ -1,0 +1,179 @@
+
+MEGARAID(8)               BSD System Manager's Manual              MEGARAID(8)
+
+NAME
+     megaraid -- Command Line Utility for MegaRAID management.
+
+SYNOPSIS
+     megaraid -showadapter
+
+     megaraid -showdevices
+
+     megaraid -showconfig [ld]
+
+     megaraid -destroyconfig [-yes]
+
+     megaraid -create R0 | R1 | R5 -drive { 0 1 2 3} [-stripesize n] [-size x]
+              [-writecache enable | disable] [-readahead on | off | adaptive]
+              [-iopolicy direct | cached]
+
+     megaraid -create auto [-numld n]
+
+     megaraid -changepolicy ld [-writecache enable | disable]
+              [-readahead on | off | adaptive] [-iopolicy direct | cached]
+
+     megaraid -rebuild pd -start | -stop | -status
+
+     megaraid -chkcon ld -start | -stop | -status
+
+     megaraid -initialize ld -start | -stop | -status
+
+     megaraid -spare pd -create | -delete
+
+     megaraid -changestate pd -online | -fail
+
+     megaraid -alarm -on | -off | -silence
+
+     megaraid -flash flashFileName
+
+DESCRIPTION
+     megaraid is a command line RAID management tool. This tool can create
+     logical drive using multiple/single physical drives. Also, it has the
+     capability to manage these logical/ physical drives and provides options
+     to monitor and trigger any action on these logical/physical drives.
+
+     If -log option is given, then all the displayed information will be
+     logged with Date and Time in a file specified by -log option. This option
+     will apply to all commands/operations.
+
+COMMAND DETAILS
+     megaraid -showadapter [-log file]
+
+     Displays all relevant information about the adapter including product
+     identification, battery status, number of logical drives created, cache
+     size etc.
+
+     megaraid -showdevices [-log file]
+
+     Displays all drives connected to the MegaRAID adapter. This will display
+     Drive Id, Identification, size, status and any SMART alerts. The status
+     of a drive can be Online, Failed, Ready, Hotspare, and Not Responding.
+
+     megaraid -showconfig [ld] [-log file]
+
+     Shows the RAID configuration in the system with Logical Drive Id, RAID
+     Level, Size, Status, and participating physical drives. The logical drive
+     status can be Failed, Degraded, or Optimal. A failed logical drive cannot
+     be accessed and no data can be recovered from it.  A degraded logical
+     drive enables the user to access all data without a failure even though
+     all attached physical drives are not in good condition. A degraded logi-
+     cal drive does not apply to RAID0 because RAID0 is not a redundant array.
+     Optimal state means that the logical drive is in perfect condition.
+
+     megaraid -destroyconfig [-yes] [-log file]
+
+     Clears the configuration. If the user does not specify "yes" the system
+     will prompt for reconfirmation.
+
+     megaraid -create R0 | R1 | R5 -drive { 0 1 2 3} [-stripesize n] [-size x]
+     [-writecache enable | disable] [-readahead on | off | adaptive]
+     [-iopolicy direct | cached] [-log file]
+
+     megaraid -create auto [-numld n] [-log file]
+
+     Creates a logical drive and adds it to the existing configuration. The
+     RAID level and participating physical drives are mandatory parameters.
+     All other parameters are optional. If size is not specified, then the
+     remaining size of the array will automatically be used. If stripe size
+     and cache policy are not specified then the default values will automati-
+     cally be used. The stripe size parameter is in Kilobytes and valid stripe
+     sizes are 16, 32, 64 and 128 KiloBytes. The size parameter is in MB and
+     the minimum size of a logical drive must be 100MB. A logical drive cannot
+     be created with a capacity less than 100MB. Once a logical drive is cre-
+     ated, the cache policy can be changed using the changepolicy command.
+
+     Auto Create will automatically destroy all current configuared logical
+     drives and create RAID Level depending on physical drive present. It can
+     create n ( 1 to 40) logical drive(s) depending on numld parameter. By
+     default numld is 1.
+
+     Default values are as follows:
+
+     stripesize 64K
+
+     writecache enabled
+
+     readcache off
+
+     cached io
+
+     megaraid -changepolicy ld [-writecache enable | disable] [-readahead on |
+     off | adaptive] [-iopolicy direct | cached] [-log file]
+
+     Changes the policy of an existing logical drive. The parameter id must be
+     the logical drive id. This option will apply to all RAID levels; however,
+     the policies will only apply to individual logical drives.
+
+     megaraid -spare pd -create | -delete [-log file]
+
+     Creates or deletes a global hotspare. Hotspares can be created from ready
+     pool devices. After deletion, a hotspare drive will be a ready drive. The
+     parameter pd is the physical drive id.
+
+     megaraid -rebuild pd -start | -stop | -status [-log file]
+
+     Rebuilds, starts, stops or gives the status of a particular physical
+     drive. The parameter pd is the physical drive id.
+
+     megaraid -chkcon ld -start | -stop | -status [-log file]
+
+     Starts, stops, or checks the status (percentage of progress) of a check
+     consistency with a particular logical drive.  The parameter id is the
+     logical drive id.
+
+     megaraid -flash flashFileName [-log file]
+
+     Flashes new firmware from the "flashfile" to the adapter. The new
+     firmware will be operational only after system reboot.
+
+     megaraid -initialize ld -start | -stop | -status [-log file]
+
+     Initializes, starts, stops, or gives the status (percentage of progress)
+     of a particular logical drive. The parameter ld is the logical drive id.
+
+     megaraid -changestate pd -online | -fail [-log file]
+
+     Changes the state of a physical drive from online to failed. The parame-
+     ter pd is the physical drive id.
+
+     megaraid -alarm -on | -off | -silence
+
+     Turn Alarm on, off or silence. When alarm set to silence, it will turn
+     off for current failure but it will turn on for next failure.
+
+EXAMPLES
+     Creating RAID0 Logical Drive with a stripe size of 128K and a drive size
+     of 1 GB = 1024 MB
+
+     megaraid -create R0 -drive 0 1 2 -stripesize 128 -size 1024
+
+     Creating RAID1 Logical Drive with a stripe size of 64K and a drive size
+     of full capacity
+
+     megaraid -create R1 -drive 0 1 -stripesize 64
+
+     Creating RAID5 Logical Drive with a stripe size of 64K and a drive size
+     of full capacity, the cache policy is Read Ahead, WriteCached enabled,
+     and CachedIO
+
+     megaraid -create R1 -drive 0 1 -stripesize 64 -writecache enable
+     -readahead on -iopolicy cached
+
+     Creating automatically  5 logcial drives
+
+     megaraid -create auto -numld 5
+
+     Run Check Consistency on logical drive 5 RAID 5
+
+     megaraid -chkcon 5 -start
+

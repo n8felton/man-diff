@@ -1,0 +1,42 @@
+XDPYINFO(1)                                                        XDPYINFO(1)
+
+
+
+NAME
+       xdpyinfo - display information utility for X
+
+SYNOPSIS
+       xdpyinfo  [-display  displayname]  [-queryExtensions]  [-ext extension-
+       name]
+
+DESCRIPTION
+       Xdpyinfo is a utility for displaying information about an X server.  It
+       is  used to examine the capabilities of a server, the predefined values
+       for various parameters used in communicating between  clients  and  the
+       server,  and the different types of screens and visuals that are avail-
+       able.
+
+       By default, numeric information (opcode, base event, base error)  about
+       protocol extensions is not displayed.  This information can be obtained
+       with the -queryExtensions option.  Use of this option on  servers  that
+       dynamically  load  extensions will likely cause all possible extensions
+       to be loaded, which can be slow  and  can  consume  significant  server
+       resources.
+
+       Detailed information about a particular extension is displayed with the
+       -ext extensionName option.  If extensionName is all, information  about
+       all  extensions supported by both xdpyinfo and the server is displayed.
+
+ENVIRONMENT
+       DISPLAY To get the default host, display number, and screen.
+
+SEE ALSO
+       X(7), xwininfo(1), xprop(1), xrdb(1)
+
+AUTHOR
+       Jim Fulton, MIT X Consortium
+       Support for the  XFree86-VidModeExtension,  XFree86-DGA,  XFree86-Misc,
+       and XKB extensions added by Joe Moss
+
+
+

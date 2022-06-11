@@ -1,0 +1,188 @@
+DNSSEC-SIGNZONE(8)                   BIND9                  DNSSEC-SIGNZONE(8)
+
+
+
+NAME
+       dnssec-signzone - DNSSEC zone signing tool
+
+SYNOPSIS
+       dnssec-signzone [-a] [-c class] [-d directory] [-e end-time]
+                       [-f output-file] [-g] [-h] [-k key] [-l domain]
+                       [-i interval] [-I input-format] [-j jitter]
+                       [-N soa-serial-format] [-o origin] [-O output-format]
+                       [-p] [-r randomdev] [-s start-time] [-t] [-v level]
+                       [-z] {zonefile} [key...]
+
+DESCRIPTION
+       dnssec-signzone signs a zone. It generates NSEC and RRSIG records and
+       produces a signed version of the zone. The security status of
+       delegations from the signed zone (that is, whether the child zones are
+       secure or not) is determined by the presence or absence of a keyset
+       file for each child zone.
+
+OPTIONS
+       -a
+           Verify all generated signatures.
+
+       -c class
+           Specifies the DNS class of the zone.
+
+       -k key
+           Treat specified key as a key signing key ignoring any key flags.
+           This option may be specified multiple times.
+
+       -l domain
+           Generate a DLV set in addition to the key (DNSKEY) and DS sets. The
+           domain is appended to the name of the records.
+
+       -d directory
+           Look for keyset files in directory as the directory
+
+       -g
+           Generate DS records for child zones from keyset files. Existing DS
+           records will be removed.
+
+       -s start-time
+           Specify the date and time when the generated RRSIG records become
+           valid. This can be either an absolute or relative time. An absolute
+           start time is indicated by a number in YYYYMMDDHHMMSS notation;
+           20000530144500 denotes 14:45:00 UTC on May 30th, 2000. A relative
+           start time is indicated by +N, which is N seconds from the current
+           time. If no start-time is specified, the current time minus 1 hour
+           (to allow for clock skew) is used.
+
+       -e end-time
+           Specify the date and time when the generated RRSIG records expire.
+           As with start-time, an absolute time is indicated in YYYYMMDDHHMMSS
+           notation. A time relative to the start time is indicated with +N,
+           which is N seconds from the start time. A time relative to the
+           current time is indicated with now+N. If no end-time is specified,
+           30 days from the start time is used as a default.
+
+       -f output-file
+           The name of the output file containing the signed zone. The default
+           is to append .signed to the input file.
+
+       -h
+           Prints a short summary of the options and arguments to
+           dnssec-signzone.
+
+       -i interval
+           When a previously signed zone is passed as input, records may be
+           resigned. The interval option specifies the cycle interval as an
+           offset from the current time (in seconds). If a RRSIG record
+           expires after the cycle interval, it is retained. Otherwise, it is
+           considered to be expiring soon, and it will be replaced.
+
+           The default cycle interval is one quarter of the difference between
+           the signature end and start times. So if neither end-time or
+           start-time are specified, dnssec-signzone generates signatures that
+           are valid for 30 days, with a cycle interval of 7.5 days.
+           Therefore, if any existing RRSIG records are due to expire in less
+           than 7.5 days, they would be replaced.
+
+       -I input-format
+           The format of the input zone file. Possible formats are "text"
+           (default) and "raw". This option is primarily intended to be used
+           for dynamic signed zones so that the dumped zone file in a non-text
+           format containing updates can be signed directly. The use of this
+           option does not make much sense for non-dynamic zones.
+
+       -j jitter
+           When signing a zone with a fixed signature lifetime, all RRSIG
+           records issued at the time of signing expires simultaneously. If
+           the zone is incrementally signed, i.e. a previously signed zone is
+           passed as input to the signer, all expired signatures has to be
+           regenerated at about the same time. The jitter option specifies a
+           jitter window that will be used to randomize the signature expire
+           time, thus spreading incremental signature regeneration over time.
+
+           Signature lifetime jitter also to some extent benefits validators
+           and servers by spreading out cache expiration, i.e. if large
+           numbers of RRSIGs don't expire at the same time from all caches
+           there will be less congestion than if all validators need to
+           refetch at mostly the same time.
+
+       -n ncpus
+           Specifies the number of threads to use. By default, one thread is
+           started for each detected CPU.
+
+       -N soa-serial-format
+           The SOA serial number format of the signed zone. Possible formats
+           are "keep" (default), "increment" and "unixtime".
+
+               "keep"
+                   Do not modify the SOA serial number.
+
+               "increment"
+                   Increment the SOA serial number using RFC 1982 arithmetics.
+
+               "unixtime"
+                   Set the SOA serial number to the number of seconds since
+                   epoch.
+
+       -o origin
+           The zone origin. If not specified, the name of the zone file is
+           assumed to be the origin.
+
+       -O output-format
+           The format of the output file containing the signed zone. Possible
+           formats are "text" (default) and "raw".
+
+       -p
+           Use pseudo-random data when signing the zone. This is faster, but
+           less secure, than using real random data. This option may be useful
+           when signing large zones or when the entropy source is limited.
+
+       -r randomdev
+           Specifies the source of randomness. If the operating system does
+           not provide a /dev/random or equivalent device, the default source
+           of randomness is keyboard input.  randomdev specifies the name of a
+           character device or file containing random data to be used instead
+           of the default. The special value keyboard indicates that keyboard
+           input should be used.
+
+       -t
+           Print statistics at completion.
+
+       -v level
+           Sets the debugging level.
+
+       -z
+           Ignore KSK flag on key when determining what to sign.
+
+       zonefile
+           The file containing the zone to be signed.
+
+       key
+           The keys used to sign the zone. If no keys are specified, the
+           default all zone keys that have private key files in the current
+           directory.
+
+EXAMPLE
+       The following command signs the example.com zone with the DSA key
+       generated in the dnssec-keygen man page. The zone's keys must be in the
+       zone. If there are keyset files associated with child zones, they must
+       be in the current directory.  example.com, the following command would
+       be issued:
+
+       dnssec-signzone -o example.com db.example.com Kexample.com.+003+26160
+
+       The command would print a string of the form:
+
+       In this example, dnssec-signzone creates the file
+       db.example.com.signed. This file should be referenced in a zone
+       statement in a named.conf file.
+
+SEE ALSO
+       dnssec-keygen(8), BIND 9 Administrator Reference Manual, RFC 2535.
+
+AUTHOR
+       Internet Systems Consortium
+
+COPYRIGHT
+       Copyright (C) 2004-2007 Internet Systems Consortium, Inc. ("ISC")
+       Copyright (C) 2000-2003 Internet Software Consortium.
+
+
+

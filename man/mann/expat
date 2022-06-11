@@ -1,0 +1,624 @@
+expat(n)                                                              expat(n)
+
+
+
+______________________________________________________________________________
+
+NAME
+       expat - Creates an instance of an expat parser object
+
+SYNOPSIS
+       package require tdom
+
+       expat ?parsername? ?-namespace? ?arg arg ..
+
+       xml::parser ?parsername? ?-namespace? ?arg arg ..
+_________________________________________________________________
+
+DESCRIPTION
+       The  parser  created  with  expat or xml::parser (which is just another
+       name for the same command in an own namespace) are able  to  parse  any
+       kind  of  well-formed  XML. The parsers are stream oriented XML parser.
+       This means that you register handler scripts with the parser  prior  to
+       starting  the  parse.  These handler scripts are called when the parser
+       discovers the associated structures in the document  being  parsed.   A
+       start  tag  is  an  example of the kind of structures for which you may
+       register a handler script.
+
+       The parsers do not validate the XML document. They do parse the  inter-
+       nal  DTD  and,  at  request, external DTD and external entities, if you
+       resolve the identifier of the external entities with the -externalenti-
+       tycommand script (see there).
+
+       Additionly,  the  Tcl  extension code that implements this command pro-
+       vides an API for adding C level coded handlers. Up to now, there exists
+       the  parser extension command "tdom". The handler set installed by this
+       extension build an in memory "tDOM" DOM tree, while the parser is pars-
+       ing the input.
+
+       It  is  possible  to  register an arbitrary amount of different handler
+       scripts and C level handlers for most  of  the  events.  If  the  event
+       occurs, they are called in turn.
+
+COMMAND OPTIONS
+       -namespace
+
+              Enables namespace parsing. You must use this option while creat-
+              ing the parser with the expat or xml::parser command. You  can't
+              enable  (nor disable) namespace parsing with <parserobj> config-
+              ure ....
+
+       -final  boolean
+
+              This option indicates whether the document data  next  presented
+              to  the  parse method is the final part of the document. A value
+              of "0" indicates that more data is  expected.  A  value  of  "1"
+              indicates that no more is expected.  The default value is "1".
+
+              If  this  option  is  set to "0" then the parser will not report
+              certain errors if the XML data is not well-formed  upon  end  of
+              input, such as unclosed or unbalanced start or end tags. Instead
+              some data may be saved by the parser until the next call to  the
+              parse method, thus delaying the reporting of some of the data.
+
+              If  this option is set to "1" then documents which are not well-
+              formed upon end of input will generate an error.
+
+       -baseurl  url
+
+              Reports the base url of the document to the parser.
+
+       -elementstartcommand  script
+
+              Specifies a Tcl command to associate with the start  tag  of  an
+              element.  The actual command consists of this option followed by
+              at least two arguments: the element type name and the  attribute
+              list.
+
+              The attribute list is a Tcl list consisting of name/value pairs,
+              suitable for passing to the array set Tcl command.
+
+              Example:
+
+
+                     proc HandleStart {name attlist} {
+                         puts stderr "Element start ==> $name has attributes $attlist"
+                     }
+
+                     $parser configure -elementstartcommand HandleStart
+
+                     $parser parse {<test id="123"></test>}
+
+
+              This would result in the following command being invoked:
+
+
+                     HandleStart text {id 123}
+
+       -elementendcommand  script
+
+              Specifies a Tcl command to associate with the end tag of an ele-
+              ment.  The actual command consists of this option followed by at
+              least one argument: the element type name. In addition,  if  the
+              -reportempty  option is set then the command may be invoked with
+              the -empty configuration option to indicate  whether  it  is  an
+              empty  element.  See  the description of the -reportempty option
+              for an example.
+
+              Example:
+
+
+                     proc HandleEnd {name} {
+                         puts stderr "Element end ==> $name"
+                     }
+
+                     $parser configure -elementendcommand HandleEnd
+
+                     $parser parse {<test id="123"></test>}
+
+
+              This would result in the following command being invoked:
+
+
+
+                     HandleEnd test
+
+
+       -characterdatacommand  script
+
+              Specifies a Tcl command to associate with character data in  the
+              document,  ie.  text. The actual command consists of this option
+              followed by one argument: the text.
+
+              It is not guaranteed that character data will be passed  to  the
+              application  in  a  single  call  to  this command. That is, the
+              application should be prepared to receive  multiple  invocations
+              of  this  callback with no intervening callbacks from other fea-
+              tures.
+
+              Example:
+
+
+
+                     proc HandleText {data} {
+                         puts stderr "Character data ==> $data"
+                     }
+
+                     $parser configure -characterdatacommand HandleText
+
+                     $parser parse {<test>this is a test document</test>}
+
+
+              This would result in the following command being invoked:
+
+
+
+                     HandleText {this is a test document}
+
+       -processinginstructioncommand  script
+
+              Specifies a Tcl command to associate  with  processing  instruc-
+              tions  in  the  document.  The  actual  command consists of this
+              option followed by two arguments: the PI target and the PI data.
+
+              Example:
+
+
+
+                     proc HandlePI {target data} {
+                         puts stderr "Processing instruction ==> $target $data"
+                     }
+
+                     $parser configure -processinginstructioncommand HandlePI
+
+                     $parser parse {<test><?special this is a processing instruction?></test>}
+
+
+              This would result in the following command being invoked:
+
+
+
+
+                     HandlePI special {this is a processing instruction}
+
+
+        -notationdeclcommand  script
+
+              Specifies  a  Tcl command to associate with notation declaration
+              in the document. The actual command consists of this option fol-
+              lowed  by four arguments: the notation name, the base uri of the
+              document (this means, whatever was set by the -baseurl  option),
+              the  system  identifier  and the public identifier. The notation
+              name is never empty, the other arguments may be.
+
+        -externalentitycommand  script
+
+              Specifies a Tcl command to associate with references to external
+              entities  in  the  document. The actual command consists of this
+              option followed by three arguments: the  base  uri,  the  system
+              identifier  of  the  entity  and  the  public  identifier of the
+              entity. The base uri and the public identifier may be the  empty
+              list.
+
+              This handler script has to return a tcl list consisting of three
+              elements. The first element of this list signals, how the exter-
+              nal  entity  is  returned  to  the processor. At the moment, the
+              three allowed types are "string", "channel" and "filename".  The
+              second  element of the list has to be the (absolute) base URI of
+              the external entity to be parsed.  The third element of the list
+              are  data,  either  the  already  read  data out of the external
+              entity as string in the case of type "string", or the name of  a
+              tcl  channel,  in the case of type "channel", or the path to the
+              external entity to be read in case of  type  "filename".  Behind
+              the  scene,  the  external entity referenced by the returned Tcl
+              channel, string or file name will be parsed with an expat exter-
+              nal entity parser with the same handler sets as the main parser.
+              If parsing of the external entity fails, the  whole  parsing  is
+              stopped  with  an  error message. If a Tcl command registered as
+              externalentitycommand isn't able to resolve an  external  entity
+              it  is allowed to return TCL_CONTINUE. In this case, the wrapper
+              give the next registered  externalentitycommand  a  try.  If  no
+              externalentitycommand  is  able  to  handle  the external entity
+              parsing stops with an error.
+
+              Example:
+
+
+
+                     proc externalEntityRefHandler {base systemId publicId} {
+                         if {![regexp {^[a-zA-Z]+:/} $systemId]}  {
+                             regsub {^[a-zA-Z]+:} $base {} base
+                             set basedir [file dirname $base]
+                             set systemId "[set basedir]/[set systemId]"
+                         } else {
+                             regsub {^[a-zA-Z]+:} $systemId systemId
+                         }
+                         if {[catch {set fd [open $systemId]}]} {
+                             return -code error \
+                                     -errorinfo "Failed to open external entity $systemId"
+                         }
+                         return [list channel $systemId $fd]
+                     }
+
+                     set parser [expat -externalentitycommand externalEntityRefHandler \
+                                       -baseurl "file:///local/doc/doc.xml" \
+                                       -paramentityparsing notstandalone]
+                     $parser parse {<?xml version='1.0'?>
+                     <!DOCTYPE test SYSTEM "test.dtd">
+                     <test/>}
+
+
+              This would result in the following command being invoked:
+
+
+
+
+                     externalEntityRefHandler file:///local/doc/doc.xml test.dtd {}
+
+
+              External entities are only tried to  resolve  via  this  handler
+              script,  if  necessary.  This means, external parameter entities
+              triggers this handler only, if -paramentityparsing is used  with
+              argument  "always"  or if -paramentityparsing is used with argu-
+              ment "notstandalone" and the document  isn't  marked  as  stand-
+              alone.
+
+        -unknownencodingcommand  script
+
+              Not implemented at Tcl level.
+
+       -startnamespacedeclcommand  script
+
+              Specifies  a Tcl command to associate with start scope of names-
+              pace declarations in the document. The actual  command  consists
+              of  this  option followed by two arguments: the namespace prefix
+              and the namespace URI. For an xmlns attribute,  prefix  will  be
+              the  empty  list.   For  an  xmlns="" attribute, uri will be the
+              empty list. The call to the start and end element handlers occur
+              between  the  calls  to  the start and end namespace declaration
+              handlers.
+
+        -endnamespacedeclcommand  script
+
+              Specifies a Tcl command to associate with end scope of namespace
+              declarations  in  the  document.  The actual command consists of
+              this option followed by the namespace  prefix  as  argument.  In
+              case  of  an xmlns attribute, prefix will be the empty list. The
+              call to the start and end element  handlers  occur  between  the
+              calls to the start and end namespace declaration handlers.
+
+        -commentcommand  script
+
+              Specifies  a Tcl command to associate with comments in the docu-
+              ment. The actual command consists of this option followed by one
+              argument: the comment data.
+
+              Example:
+
+
+
+
+                     proc HandleComment {data} {
+                         puts stderr "Comment ==> $data"
+                     }
+
+                     $parser configure -commentcommand HandleComment
+
+                     $parser parse {<test><!-- this is <obviously> a comment --></test>}
+
+
+              This would result in the following command being invoked:
+
+
+
+
+                     HandleComment { this is <obviously> a comment }
+
+
+        -notstandalonecommand  script
+
+              This  Tcl  command  is called, if the document is not standalone
+              (it has an external subset or a reference to a parameter entity,
+              but  does not have standalone="yes"). It is called with no addi-
+              tional arguments.
+
+        -startcdatasectioncommand  script
+
+              Specifies a Tcl command to associate with the start of  a  CDATA
+              section.  It is called with no additional arguments.
+
+        -endcdatasectioncommand  script
+
+              Specifies  a  Tcl  command  to associate with the end of a CDATA
+              section.  It is called with no additional arguments.
+
+        -elementdeclcommand  script
+
+              Specifies a Tcl command to associate with element  declarations.
+              The actual command consists of this option followed by two argu-
+              ments: the name of the element and the content model.  The  con-
+              tent  model  arg  is a tcl list of four elements. The first list
+              element specifies the type of the XML element; the six different
+              possible   types  are  reported  as  "MIXED",  "NAME",  "EMPTY",
+              "CHOICE", "SEQ" or "ANY". The second list  element  reports  the
+              quantifier  to the content model in XML Syntax ("?", "*" or "+")
+              or is the empty list. If the type is "MIXED", then  the  quanti-
+              fier  will  be  "{}", indicating an PCDATA only element, or "*",
+              with the allowed elements to intermix with PCDATA as tcl list as
+              the  fourth  argument.  If  the  type is "NAME", the name is the
+              third arg; otherwise the third argument is the  empty  list.  If
+              the type is "CHOICE" or "SEQ" the fourth argument will contain a
+              list of content models build like this one. The "EMPTY",  "ANY",
+              and "MIXED" types will only occur at top level.
+
+              Examples:
+
+
+
+
+                     proc elDeclHandler {name content} {
+                          puts "$name $content"
+                     }
+
+                     set parser [expat -elementdeclcommand elDeclHandler]
+                     $parser parse {<?xml version='1.0'?>
+                     <!DOCTYPE test [
+                     <!ELEMENT test (#PCDATA)>
+                     ]>
+                     <test>foo</test>}
+
+
+              This would result in the following command being invoked:
+
+
+
+
+                     test {MIXED {} {} {}}
+
+                     $parser reset
+                     $parser parse {<?xml version='1.0'?>
+                     <!DOCTYPE test [
+                     <!ELEMENT test (a|b)>
+                     ]>
+                     <test><a/></test>}
+
+
+              This would result in the following command being invoked:
+
+
+
+
+                     elDeclHandler test {CHOICE {} {} {{NAME {} a {}} {NAME {} b {}}}}
+
+
+        -attlistdeclcommand  script
+
+              Specifies  a Tcl command to associate with attlist declarations.
+              The actual command consists of  this  option  followed  by  five
+              arguments.  The Attlist declaration handler is called for *each*
+              attribute.  So  a  single  Attlist  declaration  with   multiple
+              attributes  declared  will  generate multiple calls to this han-
+              dler. The arguments are the element name this attribute  belongs
+              to,  the  name  of the attribute, the type of the attribute, the
+              default value (may be the empty list) and a  required  flag.  If
+              this  flag  is true and the default value is not the empty list,
+              then this is a "#FIXED" default.
+
+              Example:
+
+
+
+
+                     proc attlistHandler {elname name type default isRequired} {
+                         puts "$elname $name $type $default $isRequired"
+                     }
+
+                     set parser [expat -attlistdeclcommand attlistHandler]
+                     $parser parse {<?xml version='1.0'?>
+                     <!DOCTYPE test [
+                     <!ELEMENT test EMPTY>
+                     <!ATTLIST test
+                               id      ID      #REQUIRED
+                               name    CDATA   #IMPLIED>
+                     ]>
+                     <test/>}
+
+
+              This would result in the following commands being invoked:
+
+
+
+
+                     attlistHandler test id ID {} 1
+                     attlistHandler test name CDATA {} 0
+
+
+        -startdoctypedeclcommand  script
+
+              Specifies a Tcl command to associate with the start of the  DOC-
+              TYPE  declaration.  This  command  is  called  before any DTD or
+              internal subset is parsed.  The actual command consists of  this
+              option  followed by four arguments: the doctype name, the system
+              identifier, the public identifier and a boolean, that  shows  if
+              the DOCTYPE has an internal subset.
+
+        -enddoctypedeclcommand  script
+
+              Specifies a Tcl command to associate with the end of the DOCTYPE
+              declaration. This command is called after processing any  exter-
+              nal subset.  It is called with no additional arguments.
+
+        -paramentityparsing  never|notstandalone|always
+
+              "never"  disables  expansion  of  parameter  entities,  "always"
+              expands always and "notstandalone" only, if the  document  isn't
+              "standalone='no'". The default ist "never"
+
+        -entitydeclcommand  script
+
+              Specifies  a  Tcl  command to associate with any entity declara-
+              tion. The actual command consists of  this  option  followed  by
+              seven  arguments: the entity name, a boolean identifying parame-
+              ter entities, the value of the entity, the base uri, the  system
+              identifier, the public identifier and the notation name. Accord-
+              ing to the type of entity declaration some of this arguments may
+              be the empty list.
+
+        -ignorewhitecdata  boolean
+
+              If  this  flag is set, element content which contain only white-
+              spaces isn't reported with the -characterdatacommand.
+
+        -ignorewhitespace  boolean
+              Another name for  -ignorewhitecdata; see there.
+
+        -handlerset  name
+
+              This option sets the Tcl handler set  scope  for  the  configure
+              options. Any option value pair following this option in the same
+              call to the parser are modifying the named Tcl handler  set.  If
+              you  don't  use  this  option, you are modifying the default Tcl
+              handler set, named "default".
+
+        -noexpand  boolean
+
+              Normally, the parser will try to expand references  to  entities
+              defined  in the internal subset. If this option is set to a true
+              value this entities are not expanded, but reported  literal  via
+              the default handler. Warning: If you set this option to true and
+              doesn't install a  default  handler  (with  the  -defaultcommand
+              option)  for  every handler set of the parser all internal enti-
+              ties are silent lost for the handler sets without a default han-
+              dler.
+
+       -useForeignDTD  <boolen>
+              If  <boolen>  is true and the document does not have an external
+              subset, the parser will call the  -externalentitycommand  script
+              with  empty values for the systemId and publicID arguments. This
+              option must be set, before the first piece of  data  is  parsed.
+              Setting  this  option,  after  the  parsing  has  started has no
+              effect. The default is not to use a foreign DTD. The default  is
+              restored,  after  reseting  the  parser.  Pleace  notice, that a
+              -paramentityparsing value of "never" (which is the default) sup-
+              presses  any  call  to the -externalentitycommand script. Pleace
+              notice, that, if the document also doesn't have an internal sub-
+              set,   the  -startdoctypedeclcommand  and  enddoctypedeclcommand
+              scripts, if set, are not called.
+
+ COMMAND METHODS
+       parser configure option value ?option value?
+
+
+              Sets configuration options for the parser. Every command option,
+              except -namespace can be set or modified with this method.
+
+       parser cget ?-handlerset name? option
+
+
+              Return the current configuration value option for the parser.
+
+              If  the  -handlerset  option  is used, the configuration for the
+              named handler set is returned.
+
+       parser free
+
+
+              Deletes the parser and the parser command.
+
+       parser   get   -specifiedattributecount|-idattributeindex|-currentbyte-
+       count|-currentlinenumber|-currentcolumnnumber|-currentbyteindex
+
+
+              -specifiedattributecount
+
+                     Returns the number of the attribute/value pairs passed in
+                     last  call to the elementstartcommand that were specified
+                     in   the   start-tag   rather   than   defaulted.    Each
+                     attribute/value  pair  counts as 2; thus this corresponds
+                     to an index into the attribute list passed  to  the  ele-
+                     mentstartcommand.
+
+              -idattributeindex
+
+                     Returns  the index of the ID attribute passed in the last
+                     call to XML_StartElementHandler, or -1 if there is no  ID
+                     attribute.   Each  attribute/value pair counts as 2; thus
+                     this corresponds to an index  into  the  attributes  list
+                     passed to the elementstartcommand.
+
+              -currentbytecount
+
+                     Return the number of bytes in the current event.  Returns
+                     0 if the event is in an internal entity.
+
+              -currentlinenumber
+
+                     Returns the line number of the current parse location.
+
+              -currentcolumnnumber
+
+                     Returns the column number of the current parse  location.
+
+              -currentbyteindex
+
+                     Returns the byte index of the current parse location.
+
+              Only one value may be requested at a time.
+
+       parser parse data
+
+
+              Parses  the  XML string data. The event callback scripts will be
+              called, as there triggering events happens.
+
+       parser parsechannel channelID
+
+
+              Reads the XML data out of the tcl channel channelID (starting at
+              the  current access position, without any seek) up to the end of
+              file condition and parses that data.  The  channel  encoding  is
+              respected. Use the helper proc tDOM::xmlOpenFile out of the tDOM
+              script library to open a file, if you want to use this method.
+
+       parser parsefile filename
+
+
+              Reads the XML data directly out of the file  with  the  filename
+              filename  and parses that data. This is done with low level file
+              operations. The XML data must be in ISO-8859-1, UTF-8 or  UTF-16
+              encoding.  If  applicable, this is the fastest way, to parse XML
+              data.
+
+       parser reset
+
+
+              Resets the parser in preparation for parsing another document.
+
+Callback Command Return Codes
+       A script invoked for any of the parser callback commands, such as -ele-
+       mentstartcommand,  -elementendcommand,  etc,  may  return an error code
+       other than "ok" or  "error".  All  callbacks  may  in  addition  return
+       "break" or "continue".
+
+       If  a  callback script returns an "error" error code then processing of
+       the document is terminated and the error is  propagated  in  the  usual
+       fashion.
+
+       If a callback script returns a "break" error code then all further pro-
+       cessing of every handler script out of this Tcl  handler  set  is  sup-
+       pressed for the further parsing. This does not influence any other han-
+       dler set.
+
+       If a callback script returns a "continue" error code then processing of
+       the  current element, and its children, ceases for every handler script
+       out of this Tcl handler set and  processing  continues  with  the  next
+       (sibling) element. This does not influence any other handler set.
+
+SEE ALSO
+       expatapi, tdom
+
+KEYWORDS
+       SAX
+
+
+

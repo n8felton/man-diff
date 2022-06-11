@@ -1,0 +1,59 @@
+cupsenable(8)                     Apple Inc.                     cupsenable(8)
+
+
+
+NAME
+       cupsdisable, cupsenable - stop/start printers and classes
+
+SYNOPSIS
+       cupsdisable [ -E ] [-U username ] [ -c ] [ -h server[:port] ] [ -r rea-
+       son ] destination(s)
+       cupsenable [ -E ] [-U username ] [ -c ] [ -h server[:port]  ]  destina-
+       tion(s)
+
+DESCRIPTION
+       cupsenable starts the named printers or classes.
+
+       cupsdisable stops the named printers or classes.  The following options
+       may be used:
+
+       -E
+            Forces encryption of the connection to the server.
+
+       -U username
+            Uses the specified username when connecting to the server.
+
+       -c
+            Cancels all jobs on the named destination.
+
+       -h server[:port]
+            Uses the specified server and port.
+
+       -r "reason"
+            Sets the message associated with the stopped state. If  no  reason
+            is specified then the message is set to "Reason Unknown".
+
+COMPATIBILITY
+       Unlike  the System V printing system, CUPS allows printer names to con-
+       tain any printable character except SPACE, TAB,  "/",  or  "#".   Also,
+       printer and class names are not case-sensitive.
+
+       The  System  V  versions of these commands are disable and enable. They
+       have been renamed to avoid conflicts with the bash(1) build-in  command
+       of the same name.
+
+       The  CUPS versions of disable and enable may ask the user for an access
+       password depending on the printing system configuration.  This  differs
+       from the System V versions which require the root user to execute these
+       commands.
+
+SEE ALSO
+       accept(8), cancel(1), lp(1), lpadmin(8), lpstat(1),
+       http://localhost:631/help
+
+COPYRIGHT
+       Copyright 2007 by Apple Inc.
+
+
+
+

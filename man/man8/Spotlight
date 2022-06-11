@@ -1,0 +1,18 @@
+Spotlight(8)              BSD System Manager's Manual             Spotlight(8)
+
+NAME
+     Spotlight -- Spotlight GUI process
+
+SYNOPSIS
+     Spotlight
+
+DESCRIPTION
+     Spotlight is the process that manages the Spotlight menu and results win-
+     dow.
+
+     There are no configurations to Spotlight, and users should not run
+     manually.
+
+SEE ALSO
+     mdfind(1), mdls(1), mdutil(1)
+

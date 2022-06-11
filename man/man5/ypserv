@@ -1,0 +1,101 @@
+YPSERV.ACL(5)               BSD File Formats Manual              YPSERV.ACL(5)
+
+NAME
+     ypserv.acl -- ypserv(8) configuration file
+
+DESCRIPTION
+     The ypserv.acl file controls which hosts can connect to the YP server.
+
+     The format is more complex than the format for securenet(5).  The first
+     two verbs on each line controls if the line will allow or deny access for
+     a host, network (net) or all hosts.
+
+     The YP server reads the configuration file and build a list in memory.
+     This list is processed from the beginning for every incomming request. As
+     soon a match is found in the list the search terminates and it returns
+     success or failure depending on allow or deny.  If no match was found in
+     the list success is returned.
+
+     If access is denied every call will cause a no such domain error for the
+     caller.
+
+     Don't forget to allow localhost access if you want the machine running
+     ypserv access it too.
+
+     There is no default name for this file. Start ypserv with a -a filename
+     to read a file with this format.
+
+     The following different syntax can be used:
+
+     < allow|deny > host < hostname|ip-address >
+
+     If hostname has more than one ip address then all will be added to the
+     list.
+
+     < allow|deny > net < netname|netnumber > [netmask <netname|netnumber>]
+
+     If netmask part of the command isn't given then the netmask will be
+     assumed to be a class A, B or C net depending on the net number.
+
+     < allow|deny > all
+
+     A line containing one of these commands will always match any host.
+
+EXAMPLES
+     A configuration file might appear as follows:
+
+     # This is an example of an access control file to be used by ypserv.
+     #
+     # This file is parsed line by line. First match will terminate the check
+     # of the caller.
+     #
+
+     ###########################################################################
+     # This is the commands that will match a single host
+     #
+     #       allow host <hostname|ip-address>
+     #       deny host <hostname|ip-address>
+     #
+     # To process hostname gethostbyname is called. If the hostname has
+     # multiple ip-addresses all will be added (I hope). ip-address
+     # processed by inet_aton.
+     allow host localhost
+     deny host jodie
+
+     ###########################################################################
+     # This is the commands that will match a network
+     #
+     #       allow net <netname|netnumber> [netmask <netname|netnumber>]
+     #       deny net <netname|netnumber> [netmask <netname|netnumber>]
+     #
+     # To process netname getnetbyname is called, and inet_aton is used for
+     # netnumber. inet_aton both access numbers as 255.255.255.0 and 0xffffff00.
+     #
+     # If netmask isn't given the parser will assume netmask from the first bits
+     # of the network number. So if the network is subneted the you have to add
+     # the netmask. In my case I've got the network 139.58.253.0 at home so too
+     # allow any of my computers to talk with the server I need the following
+     # line
+     #
+     allow net mojathome netmask 255.255.255.0
+
+     ###########################################################################
+     # At last we have a command that will match any caller:
+     #
+     #       allow all
+     #       deny all
+     #
+
+     # reject all connections
+     deny all
+
+
+FILES
+     /var/yp/ypserv.acl  A ypserv(8) configuration file.
+
+SEE ALSO
+     yp(8), ypserv(8), securenet(5)
+
+AUTHOR
+     Mats O Jansson <moj@stacken.kth.se>
+

@@ -1,0 +1,32 @@
+cups-deviced(8)                   Apple Inc.                   cups-deviced(8)
+
+
+
+NAME
+       cups-deviced - cups device daemon
+
+SYNOPSIS
+       cups-deviced request-id limit user-id options
+
+DESCRIPTION
+       cups-deviced polls the backends in /usr/libexec/cups/backend for a list
+       of available devices.  It is run by cupsd(8) in response to a CUPS-Get-
+       Devices  request.  The  output  format  is an IPP response message. The
+       request-id argument is the request ID from the  original  IPP  request,
+       typically  1.  The Ilimit argument is the limit value from the original
+       IPP request - 0 means no limit. The user-id argument is the requesting-
+       user-name  value  from  the original IPP request.  Finally, the options
+       argument  is  a  space-delimited  list   of   attributes   ("name=value
+       name=value  ...") that were passed in with the request. Currently cups-
+       deviced looks for the requested-attributes attribute  and  tailors  the
+       output accordingly.
+
+SEE ALSO
+       backend(7), cupsd(8), cupsd.conf(5),
+       http://localhost:631/help
+
+COPYRIGHT
+       Copyright 2007 by Apple Inc.
+
+
+

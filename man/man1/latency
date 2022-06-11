@@ -1,0 +1,74 @@
+LATENCY(1)                BSD General Commands Manual               LATENCY(1)
+
+NAME
+     latency -- monitors scheduling and interrupt latency
+
+SYNOPSIS
+     latency [-rt] [-c code_file] [-l log_file] [-st threshold]
+             [-it threshold] [-s sleep_in_usecs] [-d decrementer_in_usecs]
+             [-n kernel]
+
+DESCRIPTION
+     The latency utility provides scheduling and interrupt-latency statistics.
+     Due to the kernel tracing facility it uses to operate, the command
+     requires root privileges.
+
+     The arguments are as follows:
+
+     -c code_file
+             When the -c option is specified, it takes a path to a code file
+             that contains the mappings for the system calls.  This option
+             overrides the default location of the system call code file,
+             which is found in /usr/share/misc/trace.codes.
+
+     -d decrementer_in_usecs
+             Sets the decrementer, using a value expressed in microseconds.
+             On exit, the decrementer is set back to the system default value.
+
+     -it threshold
+             Set the interrupt latency threshold, expressed in microseconds.
+             If the latency exceeds this value, and a log file has been speci-
+             fied, a record of what occurred during this time is recorded.
+
+     -l log_file
+             Specifies a log file that is written to when either the interrupt
+             or scheduling latency is exceeded.
+
+     -n kernel
+             By default, latency acts on the default /mach_kernel.  This
+             option allows you to specify an alternate booted kernel.
+
+     -rt     Sets the real-time scheduling policy.  Default policy is time-
+             share.
+
+     -s sleep_in_usecs
+             Sets the timer, taking an argument expressed in microseconds.
+             The default timer is set to 1000 microseconds.
+
+     -st threshold
+             Set the scheduler latency threshold in microseconds.  If latency
+             exceeds this, and a log file has been specified, a record of what
+             occurred during this time is recorded.
+
+     The data columns displayed are as follows:
+
+     SCHEDULER                 The number of context switches that fall within
+                               the described delay.
+
+     INTERRUPTS                The number of interrupts that fall within the
+                               described delay.
+
+     The latency utility is also SIGWINCH savvy, so adjusting your window
+     geometry will change the list of delay values displayed.
+
+SAMPLE USAGE
+     latency -rt -st 20000 -it 1000 -l /var/tmp/latency.log
+
+     The latency utility will set the realtime scheduling policy.  The thresh-
+     old for the scheduler is set to 20000 microseconds.  The threshold for
+     interrupts is set to 1000 microseconds.  Latencies that exceed these
+     thresholds will be logged in /var/tmp/latency.log.
+
+SEE ALSO
+     fs_usage(1), sc_usage(1), top(1)
+

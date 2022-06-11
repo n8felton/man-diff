@@ -1,0 +1,192 @@
+ACCELERATE(7)        BSD Miscellaneous Information Manual        ACCELERATE(7)
+
+NAME
+     Accelerate vecLib vImage AltiVec vMathLib BLAS LAPACK vDSP vBigNum
+     vBasicOps Vector Computation Velocity Engine Extended Math Library --
+     This man page introduces the vector instruction set extensions to the
+     PowerPC and Intel architectures known as AltiVec and SSE respectively,
+     the Accelerate umbrella framework, its constituent libraries and program-
+     ming support in Mac OS X.
+
+DESCRIPTION
+     The PowerPC and Intel vector instruction set architectures are based on a
+     separate SIMD style execution unit with inherently high data parallelism.
+     This high degree of parallelism is enhanced with additional parallelism
+     through superscalar dispatch to multiple execution units and execution
+     unit pipelines. Most vector instructions are designed to be fully
+     pipelined with pipeline latencies no greater than corresponding opera-
+     tions in the scalar units.  Parallelism with the integer and floating-
+     point instructions is enhanced for AltiVec due to relatively few data
+     entanglements between the scalar units and the vector unit.
+
+Highlights
+     Fixed vector length of 128-bits (16 8-bit elements, 8 16-bit elements, or
+     4 32-bit elements.  SSE provides 64-bit integer and IEEE-754 floating
+     point support as well.
+     Signed and unsigned 8-, 16-, and 32-bit integers, and IEEE floating point
+     values.
+     Saturation arithmetic.
+     32-register namespace (AltiVec) / 8- or 16-register namespace for SSE.
+     No mode switching that would increase the overhead of using the instruc-
+     tions.
+     4 operand, non-destructive instructions (AltiVec) / 2+1 operand opera-
+     tions (SSE)
+     Operations selected based on utility to digital signal processing algo-
+     rithms (including 2D and 3D image processing).
+
+Who benefits?
+     Many of the services provided by MacOS X (e.g., Quartz, QuickTime,
+     OpenGL, CoreAudio) already exploit the vector acceleration available on
+     Macintosh computers.  All MacOS X users enjoy these benefits.
+
+     Many applications that run on MacOS X (e.g., iTunes, iMovie) have already
+     been coded to use the vector libraries and vector instruction set.  Users
+     of these applications enjoy the benefits of vector acceleration.
+
+     Software developers who would like their code to use the vector facility
+     on Macintosh computers may choose to:
+     (1) Make explicit calls to entry points in the Accelerate framework.
+     Apple has optimized many of these routines for the vector engine (see the
+     framework discussion that follows.)
+     and/or (2) Program directly to the vector unit using the "Programming
+     Interface Model."
+
+     Note that a programmer must take explicit actions (as above) to engage
+     the vector engine, otherwise it remains idle.
+
+Where to go from here:
+     Browse a comprehensive introduction to vector programming and the Accel-
+     erate framework:
+     http://developer.apple.com/hardware/ve
+     (includes pages and headers to enable rapid AltiVec <-> SSE translation.)
+
+     Examine the prototypes for functions you can invoke:
+
+     /System/Library/Frameworks/Accelerate.framework/Frameworks/*/Headers/*.h
+
+     Include the interfaces in the code you write:
+
+     #include   <Accelerate/Accelerate.h>
+
+     Compile and link your code:
+
+     AltiVec:  cc -faltivec -framework Accelerate file.c
+     SSE:      cc  -framework Accelerate file.c (for SSE3 pass -msse3, for SSSE3 pass -mssse3)
+
+Accelerate Umbrella Framework
+     The Accelerate umbrella framework encompasses all the libraries provided
+     with MacOS X that Apple has optimized for high performance vector and
+     numerical computing.  Subsequent sections describe the sub-frameworks
+     that comprise the Accelerate framework.
+
+vImage Framework
+     A collection of basic image processing filters such as Convolution, Mor-
+     phological, and Geometric transforms. Alpha compositing and histogram
+     operations are also supported, in addition to various conversion routines
+     between different image formats.
+
+vecLib Framework
+     The vecLib framework is a collection of facilities covering digital sig-
+     nal processing (vDSP), matrix computations (BLAS), numerical linear alge-
+     bra (LAPACK), mathematical routines (vMathLib), basic operations (vBasi-
+     cOps) and large number calculations (vBigNum).
+
+     The vDSP, BLAS and LAPACK components of vecLib run on the scalar and vec-
+     tor domain.  vecLib automatically detects the presence of the vector
+     engine and uses it.  vMathLib mirrors the existing scalar libm on the
+     vector engine and vBasicOps is meant to complement the processor by pro-
+     viding more functionality such as a 32x32 vector integer multiply.
+     vBigNum, vBasicOps and vMathLib run only on the vector engine.
+
+     There is also another matrix computation package in vecLib called vBasi-
+     cOps.  It works somewhat in the same spirit as the BLAS.  It is best
+     suited for small problems when the alignment is known ahead of time to
+     avoid extra overhead.  In most cases, the use of BLAS instead of vec-
+     torOps is recommended.
+
+vDSP
+     The vDSP Library provides mathematical functions for applications such as
+     speech, sound, audio, and video processing, diagnostic medical imaging,
+     radar signal processing, seismic analysis, and scientific data process-
+     ing.
+
+     The vDSP functions operate on real and complex data types. The functions
+     include data type conversions, fast Fourier transforms (FFTs), and vec-
+     tor-to-vector and vector-to-scalar operations.
+
+     The vDSP functions have been implemented in two ways: as vectorized code,
+     using the vector unit on the PowerPC and Intel microprocessors, and as
+     scalar code, which runs on all machines. Vector code often has special
+     alignment restrictions. If your data is not properly aligned it is common
+     for vDSP to use the scalar path as a fallback. For best results, align
+     your data to a multiple of 16 bytes.  (Malloc naturally aligns memory
+     blocks that it allocates to 16 bytes on MacOS X.)
+
+     It is noteworthy that vDSP's FFTs are one of the fastest implementations
+     of the Discrete Fourier Transforms available anywhere.
+
+     The vDSP Library itself is included as part of vecLib in Mac OS X.  The
+     header file, vDSP.h, defines data types used by the vDSP functions and
+     symbols accepted as flag arguments to vDSP functions.
+
+     vDSP functions are available in single and double precision.  Note that
+     only the single precision is vectorized on PowerPC due to the underlying
+     instruction set architecture of the vector engine on board G4 and G5 pro-
+     cessors. The Intel vector unit supports both single and double precision,
+     so double precision operations can be vectorized on Intel processors.
+
+     For more information about vDSP download the instructions and sample code
+     from <http://developer.apple.com/hardware/ve/download_summary.html>
+
+BLAS
+     The Basic Linear Algebra Subroutines (BLAS) are high quality routines for
+     performing basic vector and matrix operations. Level 1 BLAS consists of
+     vector-vector operations, Level 2 BLAS consists of matrix-vector opera-
+     tions, and Level 3 BLAS have matrix-matrix operations.  The efficiency,
+     portability, and the wide adoption of the BLAS have made them commonplace
+     in the development of high quality linear algebra software such as LAPACK
+     and in  other technologies requiring fast vector and matrix calculations.
+     All the industry standard FORTRAN BLAS entry points and the standard C
+     BLAS entry points are exported from the vecLib framework (the latter are
+     commonly denoted the legacy C BLAS.)  For more information refer to
+     <http://www.netlib.org/blas/faq.html>
+
+LAPACK
+     LAPACK provides routines for solving systems of simultaneous linear equa-
+     tions, least-squares solutions of linear systems of equations, eigenvalue
+     problems, and singular value problems.  The associated matrix factoriza-
+     tions (LU, Cholesky, QR, SVD, Schur, generalized Schur) are also pro-
+     vided, as are related computations such as reordering of the Schur fac-
+     torizations and estimating condition numbers. Dense and banded matrices
+     are handled, but not general sparse matrices. In all areas, similar func-
+     tionality is provided for real and complex matrices, in both single and
+     double precision.  LAPACK in vecLib makes full use of the optimized BLAS
+     and fully benefits from their performance.  All the industry standard
+     FORTRAN LAPACK entry points are exported from the vecLib framework.  C
+     programs may make calls to the FORTRAN entry points using the prototypes
+     set out in "/System/Library/Frameworks/vecLib.framework/Headers/cla-
+     pack.h".
+
+     For more information refer to <http://www.netlib.org/lapack/index.html>.
+
+     BLAS and LAPACK follow fortran calling conventions (even from C). Users
+     must be aware that:
+
+     ALL arguments must be passed by reference.  This includes all scalar
+     arguments such as matrix dimension M and N, further note there is a dif-
+     ference in the memory arrangement of a two-dimensional array in Fortran
+     and C.
+
+     For more information refer to <http://www.netlib.org/clapack/readme>.
+
+vBasicOps
+     A collection of basic operations such as add, subtract, multiply and
+     divide that complement the vector processor's basic operations up to 128
+     bits.  Consult "/System/Library/Frameworks/vecLib.framework/Headers/vBa-
+     sicOps.h" for further information.
+
+vBigNum
+     Routines for large number calculations from 128 bits.  Consult "/Sys-
+     tem/Library/Frameworks/vecLib.framework/Headers/vBigNum.h" for further
+     information.
+

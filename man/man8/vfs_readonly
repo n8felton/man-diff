@@ -1,0 +1,55 @@
+VFS_READONLY(8)                                                VFS_READONLY(8)
+
+
+
+NAME
+       vfs_readonly - make a Samba share read only for a specified time period
+
+SYNOPSIS
+       vfs objects = readonly
+
+DESCRIPTION
+       This VFS module is part of the samba(7) suite.
+
+       The vfs_readonly VFS module marks a share as read only for all  clients
+       connecting within the configured time period. Clients connecting during
+       this time will be denied write access to all files in the share,  irre-
+       spective of ther actual access privileges.
+
+       This module is stackable.
+
+OPTIONS
+       readonly:period = BEGIN, END
+          Only  mark  the share as read only if the client connection was made
+          between the times marked by the BEGIN and END date  specifiers.  The
+          syntax  of these date specifiers is the same as that accepted by the
+          -d option of GNU date(1).
+
+EXAMPLES
+       Mark all shares read only:
+
+
+               [global]
+            vfs objects = readonly
+
+
+       Mark the [backup] share as read only during business hours:
+
+
+               [backup]
+            path = /readonly
+            vfs objects = readonly
+            readonly:period = readonly:period = "today 9:00","today 17:00"
+
+
+VERSION
+       This man page is correct for version 3.0.25 of the Samba suite.
+
+AUTHOR
+       The original Samba software  and  related  utilities  were  created  by
+       Andrew  Tridgell.  Samba  is now developed by the Samba Team as an Open
+       Source project similar to the way the Linux kernel is developed.
+
+
+
+

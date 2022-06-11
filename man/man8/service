@@ -1,0 +1,31 @@
+SERVICE(8)                BSD System Manager's Manual               SERVICE(8)
+
+NAME
+     service
+
+SYNOPSIS
+     service service command
+     service --list
+     service --test-if-configured-on service
+     service --test-if-available service
+
+DESCRIPTION
+     service is a simple utility to abstract the management of services pro-
+     vided by the system.  It can be used to start and stop services, as well
+     as to determine the status of services.
+
+OPTIONS
+     service command
+             Attempt to execute a given command for a given service. Cur-
+             rently, the available commands are 'start' and 'stop'.
+
+     --list  List all available services.
+
+     --test-if-configured-on service
+             Exit with status 0 if the service is currently enabled. Other-
+             wise, exit with status 1.
+
+     --test-if-available service
+             Exit with status 0 if the service's daemon exists on your system.
+             Otherwise, exit with status 1.
+

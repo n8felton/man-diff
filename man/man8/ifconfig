@@ -1,0 +1,382 @@
+IFCONFIG(8)               BSD System Manager's Manual              IFCONFIG(8)
+
+NAME
+     ifconfig -- configure network interface parameters
+
+SYNOPSIS
+     ifconfig [-L] [-m] interface [create] [address_family]
+              [address[/prefixlength] [dest_address]] [parameters]
+     ifconfig interface destroy
+     ifconfig -a [-L] [-d] [-m] [-u] [address_family]
+     ifconfig -l [-d] [-u] [address_family]
+     ifconfig [-L] [-b] [-d] [-m] [-u]
+     ifconfig interface vlan vlan-tag vlandev iface
+     ifconfig interface -vlandev iface
+     ifconfig interface bonddev iface
+     ifconfig interface -bonddev iface
+     ifconfig interface bondmode lacp | static
+
+DESCRIPTION
+     Ifconfig is used to assign an address to a network interface and/or con-
+     figure network interface parameters.  Ifconfig must be used at boot time
+     to define the network address of each interface present on a machine; it
+     may also be used at a later time to redefine an interface's address or
+     other operating parameters.
+
+     The following options are available:
+
+     address
+             For the DARPA-Internet family, the address is either a host name
+             present in the host name data base, hosts(5), or a DARPA Internet
+             address expressed in the Internet standard ``dot notation''.
+
+             It is also possible to use the CIDR notation (also known as the
+             slash notation) to include the netmask.  That is, one can specify
+             an address like 192.168.0.1/16.
+
+     address_family
+             Specify the address family which affects interpretation of the
+             remaining parameters.  Since an interface can receive transmis-
+             sions in differing protocols with different naming schemes, spec-
+             ifying the address family is recommended.  The address or proto-
+             col families currently supported are ``inet'', ``inet6'',
+
+     dest_address
+             Specify the address of the correspondent on the other end of a
+             point to point link.
+
+     interface
+             This parameter is a string of the form ``name unit'', for exam-
+             ple, ``en0''.
+
+     iface   This parameter has the same encoding as the interface parameter.
+
+     The following parameters may be set with ifconfig:
+
+     add     Another name for the alias parameter.  Introduced for compatibil-
+             ity with BSD/OS.
+
+     alias   Establish an additional network address for this interface.  This
+             is sometimes useful when changing network numbers, and one wishes
+             to accept packets addressed to the old interface.  If the address
+             is on the same subnet as the first network address for this
+             interface, a netmask of 0xffffffff has to be specified.
+
+     -alias  Remove the network address specified.  This would be used if you
+             incorrectly specified an alias, or it was no longer needed.  If
+             you have incorrectly set an NS address having the side effect of
+             specifying the host portion, removing all NS addresses will allow
+             you to respecify the host portion.
+
+     anycast
+             (Inet6 only.)  Specify that the address configured is an anycast
+             address.  Based on the current specification, only routers may
+             configure anycast addresses.  Anycast address will not be used as
+             source address of any of outgoing IPv6 packets.
+
+     arp     Enable the use of the Address Resolution Protocol (arp(4)) in
+             mapping between network level addresses and link level addresses
+             (default).  This is currently implemented for mapping between
+             DARPA Internet addresses and IEEE 802 48-bit MAC addresses (Eth-
+             ernet, FDDI, and Token Ring addresses).
+
+     -arp    Disable the use of the Address Resolution Protocol (arp(4)).
+
+     bonddev iface
+             If the interface is a bond pseudo device, associate physical
+             interface iface with it.  By default, the bond pseudo device is
+             in LACP (Link Aggregation Control Protocol) mode (see bondmode
+             below).  In this mode, the device conforms to the IEEE 802.3ad
+             Link Aggregation specification.
+
+             If this is the first physical interface to be associated with the
+             bond interface, the bond interface inherits the ethernet address
+             from the physical interface.  Physical interfaces that are added
+             to the bond have their ethernet address re-programmed so that all
+             members of the bond have the same ethernet address.  If the phys-
+             ical interface is subsequently removed from the bond using
+             -bonddev, a new ethernet address is chosen from the remaining
+             interfaces, and all interfaces are re-programmed again with the
+             new ethernet address.  If no remaining interfaces exist, the bond
+             interface's ethernet address is cleared.
+
+             If the specified physical interface iface is not capable of hav-
+             ing its ethernet address re-programmed, the bonddev command will
+             fail.
+
+             Once the physical interface iface is successfully associated with
+             the bond interface, all received packets are diverted to the bond
+             interface.  The physical interface is no longer useable on its
+             own, and remains that way until it is removed from the bond using
+             -bonddev.
+
+             It is possible that the specified interface iface is not capable
+             of aggregating, and may remain unused until the operating condi-
+             tions change.
+
+             The link status of the bond interface depends on the state of
+             link aggregation.  If no active partner is detected, the link
+             status will remain inactive.
+
+             To monitor the 802.3ad Link Aggregation state, use the -b option.
+
+             A physical interface that is associated with a vlan pseudo device
+             cannot at the same time be associated with a bond pseudo device.
+             A physical interface cannot be associated with more than one bond
+             pseudo device at the same time.
+
+             It is not possible to associate a bond with pseudo interfaces
+             such as vlan.  Only physical ethernet interfaces may be associ-
+             ated with a bond.
+
+     -bonddev iface
+             If the interface is a bond pseudo device, disassociate the physi-
+             cal interface iface from it.  Before the interface is removed
+             from the bond, the bond device announces to the link partner that
+             the interface is now individual and no longer aggregatable.  If
+             the physical iface is the last interface in the bond, the bond
+             interface clears its link address.
+
+     bondmode lacp | static
+             If the interface is a bond pseudo device, this option will set
+             the mode on the bond interface.  The two currently supported
+             modes are lacp and static.  The default mode is lacp.
+
+             To enable static mode (and turn off LACP), specify static.  In
+             static mode, a member interface is made an active part of the
+             link aggregate as long as the link status is active.
+
+             To re-enable LACP mode, specify lacp.
+
+     broadcast
+             (Inet only.)  Specify the address to use to represent broadcasts
+             to the network.  The default broadcast address is the address
+             with a host part of all 1's.
+
+     debug   Enable driver dependent debugging code; usually, this turns on
+             extra console error logging.
+
+     -debug  Disable driver dependent debugging code.
+
+     delete  Another name for the -alias parameter.
+
+     down    Mark an interface ``down''.  When an interface is marked
+             ``down'', the system will not attempt to transmit messages
+             through that interface.  If possible, the interface will be reset
+             to disable reception as well.  This action does not automatically
+             disable routes using the interface.
+
+     ether   Another name for the lladdr parameter.
+
+     lladdr addr
+             Set the link-level address on an interface.  This can be used to
+             e.g. set a new MAC address on an ethernet interface, though the
+             mechanism used is not ethernet-specific.  The address addr is
+             specified as a series of colon-separated hex digits.  If the
+             interface is already up when this option is used, it will be
+             briefly brought down and then brought back up again in order to
+             ensure that the receive filter in the underlying ethernet hard-
+             ware is properly reprogrammed.
+
+     media type
+             If the driver supports the media selection system, set the media
+             type of the interface to type.  Some interfaces support the mutu-
+             ally exclusive use of one of several different physical media
+             connectors.  For example, a 10Mb/s Ethernet interface might sup-
+             port the use of either AUI or twisted pair connectors.  Setting
+             the media type to ``10base5/AUI'' would change the currently
+             active connector to the AUI port.  Setting it to ``10baseT/UTP''
+             would activate twisted pair.  Refer to the interfaces' driver
+             specific documentation or man page for a complete list of the
+             available types.
+
+     mediaopt opts
+             If the driver supports the media selection system, set the speci-
+             fied media options on the interface.  The opts argument is a
+             comma delimited list of options to apply to the interface.  Refer
+             to the interfaces' driver specific man page for a complete list
+             of available options.
+
+     -mediaopt opts
+             If the driver supports the media selection system, disable the
+             specified media options on the interface.
+
+     tunnel src_addr dest_addr
+             (IP tunnel devices only.)  Configure the physical source and des-
+             tination address for IP tunnel interfaces (gif(4)).  The argu-
+             ments src_addr and dest_addr are interpreted as the outer
+             source/destination for the encapsulating IPv4/IPv6 header.
+
+     deletetunnel
+             Unconfigure the physical source and destination address for IP
+             tunnel interfaces previously configured with tunnel.
+
+     create  Create the specified network pseudo-device.  If the interface is
+             given without a unit number, try to create a new device with an
+             arbitrary unit number.  If creation of an arbitrary device is
+             successful, the new device name is printed to standard output.
+
+     destroy
+             Destroy the specified network pseudo-device.
+
+     plumb   Another name for the create parameter.  Included for Solaris com-
+             patibility.
+
+     unplumb
+             Another name for the destroy parameter.  Included for Solaris
+             compatibility.
+
+     metric n
+             Set the routing metric of the interface to n, default 0.  The
+             routing metric is used by the routing protocol (routed(8)).
+             Higher metrics have the effect of making a route less favorable;
+             metrics are counted as addition hops to the destination network
+             or host.
+
+     mtu n   Set the maximum transmission unit of the interface to n, default
+             is interface specific.  The MTU is used to limit the size of
+             packets that are transmitted on an interface.  Not all interfaces
+             support setting the MTU, and some interfaces have range restric-
+             tions.
+
+     netmask mask
+             (Inet only.)  Specify how much of the address to reserve for sub-
+             dividing networks into sub-networks.  The mask includes the net-
+             work part of the local address and the subnet part, which is
+             taken from the host field of the address.  The mask can be speci-
+             fied as a single hexadecimal number with a leading `0x', with a
+             dot-notation Internet address, or with a pseudo-network name
+             listed in the network table networks(5).  The mask contains 1's
+             for the bit positions in the 32-bit address which are to be used
+             for the network and subnet parts, and 0's for the host part.  The
+             mask should contain at least the standard network portion, and
+             the subnet field should be contiguous with the network portion.
+
+             The netmask can also be specified in CIDR notation after the
+             address.  See the address option above for more information.
+
+     prefixlen len
+             (Inet6 only.)  Specify that len bits are reserved for subdividing
+             networks into sub-networks.  The len must be integer, and for
+             syntactical reason it must be between 0 to 128.  It is almost
+             always 64 under the current IPv6 assignment rule.  If the parame-
+             ter is omitted, 64 is used.
+
+     remove  Another name for the -alias parameter.  Introduced for compati-
+             bility with BSD/OS.
+
+     link[0-2]
+             Enable special processing of the link level of the interface.
+             These three options are interface specific in actual effect, how-
+             ever, they are in general used to select special modes of opera-
+             tion.  An example of this is to enable SLIP compression, or to
+             select the connector type for some Ethernet cards.  Refer to the
+             man page for the specific driver for more information.
+
+     -link[0-2]
+             Disable special processing at the link level with the specified
+             interface.
+
+     up      Mark an interface ``up''.  This may be used to enable an inter-
+             face after an ``ifconfig down''.  It happens automatically when
+             setting the first address on an interface.  If the interface was
+             reset when previously marked down, the hardware will be re-ini-
+             tialized.
+
+     vlan vlan_tag vlandev iface
+             If the interface is a vlan pseudo interface, set its vlan tag
+             value to vlan_tag and associate it with the physical interface
+             iface.
+
+             The vlan_tag value is a 16-bit number that is used to create an
+             802.1Q vlan header for packets sent from the vlan interface.
+
+             A packet that is transmitted through the vlan interface is sent
+             using the specified physical interface iface with 802.1Q vlan
+             encapsulation with the specified vlan_tag.  A packet with 802.1Q
+             encapsulation received by the physical interface is directed to
+             the associated vlan interface with the matching vlan_tag.  If
+             there is no matching vlan interface, the packet is dropped.
+
+             The vlan interface is assigned a copy of the parent interface's
+             flags and the parent's ethernet address.  If the vlan interface
+             already has a physical interface associated with it, this command
+             will fail.  To change the association to another physical inter-
+             face, the existing association must be cleared first using
+             -vlandev.
+
+             If the physical interface supports 802.1Q VLAN tagging in hard-
+             ware, the vlan pseudo interface does not itself insert or remove
+             the 802.1Q encapsulation header.  Instead, the vlan_tag is passed
+             out of band from the packet data.
+
+             A physical interface that is associated with a bond pseudo device
+             cannot at the same time be associated with a vlan interface.
+             However, a physical interface can be associated with multiple
+             vlan interfaces at the same time, as long as each of the vlan_tag
+             values are unique.
+
+     -vlandev iface
+             If the driver is a vlan pseudo device, disassociate the physical
+             interface iface from it.  This breaks the link between the vlan
+             interface and its parent, clears its vlan tag, flags and its link
+             address.
+
+     Ifconfig displays the current configuration for a network interface when
+     no optional parameters are supplied.  If a protocol family is specified,
+     ifconfig will report only the details specific to that protocol family.
+
+     If the driver supports the media selection system, the supported media
+     list will be included in the output, regardless of whether the -m flag is
+     passed or not.
+
+     The -b option passed before the interface name will print the link aggre-
+     gation state for bond pseudo devices.
+
+     If -L flag is supplied, address lifetime is displayed for IPv6 addresses,
+     as time offset string.
+
+     Optionally, the -a flag may be used instead of an interface name.  This
+     flag instructs ifconfig to display information about all interfaces in
+     the system.  The -d flag limits this to interfaces that are down, and -u
+     limits this to interfaces that are up.  When no arguments are given, -a
+     is implied.
+
+     The -l flag may be used to list all available interfaces on the system,
+     with no other additional information.  Use of this flag is mutually
+     exclusive with all other flags and commands, except for -d (only list
+     interfaces that are down) and -u (only list interfaces that are up).
+
+     Only the super-user may modify the configuration of a network interface.
+
+NOTES
+     The media selection system is relatively new and only some drivers sup-
+     port it (or have need for it).
+
+     ifconfig does not change the network settings permanently, it should be
+     used only in a test and debug context.  The permanent network settings
+     can be modified using the Network Preferences pane.  In addition on Mac
+     OS X Server the permanent network settings can be changed with the
+     networksetup(8) command.  Otherwise public APIs in the SystemConfigura-
+     tion framework are currently the only supported way to access and control
+     the state of network settings.
+
+DIAGNOSTICS
+     Messages indicating the specified interface does not exist, the requested
+     address is unknown, or the user is not privileged and tried to alter an
+     interface's configuration.
+
+BUGS
+     IPv6 link-local addresses are required for several basic communication
+     between IPv6 node.  If they are deleted by ifconfig manually, the kernel
+     might show very strange behavior.  So, such manual deletions are strongly
+     discouraged.
+
+SEE ALSO
+     netstat(1), netintro(4), rc(8), routed(8)
+
+     networksetup(8) on Mac OS X Server
+
+HISTORY
+     The ifconfig command appeared in 4.2BSD.
+

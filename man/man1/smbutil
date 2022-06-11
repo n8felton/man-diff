@@ -1,0 +1,48 @@
+SMBUTIL(1)                BSD General Commands Manual               SMBUTIL(1)
+
+NAME
+     smbutil -- interface to the SMB requester
+
+SYNOPSIS
+     smbutil [-hv] command [-options] [args]
+
+DESCRIPTION
+     The smbutil command is used to control SMB requester and issue various
+     commands.
+
+     There are two types of options -- global and local to the specified
+     command.
+
+     Global options are as follows:
+
+     -h      Print a short help message.
+
+     -v      Verbose output.
+
+     The commands and local options are:
+
+     help command
+             Print usage information about command.
+
+     lookup [-w host] name
+             Resolve the given name to an IP address.  The NetBIOS name server
+             can be directly specified via the -w option.
+
+     status server
+             Resolve given server (IP address or DNS name) to NetBIOS work-
+             group and system name.
+
+     view [-connection_options] //[domain;][user[password]@] server
+             List resources available on the specified server for the user
+             user.
+
+FILES
+     nsmb.conf  Keeps static parameters for connections and other information.
+                See man nsmb.conf for details.
+
+AUTHORS
+     Boris Popov <bp@butya.kz>, <bp@FreeBSD.org>
+
+BUGS
+     Please report any bugs to Apple.
+

@@ -1,0 +1,39 @@
+client.conf(5)                    Apple Inc.                    client.conf(5)
+
+
+
+NAME
+       client.conf - client configuration file for cups
+
+DESCRIPTION
+       The client.conf file configures the CUPS client and is normally located
+       in the /private/etc/cups or ~/.cups directory. Each line  in  the  file
+       can  be  a configuration directive, a blank line, or a comment. Comment
+       lines start with the # character.
+
+DIRECTIVES
+       The following directives are understood by the client. Consult the  on-
+       line help for detailed descriptions:
+
+       Encryption IfRequested
+
+       Encryption Never
+
+       Encryption Required
+            Specifies  the level of encryption that is required for a particu-
+            lar location.
+
+       ServerName hostname-or-ip-address[:port]
+
+       ServerName /domain/socket
+            Specifies the address and optionally the port to use when connect-
+            ing to the server
+
+SEE ALSO
+       http://localhost:631/help
+
+COPYRIGHT
+       Copyright 2007 by Apple Inc.
+
+
+

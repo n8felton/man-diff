@@ -1,0 +1,29 @@
+XCURSORGEN(1)                                                    XCURSORGEN(1)
+
+
+
+NAME
+       xcursorgen - create an X cursor file from a collection of PNG images
+
+SYNOPSIS
+       xcursorgen [config-file] [output-file]
+
+DESCRIPTION
+       Xcursorgen  reads  the  config-file  to  find the list of cursor images
+       along with their hotspot and nominal size information.  Xcursorgen con-
+       verts  all  of the images to Xcursor format and writes them to the out-
+       put-file.
+
+       Each line in the config file is of the form:
+       <size> <xhot> <yhot> <filename> <ms-delay>
+
+       Multiple images with the same <size> are used to create  animated  cur-
+       sors,  the  <ms-delay> value on each line indicates how long each image
+       should be displayed before switching to the next.   <ms-delay>  can  be
+       elided for static cursors.
+
+SEE ALSO
+       Xcursor(3x)
+
+
+

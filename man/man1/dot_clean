@@ -1,0 +1,46 @@
+
+DOT_CLEAN(1)              BSD General Commands Manual             DOT_CLEAN(1)
+
+NAME
+     dot_clean -- Merge ._* files with corresponding native files.
+
+SYNOPSIS
+     dot_clean [-fmnsv] [-keep=[mostrecent|dotbar|native]] [dir ...]
+
+DESCRIPTION
+     For each operand that names a dir , dot_clean it recursively merges all
+     ._* files with their corresponding native files according to the rules
+     specified with the given arguments.
+
+     If no operands are given, a usage message is output.  If more than one
+     directory is given, directories are merged in the order in which they are
+     specified on the command line.
+
+     The following options are available:
+
+     -f      Flat merge.  Do not recursively merge all directories in the
+             given dir.  This is off by default.
+
+     -h      Help. Prints verbose usage message.
+
+     -m      Always delete dot underbar files.
+
+     -n      Delete dot underbar file if there is no matching native file.
+
+     -s      Follow symbolic links.  This will follow symbolic dot underbar
+             files when they are found.
+
+     -v      Print verbose output.
+
+EXAMPLES
+     The following is how to do an dot_clean merge on the mounted volume test,
+     always using the dot underbar information.
+
+           dot_clean --keep=dotbar /Volumes/test
+
+DIAGNOSTICS
+     The dot_clean utility exits 0 on success, and >0 if an error occurs.
+
+BUGS
+     None known.
+

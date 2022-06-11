@@ -1,0 +1,72 @@
+svnserve.conf(5)                                              svnserve.conf(5)
+
+
+
+NAME
+       svnserve.conf - Repository configuration file for svnserve
+
+SYNOPSIS
+       repository-path/conf/svnserve.conf
+
+DESCRIPTION
+       svnserve.conf  controls  the  behavior of the svnserve daemon on a per-
+       repository basis.  It is located in the conf subdirectory of the repos-
+       itory.
+
+       The  overall structure of the file is the same as the structure of Sub-
+       version user configuration files.  At the top level are sections, which
+       are  specified  by  words  in  square brackets; inside each section are
+       variable definitions of the form "variable = value".   Lines  beginning
+       with  '#'  are  ignored.  svnserve.conf currently uses only one section
+       named "general", and supports the following variables:
+
+
+       anon-access = none|read|write
+            Determines the access  level  for  unauthenticated  users.   write
+            access  allows  all repository operations.  read access allows all
+            operations except committing  and  changing  revision  properties.
+            none access allows no access.  The default level is read.
+
+
+       auth-access = none|read|write
+            Determines  the  access  level  for authenticated users, using the
+            same access levels as above.  The default level is write.
+
+
+       password-db = filename
+            Sets the location of the password database.  filename may be rela-
+            tive to the repository conf directory.  There is no default value.
+            The password database has the same overall format  as  this  file.
+            It uses only one section "users"; each variable within the section
+            is a username, and each value is a password.
+
+
+       realm = realm-name
+            Sets the authentication realm of the repository.  If two reposito-
+            ries  have  the  same password database, they should have the same
+            realm, and vice versa; this association allows clients  to  use  a
+            single  cached  password  for  several  repositories.  The default
+            realm value is the repository's uuid.
+
+EXAMPLE
+       The following example svnserve.conf allows read  access  for  authenti-
+       cated users, no access for anonymous users, points to a passwd database
+       in the same directory, and defines a realm name.
+
+        [general]
+        anon-access = none
+        auth-access = read
+        password-db = passwd
+        realm = My First Repository
+
+       The file "passwd" would look like:
+
+        [users]
+        joeuser = joepassword
+        jayrandom = randomjay
+
+SEE ALSO
+       svnserve(8)
+
+
+

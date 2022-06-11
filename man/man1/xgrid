@@ -1,0 +1,421 @@
+xgrid(1)                  BSD General Commands Manual                 xgrid(1)
+
+NAME
+     xgrid -- submit and monitor xgrid jobs
+
+SYNOPSIS
+     xgrid [-h[ostname] hostname] [-auth { Password | Kerberos }]
+           [-p[assword] password] [-f[ormat] xml]
+     xgrid -job run [-gid grid-identifier] [-si stdin] [-in indir]
+           [-so stdout] [-se stderr] [-out outdir] [-email email-address]
+           [-art art-path -artid art-identifier] [-artequal art-value]
+           [-artmin art-value] [-artmax art-value] cmd [arg1 [...]]
+     xgrid -job submit [-gid grid-identifier] [-si stdin] [-in indir]
+           [-dids jobid [, jobid]*] [-email email-address]
+           [-art art-path -artid art-identifier] [-artequal art-value]
+           [-artmin art-value] [-artmax art-value] cmd [arg1 [...]]
+     xgrid -job batch [-gid grid-identifier] xml-batch-file
+     xgrid -job results -id identifier [-so stdout] [-se stderr] [-out outdir]
+           [-tid task-identifier]
+     xgrid -job {stop | suspend | resume | delete | restart} -id identifier
+     xgrid -job {attributes | specification | log | wait} -id identifier
+     xgrid -job list [-gid grid-identifier]
+     xgrid -grid list
+     xgrid -grid attributes -gid identifier
+
+OPTIONS
+     The available options are as follows:
+
+     -h[ostname] hostname                the hostname or IP address of the
+                                         controller -- if not present, xgrid
+                                         will use the value specified in
+                                         XGRID_CONTROLLER_HOSTNAME
+
+     -auth { Password | Kerberos }       Default is Password. If Kerberos,
+                                         then use or obtain a kerberos ticket
+                                         to authenticate to the Xgrid con-
+                                         troller
+
+     -p[assword] password                if the controller requires a password
+                                         (as is the default), the password
+                                         must be specified here or in
+                                         XGRID_CONTROLLER_PASSWORD
+
+     -id identifier                      the xgrid identifier for the job of
+                                         interest (not used when submitting a
+                                         job)
+
+     -gid grid-identifier                the xgrid identifier for logical grid
+                                         of interest
+
+     -job {list | attributes}            retrieve list of, or attributes of a
+                                         job
+
+     -job stop                           stop job execution but don't delete
+                                         job
+
+     -job suspend                        suspend execution of the job (i.e. do
+                                         not schedule any pending tasks)
+
+     -job resume                         resume execution of the job -- any
+                                         pending tasks may now be scheduled
+
+     -job delete                         stop job execution (if it is running)
+                                         and delete job
+
+     -job results                        retrieve results of job previously
+                                         submitted
+
+     -job specification                  retrieve specification used when sub-
+                                         mitting job
+
+     -job restart                        restart a running or stopped job from
+                                         the beginning
+
+     -job {submit | run} cmd arg1 ...    specify a command (with arguments) to
+                                         either run synchronously or submit
+                                         asynchronously
+
+     -si stdin                           for submit/run, file to use for stan-
+                                         dard input
+
+     -in indir                           for submit/run, working directory to
+                                         submit with job
+
+     -so stdout                          for run/results, file to write the
+                                         standard output stream to
+
+     -se stderr                          for run/results, file to write the
+                                         standard error stream to
+
+     -out outdir                         for run/results, directory to store
+                                         job results in
+
+     -dids jobid [, jobid]*              do not schedule this job for execu-
+                                         tion until the list of dependent jobs
+                                         have successfully Finished.
+
+     -email email-address                email address to send job state
+                                         change notifications (i.e. "Finished"
+                                         or "Cancelled")
+
+     -grid list                          list identifiers of all logical grids
+
+     -grid attributes                    retrieve attributes of the specified
+                                         logical grid
+
+RETURN VALUES
+     Prints the job identifier when a job is submitted.
+
+     Returns 0 if command completed successfully.
+
+ENVIRONMENT
+     XGRID_CONTROLLER_HOSTNAME gives the hostname or IP address of the con-
+     troller
+
+     XGRID_CONTROLLER_PASSWORD gives the password of the controller if one is
+     required
+
+FILES
+     /etc/xgrid/agent/controller-password
+             Password that the agent may require the controller to have (only
+             readable by root)
+
+     /etc/xgrid/controller/agent-password
+             Password that the controller may be required by the agent to have
+             (only readable by root)
+
+     /etc/xgrid/controller/client-password
+             Password that the controller may require the client to have (only
+             readable by root)
+
+     /Library/Preferences/com.apple.xgrid.controller.plist
+             Controller preferences file
+
+     /etc/xgrid/controller/com.apple.xgrid.controller.plist.default
+             Commented sample of all controller preferences
+
+     /Library/Preferences/com.apple.xgrid.agent.plist
+             Agent preferences file
+
+     /etc/xgrid/agent/com.apple.xgrid.agent.plist.default
+             Commented sample of all agent preferences
+
+EXAMPLES
+     List all grids and specify hostname and password:
+
+           $ xgrid -h mycomputer.apple.com -p pword -grid list
+           (0, 1)
+
+     Show information about grid 0:
+
+           $ xgrid -h mycomputer.apple.com -p pword -grid attributes -gid 0
+           {isDefault = YES; name = Xgrid; }
+
+     Set environment variables for the following examples (tcsh):
+
+           % setenv XGRID_CONTROLLER_HOSTNAME mycomputer.apple.com
+           % setenv XGRID_CONTROLLER_PASSWORD pword
+
+     Set environment variables for the following examples (bash):
+
+           $ export XGRID_CONTROLLER_HOSTNAME=mycomputer.apple.com
+           $ export XGRID_CONTROLLER_PASSWORD=pword
+
+     List jobs and then get the attributes for one of the jobs:
+
+           $ xgrid -job list
+           { jobArray = ({ jobIdentifier = 26; } ); }
+           $ xgrid -job attributes -id 26
+
+     Run the cal program (specified using a full path so the command isn't
+     copied) on a single node synchronously and print the output to standard
+     output:
+
+           $ xgrid -job run /usr/bin/cal 2005
+
+     Submit myscript with the files in the input directory.  Send email to
+     somebody@apple.com on every job state change. Then retrieve the results
+     and save the stdout and stderr streams in files instead of printing them
+     out to the terminal and save the output files in the specified directory.
+     Finally delete the job:
+
+           $ xgrid -job submit -in ~/data/working -email somebody@apple.com
+           myscript param1 param2
+           { jobIdentifier = 27; }
+           $ xgrid -job results -id 27 -so job.out -se job.err -out job-outdir
+           $ xgrid -job delete -id 27
+
+   Batch file examples
+     Complex multi-job specification may be submitted via an XML batch prop-
+     erty list. Batch file job specifications are submitted as follows:
+
+           $ xgrid -job batch sample_batch.xml
+
+     The following XML plist submits a simple /usr/bin/cal job:
+
+     <?xml version="1.0" encoding="UTF-8"?>
+     <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+     <plist version="1.0">
+     <array>
+         <dict>
+             <key>name</key>
+             <string>Cal Job</string>
+             <key>taskSpecifications</key>
+             <dict>
+                 <key>0</key>
+                 <dict>
+                     <key>command</key>
+                     <string>/usr/bin/cal</string>
+                     <key>arguments</key>
+                     <array>
+                         <string>6</string>
+                         <string>2005</string>
+                     </array>
+                 </dict>
+             </dict>
+         </dict>
+     </array>
+     </plist>
+
+     A list of all XML batch submission properties follows:
+
+     <?xml version="1.0" encoding="UTF-8"?>
+     <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+     <plist version="1.0">
+     <array>
+         <dict>
+             <!-- A symbolic name of the job -->
+             <key>name</key>
+             <string>Full Job</string>
+
+             <!-- Notification of all job state changes will be sent to this email address -->
+             <key>notificationEmail</key>
+             <string>somebody@example.com</string>
+
+             <key>schedulerParameters</key>
+             <dict>
+                 <!-- do all of the given tasks need to start at the same time? -->
+                 <key>tasksMustStartSimultaneously</key>
+                 <string>YES</string>
+
+                 <!-- what's the minimum number that need to start at the same time? -->
+                 <key>minimumTaskCount</key>
+                 <integer>5</integer>
+
+                 <!-- do not schedule this job until the following job (id's) have finished successfully -->
+                 <key>dependsOnJobs</key>
+                 <array>
+                     <string>23</string>
+                     <string>44</string>
+                 </array>
+             </dict>
+
+             <key>inputFiles</key>
+             <dict>
+                 <!-- the file 'textfile' will be created on agent machines in the working directory -->
+                 <key>textfile</key>
+                 <dict>
+                     <!-- base64 encoded file data -->
+                     <key>fileData</key>
+                     <!-- 'this is a test' -->
+                     <data>dGhpcyBpcyBhIHRlc3Q=</data>
+                     <!-- should this file have execute permission? -->
+                     <key>isExecutable</key>
+                     <string>NO</string>
+                 </dict>
+
+                 <!-- create 'textfile' in the directory 'task1'-->
+                 <key>task1/textfile</key>
+                 <dict>
+                     <key>fileData</key>
+                     <data>dGhpcyBpcyBhIHRlc3Q=</data>
+                 </dict>
+             </dict>
+
+             <!-- define some prototype task specifications. Here we can define sets of common parts of taskSpecifications -->
+             <!-- Any taskSpecifications settings are valid. -->
+             <key>taskPrototypes</key>
+             <dict>
+                 <key>echoTask</key>
+                 <dict>
+                     <key>command</key>
+                     <string>/bin/echo</string>
+                     <key>arguments</key>
+                     <array>
+                         <string>echoTask Arguments</string>
+                         <string>are here</string>
+                     </array>
+                 </dict>
+             </dict>
+
+             <!-- specifications of all tasks of this job -->
+             <key>taskSpecifications</key>
+             <dict>
+
+                 <!-- key is symbolic task name -->
+                 <key>0</key>
+                 <dict>
+                     <!-- command to execute -->
+                     <key>command</key>
+                     <string>/bin/echo</string>
+
+                     <!-- environment dictionary -->
+                     <key>environment</key>
+                     <dict>
+                         <key>MY_ENV_VARIABLE</key>
+                         <string>MY_VALUE</string>
+                     </dict>
+
+                     <!-- argument array -->
+                     <key>arguments</key>
+                     <array>
+                         <string>HelloWorld</string>
+                     </array>
+
+                     <!-- use the given file as <stdin> -->
+                     <key>inputStream</key>
+                     <string>textfile</string>
+
+                     <!-- do not start this task until the following tasks (symbolic names) have finished successfully -->
+                     <key>dependsOnTasks</key>
+                     <array>
+                         <string>1</string>
+                     </array>
+                 </dict>
+
+                 <key>1</key>
+                 <dict>
+                     <!-- by default use the echoTask prototype settings -->
+                     <key>taskPrototypeIdentifier</key>
+                     <string>echoTask</string>
+
+                     <!-- override the prototype setting for arguments -->
+                     <key>arguments</key>
+                     <array>
+                         <string>Task 1</string>
+                     </array>
+
+                     <!-- map a subset of files in the 'inputFiles' section for this task only -->
+                     <key>inputFileMap</key>
+                     <dict>
+                         <key>textfile</key>
+                         <string>task1/textfile</string>
+                     </dict>
+
+                 </dict>
+             </dict>
+         </dict>
+
+         <!-- a completely different job -->
+         <dict>
+             <key>name</key>
+             <string>Calendar Job</string>
+
+             <key>taskSpecifications</key>
+             <dict>
+                 <key>0</key>
+                 <dict>
+                     <key>command</key>
+                     <string>/usr/bin/cal</string>
+                     <key>arguments</key>
+                     <array>
+                         <string>6</string>
+                         <string>2005</string>
+                     </array>
+                 </dict>
+             </dict>
+         </dict>
+
+     </array>
+
+     </plist>
+
+DIAGNOSTICS
+     xgrid with no arguments will print the usage message
+
+ERRORS
+     If a job fails due to an error, the error code reported is simply the
+     error code that was returned by the task (or by the system).  (For system
+     error descriptions, see /usr/include/sys/errno.h.) Common errors include:
+
+     o   Error 1: The permissions of some file are set incorrectly.
+
+     o   Error 2: No such file exists.
+
+     o   Error 8: The executable file wasn't actually executable.
+
+SEE ALSO
+     xgridctl(8) ssh(1)
+
+CONFORMING TO
+     The protocol used by Xgrid conforms to:
+
+     o   RFC 3080 (BEEP Protocol)
+
+     o   Apple XML property list (plist) specification
+
+HISTORY
+     Xgrid's history can be traced back to Zilla, which was developed by NeXT
+     in the late 80's and was the first clustering desktop program to make use
+     of the "noninterventive screen saver" motif, a motif which is now common-
+     place and widely used in projects like Seti@Home.  Zilla won the 1991
+     national ComputerWorld-Smithsonian Award in the science category for this
+     noninterventive, community-supercomputing paradigm.
+
+     Apple acquired the rights to Zilla in 1997, and later used that as the
+     inspiration for the research project which became Xgrid.  Xgrid was pub-
+     licly launched as a Technology Preview on January 6, 2004 at MacWorld San
+     Francisco.
+
+BUGS
+     Some commonly reported issues are:
+
+     1.   The controller always copies over the commands and working directory
+          to the agent before each individual task, rather than checking to
+          see if it is cached
+
+     Bug reports can be sent to bugreport.apple.com
+
+     Feedback can be sent to xgrid@apple.com
+

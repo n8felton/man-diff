@@ -1,0 +1,16 @@
+PYTHONW(1)                BSD General Commands Manual               PYTHONW(1)
+
+NAME
+     pythonw -- run python script with GUI
+
+SYNOPSIS
+     pythonw ...
+
+DESCRIPTION
+     pythonw is used to run python scripts that display a graphical user
+     interface (GUI).  Pass the same arguments to pythonw as you would to
+     python(1).  For executable scripts, use pythonw in the "#!" line.
+
+SEE ALSO
+     python(1)
+

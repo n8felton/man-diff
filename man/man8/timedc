@@ -1,0 +1,73 @@
+TIMEDC(8)                 BSD System Manager's Manual                TIMEDC(8)
+
+NAME
+     timedc -- timed control program
+
+SYNOPSIS
+     timedc [command [argument ...]]
+
+DESCRIPTION
+     The timedc utility is used to control the operation of the timed(8) pro-
+     gram.  It may be used to:
+
+     o   Measure the differences between machines' clocks,
+
+     o   Find the location where the master time server is running,
+
+     o   Enable or disable tracing of messages received by timed(8), and
+
+     o   Perform various debugging actions.
+
+     Without any arguments, timedc will prompt for commands from the standard
+     input.  If arguments are supplied, timedc interprets the first argument
+     as a command and the remaining arguments as parameters to the command.
+     The standard input may be redirected causing timedc to read commands from
+     a file.  Commands may be abbreviated; recognized commands are:
+
+     ? [command ...]
+
+     help [command ...]
+             Print a short description of each command specified in the argu-
+             ment list, or, if no arguments are given, a list of the recog-
+             nized commands.
+
+     clockdiff host ...
+             Compute the differences between the clock of the host machine and
+             the clocks of the machines given as arguments.
+
+     msite [host ...]
+             Show the master time server for specified host(s).
+
+     trace { on | off }
+             Enable or disable the tracing of incoming messages to timed in
+             the file /var/log/timed.log.
+
+     election host1 [host2 ...]
+             Asks the daemon on the target host to reset its "election" timers
+             and to ensure that a time master has been elected.
+
+     quit    Exit from timedc.
+
+     Other commands may be included for use in testing and debugging timed(8);
+     the help command and the program source may be consulted for details.
+
+FILES
+     /var/log/timed.log        tracing file for timed
+     /var/log/timed.masterlog  log file for master timed
+
+SEE ALSO
+     date(1), adjtime(2), icmp(4), timed(8)
+
+     R. Gusella and S. Zatti, TSP: The Time Synchronization Protocol for UNIX
+     4.3BSD.
+
+DIAGNOSTICS
+     ?Ambiguous command  abbreviation matches more than one command
+
+     ?Invalid command  no match found
+
+     ?Privileged command  command can be executed by root only
+
+HISTORY
+     The timedc utility appeared in 4.3BSD.
+

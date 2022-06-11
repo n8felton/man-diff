@@ -1,0 +1,71 @@
+TDBBACKUP(8)                                                      TDBBACKUP(8)
+
+
+
+NAME
+       tdbbackup  -  tool  for  backing up and for validating the integrity of
+       samba .tdb files
+
+SYNOPSIS
+       tdbbackup [-s suffix] [-v] [-h]
+
+DESCRIPTION
+       This tool is part of the samba(1) suite.
+
+       tdbbackup is a tool that may be used to backup samba .tdb  files.  This
+       tool  may  also be used to verify the integrity of the .tdb files prior
+       to samba startup or during normal operation. If it  finds  file  damage
+       and it finds a prior backup the backup file will be restored.
+
+OPTIONS
+       -h
+          Get help information.
+
+       -s suffix
+          The  -s  option  allows the adminisistrator to specify a file backup
+          extension. This way it is possible to keep a history of  tdb  backup
+          files by using a new suffix for each backup.
+
+       -v
+          The  -v  will check the database for damages (currupt data) which if
+          detected causes the backup to be restored.
+
+COMMANDS
+       GENERAL INFORMATION
+
+       The tdbbackup utility can safely be run at any time. It was designed so
+       that it can be used at any time to validate the integrity of tdb files,
+       even during Samba operation. Typical usage for the command will be:
+
+       tdbbackup [-s suffix] *.tdb
+
+       Before restarting samba the following command may be  run  to  validate
+       .tdb files:
+
+       tdbbackup -v [-s suffix] *.tdb
+
+       Samba .tdb files are stored in various locations, be sure to run backup
+       all .tdb file on the system. Important files includes:
+
+       o   secrets.tdb - usual location  is  in  the  /usr/local/samba/private
+          directory, or on some systems in /etc/samba.
+
+       o    passdb.tdb  -  usual  location  is in the /usr/local/samba/private
+          directory, or on some systems in /etc/samba.
+
+       o   *.tdb located in the /usr/local/samba/var directory or on some sys-
+          tems in the /var/cache or /var/lib/samba directories.
+
+VERSION
+       This man page is correct for version 3.0 of the Samba suite.
+
+AUTHOR
+       The  original  Samba  software  and  related  utilities were created by
+       Andrew Tridgell. Samba is now developed by the Samba Team  as  an  Open
+       Source project similar to the way the Linux kernel is developed.
+
+       The tdbbackup man page was written by John H Terpstra.
+
+
+
+

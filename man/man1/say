@@ -1,0 +1,48 @@
+SAY(1)                     Speech Synthesis Manager                     SAY(1)
+
+
+
+NAME
+       say - Convert text to audible speech
+
+SYNOPSIS
+           say [-v voice] [-o out.aiff | -n name:port ] [-f file | string ...]
+
+DESCRIPTION
+       This tool uses the Speech Synthesis manager to convert input text to
+       audible speech and either play it through the sound output device
+       chosen in System Preferences or save it to an AIFF file.
+
+OPTIONS
+       string
+           Specify the text to speak on the command line. This can consist of
+           multiple arguments, which are considered to be separated by spaces.
+
+       -f file
+           Specify a file to be spoken. If file is - or neither this parameter
+           nor a message is specified, read from standard input.
+
+       -v voice
+           Specify the voice to be used. Default is the voice selected in
+           System Preferences.
+
+       -o out.aiff
+           Specify an AIFF file to be written.
+
+       -n name
+       -n name:port
+       -n :port
+       -n :
+           Specify a service name (default "AUNetSend") and/or IP port to be
+           used for redirecting the speech output through AUNetSend.
+
+       If the input is a TTY, text is spoken line by line, and the output
+       file, if specified, will only contain audio for the last line of the
+       input.  Otherwise, text is spoken all at once.
+
+ERRORS
+       say returns 0 if the text was spoken successfully, otherwise non-zero.
+       Diagnostic messages will be printed to standard error.
+
+
+

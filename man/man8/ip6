@@ -1,0 +1,41 @@
+ip6(8)                    BSD System Manager's Manual                   ip6(8)
+
+NAME
+     ip6 -- Enable or disable IPv6 on active interfaces
+
+SYNOPSIS
+     ip6 [-ax] [-ud -interface]
+
+DESCRIPTION
+     ip6 can be used to start up or shut down IPv6 on active interfaces.  When
+     IPv6 is enabled on an interface the protocol is attached to the inter-
+     face, at which point the default settings in the kernel allow it to
+     acquire a link-local address and accept router advertisements.  Disabling
+     detaches the protocol from the interface.
+
+     Possible options are:
+
+     -a   Start IPv6 on all interfaces.
+
+     -x   Stop IPv6 on all interfaces.
+
+     -u -[interface]
+          Start IPv6 on interface.
+
+     -d -[interface]
+          Stop IPv6 on interface.
+
+REQUIREMENTS
+     You need support for IPv6 in your kernel. This is provided beginning with
+     Darwin Kernel Version 6.0.
+
+CONFIGURATION
+     The default IPv6 configuration for an interface assigns a link-local
+     address to it and sets the interface to receive router advertisements.
+     No further configuration is necessary for basic functionality.  However,
+     various settings can be modified by using sysctl.  Pp
+
+SEE ALSO
+     stf(4), IPv6 Documentation at
+     http://www.netbsd.org/Documentation/network/ipv6/, RFC 3068.
+

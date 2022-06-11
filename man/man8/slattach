@@ -1,0 +1,40 @@
+SLATTACH(8)               BSD System Manager's Manual              SLATTACH(8)
+
+NAME
+     slattach -- attach serial lines as network interfaces
+
+SYNOPSIS
+     Slattach ttyname [baudrate]
+
+DESCRIPTION
+     Slattach is used to assign a tty line to a network interface, and to
+     define the network source and destination addresses.  The following oper-
+     ands are supported by slattach:
+
+     ttyname       Specifies the name of the tty device.  Ttyname should be a
+                   string of the form `ttyXX', or `/dev/ttyXX'.
+
+     baudrate      Specifies the speed of the connection. If not specified,
+                   the default of 9600 is used.
+
+     Only the super-user may attach a network interface.
+
+     To detach the interface, use ``ifconfig interface-name down'' after
+     killing off the slattach process.  Interface-name is the name that is
+     shown by netstat(1)
+
+EXAMPLES
+           slattach ttyh8
+           slattach /dev/tty01 4800
+
+DIAGNOSTICS
+     Messages indicating the specified interface does not exit, the requested
+     address is unknown, the user is not privileged and tried to alter an
+     interface's configuration.
+
+SEE ALSO
+     netstat(1), netintro(4), ifconfig(8), rc(8)
+
+HISTORY
+     The slattach command appeared in 4.3BSD.
+

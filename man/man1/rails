@@ -1,0 +1,31 @@
+RAILS(1)                  BSD General Commands Manual                 RAILS(1)
+
+NAME
+     rails -- Web-application framework
+
+SYNOPSIS
+     rails path [options...]
+
+DESCRIPTION
+     Rails is a web-application and persistence framework that includes every-
+     thing needed to create database-backed web-applications according to the
+     Model-View-Control pattern of separation. This pattern splits the view
+     (also called the presentation) into "dumb" templates that are primarily
+     responsible for inserting pre-built data in between HTML tags. The model
+     contains the "smart" domain objects (such as Account, Product, Person,
+     Post) that holds all the business logic and knows how to persist them-
+     selves to a database. The controller handles the incoming requests (such
+     as Save New Account, Update Product, Show Post) by manipulating the model
+     and directing data to the view.
+
+     Rails is written with the ruby(1) language. For more information about
+     Rails you can use its ---help flag. There is also online documentation
+     available at "http://rubyonrails.org".
+
+SEE ALSO
+     ruby(1) mongrel_rails(1) cap(1)
+
+AUTHORS
+     Rails was created by David Heinemeier Hansson <david@loudthinking.com>
+     then extended and improved by hundreds of open-source contributors.
+

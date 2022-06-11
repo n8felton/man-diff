@@ -1,0 +1,56 @@
+SLEEP(1)                  BSD General Commands Manual                 SLEEP(1)
+
+NAME
+     sleep -- suspend execution for an interval of time
+
+SYNOPSIS
+     sleep seconds
+
+DESCRIPTION
+     The sleep utility suspends execution for a minimum of seconds.  It is
+     usually used to schedule the execution of other commands (see EXAMPLES
+     below).
+
+     The sleep utility exits with one of the following values:
+
+     0     On successful completion, or if the signal SIGALRM was received.
+
+     >0    An error occurred.
+
+EXAMPLES
+     To schedule the execution of a command for x number seconds later:
+
+           (sleep 1800; sh command_file >& errors)&
+
+     This incantation would wait a half hour before running the script com-
+     mand_file. (See the at(1) utility.)
+
+     To reiteratively run a command (with the csh(1)):
+
+           while (1)
+                   if (! -r zzz.rawdata) then
+                           sleep 300
+                   else
+                           foreach i (`ls *.rawdata`)
+                                   sleep 70
+                                   awk -f collapse_data $i >> results
+                           end
+                           break
+                   endif
+           end
+
+     The scenario for a script such as this might be: a program currently run-
+     ning is taking longer than expected to process a series of files, and it
+     would be nice to have another program start processing the files created
+     by the first program as soon as it is finished (when zzz.rawdata is cre-
+     ated).  The script checks every five minutes for the file zzz.rawdata,
+     when the file is found, then another portion processing is done courte-
+     ously by sleeping for 70 seconds in between each awk job.
+
+SEE ALSO
+     setitimer(2), sleep(3), at(1)
+
+STANDARDS
+     The sleep command is expected to be IEEE Std 1003.2 (``POSIX.2'') compat-
+     ible.
+

@@ -1,0 +1,36 @@
+MKAFMMAP(1)                                                        MKAFMMAP(1)
+
+
+
+NAME
+       mkafmmap - creates font map for AFM files
+
+SYNOPSIS
+       mkafmmap [options] files...
+
+DESCRIPTION
+       The  mkafmmap command will generate a font map file reading all the AFM
+       files given in the command line. By default it will write the map to  a
+       file  named  font.map,  a  different filename can be specified with the
+       --output-file options. Using '-' will make the program write the map to
+       stdout.
+
+OPTIONS
+       -h, --help
+              Show summary of options.
+
+       -v, --version
+              Show version of program.
+
+       -p, --output-file=NAME
+              Print output to file NAME.
+
+SEE ALSO
+       enscript(1), states(1).
+
+AUTHOR
+       This  manual  page was written by Lucas Wall <kthulhu@usa.net>, for the
+       Debian project (but may be used by others).
+
+
+

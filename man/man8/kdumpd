@@ -1,0 +1,26 @@
+KDUMPD(8)                 BSD System Manager's Manual                KDUMPD(8)
+
+NAME
+     kdumpd -- Mac OS X remote kernel core dump server
+
+SYNOPSIS
+     /usr/libexec/kdumpd [directory]
+
+DESCRIPTION
+     Kdumpd is a server which receives kernel states in the form of a core
+     dump from a remote Mac OS X machine.  The kdumpd server operates on UDP
+     port 1069, although this may be configurable in the future.  The server
+     should be started by inetd(8).
+
+     The server should have the user ID with the lowest possible privilege,
+     usually the user "nobody".  The directory specified as a server program
+     argument in /etc/inetd.conf directs the server to store kernel cores in
+     that directory and nowhere else.  The server returns an EEXIST error to
+     the remote kernel if it receives a request for an existing file - i.e.
+     only new files can be created. The server also disallows path specifica-
+     tions in the incoming file name.
+
+HISTORY
+     The kdumpd command is based on Berkeley tftpd(8) by way of FreeBSD, with
+     several modifications.
+

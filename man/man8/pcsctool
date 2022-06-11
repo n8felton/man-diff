@@ -1,0 +1,45 @@
+PCSCTOOL(8)                       User Manual                      PCSCTOOL(8)
+
+
+
+NAME
+       pcsctool
+
+SYNOPSIS
+       pcsctool
+
+DESCRPTION
+       pcsctool  introduces  new smart cards to pcsc-lite and assigns a plugin
+       to service the card.
+
+OPTIONS
+       None
+
+USAGE
+       pcsctool lists the currently installed bundles and asks you  to  select
+       one.   You select the plugin bundle that services your smartcard. pcsc-
+       tool will then ask you to insert the new card.  The  application  exits
+       and pcsc is now configured to use your card.
+
+       Example:
+
+        [root@osx]# pcsctool
+        Select the approprate token driver:
+        -----------------------------------
+          1.     mscMuscleCard.bundle
+        -----------------------------------
+        Enter the number: 1
+
+        Insert your token in: My Friendly Reader 0 0
+
+        Token support updated successfully !
+        [root@osx]#
+
+SEE ALSO
+       pcscd(8)
+
+BUGS
+       Plugins MUST reside in /usr/libexec/SmartCardServices/services
+
+
+

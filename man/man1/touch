@@ -1,0 +1,75 @@
+TOUCH(1)                  BSD General Commands Manual                 TOUCH(1)
+
+NAME
+     touch -- change file access and modification times
+
+SYNOPSIS
+     touch [-acfm] [-r file] [-t [[CC]YY]MMDDhhmm[.SS]] file ...
+
+DESCRIPTION
+     The touch utility sets the modification and access times of files to the
+     current time of day.  If the file doesn't exist, it is created with
+     default permissions.
+
+     The following options are available:
+
+     -a      Change the access time of the file.  The modification time of the
+             file is not changed unless the -m flag is also specified.
+
+     -c      Do not create the file if it does not exist.  The touch utility
+             does not treat this as an error.  No error messages are displayed
+             and the exit value is not affected.
+
+     -f      Attempt to force the update, even if the file permissions do not
+             currently permit it.
+
+     -m      Change the modification time of the file.  The access time of the
+             file is not changed unless the -a flag is also specified.
+
+     -r      Use the access and modifications times from the specified file
+             instead of the current time of day.
+
+     -t      Change the access and modification times to the specified time.
+             The argument should be in the form ``[[CC]YY]MMDDhhmm[.SS]''
+             where each pair of letters represents the following:
+
+                   CC      The first two digits of the year (the century).
+                   YY      The second two digits of the year.  If ``YY'' is
+                           specified, but ``CC'' is not, a value for ``YY''
+                           between 69 and 99 results in a ``CC'' value of 19.
+                           Otherwise, a ``CC'' value of 20 is used.
+                   MM      The month of the year, from 1 to 12.
+                   DD      the day of the month, from 1 to 31.
+                   hh      The hour of the day, from 0 to 23.
+                   mm      The minute of the hour, from 0 to 59.
+                   SS      The second of the minute, from 0 to 61.
+
+             If the ``CC'' and ``YY'' letter pairs are not specified, the val-
+             ues default to the current year.  If the ``SS'' letter pair is
+             not specified, the value defaults to 0.
+
+DIAGNOSTICS
+     The touch utility exits 0 on success, and >0 if an error occurs.
+
+SEE ALSO
+     utimes(2)
+
+COMPATIBILITY
+     The obsolescent form of touch, where a time format is specified as the
+     first argument, is supported.  When no -r or -t option is specified,
+     there are at least two arguments, and the first argument is a string of
+     digits either eight or ten characters in length, the first argument is
+     interpreted as a time specification of the form ``MMDDhhmm[YY]''.
+
+     The ``MM'', ``DD'', ``hh'' and ``mm'' letter pairs are treated as their
+     counterparts specified to the -t option.  If the ``YY'' letter pair is in
+     the range 39 to 99, the year is set to 1939 to 1999, otherwise, the year
+     is set in the 21st century.
+
+HISTORY
+     A touch utility appeared in Version 7 AT&T UNIX.
+
+STANDARDS
+     The touch utility is expected to be a superset of the IEEE Std 1003.2
+     (``POSIX.2'') specification.
+

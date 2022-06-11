@@ -1,0 +1,84 @@
+lpr(1)                            Apple Inc.                            lpr(1)
+
+
+
+NAME
+       lpr - print files
+
+SYNOPSIS
+       lpr  [  -E  ]  [  -H  server[:port]  ]  [  -U  username ] [ -P destina-
+       tion[/instance] ] [ -#  num-copies  [  -h  ]  [  -l  ]  [  -m  ]  [  -o
+       option[=value] ] [ -p] [ -q ] [ -r ] [ -C/J/T title ] [ file(s) ]
+
+DESCRIPTION
+       lpr  submits  files  for  printing. Files named on the command line are
+       sent to the named printer (or the system default destination if no des-
+       tination is specified). If no files are listed on the command-line, lpr
+       reads the print file from the standard input.
+
+OPTIONS
+       The following options are recognized by lpr:
+
+       -E
+            Forces encryption when connecting to the server.
+
+       -H server[:port]
+            Specifies an alternate server.
+
+       -C "name"
+
+       -J "name"
+
+       -T "name"
+            Sets the job name.
+
+       -P destination[/instance]
+            Prints files to the named printer.
+
+       -U username
+            Specifies an alternate username.
+
+       -# copies
+            Sets the number of copies to print from 1 to 100.
+
+       -h
+            Disables banner printing. This option is equivalent  to  "-o  job-
+            sheets=none".
+
+       -l
+            Specifies  that the print file is already formatted for the desti-
+            nation and should be sent without filtering. This option is equiv-
+            alent to "-o raw".
+
+       -m
+            Send an email on job completion.
+
+       -o option[=value]
+            Sets a job option.
+
+       -p
+            Specifies  that  the  print file should be formatted with a shaded
+            header with the date, time, job name, and page number. This option
+            is equivalent to "-o prettyprint" and is only useful when printing
+            text files.
+
+       -q
+            Hold job for printing.
+
+       -r
+            Specifies that the named  print  files  should  be  deleted  after
+            printing them.
+
+COMPATIBILITY
+       The  "c",  "d",  "f",  "g", "i", "n", "t", "v", and "w" options are not
+       supported by CUPS and produce a warning message if used.
+
+SEE ALSO
+       cancel(1), lp(1), lpq(1), lprm(1), lpstat(1),
+       http://localhost:631/help
+
+COPYRIGHT
+       Copyright 2007 by Apple Inc.
+
+
+

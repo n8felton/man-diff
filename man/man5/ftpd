@@ -1,0 +1,318 @@
+FTPD.CONF(5)                BSD File Formats Manual               FTPD.CONF(5)
+
+NAME
+     ftpd.conf -- tnftpd(8) configuration file
+
+DESCRIPTION
+     The ftpd.conf file specifies various configuration options for tnftpd(8)
+     that apply once a user has authenticated their connection.
+
+     ftpd.conf consists of a series of lines, each of which may contain a con-
+     figuration directive, a comment, or a blank line.  Directives that appear
+     later in the file override settings by previous directives.  This allows
+     `wildcard' entries to define defaults, and then have class-specific over-
+     rides.
+
+     A directive line has the format:
+           command class [arguments]
+
+     A ``\'' is the escape character; it can be used to escape the meaning of
+     the comment character, or if it is the last character on a line, extends
+     a configuration directive across multiple lines.  A ``#'' is the comment
+     character, and all characters from it to the end of line are ignored
+     (unless it is escaped with the escape character).
+
+     Each authenticated user is a member of a class, which is determined by
+     ftpusers(5).  class is used to determine which ftpd.conf entries apply to
+     the user.  The following special classes exist when parsing entries in
+     ftpd.conf:
+           all     Matches any class.
+           none    Matches no class.
+
+     Each class has a type, which may be one of:
+
+           GUEST   Guests (as per the ``anonymous'' and ``ftp'' logins).  A
+                   chroot(2) is performed after login.
+
+           CHROOT  chroot(2)ed users (as per ftpchroot(5)).  A chroot(2) is
+                   performed after login.
+
+           REAL    Normal users.
+
+     The tnftpd(8) STAT command will return the class settings for the current
+     user as defined by ftpd.conf, unless the private directive is set for the
+     class.
+
+     Each configuration line may be one of:
+
+     advertize class [host]
+           Set the address to advertise in the response to the PASV and LPSV
+           commands to the address for host (which may be either a host name
+           or IP address).  This may be useful in some firewall configura-
+           tions, although many ftp clients may not work if the address being
+           advertised is different to the address that they've connected to.
+           If class is ``none'' or host not is specified, disable this.
+
+     checkportcmd class [off]
+           Check the PORT command for validity.  The PORT command will fail if
+           the IP address specified does not match the FTP command connection,
+           or if the remote TCP port number is less than IPPORT_RESERVED.  It
+           is strongly encouraged that this option be used, especially for
+           sites concerned with potential security problems with FTP bounce
+           attacks.  If class is ``none'' or off is specified, disable this
+           feature, otherwise enable it.
+
+     chroot class [pathformat]
+           If pathformat is not specified or class is ``none'', use the
+           default behavior (see below).  Otherwise, pathformat is parsed to
+           create a directory to create as the root directory with chroot(2)
+           into upon login.
+
+           pathformat can contain the following escape strings:
+                 Escape  Description
+                 %c      Class name.
+                 %d      Home directory of user.
+                 %u      User name.
+                 %%      A ``%'' character.
+
+           The default root directory is:
+                 CHROOT  The user's home directory.
+                 GUEST   If -a anondir is specified, use anondir, otherwise
+                         the home directory of the `ftp' user.
+                 REAL    By default no chroot(2) is performed.
+
+     classtype class type
+           Set the class type of class to type (see above).
+
+     conversion class suffix [type disable command]
+           Define an automatic in-line file conversion.  If a file to retrieve
+           ends in suffix, and a real file (sans suffix) exists, then the out-
+           put of command is returned instead of the contents of the file.
+
+                 suffix   The suffix to initiate the conversion.
+
+                 type     A list of valid filetypes for the conversion.  Valid
+                          types are: `f' (file), and `d' (directory).
+
+                 disable  The name of file that will prevent conversion if it
+                          exists.  A file name of ``.'' will prevent this dis-
+                          abling action (i.e., the conversion is always per-
+                          mitted.)
+
+                 command  The command to run for the conversion.  The first
+                          word should be the full path name of the command, as
+                          execv(3) is used to execute the command.  All
+                          instances of the word ``%s'' in command are replaced
+                          with the requested file (sans suffix).
+
+           Conversion directives specified later in the file override earlier
+           conversions with the same suffix.
+
+     denyquick class [off]
+           Enforce ftpusers(5) rules after the USER command is received,
+           rather than after the PASS command is received.  Whilst enabling
+           this feature may allow information leakage about available accounts
+           (for example, if you allow some users of a REAL or CHROOT class but
+           not others), it is useful in preventing a denied user (such as
+           `root') from entering their password across an insecure connection.
+           This option is strongly recommended for servers which run an anony-
+           mous-only service.  If class is ``none'' or off is specified, dis-
+           able this feature, otherwise enable it.
+
+     display class [file]
+           If file is not specified or class is ``none'', disable this.  Oth-
+           erwise, each time the user enters a new directory, check if file
+           exists, and if so, display its contents to the user.  Escape
+           sequences are supported; refer to Display file escape sequences in
+           tnftpd(8) for more information.
+
+     hidesymlinks class [off]
+           If class is ``none'' or off is specified, disable this feature.
+           Otherwise, the LIST command lists symbolic links as the file or
+           directory the link references (``ls -LlA'').  Servers which run an
+           anonymous service may wish to enable this feature for GUEST users,
+           so that symbolic links do not leak names in directories that are
+           not searchable by GUEST users.
+
+     homedir class [pathformat]
+           If pathformat is not specified or class is ``none'', use the
+           default behavior (see below).  Otherwise, pathformat is parsed to
+           create a directory to change into upon login, and to use as the
+           `home' directory of the user for tilde expansion in pathnames, etc.
+           pathformat is parsed as per the chroot directive.
+
+           The default home directory is the home directory of the user for
+           REAL users, and / for GUEST and CHROOT users.
+
+     limit class [count [file]]
+           Limit the maximum number of concurrent connections for class to
+           count, with `-1' meaning unlimited connections.  If the limit is
+           exceeded and file is specified, display its contents to the user.
+           If class is ``none'' or count is not specified, disable this.  If
+           file is a relative path, it will be searched for in /etc (which can
+           be overridden with -c confdir).
+
+     maxfilesize class [size]
+           Set the maximum size of an uploaded file to size, with `-1' meaning
+           unlimited connections.  If class is ``none'' or size is not speci-
+           fied, disable this.
+
+     maxtimeout class [time]
+           Set the maximum timeout period that a client may request, default-
+           ing to two hours.  This cannot be less than 30 seconds, or the
+           value for timeout.  If class is ``none'' or time is not specified,
+           use the default.
+
+     mmapsize class [size]
+           Set the size of the sliding window to map a file using mmap(2).  If
+           zero, tnftpd(8) will use read(2) instead.  The default is zero.  An
+           optional suffix may be provided as per rateget.  This option
+           affects only binary transfers.  If class is ``none'' or size is not
+           specified, use the default.
+
+     modify class [off]
+           If class is ``none'' or off is specified, disable the following
+           commands: CHMOD, DELE, MKD, RMD, RNFR, and UMASK.  Otherwise,
+           enable them.
+
+     motd class [file]
+           If file is not specified or class is ``none'', disable this.  Oth-
+           erwise, use file as the message of the day file to display after
+           login.  Escape sequences are supported; refer to Display file
+           escape sequences in tnftpd(8) for more information.  If file is a
+           relative path, it will be searched for in /etc (which can be over-
+           ridden with -c confdir).
+
+     notify class [fileglob]
+           If fileglob is not specified or class is ``none'', disable this.
+           Otherwise, each time the user enters a new directory, notify the
+           user of any files matching fileglob.
+
+     passive class [off]
+           If class is ``none'' or off is specified, prevent passive (PASV,
+           LPSV, and EPSV) connections.  Otherwise, enable them.
+
+     portrange class [min max]
+           Set the range of port number which will be used for the passive
+           data port.  max must be greater than min, and both numbers must be
+           be between IPPORT_RESERVED (1024) and 65535.  If class is ``none''
+           or no arguments are specified, disable this.
+
+     private class [off]
+           If class is ``none'' or off is specified, do not display class
+           information in the output of the STAT command.  Otherwise, display
+           the information.
+
+     rateget class [rate]
+           Set the maximum get (RETR) transfer rate throttle for class to rate
+           bytes per second.  If rate is 0, the throttle is disabled.  If
+           class is ``none'' or rate is not specified, disable this.
+
+           An optional suffix may be provided, which changes the interpreta-
+           tion of rate as follows:
+                 b    Causes no modification.  (Default; optional)
+                 k    Kilo; multiply the argument by 1024
+                 m    Mega; multiply the argument by 1048576
+                 g    Giga; multiply the argument by 1073741824
+                 t    Tera; multiply the argument by 1099511627776
+
+     rateput class [rate]
+           Set the maximum put (STOR) transfer rate throttle for class to rate
+           bytes per second, which is parsed as per rateget rate.  If class is
+           ``none'' or rate is not specified, disable this.
+
+     readsize class [size]
+           Set the size of the read buffer to read(2) a file.  The default is
+           the file system block size.  An optional suffix may be provided as
+           per rateget.  This option affects only binary transfers.  If class
+           is ``none'' or size is not specified, use the default.
+
+     recvbufsize class [size]
+           Set the size of the socket receive buffer.  An optional suffix may
+           be provided as per rateget.  The default is zero and the system
+           default value will be used.  This option affects only passive
+           transfers.  If class is ``none'' or size is not specified, use the
+           default.
+
+     sanenames class [off]
+           If class is ``none'' or off is specified, allow uploaded file names
+           to contain any characters valid for a file name.  Otherwise, only
+           permit file names which don't start with a `.' and only comprise of
+           characters from the set ``[-+,._A-Za-z0-9]''.
+
+     sendbufsize class [size]
+           Set the size of the socket send buffer.  An optional suffix may be
+           provided as per rateget.  The default is zero and the system
+           default value will be used.  This option affects only binary trans-
+           fers.  If class is ``none'' or size is not specified, use the
+           default.
+
+     sendlowat class [size]
+           Set the low water mark of socket send buffer.  An optional suffix
+           may be provided as per rateget.  The default is zero and system
+           default value will be used.  This option affects only for binary
+           transfer.  If class is ``none'' or size is not specified, use the
+           default.
+
+     template class [refclass]
+           Define refclass as the `template' for class; any reference to
+           refclass in following directives will also apply to members of
+           class.  This is useful to define a template class so that other
+           classes which are to share common attributes can be easily defined
+           without unnecessary duplication.  There can be only one template
+           defined at a time.  If refclass is not specified, disable the tem-
+           plate for class.
+
+     timeout class [time]
+           Set the inactivity timeout period.  (the default is fifteen min-
+           utes).  This cannot be less than 30 seconds, or greater than the
+           value for maxtimeout.  If class is ``none'' or time is not speci-
+           fied, use the default.
+
+     umask class [umaskval]
+           Set the umask to umaskval.  If class is ``none'' or umaskval is not
+           specified, set to the default of 027.
+
+     upload class [off]
+           If class is ``none'' or off is specified, disable the following
+           commands: APPE, STOR, and STOU, as well as the modify commands:
+           CHMOD, DELE, MKD, RMD, RNFR, and UMASK.  Otherwise, enable them.
+
+     writesize class [size]
+           Limit the number of bytes to write(2) at a time.  The default is
+           zero, which means all the data available as a result of mmap(2) or
+           read(2) will be written at a time.  An optional suffix may be pro-
+           vided as per rateget.  This option affects only binary transfers.
+           If class is ``none'' or size is not specified, use the default.
+
+DEFAULTS
+     The following defaults are used:
+
+           checkportcmd  all
+           classtype     chroot CHROOT
+           classtype     guest  GUEST
+           classtype     real   REAL
+           display       none
+           limit         all    -1     # unlimited connections
+           maxtimeout    all    7200   # 2 hours
+           modify        all
+           motd          all    motd
+           notify        none
+           passive       all
+           timeout       all    900    # 15 minutes
+           umask         all    027
+           upload        all
+           modify        guest  off
+           umask         guest  0707
+
+FILES
+     /etc/ftpd.conf                      This file.
+     /usr/share/ftpd/examples/ftpd.conf  A sample ftpd.conf file.
+
+SEE ALSO
+     ftpchroot(5), ftpusers(5), tnftpd(8)
+
+HISTORY
+     The ftpd.conf functionality was implemented in NetBSD 1.3 and later
+     releases by Luke Mewburn, based on work by Simon Burge.
+

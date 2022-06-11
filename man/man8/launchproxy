@@ -1,0 +1,15 @@
+launchproxy(8)            BSD System Manager's Manual           launchproxy(8)
+
+NAME
+     launchproxy -- inetd job emulation helper
+
+SYNOPSIS
+     launchproxy
+
+DESCRIPTION
+     launchproxy handles the inetd emulation for launchd.  This program may be
+     merged into launchd in the future.
+
+SEE ALSO
+     launchctl(1), launchd.plist(5), launchd(8)
+

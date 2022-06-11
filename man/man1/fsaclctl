@@ -1,0 +1,39 @@
+fsaclctl(1)               BSD General Commands Manual              fsaclctl(1)
+
+NAME
+     fsaclctl
+
+SYNOPSIS
+     fsaclctl -p path | -a [-e] [-d] [-v]
+
+DESCRIPTION
+     The fsaclctl command enables, disables or prints the status of Access
+     Control List support on a given file system.  After changing Access Con-
+     trol List support either reboot the system, or remount the file system,
+     to make running applications aware of the change.
+
+     The options are:
+
+     -p      Path to file system mount point.
+
+     -a      Operate on all relevant volumes.
+
+     -e      Enable Access Control Lists on the given file system.
+
+     -d      Disable Access Control Lists on the given file system.
+
+     -v      Display version number.
+
+SEE ALSO
+     chmod(2), unmount(2), ls(2), mount(8)
+
+HISTORY
+     The fsaclctl command first appeared Mac OS X version 10.4.
+
+RETURN VALUES
+     0                  fsaclctl Successfully performed requested operation.
+
+     [ENOTSUP]          The filesystem does not support this operation.
+
+     [EPERM]            The requested operation must be performed as root.
+

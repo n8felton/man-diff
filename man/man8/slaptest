@@ -1,0 +1,58 @@
+SLAPTEST(8C)                                                      SLAPTEST(8C)
+
+
+
+NAME
+       slaptest - Check the suitability of the slapd.conf file.
+
+SYNOPSIS
+       /BinaryCache/OpenLDAP/OpenLDAP-106~5/Root/usr/sbin/slaptest  [-d level]
+       [-f slapd.conf] [-F confdir] [-u] [-v]
+
+
+DESCRIPTION
+       Slaptest is used to check the conformance of the slapd.conf(5) configu-
+       ration file.  It opens the slapd.conf(5) configuration file, and parses
+       it according to the general and the  backend-specific  rules,  checking
+       its sanity.
+
+
+OPTIONS
+       -d level
+              enable debugging messages as defined by the specified level.
+
+       -f slapd.conf
+              specify an alternative slapd.conf(5) file.
+
+       -F confdir
+              specify  a  config  directory.  If both -f and -F are specified,
+              the config file will be read and converted to  config  directory
+              format  and  written  to  the  specified  directory.  If neither
+              option is specified, slaptest will attempt to read  the  default
+              config  directory  before trying to use the default config file.
+              If a valid config directory exists then the default config  file
+              is ignored. If dryrun mode is also specified, no conversion will
+              occur.
+
+       -u     enable dryrun mode (i.e.  don't  fail  if  databases  cannot  be
+              opened, but config is fine).
+
+       -v     enable verbose mode.
+
+EXAMPLES
+       To check a slapd.conf(5) give the command:
+
+            /BinaryCache/OpenLDAP/OpenLDAP-106~5/Root/usr/sbin/slaptest -f //etc/openldap/slapd.conf -v
+
+SEE ALSO
+       ldap(3), slapd(8) slapdn(8)
+
+       "OpenLDAP Administrator's Guide" (http://www.OpenLDAP.org/doc/admin/)
+
+ACKNOWLEDGEMENTS
+       OpenLDAP   is   developed   and  maintained  by  The  OpenLDAP  Project
+       (http://www.openldap.org/).  OpenLDAP is  derived  from  University  of
+       Michigan LDAP 3.3 Release.
+
+
+

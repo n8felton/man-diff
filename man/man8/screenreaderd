@@ -1,0 +1,29 @@
+screenreaderd(8)          BSD System Manager's Manual         screenreaderd(8)
+
+NAME
+     screenreaderd -- VoiceOver daemon
+
+SYNOPSIS
+     screenreaderd [-h | -v | [-ws -t appname -l logmask]]
+
+DESCRIPTION
+     screenreaderd gives audible feedback on user activity and responds to
+     user requests for VoiceOver feedback.
+
+     Options:
+
+     -h       Displays short syntax description.
+
+     -v       Displays version information.
+
+     -w       Starts in watchdog mode. Will try to restart after a crash.
+
+     -s       Required to run at login time. Requires -w option.
+
+     -t appname,appname,...
+              Comma separated list of application names to target.  All appli-
+              cations will be targeted if none are specified.
+
+     -l logmask,logmask,...
+              Comma separated list of logmasks
+

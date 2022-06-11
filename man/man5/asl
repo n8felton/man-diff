@@ -1,0 +1,92 @@
+asl.conf(5)                 BSD File Formats Manual                asl.conf(5)
+
+NAME
+     asl.conf -- configuration file for syslogd(8) asl_action module.
+
+DESCRIPTION
+     The syslogd(8) server in Mac OS X includes a module that compares mes-
+     sages with a set of query patterns, and which performs various actions
+     when messages match the query patterns.
+
+     Each line in the file contains three components.  The first is a query,
+     the second is an action, and the third contains parameters specific to
+     that action.  For example:
+
+           Q [= Sender foobar] [N< Level 3] notify com.apple.foobar
+
+   Queries
+     Queries start with the letter "Q" followed by whitespace.  Following that
+     are any number of message matching components, each of which has the
+     form:
+
+           [OP KEY VAL]
+
+     OP is a comparison operator.  It can have the following values:
+
+           T     true (always matches)
+           =     equal
+           !     not equal
+           >     greater than
+           >=    greater than or equal to
+           <     less than
+           <=    less than or equal to
+
+     It can also be preceded by one or more modifiers:
+
+           C     casefold
+           N     numeric comparison
+           S     substring
+           A     prefix
+           Z     suffix
+
+     KEY and VAL are message keys and values.  For example
+
+           Q [= Sender foobar]
+
+     matches any message with key="Sender" and val="foobar".  The query
+
+           Q [CA= Color gr]
+
+     matches any message with key=Color and val beginning with the letters GR,
+     Gr, gr, or gR (C meaning casefold, A meaning prefix).  The example query
+     above,
+
+           Q [= Sender foobar] [N< Level 3]
+
+     matches any message from "foobar" with a level numerically less than 3
+     (string values are converted to integers, and the comparison is done on
+     the integer values).
+
+     The "T" operator is useful to test for the presence of a particular key.
+
+           Q [T Flavor whatever]
+
+     Will match any message that has a "Flavor" key, regardless of its value.
+
+   Actions
+     The "notify" action causes syslogd to post a notification with
+     notify_post().  The notification key must appear as a single parameter
+     following the "notify" action.
+
+     The "access" action sets read access controls for messages that match the
+     associated query pattern.  syslogd will restrict read access to matching
+     messages to a specific user and group.  The user ID number and group ID
+     number must follow the "access" keyword as parameters.
+
+     The "store" action saves matching messages in a separate log message
+     database.  The database may be accessed using the syslog command line
+     utility.  A database pathname must follow the "store" keyword.  A new
+     database will be created if one does not exist.  Two optional parameters,
+     "stayopen" and "exclude_asldb" may follow the database pathname.
+
+     By default, syslogd will open the database, save a matching message, and
+     then close the database.  If a high volume of messages is expected, spec-
+     ifying "stayopen" will improve performance.
+
+     Specifying "exclude_asldb" will cause syslogd to save matching messages
+     in the database, but exclude them from the main syslogd database
+     (/var/log/asl.db).
+
+SEE ALSO
+     asl(3), notify(3), syslog(1), syslogd(8).
+

@@ -1,0 +1,188 @@
+filter(7)                         Apple Inc.                         filter(7)
+
+
+
+NAME
+       filter - cups file conversion filter interface
+
+SYNOPSIS
+       filter job user title num-copies options [ filename ]
+
+DESCRIPTION
+       The CUPS filter interface provides a standard method for adding support
+       for new document types to CUPS. Each filter is  capable  of  converting
+       from  one  or  more  input formats to another format that can either be
+       printed directly or piped into another filter to get it to a  printable
+       format.
+
+       Filters  must be capable of reading from a filename on the command-line
+       or from the standard input, copying the standard input to  a  temporary
+       file  as  required  by  the file format. All output must be sent to the
+       standard output.
+
+       The command name (argv[0]) is  set  to  the  name  of  the  destination
+       printer.
+
+LOG MESSAGES
+       Messages  sent  to stderr are generally logged to printer-state-message
+       attribute and the current ErrorLog.  Each line begins with  a  standard
+       prefix:
+
+
+       ALERT: message
+            Sets  the  printer-state-message  attribute and adds the specified
+            message to the current ErrorLog using the "alert" log level.
+
+
+       ATTR: attribute=value [attribute=value]
+            Sets the named job attribute(s). Typically this will  be  used  to
+            set the job-remote-id attribute.
+
+
+       CRIT: message
+            Sets  the  printer-state-message  attribute and adds the specified
+            message to the current ErrorLog using the "critical" log level.
+
+
+       DEBUG: message
+            Sets the printer-state-message attribute and  adds  the  specified
+            message to the current ErrorLog using the "debug" log level.
+
+
+       DEBUG2: message
+            Sets  the  printer-state-message  attribute and adds the specified
+            message to the current ErrorLog using the "debug2" log level.
+
+
+       EMERG: message
+            Sets the printer-state-message attribute and  adds  the  specified
+            message to the current ErrorLog using the "emergency" log level.
+
+
+       ERROR: message
+            Sets  the  printer-state-message  attribute and adds the specified
+            message to the current ErrorLog using the "error" log level.
+
+
+       INFO: message
+            Sets the printer-state-message attribute. If the current  LogLevel
+            is set to "debug2", also adds the specified message to the current
+            ErrorLog using the "info" log level.
+
+
+       NOTICE: message
+            Sets the printer-state-message attribute and  adds  the  specified
+            message to the current ErrorLog using the "notice" log level.
+
+
+       PAGE: page-number #-copies
+
+       PAGE: total #-pages
+            Adds an entry to the current PageLog. The first form adds #-copies
+            to the job-media-sheets-completed attribute. The second form  sets
+            the job-media-sheets-completed attribute to #-pages.
+
+
+       STATE: printer-state-reason [printer-state-reason ...]
+
+       STATE: + printer-state-reason [printer-state-reason ...]
+
+       STATE: - printer-state-reason [printer-state-reason ...]
+            Sets,  adds,  or removes printer-state-reason keywords to the cur-
+            rent queue. Typically this is used to  indicate  media,  ink,  and
+            toner conditions on a printer.
+
+
+       WARNING: message
+            Sets  the  printer-state-message  attribute and adds the specified
+            message to the current ErrorLog using the "warning" log level.
+
+
+ENVIRONMENT VARIABLES
+       The following environment variables are defined by the CUPS server when
+       executing the filter:
+
+
+       CHARSET
+            The default text character set, typically utf-8.
+
+
+       CLASS
+            When  a  job is submitted to a printer class, contains the name of
+            the destination printer class. Otherwise this environment variable
+            will not be set.
+
+
+       CONTENT_TYPE
+            The  MIME  type  associated with the file (e.g.  application/post-
+            script).
+
+
+       CUPS_DATADIR
+            The directory where data files can be found.
+
+
+       CUPS_SERVERROOT
+            The root directory of the server.
+
+
+       DEVICE_URI
+            The device-uri associated with the printer.
+
+
+       FINAL_CONTENT_TYPE
+            The  MIME  type  associated  with  the  printer  (e.g.    applica-
+            tion/vnd.cups-postscript).
+
+
+       LANG
+            The default language locale (typically C or en).
+
+
+       PATH
+            The  standard execution path for external programs that may be run
+            by the filter.
+
+
+       PPD
+            The full pathname of the PostScript Printer Description (PPD) file
+            for this printer.
+
+
+       PRINTER
+            The name of the printer.
+
+
+       RIP_CACHE
+            The  recommended  amount of memory to use for Raster Image Proces-
+            sors (RIPs).
+
+
+       SOFTWARE
+            The name and version number of the server (typically CUPS/1.2).
+
+
+       TZ
+            The timezone of the server.
+
+
+       USER
+            The user executing the filter, typically "lp" or  "root";  consult
+            the cupsd.conf(5) file for the current setting.
+
+
+COMPATIBILITY
+       While  the  filter  interface  is  compatible  with  System V interface
+       scripts, it will only work with the System V interface  script  as  the
+       only  filter.   Typically the interface script will be provided via the
+       lpadmin(8) command using the -i option.
+
+SEE ALSO
+       backend(1), cupsd(8),
+       http://localhost:631/help
+
+COPYRIGHT
+       Copyright 2007 by Apple Inc.
+
+
+

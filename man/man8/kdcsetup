@@ -1,0 +1,96 @@
+kdcsetup(1)               BSD General Commands Manual              kdcsetup(1)
+
+NAME
+     kdcsetup -- Kerberos -- Open Directory Single Sign On
+
+SYNOPSIS
+     kdcsetup [-e] [-d] [-f dir_node] [-c dir_node] [-x] [-w] -a admin_name
+              [-p password] REALM
+
+DESCRIPTION
+     kdcsetup is a tool for configuring an Apple Open Directory KDC, it also
+     will set up a stock MIT KDC. It creates the needed setup files and adds
+     the krb5kdc and kadmind servers to the launchd configuration. If the -f
+     option is used kdcsetup writes the KerbersKDC and  KerberosClient config
+     records into the given open directory node. If the -c option is used
+     kdcsetup will create a clone (or slave kdc). If neither option is speci-
+     fied, kdcsetup will set up a stock MIT KDC, prompting for the Master
+     Password.
+
+     -e       Eanbles kdcmond and kadmind in the launchd config (other options
+              except for -v are ignored)
+
+     -d       Disables kdcmond and kadmind in the launchd config (other
+              options except for -v are ignored)
+
+     -f dir_node
+              Create a "master" KDC, write the KerberosKDC and KerberosClient
+              records into the given open directory node
+
+     -c dir_node
+              Create a "replica" KDC, read the KerberosKDC record from the
+              given open directory node and set this KDC up in the same way.
+              This does not copy over the Kerberos database or the kad-
+              min.keytab file. It does update the KerberosClient record,
+              adding an entry into the kdc list
+
+     -x       Promotes a replica KDC to a master. This updates the Ker-
+              berosClient record in the current open directory node
+
+     -w       Add kdcmond and kadmind to the launchd config
+
+     -a admin_name
+              Name of an administrator authorized to make changes in the open
+              directory node. Also this admin will be used as the administra-
+              tor in the KDC database. Note: this is not a principal name
+
+     -p password
+              The password for the above admin
+
+     REALM    The realm that this KDC serves
+
+EXAMPLES
+     To use kerberosautoconfig and kdcsetup to set up a stock MIT KDC
+
+     kerberosautoconfig -r REALM.ORG -m myserver.org
+
+     kdcsetup -w -a administrator -p admin_pass REALM.ORG
+
+     To use kerberosautoconfig and kdcsetup to set up an Apple KDC as a master
+     with a local open directory master
+
+     kerberosautoconfig -r REALM.ORG -m myserver.org
+
+     kdcsetup -f /LDAPv3/127.0.0.1 -w -a administrator -p admin_pass REALM.ORG
+
+     To use kerberosautoconfig and kdcsetup to set up an Apple KDC as a
+     replica
+
+     kerberosautoconfig -r REALM.ORG -m myserver.org
+
+     kdcsetup -c /LDAPv3/127.0.0.1 -w -a administrator -p admin_pass REALM.ORG
+
+FILES
+     /var/db/krb5kdc/               directory where all the config & database
+                                    files for the KDC are stored
+     /var/log/krb5kdc/              directory where the log files from the KDC
+                                    are written
+     /System/Library/LaunchDaemons/com.apple.kdcmond
+     /System/Library/LaunchDaemons/edu.mit.kadmind
+                                    the -w option adds kdcmond and kadmind to
+                                    the launchd config
+
+DIAGNOSTICS
+     You can add -v debug_level to any kdcsetup command. Debug level 1 pro-
+     vides status information, higher levels add progressivly more levels of
+     detail.
+
+NOTES
+     The kdcsetup tool is used by the Apple Single Sign On system to set up a
+     KDC integrated with the rest of the Single Sign On components.
+
+SEE ALSO
+     DirectoryService(1), kerberos(1), launchctl(1), kadmind(8),
+     kerberosautoconfig(8), kdcmond(8), krbservicesetup(8), krb5kdc(8),
+     launchd(8), sso_util(8)
+

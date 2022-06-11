@@ -1,0 +1,87 @@
+KEXTD(8)                  BSD System Manager's Manual                 KEXTD(8)
+
+NAME
+     kextd -- loads kexts on demand from kernel or client processes
+
+SYNOPSIS
+     kextd [-c] [-d] [-f] [-h] [-j] [-r directory] ...  [-v [1-6]] [-x]
+
+DESCRIPTION
+     kextd runs as a daemon process to handle requests from the kernel to load
+     kernel extensions (kexts).  For proper operation kextd must be invoked as
+     the superuser.
+
+     kextd should not be considered a formal interface in the Darwin OS or in
+     Mac OS X.  Neither its usage nor its presence should be relied on by any
+     software or software installer.
+
+     The options available are these:
+
+     -c       Ignore any repository cache files and scan all kext bundles to
+              gather information.  If this option is not given, kextd will
+              attempt to use cache files and to create them if they are out of
+              date or don't exist.
+
+     -d       Debug mode; run in the foreground and print messages to std-
+              out/stderr.
+
+     -f       Don't fork a child task when loading kexts.  This option is
+              present for debugging kextd and should never be used otherwise.
+
+     -h       Print a help message describing each option flag.
+
+     -j       Don't jettison kernel linker; load NDRVs in the kernel and exit,
+              allowing the kernel to continue handling all load requests.
+              This option is used in startup scripts for install CDs, along
+              with a properly built mkext cache, in order to speed startup
+              from the CD.
+
+     -r directory
+              Use directory as a repository of known kexts for handling load
+              requests.  This is not recursive; only the directory's immediate
+              contents are scanned.  By default kextd uses only the kexts in
+              /System/Library/Extensions.
+
+     -v [1-6]
+              Verbose mode; print information about the kext scanning and
+              loading process (note that this is generally not useful when
+              unloading).  See the man page for kextload(8) to see what each
+              verbose level prints.
+
+     -x       Run kextd in safe boot mode (indicating startup with the Shift
+              key held down).  Kexts that don't specify a proper value for the
+              OSBundleRequired info dictionary property will not be loaded.
+              As of Mac OS X 10.5, kextd determines from the kernel whether
+              the system has started in safe boot mode, so this flag is no
+              longer necessary (but may be used for testing).  In safe boot
+              mode, kextd does not use caches (that is, this option implies
+              the use of the -c option).
+
+RESETTING KEXTD
+     On Mac OS X 10.3 and later, it is possible to reset kextd without termi-
+     nating and restarting it, by sending it a HUP signal.  This causes kextd
+     to rescan the Extensions folder, rebuild all its caches, and send all
+     driver personalities to the kernel for a new round of driver matching.
+     In OS X 10.5, kextd watches /System/Library/Extensions and automatically
+     rebuilds their mkext caches.  It will send new drivers personalities to
+     the kernel at this time.
+
+     Installers that add new drivers can signal kextd in these ways instead of
+     requiring the computer to be restarted.  Note that if a hardware device
+     has a driver attached when this is done, a newly-installed driver will
+     not match on it.  See the Apple Developer Connection's Technical Q&A
+     QA1319 for more information.
+
+DIAGNOSTICS
+     kextd normally never exits.  If an error occurs it exits with a nonzero
+     status.  If invoked with the -j option it exits with a zero status when
+     no error occurs, or a nonzero status if an error does occur.
+
+     kextd logs all error and verbose messages to the system log, or to the
+     console if the system log facility isn't available.  When running in
+     debug mode all output is printed to the standard output and error
+     streams.
+
+SEE ALSO
+     kextcache(8), kextload(8), kextstat(8), kextunload(8), syslogd(8)
+

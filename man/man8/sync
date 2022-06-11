@@ -1,0 +1,24 @@
+SYNC(8)                   BSD System Manager's Manual                  SYNC(8)
+
+NAME
+     sync -- force completion of pending disk writes (flush cache)
+
+SYNOPSIS
+     sync
+
+DESCRIPTION
+     Sync can be called to insure that all disk writes have been completed
+     before the processor is halted in a way not suitably done by reboot(8) or
+     halt(8).  Generally, it is preferable to use reboot or halt to shut down
+     the system, as they may perform additional actions such as resynchroniz-
+     ing the hardware clock and flushing internal caches before performing a
+     final sync.
+
+     Sync utilizes the sync(2) function call.
+
+SEE ALSO
+     fsync(2), sync(2), halt(8), reboot(8), update(8)
+
+HISTORY
+     A sync command appeared in Version 6 AT&T UNIX.
+

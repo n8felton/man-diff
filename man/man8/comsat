@@ -1,0 +1,51 @@
+COMSAT(8)                 BSD System Manager's Manual                COMSAT(8)
+
+NAME
+     comsat -- biff server
+
+SYNOPSIS
+     comsat [-l]
+
+DESCRIPTION
+     comsat is the server process which receives reports of incoming mail and
+     notifies users if they have requested this service.  comsat receives mes-
+     sages on a datagram port associated with the ``biff'' service specifica-
+     tion (see services(5) and inetd(8)).  The one line messages are of the
+     form:
+
+           user@mailbox-offset
+
+     If the user specified is logged in to the system and the associated ter-
+     minal has the owner execute bit turned on (by a ``biff y''), the offset
+     is used as a seek offset into the appropriate mailbox file and the first
+     7 lines or 560 characters of the message are printed on the user's termi-
+     nal.  Lines which appear to be part of the message header other than the
+     ``From'', ``To'', ``Date'', or ``Subject'' lines are not included in the
+     displayed message.
+
+OPTIONS
+     The comsat program supports this option:
+
+     -l     The -l option turns on syslogd(8) log messages.
+
+FILES
+     /var/run/utmpx  to find out who's logged on and on what terminals
+
+SEE ALSO
+     biff(1), inetd(8), syslogd(8).
+
+BUGS
+     The message header filtering is prone to error.  The density of the
+     information presented is near the theoretical minimum.
+
+     Users should be notified of mail which arrives on other machines than the
+     one to which they are currently logged in.
+
+     The notification should appear in a separate window so it does not mess
+     up the screen.
+
+     comsat runs as root so that it can open the users maildrop.
+
+HISTORY
+     The comsat command appeared in 4.2BSD.
+

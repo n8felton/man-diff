@@ -1,0 +1,25 @@
+spindump(8)               BSD System Manager's Manual              spindump(8)
+
+NAME
+     spindump -- hang reporting tool
+
+SYNOPSIS
+     spindump
+
+DESCRIPTION
+     spindump is a tool used by various system components to create hang
+     reports and notify the user of application hangs. Most users should not
+     run spindump manually, but it can be invoked by the root user with argu-
+     ments similar to those for sample(1) for debugging purposes.
+
+     Hang reports are stored at:
+
+     /Library/Logs/HangReporter/<<application-name>>/<<hang-date>>.hang
+
+     For normal application crashes spindump will display a dialog to alert
+     the console user to the crash and offer the choice to view more details
+     about the crash and/or report the crash to Apple.
+
+SEE ALSO
+     crashdump(8,) sample(1)
+

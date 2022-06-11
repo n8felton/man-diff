@@ -1,0 +1,79 @@
+EXPR(1)                   BSD General Commands Manual                  EXPR(1)
+
+NAME
+     expr -- evaluate expression
+
+SYNOPSIS
+     expr expression
+
+DESCRIPTION
+     The expr utility evaluates expression and writes the result on standard
+     output.
+
+     All operators are separate arguments to the expr utility.  Characters
+     special to the command interpreter must be escaped.
+
+     Operators are listed below in order of increasing precedence.  Operators
+     with equal precedence are grouped within { } symbols.
+
+     expr1 | expr2
+             Returns the evaluation of expr1 if it is neither an empty string
+             nor zero; otherwise, returns the evaluation of expr2.
+
+     expr1 & expr2
+             Returns the evaluation of expr1 if neither expression evaluates
+             to an empty string or zero; otherwise, returns zero.
+
+     expr1 {=, >, >=, <, <=, !=} expr2
+             Returns the results of integer comparison if both arguments are
+             integers; otherwise, returns the results of string comparison
+             using the locale-specific collation sequence.  The result of each
+             comparison is 1 if the specified relation is true, or 0 if the
+             relation is false.
+
+     expr1 {+, -} expr2
+             Returns the results of addition or subtraction of integer-valued
+             arguments.
+
+     expr1 {*, /, %} expr2
+             Returns the results of multiplication, integer division, or
+             remainder of integer-valued arguments.
+
+     expr1 : expr2
+             The ``:'' operator matches expr1 against expr2, which must be a
+             regular expression.  The regular expression is anchored to the
+             beginning of  the string with an implicit ``^''.  expr expects
+             "basic" regular expressions, see re_format(7) for more informa-
+             tion on regular expressions.
+
+             If the match succeeds and the pattern contains at least one regu-
+             lar expression subexpression ``\(...\)'', the string correspond-
+             ing to ``\1'' is returned; otherwise the matching operator
+             returns the number of characters matched.  If the match fails and
+             the pattern contains a regular expression subexpression the null
+             string is returned; otherwise 0.
+
+     Parentheses are used for grouping in the usual manner.
+
+EXAMPLES
+     1.   The following example adds one to the variable a.
+                a=`expr $a + 1`
+
+     2.   The following example returns the filename portion of a pathname
+          stored in variable a.  The // characters act to eliminate ambiguity
+          with the division operator.
+                expr //$a : '.*/\(.*\)'
+
+     3.   The following example returns the number of characters in variable
+          a.
+                expr $a : '.*'
+
+DIAGNOSTICS
+     The expr utility exits with one of the following values:
+     0       the expression is neither an empty string nor 0.
+     1       the expression is an empty string or 0.
+     2       the expression is invalid.
+
+STANDARDS
+     The expr utility conforms to IEEE Std 1003.2 (``POSIX.2'').
+

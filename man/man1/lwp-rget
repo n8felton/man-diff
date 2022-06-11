@@ -1,0 +1,119 @@
+LWP-RGET(1)           User Contributed Perl Documentation          LWP-RGET(1)
+
+
+
+NAME
+       lwp-rget - Retrieve web documents recursively
+
+SYNOPSIS
+        lwp-rget [--verbose] [--auth=USER:PASS] [--depth=N] [--hier] [--iis]
+                 [--keepext=mime/type[,mime/type]] [--limit=N] [--nospace]
+                 [--prefix=URL] [--referer=URL] [--sleep=N] [--tolower] <URL>
+        lwp-rget --version
+
+DESCRIPTION
+       This program will retrieve a document and store it in a local file.  It
+       will follow any links found in the document and store these documents
+       as well, patching links so that they refer to these local copies.  This
+       process continues until there are no more unvisited links or the
+       process is stopped by the one or more of the limits which can be
+       controlled by the command line arguments.
+
+       This program is useful if you want to make a local copy of a collection
+       of documents or want to do web reading off-line.
+
+       All documents are stored as plain files in the current directory. The
+       file names chosen are derived from the last component of URL paths.
+
+       The options are:
+
+       --auth=USER:PASn
+          Set the authentication credentials to user "USER" and password
+          "PASS" if any restricted parts of the web site are hit.  If there
+          are restricted parts of the web site and authentication credentials
+          are not available, those pages will not be downloaded.
+
+       --depth=n
+          Limit the recursive level. Embedded images are always loaded, even
+          if they fall outside the --depth. This means that one can use
+          --depth=0 in order to fetch a single document together with all
+          inline graphics.
+
+          The default depth is 5.
+
+       --hier
+          Download files into a hierarchy that mimics the web site structure.
+          The default is to put all files in the current directory.
+
+       --referer=URI
+          Set the value of the Referer header for the initial request.  The
+          special value "NONE" can be used to suppress the Referer header in
+          any of subsequent requests.  The Referer header will always be
+          suppressed in all normal "http" requests if the referring page was
+          transmitted over "https" as recommended in RFC 2616.
+
+       --iis
+          Sends an "Accept: */*" on all URL requests as a workaround for a bug
+          in IIS 2.0.  If no Accept MIME header is present, IIS 2.0 returns
+          with a "406 No acceptable objects were found" error.  Also converts
+          any back slashes (\\) in URLs to forward slashes (/).
+
+       --keepext=mime/type[,mime/type]
+          Keeps the current extension for the list MIME types.  Useful when
+          downloading text/plain documents that shouldn't all be translated to
+          *.txt files.
+
+       --limit=n
+          Limit the number of documents to get.  The default limit is 50.
+
+       --nospace
+          Changes spaces in all URLs to underscore characters (_).  Useful
+          when downloading files from sites serving URLs with spaces in
+          them.   Does not remove spaces from fragments, e.g.,
+          "file.html#somewhere in here".
+
+       --prefix=url_prefix
+          Limit the links to follow. Only URLs that start the prefix string
+          are followed.
+
+          The default prefix is set as the "directory" of the initial URL to
+          follow.    For instance if we start lwp-rget with the URL
+          "http://www.sn.no/foo/bar.html", then prefix will be set to
+          "http://www.sn.no/foo/".
+
+          Use "--prefix=''" if you don't want the fetching to be limited by
+          any prefix.
+
+       --sleep=n
+          Sleep n seconds before retrieving each document. This options allows
+          you to go slowly, not loading the server you visiting too much.
+
+       --tolower
+          Translates all links to lowercase.  Useful when downloading files
+          from IIS since it does not serve files in a case sensitive manner.
+
+       --verbose
+          Make more noise while running.
+
+       --quiet
+          Don't make any noise.
+
+       --version
+          Print program version number and quit.
+
+       --help
+          Print the usage message and quit.
+
+       Before the program exits the name of the file, where the initial URL is
+       stored, is printed on stdout.  All used filenames are also printed on
+       stderr as they are loaded.  This printing can be suppressed with the
+       --quiet option.
+
+SEE ALSO
+       lwp-request, LWP
+
+AUTHOR
+       Gisle Aas <aas@sn.no>
+
+
+

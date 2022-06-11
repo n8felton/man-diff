@@ -1,0 +1,34 @@
+ERB(1)                    BSD General Commands Manual                   ERB(1)
+
+NAME
+     rake -- Ruby Make
+
+SYNOPSIS
+     rake [-f rakefile] [options...] targets...
+
+DESCRIPTION
+     Rake is a simple ruby(1) build program with capabilities similar to the
+     regular make(1) command.
+
+     Rake has the following features:
+
+     o   Rakefiles (Rake's version of Makefiles) are completely defined in
+         standard Ruby syntax. No XML files to edit. No quirky Makefile syntax
+         to worry about (is that a tab or a space?).
+
+     o   Users can specify tasks with prerequisites.
+
+     o   Rake supports rule patterns to sythesize implicit tasks.
+
+     o   Flexible FileLists that act like arrays but know about manipulating
+         file names and paths.
+
+     For more information about Rake you can use its ---help flag. There is
+     also online documentation available at "http://docs.rubyrake.org".
+
+SEE ALSO
+     make(1) ruby(1)
+
+AUTHORS
+     Rake is written by Jim Weirich <jim@weirichhouse.org>
+

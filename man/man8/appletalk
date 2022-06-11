@@ -1,0 +1,123 @@
+appletalk(8)                                                      appletalk(8)
+
+
+
+NAME
+       appletalk  -  enables  you  to  configure and display AppleTalk network
+       interfaces
+
+
+SYNOPSIS
+       appletalk [[-u network-interface [-h default-zone ]  [-q]]  |  [[-r|-x]
+       [-c]  [-f  config-file ] [-q] [-v value ] [-w value ]]] [-d] [-C name ]
+       [-n] [-p] [-s] [-j] [-m value ] [-t] [-z]
+
+
+ARGUMENTS
+    Starting Appletalk in single port mode:
+       -u      network-interface
+
+       -q      Start AppleTalk in non-interactive mode, without prompting  the
+               user  for  zones.  This option is valid only with -u (or -[rx],
+               see below).
+
+
+    Starting Appletalk on multiple ports:
+       -r      Start AppleTalk in routing mode.
+
+       -x      Start AppleTalk in multi-homing mode.
+
+
+    Modifiers for single port mode:
+       -h      default-zone
+
+               Check / modify the future default zone.
+
+    Modifiers for multiple ports:
+       -c      Check config file only.
+
+       -e      Check and display configuration only.
+
+       -f      config-file
+
+               Specify a configuration file.  The default  configuration  file
+               is /etc/appletalk.cfg
+
+       -q      Start  AppleTalk in non-interactive mode, without prompting the
+               user for zones.  This option is valid only with -r  or  -x  (or
+               -u, see above).
+
+       -v      value
+
+               Set the maximum number of routing table entries to value
+
+       -w      value
+
+               Set the maximum number of zip table entries to value
+
+
+    Other commands:
+       -d      Makes  AppleTalk  inactive.  You must be logged in as "root" to
+               issue this command.
+
+       -C      name
+
+               Specify the computer name. The default name  is  determine  via
+               the  uname(3)  command.   Non-ASCII strings can be specified by
+               using  a  hexidecimal  representation  of  the  characters  and
+               enclosing the hex string within "*" characters.
+
+       -n      Displays the current AppleTalk network number and node id.
+
+       -p      Print saved AppleTalk information.
+
+       -s      Show statistics and error counts.
+
+
+Other routing commands.
+       -j      Print router status.
+
+       -m      value
+
+               Set the maximum routing, in packets per second, to value
+
+       -t      Display the routing table.
+
+       -z      Display the zone list.
+
+
+DESCRIPTION
+       appletalk displays the status of an active AppleTalk interface, selects
+       an AppleTalk interface, and makes AppleTalk active  or  inactive.   Any
+       user  can  display  statistics,  but  only  users logged in as root can
+       select an AppleTalk interface or make it active or inactive.
+
+
+EXAMPLES
+       To display the current AppleTalk status, enter this command line:
+
+       appletalk -s
+
+       To make AppleTalk inactive, enter this command line:
+
+       appletalk -d
+
+       To make AppleTalk active on interface en0, enter this command line:
+
+       appletalk -u en0
+
+
+FILES
+       /usr/sbin/appletalk
+           Executable file
+
+       /etc/appletalk.cfg
+           Configuration file
+
+
+SEE ALSO
+       appletalk.cfg(5), appleping(1), at_cho_prn(8), atlookup(1), atprint(1),
+       atstatus(1)
+
+
+

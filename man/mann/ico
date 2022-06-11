@@ -1,0 +1,158 @@
+ico(n)                       Windows ICO handling                       ico(n)
+
+
+
+______________________________________________________________________________
+
+NAME
+       ico - Reading and writing windows icons
+
+SYNOPSIS
+       package require Tcl  8.4
+
+       package require ico  ?0.3?
+
+       ::ico::getIconList file ?option value...?
+
+       ::ico::getIcon file index ?option value...?
+
+       ::ico::writeIcon file index depth data ?option value...?
+
+       ::ico::copyIcon file index file2 index2 ?option value...?
+
+       ::ico::EXEtoICO file file2
+
+       ::ico::clearCache ?file?
+
+       ::ico::transparentColor image color
+
+       ::ico::Show file ?option value...?
+
+_________________________________________________________________
+
+DESCRIPTION
+       This  package  provides functions for reading and writing Windows icons
+       from ICO, EXE, DLL, ICL, and BMP files.
+
+API
+       ::ico::getIconList file ?option value...?
+              Returns a list of icons found in file where each element has the
+              format {width height depth}. Recognizes the following options.
+
+              -type fileFormat
+
+
+       ::ico::getIcon file index ?option value...?
+              Extracts  the  icon  at index from file.  The default -format is
+              image which will return the name of a Tk  image  containing  the
+              icon. Optionally -name may be used to specify the name of the Tk
+              image that is created. If -format is colors then a list of color
+              names  in the #RRGGBB format is returned. Each list element is a
+              horizontal row. Each horizontal row contains a  list  of  colors
+              for  all  the pixels in that row from left to right.  Recognizes
+              the following options.
+
+              -type fileFormat
+
+              -format value
+
+              -name value
+
+
+       ::ico::writeIcon file index depth data ?option value...?
+
+              file fileName (in)
+
+              index integer (in)
+                     This is the 0-based index of  the  icon  to  write.  When
+                     writing  to  an  EXE, DLL, or ICL file you may only over-
+                     write existing icons with an icon of the same  dimensions
+                     and  color  depth.   When writing to an ICO, index may be
+                     one greater than the last icon. This will  append  a  new
+                     icon  to  the  file.   When writing to an ICO, index will
+                     accept end. This will also  cause  the  new  icon  to  be
+                     appended  to  the file.  When writing the other types end
+                     will refer to the last existing icon.
+
+              depth integer (in)
+                     This argument must have a value of 1, 4, 8, 24, or 32. If
+                     data has more colors than the color depth allows an error
+                     will be generated.
+
+              data options (in)
+                     This argument is either a list of colors  in  the  format
+                     returned  by ::ico::getIcon -format colors or the name of
+                     a Tk image.
+
+       Recognizes the following options.
+
+              -type fileFormat
+
+
+       ::ico::copyIcon file index file2 index2 ?option value...?
+              Copies the icon at index in file to index2 in file2.
+
+              -fromtype fileFormat
+
+              -totype fileFormat
+
+
+       ::ico::EXEtoICO file file2
+              Extracts all icons from the executable  file  to  the  ICO  file
+              file2.
+
+              -type fileFormat
+
+
+       ::ico::clearCache ?file?
+              The  ::ico::getIconList  command caches icon offsets inside EXE,
+              DLL, and ICL files in order to speed up extraction.   This  com-
+              mand clears that cache for the specific ?file? or all files.
+
+       ::ico::transparentColor image color
+              If  image  is a single word it is assumed to be the name of a Tk
+              image.  All pixels matching color  in  the  image  will  be  set
+              transparent.   Alternatively, image may be a color list in which
+              case a modified list is returned.
+
+       ::ico::Show file ?option value...?
+              Application level command which displays a  window  showing  all
+              the icons in file with information about them.
+
+              -type fileFormat
+
+              -parent pathName
+
+EXAMPLE
+           button .explore -image [::ico::getIcon explorer.exe 0 -name explore]
+           set i [lsearch [::ico::getIconList tclkit.exe] {32 32 8}]]
+           set colorlist [::ico::getIcon tclkit.exe $i -format colors -type EXE]
+
+
+LIMITATIONS
+       Icons may not be added or removed from file types other than ICO. Icons
+       in these files may only be replaced with icons of the  same  dimensions
+       and color depth.
+
+       Icons of 8bpp or lower must include black in the pallete, this means if
+       your icon does not have black in it, you will need  to  leave  a  color
+       free so that it may be included by writeIcon.
+
+       There  is currently no way to read alpha channel information from 32bpp
+       icons.
+
+       Tk images do not have an alpha channel so the only way to write a  true
+       32bpp icon is from a color list. writing a 32bpp icon from a Tkimage is
+       identical to writing a 24bpp icon.
+
+
+           button .explore -image [::ico::getIcon explorer.exe 0 -name explore]
+           set i [lsearch [::ico::getIconList tclkit.exe] {32 32 8}]]
+           set colorlist [::ico::getIcon tclkit.exe $i -format colors -type EXE]
+
+
+KEYWORDS
+       dll, entry, exe, ico, icon
+
+
+

@@ -1,0 +1,26 @@
+GETNAME(1)                BSD General Commands Manual               GETNAME(1)
+
+NAME
+     getNAME -- get name sections from manual pages
+
+SYNOPSIS
+     /usr/libexec/getNAME [-itw] file ...
+
+DESCRIPTION
+     The getNAME utility get name sections from manual pages.  Without options
+     getNAME building apropos(1) database entries.
+
+     The options are as follows:
+
+     -i      For building intro entries.
+
+     -t      For building toc.
+
+     -w      Print type of manual page (OLD, NEW, UNKNOWN).
+
+SEE ALSO
+     apropos(1), makewhatis(1), man(1)
+
+HISTORY
+     The manual page for getNAME command appeared in FreeBSD 2.2.
+

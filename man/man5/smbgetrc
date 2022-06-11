@@ -1,0 +1,68 @@
+SMBGETRC(5)                                                        SMBGETRC(5)
+
+
+
+NAME
+       smbgetrc - configuration file for smbget
+
+SYNOPSIS
+       smbgetrc
+
+DESCRIPTION
+       This manual page documents the format and options of the smbgetrc file.
+       This is the configuration file used by the smbget(1) utility. The  file
+       contains  of  key-value pairs, one pair on each line. The key and value
+       should be separated by a space.
+
+       By default, smbget reads its configuration from $HOME/.smbgetrc, though
+       other locations can be specified using the command-line options.
+
+OPTIONS
+       The following keys can be set:
+
+       resume on|off
+          Whether aborted downloads should be automatically resumed.
+
+       recursive on|off
+          Whether directories should be downloaded recursively
+
+       username name
+          Username  to  use when logging in to the remote server. Use an empty
+          string for anonymous access.
+
+       password pass
+          Password to use when logging in.
+
+       workgroup wg
+          Workgroup to use when logging in
+
+       nonprompt on|off
+          Turns off asking for username and password. Useful for scripts.
+
+       debuglevel int
+          (Samba) debuglevel to run at.  Useful  for  tracking  down  protocol
+          level problems.
+
+       dots on|off
+          Whether  a single dot should be printed for each block that has been
+          downloaded, instead of the default progress indicator.
+
+       blocksize int
+          Number of bytes to put in a block.
+
+VERSION
+       This man page is correct for version 3.0 of the Samba suite.
+
+SEE ALSO
+       smbget(1) and Samba(7).
+
+AUTHOR
+       The original Samba software  and  related  utilities  were  created  by
+       Andrew  Tridgell.  Samba  is now developed by the Samba Team as an Open
+       Source project similar to the way the Linux kernel is developed.
+
+       This manual page was written by Jelmer Vernooij
+
+
+
+

@@ -1,0 +1,82 @@
+SLAPINDEX(8C)                                                    SLAPINDEX(8C)
+
+
+
+NAME
+       slapindex - SLAPD index to LDIF utility
+
+SYNOPSIS
+       /BinaryCache/OpenLDAP/OpenLDAP-106~5/Root/usr/sbin/slapindex  [-v] [-c]
+       [-g] [-q] [-d  level]  [-b  suffix]  [-n  dbnum]  [-f  slapd.conf]  [-F
+       confdir]
+
+
+DESCRIPTION
+       Slapindex is used to regenerate slapd(8) indices based upon the current
+       contents of a database.  It opens the given database determined by  the
+       database number or suffix and updates the indices for all values of all
+       attributes of all entries.  Databases configured as subordinate of this
+       one are also re-indexed, unless -g is specified.
+
+OPTIONS
+       -v     enable verbose mode.
+
+       -c     enable continue (ignore errors) mode.
+
+       -g     disable subordinate gluing.  Only the specified database will be
+              processed, and not its glued subordinates (if any).
+
+       -q     enable quick (fewer integrity checks) mode. Performs no  consis-
+              tency  checks when writing the database. Improves indexing time,
+              however the database will most likely be unusable if any  errors
+              or interruptions occur.
+
+       -d level
+              enable debugging messages as defined by the specified level.
+
+       -b suffix
+              Use the specified suffix to determine which database to generate
+              output for.  The -b cannot be used in conjunction  with  the  -n
+              option.
+
+       -n dbnum
+              Generate output for the dbnum-th database listed in the configu-
+              ration file.  The -n cannot be used in conjunction with  the  -b
+              option.
+
+       -f slapd.conf
+              specify an alternative slapd.conf(5) file.
+
+       -F confdir
+              specify  a  config  directory.  If both -f and -F are specified,
+              the config file will be read and converted to  config  directory
+              format  and  written  to  the  specified  directory.  If neither
+              option is specified, an  attempt  to  read  the  default  config
+              directory  will  be made before trying to use the default config
+              file. If a valid config directory exists then the default config
+              file is ignored.
+
+LIMITATIONS
+       Your  slapd(8) should not be running (at least, not in read-write mode)
+       when you do this to ensure consistency of the database.
+
+       This command provides ample opportunity for  the  user  to  obtain  and
+       drink their favorite beverage.
+
+EXAMPLES
+       To reindex your SLAPD database, give the command:
+
+            /BinaryCache/OpenLDAP/OpenLDAP-106~5/Root/usr/sbin/slapindex
+
+SEE ALSO
+       ldap(3), ldif(5), slapadd(8), ldapadd(1), slapd(8)
+
+       "OpenLDAP Administrator's Guide" (http://www.OpenLDAP.org/doc/admin/)
+
+ACKNOWLEDGEMENTS
+       OpenLDAP   is   developed   and  maintained  by  The  OpenLDAP  Project
+       (http://www.openldap.org/).  OpenLDAP is  derived  from  University  of
+       Michigan LDAP 3.3 Release.
+
+
+

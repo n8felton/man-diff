@@ -1,0 +1,53 @@
+FAITH(4)                 BSD Kernel Interfaces Manual                 FAITH(4)
+
+NAME
+     faith -- IPv6-to-IPv4 TCP relay capturing interface
+
+SYNOPSIS
+     pseudo-device faith [count]
+
+DESCRIPTION
+     The faith interface captures IPv6 TCP traffic, for implementing userland
+     IPv6-to-IPv4 TCP relay like faithd(8).
+
+     Special action will be taken when IPv6 TCP traffic is seen on a router,
+     and routing table suggests to route it to faith interface.  In this case,
+     the packet will be accepted by the router, regardless of list of IPv6
+     interface addresses assigned to the router.  The packet will be captured
+     by an IPv6 TCP socket, if it has IN6P_FAITH flag turned on and it has
+     matching address/port pairs.  In result, faith will let you capture IPv6
+     TCP traffic to some specific destination addresses.  Userland programs,
+     such as faithd(8) can use this behavior to relay IPv6 TCP traffic to IPv4
+     TCP traffic.  The program can accept some specific IPv6 TCP traffic, per-
+     form getsockname(2) to get the IPv6 destination address specified by the
+     client, and perform application-specific address mapping to relay IPv6
+     TCP to IPv4 TCP.
+
+     The IN6P_FAITH flag on IPv6 TCP socket can be set by using setsockopt(2),
+     with level equals to IPPROTO_IPV6 and optname equals to IPv6_FAITH.
+
+     To handle error reports by ICMPv6, some of ICMPv6 packets routed to faith
+     interface will be delivered to IPv6 TCP, as well.
+
+     To understand how faith can be used, take a look at source code of
+     faithd(8).
+
+     As faith interface implements potentially dangerous operation, great care
+     must be taken when configuring faith interface.  To avoid possible mis-
+     use, sysctl(8) variable net.inet6.ip6.keepfaith must be set to 1 prior to
+     the use of the interface.  When net.inet6.ip6.keepfaith is 0, no packet
+     will be captured by faith interface.
+
+     faith interface is intended to be used on routers, not on hosts.
+
+SEE ALSO
+     inet(4), inet6(4), faithd(8)
+
+     Jun-ichiro itojun Hagino and Kazu Yamamoto, An IPv6-to-IPv4 transport
+     relay translator, internet draft, draft-ietf-ngtrans-tcpudp-relay-04.txt,
+     work in progress material.
+
+HISTORY
+     The FAITH IPv6-to-IPv4 TCP relay translator was first appeared in WIDE
+     hydrangea IPv6 stack.
+

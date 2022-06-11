@@ -1,0 +1,532 @@
+cupsd.conf(5)                     Apple Inc.                     cupsd.conf(5)
+
+
+
+NAME
+       cupsd.conf - server configuration file for cups
+
+DESCRIPTION
+       The  cupsd.conf  file  configures  the CUPS scheduler, cupsd(8).  It is
+       normally located in the /private/etc/cups directory.
+
+       Each line in the file can be a configuration directive, a  blank  line,
+       or  a comment. Comment lines start with the # character. The configura-
+       tion directives are intentionally similar to those used by the  popular
+       Apache web server software and are described below.
+
+DIRECTIVES
+       The  following  directives  are understood by cupsd(8). Consult the on-
+       line help for detailed descriptions:
+
+       AccessLog filename
+
+       AccessLog syslog
+            Defines the access log filename.
+
+       Allow all
+
+       Allow none
+
+       Allow host.domain.com
+
+       Allow *.domain.com
+
+       Allow ip-address
+
+       Allow ip-address/netmask
+
+       Allow ip-address/mm
+
+       Allow @IF(name)
+
+       Allow @LOCAL
+            Allows access from the named hosts or addresses.
+
+       AuthClass User
+
+       AuthClass Group
+
+       AuthClass System
+            Specifies the authentication class (User, Group,  System)  -  this
+            directive is deprecated.
+
+       AuthGroupName group-name
+            Specifies the authentication group - this directive is deprecated.
+
+       AuthType None
+
+       AuthType Basic
+
+       AuthType BasicDigest
+
+       AuthType Digest
+
+       AuthType Kerberos
+            Specifies  the  authentication  type  (None,  Basic,  BasicDigest,
+            Digest, Kerberos)
+
+       AutoPurgeJobs Yes
+
+       AutoPurgeJobs No
+            Specifies  whether to purge job history data automatically when it
+            is no longer required for quotas.
+
+       BrowseAddress ip-address
+
+       BrowseAddress @IF(name)
+
+       BrowseAddress @LOCAL
+            Specifies a broadcast address  for  outgoing  printer  information
+            packets.
+
+       BrowseAllow all
+
+       BrowseAllow none
+
+       BrowseAllow host.domain.com
+
+       BrowseAllow *.domain.com
+
+       BrowseAllow ip-address
+
+       BrowseAllow ip-address/netmask
+
+       BrowseAllow ip-address/mm
+
+       BrowseAllow @IF(name)
+
+       BrowseAllow @LOCAL
+            Allows incoming printer information packets from the named host or
+            address.
+
+       BrowseDeny all
+
+       BrowseDeny none
+
+       BrowseDeny host.domain.com
+
+       BrowseDeny *.domain.com
+
+       BrowseDeny ip-address
+
+       BrowseDeny ip-address/netmask
+
+       BrowseDeny ip-address/mm
+
+       BrowseDeny @IF(name)
+
+       BrowseDeny @LOCAL
+            Denies incoming printer information packets from the named host or
+            address.
+
+       BrowseInterval seconds
+            Specifies  the maximum interval between printer information broad-
+            casts.
+
+       BrowseOrder allow,deny
+
+       BrowseOrder deny,allow
+            Specifies  the  order  of  printer  information   access   control
+            (allow,deny or deny,allow)
+
+       BrowsePoll host-or-ip-address
+            Specifies a server to poll for printer information.
+
+       BrowsePort port
+            Specifies the port to listen to for printer information packets.
+
+       BrowseProtocols [All] [CUPS] [DNSSD] [LDAP] [SLP]
+            Specifies the protocols to use for printer browsing.
+
+       BrowseLocalProtocols [All] [CUPS] [DNSSD] [LDAP] [SLP]
+            Specifies the protocols to use for local printer browsing.
+
+       BrowseRemoteProtocols [All] [CUPS] [DNSSD] [LDAP] [SLP]
+            Specifies the protocols to use for remote printer browsing.
+
+       BrowseRelay from-address to-address
+            Specifies  that printer information packets should be relayed from
+            one host or network to another.
+
+       BrowseShortNames Yes
+
+       BrowseShortNames No
+            Specifies whether remote printers will use short names ("printer")
+            or not ("printer@server"). This option is ignored if more than one
+            remote printer exists with the same name.
+
+       BrowseTimeout seconds
+            Specifies the maximum interval between printer information updates
+            before  remote printers will be removed from the list of available
+            printers.
+
+       Browsing Yes
+
+       Browsing No
+            Specifies  whether  or  not  remote  printer  browsing  should  be
+            enabled.
+
+       Classification banner
+            Specifies the security classification of the server.
+
+       ClassifyOverride Yes
+
+       ClassifyOverride No
+            Specifies whether to allow users to override the classification of
+            individual print jobs.
+
+       ConfigFilePerm mode
+            Specifies the permissions for all  configuration  files  that  the
+            scheduler writes.
+
+       DataDir path
+            Specified the directory where data files can be found.
+
+       DefaultAuthType Basic
+
+       DefaultAuthType BasicDigest
+
+       DefaultAuthType Digest
+
+       DefaultAuthType Kerberos
+            Specifies the default type of authentication to use.
+
+       DefaultCharset charset
+            Specifies the default character set to use for text.
+
+       DefaultLanguage locale
+            Specifies the default language to use for text and web content.
+
+       DefaultPolicy policy-name
+            Specifies the default access policy to use.
+
+       Deny all
+
+       Deny none
+
+       Deny host.domain.com
+
+       Deny *.domain.com
+
+       Deny ip-address
+
+       Deny ip-address/netmask
+
+       Deny ip-address/mm
+
+       Deny @IF(name)
+
+       Deny @LOCAL
+            Denies access to the named host or address.
+
+       DocumentRoot directory
+            Specifies  the  root  directory  for the internal web server docu-
+            ments.
+
+       Encryption IfRequested
+
+       Encryption Never
+
+       Encryption Required
+            Specifies the level of encryption that is required for a  particu-
+            lar location.
+
+       ErrorLog filename
+
+       ErrorLog syslog
+            Specifies the error log filename.
+
+       FileDevice Yes
+
+       FileDevice No
+            Specifies  whether  the  file  pseudo-device  can  be used for new
+            printer queues.
+
+       FilterLimit limit
+            Specifies the maximum cost of filters that are run concurrently.
+
+       FilterNice nice-value
+            Specifies the scheduling priority ("nice" value) of  filters  that
+            are run to print a job.
+
+       FontPath directory[:directory:...]
+            Specifies the search path for fonts.
+
+       Group group-name-or-number
+            Specifies  the  group  name or ID that will be used when executing
+            external programs.
+
+       HideImplicitMembers Yes
+
+       HideImplicitMembers No
+            Specifies whether to hide members of implicit classes.
+
+       HostNameLookups Yes
+
+       HostNameLookups No
+
+       HostNameLookups Double
+            Specifies  whether  or  not  to  do  reverse  lookups  on   client
+            addresses.
+
+       ImplicitAnyClasses Yes
+
+       ImplicitAnyClasses No
+            Specifies  whether or not to create implicit classes for local and
+            remote    printers,    e.g.    "AnyPrinter"    from     "Printer",
+            "Printer@server1", and "Printer@server2".
+
+       ImplicitClasses Yes
+
+       ImplicitClasses No
+            Specifies whether or not to create implicit classes from identical
+            remote printers.
+
+       Include filename
+            Includes the named file.
+
+       JobRetryInterval seconds
+            Specifies the interval between retries of jobs in seconds.
+
+       JobRetryLimit count
+            Specifies the number of retries that are done for jobs.
+
+       KeepAlive Yes
+
+       KeepAlive No
+            Specifies whether to support HTTP keep-alive connections.
+
+       KeepAliveTimeout seconds
+            Specifies the amount of time that connections are kept alive.
+
+       Krb5Keytab filename
+            Overrides the Kerberos key tab location.
+
+       <Limit operations> ... </Limit>
+            Specifies the IPP operations that are being limited inside a  pol-
+            icy.
+
+       <Limit methods> ... </Limit>
+
+       <LimitExcept methods> ... </LimitExcept>
+            Specifies  the  HTTP methods that are being limited inside a loca-
+            tion.
+
+       LimitRequestBody
+            Specifies the maximum size of any print job request.
+
+       Listen ip-address:port
+
+       Listen *:port
+
+       Listen /path/to/domain/socket
+            Listens to the specified address and port or domain socket path.
+
+       <Location /path> ... </Location>
+            Specifies access control for the named location.
+
+       LogFilePerm mode
+            Specifies the permissions for all log  files  that  the  scheduler
+            writes.
+
+       LogLevel alert
+
+       LogLevel crit
+
+       LogLevel debug2
+
+       LogLevel debug
+
+       LogLevel emerg
+
+       LogLevel error
+
+       LogLevel info
+
+       LogLevel none
+
+       LogLevel notice
+
+       LogLevel warn
+            Specifies the logging level for the ErrorLog file.
+
+       MaxClients number
+            Specifies the maximum number of simultaneous clients to support.
+
+       MaxClientsPerHost number
+            Specifies  the  maximum  number of simultaneous clients to support
+            from a single address.
+
+       MaxCopies number
+            Specifies the maximum number of copies that a user  can  print  of
+            each job.
+
+       MaxJobs number
+            Specifies the maximum number of simultaneous jobs to support.
+
+       MaxJobsPerPrinter number
+            Specifies  the  maximum number of simultaneous jobs per printer to
+            support.
+
+       MaxJobsPerUser number
+            Specifies the maximum number of simultaneous jobs per user to sup-
+            port.
+
+       MaxLogSize number-bytes
+            Specifies  the  maximum  size  of  the  log  files before they are
+            rotated (0 to disable rotation)
+
+       MaxRequestSize number-bytes
+            Specifies the maximum request/file size in bytes (0 for no limit)
+
+       Order allow,deny
+
+       Order deny,allow
+            Specifies  the  order  of  HTTP  access  control  (allow,deny   or
+            deny,allow)
+
+       PageLog filename
+
+       PageLog syslog
+            Specifies the page log filename.
+
+       PassEnv variable [... variable]
+            Passes the specified environment variable(s) to child processes.
+
+       <Policy name> ... </Policy>
+            Specifies access control for the named policy.
+
+       Port number
+            Specifies a port number to listen to for HTTP requests.
+
+       PreserveJobFiles Yes
+
+       PreserveJobFiles No
+            Specifies  whether  or  not  to  preserve job files after they are
+            printed.
+
+       PreserveJobHistory Yes
+
+       PreserveJobHistory No
+            Specifies whether or not to preserve the job  history  after  they
+            are printed.
+
+       Printcap
+
+       Printcap filename
+            Specifies  the  filename for a printcap file that is updated auto-
+            matically with a list of available  printers  (needed  for  legacy
+            applications);  specifying  Printcap  with  no  filename  disables
+            printcap generation.
+
+       PrintcapFormat bsd
+
+       PrintcapFormat solaris
+            Specifies the format of the printcap file.
+
+       PrintcapGUI
+
+       PrintcapGUI gui-program-filename
+            Specifies whether to generate option  panel  definition  files  on
+            some  operating  systems.  When provided with no program filename,
+            disables option panel definition files.
+
+       ReloadTimeout seconds
+            Specifies the amount of time to wait  for  job  completion  before
+            restarting the scheduler.
+
+       RemoteRoot user-name
+            Specifies  the  username  that  is associated with unauthenticated
+            root accesses.
+
+       RequestRoot directory
+            Specifies the directory to store print jobs and other HTTP request
+            data.
+
+       Require group group-name-list
+
+       Require user user-name-list
+
+       Require valid-user
+            Specifies that user or group authentication is required.
+
+       RIPCache bytes
+            Specifies  the  maximum  amount  of  memory to use when converting
+            images and PostScript files to bitmaps for a printer.
+
+       Satisfy all
+
+       Satisfy any
+            Specifies whether all or any limits set for  a  Location  must  be
+            satisfied to allow access.
+
+       ServerAdmin user@domain.com
+            Specifies the email address of the server administrator.
+
+       ServerBin directory
+            Specifies the directory where backends, CGIs, daemons, and filters
+            may be found.
+
+       ServerCertificate filename
+            Specifies the encryption certificate to use.
+
+       ServerKey filename
+            Specifies the encryption key to use.
+
+       ServerName hostname-or-ip-address
+            Specifies the fully-qualified hostname of the server.
+
+       ServerRoot directory
+            Specifies the directory where the server configuration  files  can
+            be found.
+
+       ServerTokens Full
+
+       ServerTokens Major
+
+       ServerTokens Minimal
+
+       ServerTokens Minor
+
+       ServerTokens None
+
+       ServerTokens OS
+
+       ServerTokens ProductOnly
+            Specifies  what  information  is  included in the Server header of
+            HTTP responses.
+
+       SetEnv variable value
+            Set the specified environment variable to be passed to child  pro-
+            cesses.
+
+       SSLListen
+            Listens  on  the  specified address and port for encrypted connec-
+            tions.
+
+       SSLPort
+            Listens on the specified port for encrypted connections.
+
+       SystemGroup group-name [group-name ...]
+            Specifies the group(s) to use for System class authentication.
+
+       TempDir directory
+            Specifies the directory where temporary files are stored.
+
+       Timeout seconds
+            Specifies the HTTP request timeout in seconds.
+
+       User user-name
+            Specifies the user name or ID that is used when  running  external
+            programs.
+
+SEE ALSO
+       classes.conf(5),   cupsd(8),   mime.convs(5),   mime.types(5),   print-
+       ers.conf(5), subscriptions.conf(5),
+       http://localhost:631/help
+
+COPYRIGHT
+       Copyright 2007 by Apple Inc.
+
+
+

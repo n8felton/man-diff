@@ -1,0 +1,42 @@
+atstatus(1)                                                        atstatus(1)
+
+
+
+NAME
+       atstatus - displays status information from an AppleTalk device
+
+SYNOPSYS
+       atstatus [ object[:type[@zone]] ]
+
+ARGUMENTS
+       object  Specifies  the  name of the AppleTalk device.  Wildcard charac-
+               ters are not permitted.  If you  don't  specify  the  AppleTalk
+               device, atstatus uses the system default.  If the name contains
+               spaces, put quotation marks around the name.  Here is an  exam-
+               ple:
+
+                       atstatus "Sharon's Print Shop"
+
+       type    Specifies  the  type  of server.  If you don't specify the type
+               argument, the default is LaserWriter.  If  you  supply  a  zone
+               argument, you must also supply a type argument.
+
+       zone    Specifies  the  zone in which the AppleTalk device resides.  If
+               you don't specify the zone, the  system  defaults  to  *,  your
+               local zone.
+
+
+DESCRIPTION
+       atstatus  gets  the  status  string from an AppleTalk device, such as a
+       LaserWriter.
+
+
+FILES
+       /usr/bin/atstatus Executable file
+
+
+SEE ALSO
+       at_cho_prn(1), atlookup(1), atprint(1)
+
+
+

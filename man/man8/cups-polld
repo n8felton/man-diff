@@ -1,0 +1,28 @@
+cups-polld(8)                     Apple Inc.                     cups-polld(8)
+
+
+
+NAME
+       cups-polld - cups printer polling daemon
+
+SYNOPSIS
+       cups-polld address ipp-port interval browse-port
+
+DESCRIPTION
+       cups-polld  polls  remote  servers for a list of available printers and
+       printer classes every interval seconds.  Printer and class  information
+       is  then broadcast to the localhost interface (127.0.0.1) on the speci-
+       fied browse port for reception by cupsd(8).
+
+       This program is started automatically by  cupsd  for  every  BrowsePoll
+       directive found in the cupsd.conf(5) file.
+
+SEE ALSO
+       cupsd(8), cupsd.conf(5),
+       http://localhost:631/help
+
+COPYRIGHT
+       Copyright 2007 by Apple Inc.
+
+
+

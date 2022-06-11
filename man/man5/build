@@ -1,0 +1,145 @@
+build.xml(5)                                                      build.xml(5)
+
+
+
+NAME
+       build.xml - configuration file used by ant to build projects
+
+
+DESCRIPTION
+       The  file  build.xml  is  the default configuration file used by ant to
+       determine target to build for a specific project. It can be  considered
+       the ant equivalent of Makefile..
+
+       The  format  of ant is XML and for each project a seperate file is con-
+       structed.  The buildfile consists of one or more tasks. An  example  is
+       given below.
+
+       <project default="compile">
+
+         <target name="compile">
+           <javac srcdir="src">
+         </target>
+
+       </project>
+
+       This example has one target and it is defaulted. The target itself con-
+       sists of one task javac which compiles the files in the src  directory.
+
+
+TARGETS
+       Targets  can  depend  on other targets. These dependencies are given by
+       the depends attribute of the <target> element.
+
+
+TASKS
+       A task is a piece of code that is executed.   Ant  recognizes  built-in
+       task, optional tasks, but one can also write new tasks.
+
+       Built-in tasks
+
+       The  built-in  tasks are: Ant, AntCall, AntStructure, Apply, Available,
+       Chmod, Copy, Cvs, Delete, Deltree, Echo, Exec,  ExecOn,  Fail,  Filter,
+       FixCRLF, GenKey, Get, GUnzip, GZip, Jar, Java, Javac, Javadoc/Javadoc2,
+       Mail, Mkdir, Move, Patch, Property, Replace, Rmic, SignJar, Sql, Style,
+       Tar, Taskdef, Touch, TStamp, Unjar, Untar, Unwar, Unzip, Uptodate, War,
+       Zip
+
+
+       Java   Executes a Java class within  the  running  (Ant)  VM  or  forks
+              another  VM if specified. Below are some of the attibutes to the
+              <java> element:
+
+              classname (required) the Java class to execute
+
+              fork if enabled triggers the class execution in another VM (dis-
+              abled by default)
+
+              jvm the command used to invoke the Java Virtual Machine, default
+              is java. The command is  resolved  by  java.lang.Runtime.exec().
+              Ignored if fork is disabled.
+
+              Other  arguments are classpath, classpathref, maxmemory, failon-
+              error, dir and output.
+
+
+       Javac  Compiles a source tree within the running (Ant) VM.
+
+              srcdir (required) location of the java files
+
+              destdir location to store the class files
+
+              debug indicates whether source should  be  compiled  with  debug
+              information; defaults to off
+
+              optimize  indicates whether source should be compiled with opti-
+              mization; defaults to off
+
+              target generate class files for specific VM version  (e.g.,  1.1
+              or 1.2).
+
+              includes  comma-separated list of patterns of files that must be
+              included; all files are included when omitted
+
+              excludes comma-separated list of patterns of files that must  be
+              excluded;  no  files (except default excludes) are excluded when
+              omitted.
+
+              defaultexcludes indicates whether  default  excludes  should  be
+              used (yes | no); default excludes are used when omitted.
+
+              Other arguments are includesfile, excludesfile, classpath, boot-
+              classpath, classpathref,  bootclasspathref,  extdirs,  encoding,
+              deprecation,  verbose, includeAntRuntime, includeJavaRuntime and
+              failonerror.
+
+
+Properties
+       A project can have a set of properties, which consist of a  name  value
+       combination. Within tasks they can be used by placing them between "${"
+       and "}", as in "${builddir}/classes".
+
+       Built-in Properties
+
+       Ant provides access to all  system  properties  as  if  they  had  been
+       defined using a <property> task. For example, ${os.name} expands to the
+       name of the operating system.
+
+
+       basedir
+              the absolute path of the project's  basedir  (as  set  with  the
+              basedir attribute of <project>).
+
+       ant.file
+              the absolute path of the buildfile.
+
+       ant.project.name
+              the  name  of the project that is currently executing; it is set
+              in the name attribute of <project>.
+
+       ant.java.version
+              the JVM version Ant detected; currently it can hold  the  values
+              "1.1", "1.2" and "1.3".
+
+
+Classpath
+       The classpath can be set by using the <classpath> element:
+
+       <classpath>
+         <pathelement path="${classpath}"/>
+         <pathelement location="lib/helper.jar"/>
+         <fileset dir="lib">
+           <include name="**/*.jar"/>
+         </fileset> </classpath>
+
+
+SEE ALSO
+       ant(1)
+
+
+AUTHOR
+       This  manpage  is made by Egon Willighagen <egonw@sci.kun.nl> and based
+       on the Ant Manual <http://jakarta.apache.org/ant/manual/>.
+
+
+

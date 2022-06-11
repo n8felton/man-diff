@@ -1,0 +1,51 @@
+PORTMAP(8)                BSD System Manager's Manual               PORTMAP(8)
+
+NAME
+     portmap -- RPC program,version to DARPA port mapper
+
+SYNOPSIS
+     portmap [-d] [-v] [-h bindip]
+
+DESCRIPTION
+     Portmap is a server that converts RPC program numbers into DARPA protocol
+     port numbers.  It must be running in order to make RPC calls.
+
+     When an RPC server is started, it will tell portmap what port number it
+     is listening to, and what RPC program numbers it is prepared to serve.
+     When a client wishes to make an RPC call to a given program number, it
+     will first contact portmap on the server machine to determine the port
+     number where RPC packets should be sent.
+
+     Portmap must be started before any RPC servers are invoked.
+
+     Portmap uses hosts_access(5) access control by default.  Access control
+     patterns may only reference IP addresses.
+
+     Normally portmap forks and dissociates itself from the terminal like any
+     other daemon.  Portmap then logs errors using syslog(3).
+
+     The following options are available:
+
+     -d      Prevent portmap from running as a daemon, and causes errors and
+             debugging information to be printed to the standard error output.
+
+     -v      Enable verbose logging of access control checks.
+
+     -h      Specify specific ip addresses to bind to for UDP requests.  This
+             option may be specified multiple times and is typically necessary
+             when running portmap on a multi-homed host.  If no -h option is
+             specified, portmap will bind to INADDR_ANY, which could lead to
+             problems on a multi-homed host due to portmap returning a udp
+             packet from a different IP address then it was sent to.  Note
+             that when specifying ip addresses with -h, portmap will automati-
+             cally add 127.0.0.1 to the list so you don't have to.
+
+SEE ALSO
+     hosts_access(5), inetd.conf(5), inetd(8), rpcinfo(8)
+
+BUGS
+     If portmap crashes, all servers must be restarted.
+
+HISTORY
+     The portmap command appeared in 4.3BSD
+

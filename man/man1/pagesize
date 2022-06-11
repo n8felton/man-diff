@@ -1,0 +1,19 @@
+PAGESIZE(1)               BSD General Commands Manual              PAGESIZE(1)
+
+NAME
+     pagesize -- print system page size
+
+SYNOPSIS
+     pagesize
+
+DESCRIPTION
+     Pagesize prints the size of a page of memory in bytes, as returned by
+     getpagesize(2).  This program is useful in constructing portable shell
+     scripts.
+
+SEE ALSO
+     getpagesize(2)
+
+HISTORY
+     The pagesize command appeared in 4.2BSD.
+

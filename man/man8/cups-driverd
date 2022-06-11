@@ -1,0 +1,74 @@
+cups-driverd(8)                   Apple Inc.                   cups-driverd(8)
+
+
+
+NAME
+       cups-driverd - cups driver daemon
+
+SYNOPSIS
+       cups-driverd cat ppd-name
+       cups-driverd list request_id limit options
+
+DESCRIPTION
+       cups-driverd  shows  or lists PPD files. It is run in response to CUPS-
+       Add-Modify-Printer  or  CUPS-Get-Devices  requests.   The  first   form
+       ("cups-driverd  cat ppd-name") writes the named PPD file to stdout. The
+       output format is an uncompressed PPD file.
+
+       The second form lists the available manufacturers or PPD files to  std-
+       out  as  indicated by the options argument. The output format is an IPP
+       response message. The request_id argument is the request  ID  from  the
+       original  IPP  request,  typically  1. The Ilimit argument is the limit
+       value from the original IPP request - 0 means no  limit.  Finally,  the
+       options  argument  is a space-delimited list of attributes ("name=value
+       name=value cups-driverd looks for the ppd-make and requested-attributes
+       attributes and tailors the output accordingly.
+
+DRIVERS
+       Drivers  can be static PPD files under the /usr/share/cups/model direc-
+       tory or programs under the /usr/libexec/cups/driver  directory.  Static
+       PPD  files must conform to the Adobe PPD File Format Specification ver-
+       sion 4.3 and may be compressed using the gzip(1) program.  Driver  pro-
+       grams  must implement the command-line interface shown in the next sec-
+       tion.  Driver programs provide an  interface  to  dynamically-generated
+       PPD files. The following arguments are currently defined:
+
+       drivername list
+            Lists the supported PPD files to stdout.
+
+       drivername cat ppdname
+            Writes  the  named  PPD  file to stdout.  When run with the single
+            argument "list", the program must list the available PPD files  it
+            can generate to stdout using the following format:
+                "drivername:ppdname" language "make" "make and model" "1284 device id"
+
+       Drivername  is the name of the driver program. Ppdname is the name used
+       to select the given driver. Language is the locale associated with  the
+       default  language of the PPD file, typically "en". Make is the Manufac-
+       turer name from the PPD file. Make and model is the NickName name  from
+       the  PPD file. 1284 device id is the 1284DeviceId from the PPD file, if
+       any.  When the driver program is run with the "cat ppdname"  arguments,
+       it  must write the named PPD file to stdout, uncompressed. If the named
+       PPD file does not exist, the driver program must not write  any  output
+       to  stdout  and report the error to stderr instead.  Error messages can
+       be relayed back to cupsd by writing them to stderr. The following  pre-
+       fixes are recognized:
+
+       DEBUG: [drivername]
+            Debugging messages
+
+       ERROR: [drivername]
+            Error messages
+
+       INFO: [drivername]
+            Informational messages
+
+SEE ALSO
+       cupsd(8), cupsd.conf(5), cupstestppd(1),
+       http://localhost:631/help
+
+COPYRIGHT
+       Copyright 2007 by Apple Inc.
+
+
+

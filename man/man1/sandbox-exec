@@ -1,0 +1,27 @@
+SANDBOX-EXEC(1)           BSD General Commands Manual          SANDBOX-EXEC(1)
+
+NAME
+     sandbox-exec -- execute within a sandbox
+
+SYNOPSIS
+     sandbox-exec [-f profile-file] [-n profile-name] [-p profile-string]
+                  command
+
+DESCRIPTION
+     The sandbox-exec command creates a sandbox using a profile specified by
+     the -f, -n, or -p option and exec's command.
+
+     The options are as follows:
+
+     -f profile-file
+             Read the profile from the file named profile-file.
+
+     -n profile-name
+             Use the pre-defined profile profile-name.
+
+     -p profile-string
+             Specify the profile to be used on the command line.
+
+SEE ALSO
+     sandbox_init(3), sandbox(7), sandbox-compilerd(8)
+

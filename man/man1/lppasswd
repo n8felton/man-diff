@@ -1,0 +1,42 @@
+lppasswd(1)                       Apple Inc.                       lppasswd(1)
+
+
+
+NAME
+       lppasswd - add, change, or delete digest passwords.
+
+SYNOPSIS
+       lppasswd [ username ]
+       lppasswd -a [ -g groupname ] username
+       lppasswd -x username
+
+DESCRIPTION
+       lppasswd  adds,  changes, or deletes passwords in the CUPS digest pass-
+       word file, passwd.md5. When run by a normal user, lppasswd will  prompt
+       for  the  old  and new passwords.  When run by the super-user, lppasswd
+       can add new accounts (-a username),  change  existing  accounts  (user-
+       name),  or  delete  accounts (-x username) in the digest password file.
+       Digest usernames do not have to match local UNIX usernames.
+
+OPTIONS
+       lppasswd supports the following options:
+
+       -g groupname
+            Specifies a group other than the default system group.
+
+SECURITY ISSUES
+       The lppasswd command is installed setuid to root. While  every  attempt
+       has  been  made  to  make  it  secure against exploits that could grant
+       super-user privileges to unprivileged users, paranoid  system  adminis-
+       trators  may  wish to disable or change the ownership of the program to
+       an unprivileged account.
+
+SEE ALSO
+       lp(1), lpr(1),
+       http://localhost:631/help
+
+COPYRIGHT
+       Copyright 2007 by Apple Inc.
+
+
+

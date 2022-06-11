@@ -1,0 +1,230 @@
+POSTCONF(1)                                                        POSTCONF(1)
+
+
+
+NAME
+       postconf - Postfix configuration utility
+
+SYNOPSIS
+       postconf [-dhnv] [-c config_dir] [parameter ...]
+
+       postconf [-aAmlv] [-c config_dir]
+
+       postconf [-ev] [-c config_dir] [parameter=value ...]
+
+       postconf [-btv] [-c config_dir] [template_file]
+
+DESCRIPTION
+       The  postconf(1)  command  displays  the actual values of configuration
+       parameters, changes configuration parameter values, or  displays  other
+       configuration information about the Postfix mail system.
+
+       Options:
+
+       -a     List  the available SASL server plug-in types.  The SASL plug-in
+              type is selected with the smtpd_sasl_type configuration  parame-
+              ter by specifying one of the names listed below.
+
+              cyrus  This  server  plug-in  is available when Postfix is built
+                     with Cyrus SASL support.
+
+              dovecot
+                     This server plug-in requires the  Dovecot  authentication
+                     server.
+
+              This feature is available with Postfix 2.3 and later.
+
+       -A     List  the available SASL client plug-in types.  The SASL plug-in
+              type is selected with the smtp_sasl_type or lmtp_sasl_type  con-
+              figuration  parameters  by  specifying  one  of the names listed
+              below.
+
+              cyrus  This client plug-in is available when  Postfix  is  built
+                     with Cyrus SASL support.
+
+              This feature is available with Postfix 2.3 and later.
+
+       -b [template_file]
+              Display the message text that appears at the beginning of deliv-
+              ery status notification (DSN) messages, with  $name  expressions
+              replaced  by  actual  values.   To override the built-in message
+              text, specify a template file at the end of the command line, or
+              specify a template file in main.cf with the bounce_template_file
+              parameter.  To force selection of the built-in message text tem-
+              plates,  specify an empty template file name (in shell language:
+              "").
+
+              This feature is available with Postfix 2.3 and later.
+
+       -c config_dir
+              The main.cf configuration file is in the named directory instead
+              of the default configuration directory.
+
+       -d     Print default parameter settings instead of actual settings.
+
+       -e     Edit  the  main.cf  configuration  file. The file is copied to a
+              temporary file then renamed into place.  Parameters  and  values
+              are  specified  on the command line. Use quotes in order to pro-
+              tect shell metacharacters and whitespace.
+
+       -h     Show parameter values only, not the ``name = '' label that  nor-
+              mally precedes the value.
+
+       -l     List  the names of all supported mailbox locking methods.  Post-
+              fix supports the following methods:
+
+              flock  A kernel-based advisory locking method  for  local  files
+                     only.  This locking method is available on systems with a
+                     BSD compatible library.
+
+              fcntl  A kernel-based advisory  locking  method  for  local  and
+                     remote files.
+
+              dotlock
+                     An application-level locking method. An application locks
+                     a file named filename by  creating  a  file  named  file-
+                     name.lock.  The application is expected to remove its own
+                     lock file, as well as stale lock  files  that  were  left
+                     behind after abnormal termination.
+
+       -m     List  the  names of all supported lookup table types. In Postfix
+              configuration files, lookup tables are specified  as  type:name,
+              where type is one of the types listed below. The table name syn-
+              tax depends on the lookup table type as described in  the  DATA-
+              BASE_README document.
+
+              btree  A  sorted, balanced tree structure.  This is available on
+                     systems with support for Berkeley DB databases.
+
+              cdb    A read-optimized structure with no support for  incremen-
+                     tal  updates.   This is available on systems with support
+                     for CDB databases.
+
+              cidr   A table that  associates  values  with  Classless  Inter-
+                     Domain  Routing  (CIDR)  patterns.  This  is described in
+                     cidr_table(5).
+
+              dbm    An indexed file type based on hashing.  This is available
+                     on systems with support for DBM databases.
+
+              environ
+                     The UNIX process environment array. The lookup key is the
+                     variable name. Originally implemented for testing,  some-
+                     one may find this useful someday.
+
+              hash   An indexed file type based on hashing.  This is available
+                     on systems with support for Berkeley DB databases.
+
+              ldap (read-only)
+                     Perform  lookups  using  the  LDAP  protocol.   This   is
+                     described in ldap_table(5).
+
+              mysql (read-only)
+                     Perform   lookups  using  the  MYSQL  protocol.  This  is
+                     described in mysql_table(5).
+
+              pcre (read-only)
+                     A lookup table based on Perl Compatible  Regular  Expres-
+                     sions. The file format is described in pcre_table(5).
+
+              pgsql (read-only)
+                     Perform  lookups  using  the PostgreSQL protocol. This is
+                     described in pgsql_table(5).
+
+              proxy (read-only)
+                     A lookup table that is implemented via the Postfix  prox-
+                     ymap(8) service. The table name syntax is type:name.
+
+              regexp (read-only)
+                     A  lookup  table  based  on regular expressions. The file
+                     format is described in regexp_table(5).
+
+              sdbm   An indexed file type based on hashing.  This is available
+                     on systems with support for SDBM databases.
+
+              static (read-only)
+                     A  table  that  always returns its name as lookup result.
+                     For example, static:foobar always returns the string foo-
+                     bar as lookup result.
+
+              tcp (read-only)
+                     Perform  lookups  using  a  simple request-reply protocol
+                     that is described in tcp_table(5).  This feature  is  not
+                     included with the stable Postfix release.
+
+              unix (read-only)
+                     A  limited way to query the UNIX authentication database.
+                     The following tables are implemented:
+
+                     unix:passwd.byname
+                            The table is the UNIX password database.  The  key
+                            is  a  login  name.  The result is a password file
+                            entry in passwd(5) format.
+
+                     unix:group.byname
+                            The table is the UNIX group database. The key is a
+                            group  name.   The result is a group file entry in
+                            group(5) format.
+
+              Other table types may exist depending on how Postfix was  built.
+
+       -n     Print  parameter  settings  that  are not left at their built-in
+              default value, because they are explicitly specified in main.cf.
+
+       -t [template_file]
+              Display  the  templates  for  delivery status notification (DSN)
+              messages. To override the built-in templates, specify a template
+              file  at the end of the command line, or specify a template file
+              in main.cf with the bounce_template_file  parameter.   To  force
+              selection  of  the built-in templates, specify an empty template
+              file name (in shell language: "").
+
+              This feature is available with Postfix 2.3 and later.
+
+       -v     Enable verbose  logging  for  debugging  purposes.  Multiple  -v
+              options make the software increasingly verbose.
+
+DIAGNOSTICS
+       Problems are reported to the standard error stream.
+
+ENVIRONMENT
+       MAIL_CONFIG
+              Directory with Postfix configuration files.
+
+CONFIGURATION PARAMETERS
+       The  following  main.cf parameters are especially relevant to this pro-
+       gram.
+
+       The text below provides only a parameter summary. See  postconf(5)  for
+       more details including examples.
+
+       config_directory (see 'postconf -d' output)
+              The  default  location of the Postfix main.cf and master.cf con-
+              figuration files.
+
+       bounce_template_file (empty)
+              Pathname of a configuration file with bounce message  templates.
+
+FILES
+       /etc/postfix/main.cf, Postfix configuration parameters
+
+SEE ALSO
+       bounce(5), bounce template file format
+       postconf(5), configuration parameters
+
+README FILES
+       Use  "postconf readme_directory" or "postconf html_directory" to locate
+       this information.
+       DATABASE_README, Postfix lookup table overview
+
+LICENSE
+       The Secure Mailer license must be distributed with this software.
+
+AUTHOR(S)
+       Wietse Venema
+       IBM T.J. Watson Research
+       P.O. Box 704
+       Yorktown Heights, NY 10598, USA
+
+
+

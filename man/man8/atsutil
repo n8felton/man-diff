@@ -1,0 +1,57 @@
+atsutil(8)                BSD System Manager's Manual               atsutil(8)
+
+NAME
+     atsutil -- atsutil to modify font auto activation and font protection,
+     ATSServer and related databases.
+
+SYNOPSIS
+     atsutil autoactivation [-DdeaRh] [path]
+     atsutil databases [-remove | -removeUser]
+     atsutil fontprotection [-on | -off] [-get] [-files] [-fonts]
+     atsutil server [-ping | -shutdown]
+     atsutil help
+
+DESCRIPTION
+     atsutil tool modifies font auto activation and font protection settings,
+     removes System and User font databases, and query or shutdown ATSServer.
+
+     autoactivation modifies font auto activation settings globally or for a
+     specific application.
+
+     databases will remove ATSServer System or User databases.
+
+     fontprotection overrides System font protection settings.
+
+     server queries the status of ATSServer or shutdown the ATSServer.  Shut-
+     ting down the ATSServer will spawn a new ATSServer.
+
+OPTIONS
+     autoactivation [-DdeaRh] [path]
+     -D set font auto activation setting to default.
+     -d is specified, then set font auto activation setting to disabled.
+     -e is specified, then set font auto activation setting to enabled.
+     -a is specified, then set font auto activation setting to ask.
+     -R is specified, then reset font auto activation setting to default.
+     -h is specified, then display help information.
+     -path with options is specified, then set font auto activation setting
+     locally for application.  Otherwise, setting is global in scope.
+
+     Note, path without options will return current font auto activation set-
+     ting for application.
+
+     databases [-ping | -shutdown]
+     -remove remove ATSServer ddatabases for active user and system (used when
+     no one is logged in and some background processes).
+     -removeUser remove ATSServer ddatabases for the active user only.
+
+     fontprotection [-on | -off] [-get] [-files] [-fonts]
+     -on enable System font protection.
+     -off disable System font protection.
+     -get return System font protection setting.
+     -files prints list of protected font files.
+     -fonts prints list of protected font faces (Postscript names).
+
+     server [-ping | -shutdown]
+     -ping query running ATSServer.
+     -shutdown shutdown ATSServer and spawn a new ATSServer.
+

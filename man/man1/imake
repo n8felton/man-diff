@@ -1,0 +1,200 @@
+IMAKE(1)                                                              IMAKE(1)
+
+
+
+NAME
+       imake - C preprocessor interface to the make utility
+
+SYNOPSIS
+       imake  [ -Ddefine ] [ -Idir ] [ -Udefine ] [ -Ttemplate ] [ -f filename
+       ] [ -C filename ] [ -s filename ] [ -e ] [ -v ]
+
+DESCRIPTION
+       Imake is used to generate Makefiles from a template, a set of cpp macro
+       functions,  and  a  per-directory input file called an Imakefile.  This
+       allows machine dependencies (such as compiler options,  alternate  com-
+       mand  names,  and  special  make  rules)  to  be kept separate from the
+       descriptions of the various items to be built.
+
+OPTIONS
+       The following command line options may be passed to imake:
+
+       -Ddefine
+               This option is passed directly to cpp.  It is typically used to
+               set  directory-specific  variables.   For example, the X Window
+               System uses this flag to set TOPDIR to the name of  the  direc-
+               tory  containing the top of the core distribution and CURDIR to
+               the name of the current directory, relative to the top.
+
+       -Idirectory
+               This option is passed directly to cpp.  It is typically used to
+               indicate the directory in which the imake template and configu-
+               ration files may be found.
+
+       -Udefine
+               This option is passed directly to cpp.  It is typically used to
+               unset variables when debugging imake configuration files.
+
+       -Ttemplate
+               This  option  specifies  the  name  of the master template file
+               (which is usually located in the directory specified  with  -I)
+               used by cpp.  The default is Imake.tmpl.
+
+       -f filename
+               This option specifies the name of the per-directory input file.
+               The default is Imakefile.
+
+       -C filename
+               This option specifies the name of the  .c  file  that  is  con-
+               structed in the current directory.  The default is Imakefile.c.
+
+       -s filename
+               This option specifies the name of the make description file  to
+               be  generated  but make should not be invoked.  If the filename
+               is a dash (-), the output is written to stdout.  The default is
+               to generate, but not execute, a Makefile.
+
+       -e      This  option  indicates  the imake should execute the generated
+               Makefile.  The default is to leave this to the user.
+
+       -v      This option indicates that imake should print the  cpp  command
+               line that it is using to generate the Makefile.
+
+HOW IT WORKS
+       Imake  invokes  cpp  with any -I or -D flags passed on the command line
+       and passes the name of a file containing the following 3 lines:
+
+                 #define IMAKE_TEMPLATE "Imake.tmpl"
+                 #define INCLUDE_IMAKEFILE <Imakefile>
+                 #include IMAKE_TEMPLATE
+
+       where Imake.tmpl and Imakefile may be overridden by the -T and -f  com-
+       mand options, respectively.
+
+       The  IMAKE_TEMPLATE typically reads in a file containing machine-depen-
+       dent parameters (specified as cpp symbols), a site-specific  parameters
+       file,  a file defining variables, a file containing cpp macro functions
+       for generating make rules, and  finally  the  Imakefile  (specified  by
+       INCLUDE_IMAKEFILE)  in  the  current directory.  The Imakefile uses the
+       macro functions to indicate what targets should be built;  imake  takes
+       care of generating the appropriate rules.
+
+       Imake  configuration  files contain two types of variables, imake vari-
+       ables and make variables.  The imake variables are interpreted  by  cpp
+       when  imake is run.  By convention they are mixed case.  The make vari-
+       ables are written into the Makefile for later interpretation  by  make.
+       By convention make variables are upper case.
+
+       The  rules  file (usually named Imake.rules in the configuration direc-
+       tory) contains a variety of cpp macro  functions  that  are  configured
+       according  to  the current platform.  Imake replaces any occurrences of
+       the string ``@@'' with a newline to allow  macros  that  generate  more
+       than one line of make rules.  For example, the macro
+
+        #define  program_target(program, objlist)        @@\
+        program: objlist                                 @@\
+                 $(CC)  -o  $@  objlist  $(LDFLAGS)
+
+       when called with program_target(foo, foo1.o  foo2.o) will expand to
+
+        foo:     foo1.o  foo2.o
+                 $(CC)  -o  $@  foo1.o  foo2.o  $(LDFLAGS)
+
+
+       Imake  also  replaces  any  occurrences  of the word ``XCOMM'' with the
+       character ``#'' to permit placing  comments  in  the  Makefile  without
+       causing ``invalid directive'' errors from the preprocessor.
+
+       Some  complex  imake  macros  require generated make variables local to
+       each invocation of the macro, often  because  their  value  depends  on
+       parameters passed to the macro.  Such variables can be created by using
+       an imake variable of the form XVARdefn, where n is a single  digit.   A
+       unique  make  variable  will  be substituted.  Later occurrences of the
+       variable XVARusen will be replaced by the variable created by the  cor-
+       responding XVARdefn.
+
+       On  systems  whose  cpp  reduces  multiple  tabs and spaces to a single
+       space, imake attempts to put back any  necessary  tabs  (make  is  very
+       picky  about the difference between tabs and spaces).  For this reason,
+       colons (:) in command lines must be preceded by a backslash (\).
+
+USE WITH THE X WINDOW SYSTEM
+       The X Window System uses imake extensively, for both full builds within
+       the source tree and external software.  As mentioned above, two special
+       variables, TOPDIR and CURDIR, are set to make referencing  files  using
+       relative path names easier.  For example, the following command is gen-
+       erated automatically to build the  Makefile  in  the  directory  lib/X/
+       (relative to the top of the sources):
+
+                 %  ../.././config/imake  -I../.././config  \
+                       -DTOPDIR=../../.   -DCURDIR=./lib/X
+
+       When building X programs outside the source tree, a special symbol Use-
+       Installed is defined and TOPDIR and CURDIR are omitted.  If the config-
+       uration  files have been properly installed, the script xmkmf(1) may be
+       used.
+
+INPUT FILES
+       Here is a summary of the files read by imake as used by X.  The  inden-
+       tation shows what files include what other files.
+
+           Imake.tmpl                generic variables
+               site.def              site-specific, BeforeVendorCF defined
+               *.cf                  machine-specific
+                   *Lib.rules        shared library rules
+               site.def              site-specific, AfterVendorCF defined
+               Imake.rules           rules
+               Project.tmpl          X-specific variables
+                   *Lib.tmpl         shared library variables
+               Imakefile
+                   Library.tmpl      library rules
+                   Server.tmpl       server rules
+                   Threads.tmpl      multi-threaded rules
+
+       Note  that  site.def gets included twice, once before the *.cf file and
+       once after.  Although most  site  customizations  should  be  specified
+       after  the  *.cf file, some, such as the choice of compiler, need to be
+       specified before, because other variable settings may depend on them.
+
+       The first time site.def is included,  the  variable  BeforeVendorCF  is
+       defined,  and  the  second time, the variable AfterVendorCF is defined.
+       All code in site.def should be inside an #ifdef for one of  these  sym-
+       bols.
+
+FILES
+       Imakefile.c                   temporary input file for cpp
+       /tmp/Imf.XXXXXX               temporary Makefile for -s
+       /tmp/IIf.XXXXXX               temporary  Imakefile  if specified Imake-
+       file uses # comments
+       /usr/bin/cpp                  default C preprocessor
+
+SEE ALSO
+       make(1), xmkmf(1)
+       S. I. Feldman, Make -- A Program for Maintaining Computer Programs
+
+ENVIRONMENT VARIABLES
+       The following environment variables may be set, however  their  use  is
+       not  recommended  as  they  introduce dependencies that are not readily
+       apparent when imake is run:
+
+       IMAKEINCLUDE
+            If defined, this specifies a ``-I'' include argument  to  pass  to
+            the C preprocessor.  E.g., ``-I/usr/X11/config''.
+
+       IMAKECPP
+            If defined, this should be a valid path to a preprocessor program.
+            E.g., ``/usr/local/cpp''.  By default, imake will  use  cc  -E  or
+            /usr/bin/cpp, depending on the OS specific configuration.
+
+       IMAKEMAKE
+            If defined, this should be a valid path to a make program, such as
+            ``/usr/local/make''.  By default, imake  will  use  whatever  make
+            program  is  found using execvp(3).  This variable is only used if
+            the ``-e'' option is specified.
+
+AUTHOR
+       Todd Brunhoff, Tektronix and MIT Project Athena; Jim Fulton, MIT X Con-
+       sortium
+
+
+

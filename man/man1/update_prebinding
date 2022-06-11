@@ -1,0 +1,80 @@
+update_dyld_shared_cac... BSD General Commands Manualupdate_dyld_shared_cac...
+
+NAME
+     update_dyld_shared_cache -- Updates dyld's shared cache
+
+SYNOPSIS
+     update_dyld_shared_cache [-root directory] [-arch arch] [-force] [-debug]
+                              [-sort_by_name] [-universal_boot]
+
+DESCRIPTION
+     update_dyld_shared_cache ensures that dyld's shared cache is up-to-date.
+     Normally, this command never needs to be manually run.  Instead, it is
+     automatically run by launchd when dyld notices the shared cache is out of
+     date.  To prevent the cache from being regeneated during an install or
+     during development of OS dylibs, dyld will not trigger a shared cache
+     rebuild if the environment variable DYLD_NO_FIX_PREBINDING is set, or if
+     the main executable is a setuid binary, or alternate dylibs are loaded
+     via one of the DYLD_ environment variables.
+
+     The dyld shared cache is mapped by dyld into a process at launch time.
+     Later, when loading any mach-o image, dyld will first check if is in the
+     share cache, and if it is will use that pre-bound version instead of
+     opening, mapping, and binding the original file.  This results in signif-
+     icant performance improvements to launch time.
+
+     update_dyld_shared_cache scans the directory
+     /var/db/dyld/shared_region_roots for text files containing paths to mach-
+     o executables.  The full dependencies of all dylibs required by those
+     executables is used to determine which libraries are commonly used and
+     should be placed in the shared cache. If one of the text files contains a
+     path to a dylib, that dylib and its depenents will be forced into the
+     cache.
+
+     update_dyld_shared_cache builds a separate cache file for each architec-
+     ture.  The cache files and a readable text map of the cached are gener-
+     ated to /var/db/dyld.
+
+     You must be root to run this tool.
+
+     The options are as follows:
+
+     -root directory
+                 This option specifies the root of an OS installation for
+                 which dyld's shared cache should be updated.  This allosw you
+                 to update the shared cache on a non-running version of the
+                 OS.  The cache files are created in the var/db/dyld directory
+                 of the specified directory.
+
+     -arch arch  By default update_dyld_shared_cache generates cache files for
+                 all architecture that the current machine can execute.  You
+                 can override this behavior by specifying one or more -arch
+                 options and list exactly which architectures should have
+                 their shared caches updated.
+
+     -force      This option will cause update_dyld_shared_cache to regener-
+                 ated the shared cache files even if they appear to be already
+                 up-to-date.
+
+     -debug      This option prints out additional information about the work
+                 being done.
+
+     -sort_by_name
+                 By default update_dyld_shared_cache assignes a random start
+                 address to each mach-o image in the cache.  This option
+                 causes the start addresses to be choosen in path order, thus
+                 subsequent runs will produce the same address layout which
+                 can help reproduce some bugs.
+
+     -universal_boot
+                 This option can only be used running on an machine with an
+                 Intel processor.  It builds caches that can be used when
+                 booting on an Intel or a PowerPC based machine.
+
+FILES
+     /var/db/dyld/shared_region_roots directory of text files with paths to
+     mach-o images used to determine what should be in shared cache.
+
+SEE ALSO
+     dyld(1)
+

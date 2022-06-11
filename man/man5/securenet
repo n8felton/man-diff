@@ -1,0 +1,29 @@
+SECURENET(5)                BSD File Formats Manual               SECURENET(5)
+
+NAME
+     securenet -- ypserv(8) configuration file for secure networks
+
+DESCRIPTION
+     The securenet file controls which hosts can connect to the YP server.
+
+     The format is rather simple. Each row consists of two items. The first
+     item is the network mask. The second item is the network.
+
+EXAMPLES
+     A configuration file might appear as follows:
+
+     #
+     # Only my local net is secure.
+     #
+     255.255.255.0 139.58.253.0
+
+FILES
+     /var/yp/securenet  A ypserv(8) configuration file.
+
+SEE ALSO
+     yp(8), ypserv(8), ypserv.acl(5)
+
+HISTORY
+     The securenet was added to NIS by Sun Microsystems, Inc. as a bugfix for
+     weak security.
+

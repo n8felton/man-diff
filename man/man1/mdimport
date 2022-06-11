@@ -1,0 +1,48 @@
+mdimport(1)               BSD General Commands Manual              mdimport(1)
+
+NAME
+     mdimport -- import file hierarchies into the metadata datastore.
+
+SYNOPSIS
+     mdimport [-VXLrg] [-d level | category] [-w delay] file | directory
+
+DESCRIPTION
+     mdimport can be used to import metadata from files or file system hierar-
+     chies.
+
+     The following options are available:
+
+     -g plugin   Load the plugin at the provided path, ignoring system
+                 installed plugins.  Useful for testing plugins that have not
+                 yet been installed.
+
+     -V          Print timing information for this run of mdimport.
+
+     -A          Print out the list of all of the attributes and their local-
+                 izations in the current language and exit.
+
+     -X          Print the schema file and exit
+
+     -r          Ask the server to reimport files for UTIs claimed by the
+                 listed plugin.  For example, the following would cause all of
+                 the chat files on the system to be reimported:
+
+                       mdimport -r /System/Library/Spotlight/Chat.mdimporter
+
+     -p          Print out performance information gathered during the run.
+
+     -L          Print the list of installed importers and exit.
+
+     -d level    Print debugging information.  Level can be 1-4.
+
+     -n          Don't actually set the attributes on the file.  Useful for
+                 debugging.
+
+     -w msecs    Wait for the specified interval between scanning files.
+
+NOTES
+     The -f switch is obsolete in Leopard and beyond.
+
+SEE ALSO
+     mdcheckschema(1), mdfind(1), mdutil(1), mdls(1)
+

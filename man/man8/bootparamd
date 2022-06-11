@@ -1,0 +1,23 @@
+bootparamd(8)             BSD System Manager's Manual            bootparamd(8)
+
+NAME
+     bootparamd -- boot parameter server
+
+SYNOPSIS
+     bootparamd [-d] [-r router]
+
+DESCRIPTION
+     bootparamd provides configuration parameters for clients using the boot-
+     params RPC protocol.  The server is not started by default on Mac OS X
+     systems, nor is it used by Mac OS X clients.
+
+     When invoked with the -d option, bootparamd runs in debug mode.  It
+     remains attached to the controlling terminal and prints a log of its
+     activity.
+
+     The -r router option may be used to set the router returned in WHOAMI
+     replies.  The router argument may be a name or a dotted-quad IP address.
+
+SEE ALSO
+     bootparams(5), lookupd(8)
+

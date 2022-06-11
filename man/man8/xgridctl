@@ -1,0 +1,68 @@
+xgridctl(8)               BSD System Manager's Manual              xgridctl(8)
+
+NAME
+     xgridctl -- Xgrid Daemon Control Interface
+
+SYNOPSIS
+     xgridctl [target] action
+
+OPTIONS
+     The target is one of the following:
+
+     controller    perform the action for the xgricontrollerd daemon
+
+     agent         perform the action for the xgridagentd daemon
+
+     The action is one of the following:
+
+     status        print status for the chosen daemon, or all daemons if no
+                   target is specified
+
+     start         start the chosen daemon and set it to run at startup;
+                   requires a target
+
+     stop          stop the chosen daemon and set it to not run at startup;
+                   requires a target
+
+RETURN VALUES
+     0             completed succesfully
+
+     1             an error occurred
+
+FILES
+     /usr/libexec/xgrid/xgridagentd
+             agent daemon
+
+     /usr/libexec/xgrid/xgridcontrollerd
+             controller daemon
+
+     /System/Library/LaunchDaemons/com.apple.xgridagentd.plist
+             agent launchd control file
+
+     /System/Library/LaunchDaemons/com.apple.xgridcontrollerd.plist
+             controller launchd control file
+
+EXAMPLES
+     Print status of agent and controller:
+
+           $ xgridctl status
+
+     Start the controller and set it to run at startup:
+
+           $ xgridctl controller start
+
+     Stop the agent and set it to not run at startup:
+
+           $ xgridctl agent stop
+
+SEE ALSO
+     xgrid(1) launchd(8)
+
+HISTORY
+     This program was first introduced in Mac OS X 10.4 "Tiger".  It was
+     inspired by apachectl(8).  The "on" and "off" actions were deprecated in
+     Mac OS X 10.5 "Leopard".
+
+BUGS
+     Bug reports can be sent to bugreport.apple.com
+

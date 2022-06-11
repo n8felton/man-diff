@@ -1,0 +1,22 @@
+SANDBOX-COMPILERD(8)      BSD System Manager's Manual     SANDBOX-COMPILERD(8)
+
+NAME
+     sandbox-compilerd -- The Mac OS X sandbox profile compiler daemon.
+
+SYNOPSIS
+     sandbox-compilerd [-d] [-N]
+
+DESCRIPTION
+     sandbox-compilerd compiles sandbox profiles on behalf of the sandbox ker-
+     nel extension.
+
+     This command is not intended to be invoked directly.
+
+OPTIONS
+     -d       Debug.  Log additional informational messages via asl_log(3).
+
+     -N       No caching.  The sandbox profile cache will not be used.
+
+SEE ALSO
+     sandbox-exec(1), sandbox_init(3), sandbox(7)
+

@@ -1,0 +1,192 @@
+DYLD(1)                                                                DYLD(1)
+
+
+
+NAME
+       dyld - the dynamic link editor
+
+SYNOPSIS
+       DYLD_FRAMEWORK_PATH
+       DYLD_FALLBACK_FRAMEWORK_PATH
+       DYLD_LIBRARY_PATH
+       DYLD_FALLBACK_LIBRARY_PATH
+       DYLD_ROOT_PATH
+       DYLD_SHARED_REGION
+       DYLD_INSERT_LIBRARIES
+       DYLD_FORCE_FLAT_NAMESPACE
+       DYLD_IMAGE_SUFFIX
+       DYLD_PRINT_OPTS
+       DYLD_PRINT_ENV
+       DYLD_PRINT_LIBRARIES
+       DYLD_PRINT_LIBRARIES_POST_LAUNCH
+       DYLD_BIND_AT_LAUNCH
+       DYLD_NO_FIX_PREBINDING
+       DYLD_DISABLE_DOFS
+       DYLD_PRINT_APIS
+       DYLD_PRINT_BINDINGS
+       DYLD_PRINT_INITIALIZERS
+       DYLD_PRINT_REBASINGS
+       DYLD_PRINT_SEGMENTS
+       DYLD_PRINT_STATISTICS
+       DYLD_PRINT_DOFS
+
+DESCRIPTION
+       The  dynamic  linker  uses  the  following environment variables.  They
+       affect any program that uses the dynamic linker.
+
+       DYLD_FRAMEWORK_PATH
+              This is a colon  separated  list  of  directories  that  contain
+              frameworks.   The  dynamic  linker  searches  these  directories
+              before it searches for the framework by its  install  name.   It
+              allows  you  to  test  new  versions  of existing frameworks. (A
+              framework is a library  install  name  that  ends  in  the  form
+              XXX.framework/Versions/YYY/XXX  or  XXX.framework/XXX, where XXX
+              and YYY are any name.)
+
+              For each framework that a program uses, the dynamic linker looks
+              for  the  framework  in each directory in DYLD_FRAMEWORK_PATH in
+              turn. If it looks in all the  directories  and  can't  find  the
+              framework,  it  searches the directories in DYLD_LIBRARY_PATH in
+              turn. If it still can't find the  framework,  it  then  searches
+              DYLD_FALLBACK_FRAMEWORK_PATH  and  DYLD_FALLBACK_LIBRARY_PATH in
+              turn.
+
+              Use the -L option to otool(1).  to discover the  frameworks  and
+              shared libraries that the executable is linked against.
+
+       DYLD_FALLBACK_FRAMEWORK_PATH
+              This  is  a  colon  separated  list  of directories that contain
+              frameworks.  It is used as the default location  for  frameworks
+              not found in their install path.
+
+              By    default,    it   is   set   to   /Library/Frameworks:/Net-
+              work/Library/Frameworks:/System/Library/Frameworks
+
+       DYLD_LIBRARY_PATH
+              This is a colon  separated  list  of  directories  that  contain
+              libraries.  The dynamic linker searches these directories before
+              it searches the default locations for libraries. It  allows  you
+              to test new versions of existing libraries.
+
+              For  each  library that a program uses, the dynamic linker looks
+              for it in each directory in DYLD_LIBRARY_PATH  in  turn.  If  it
+              still  can't  find  the  library,  it  then  searches DYLD_FALL-
+              BACK_FRAMEWORK_PATH and DYLD_FALLBACK_LIBRARY_PATH in turn.
+
+              Use the -L option to otool(1).  to discover the  frameworks  and
+              shared libraries that the executable is linked against.
+
+       DYLD_FALLBACK_LIBRARY_PATH
+              This  is  a  colon  separated  list  of directories that contain
+              libraries.  It is used as the default location for libraries not
+              found  in  their  install  path.   By  default,  it  is  set  to
+              $(HOME)/lib:/usr/local/lib:/lib:/usr/lib.
+
+       DYLD_ROOT_PATH
+              This is a colon separated  list  of  directories.   The  dynamic
+              linker  will prepend each of this directory paths to every image
+              access until a file is found.
+
+       DYLD_SHARED_REGION
+              This can be "use" (the default), "avoid", or  "private".   Sett-
+              ting  it to "avoid" tells dyld to not use the shared cache.  All
+              OS dylibs are loaded dynamically just like  every  other  dylib.
+              Setting  it  to "private" tells dyld to remove the shared region
+              from the process address space and mmap() back in a private copy
+              of  the  dyld  shared  cache in the shared region address range.
+              This is only useful if the shared cache on disk has been updated
+              and is different than the shared cache in use.
+
+       DYLD_INSERT_LIBRARIES
+              This  is  a  colon  separated  list of dynamic libraries to load
+              before the ones specified in the program.  This  lets  you  test
+              new  modules  of existing dynamic shared libraries that are used
+              in flat-namespace images by loading a temporary  dynamic  shared
+              library with just the new modules.  Note that this has no effect
+              on images built a two-level namespace  images  using  a  dynamic
+              shared library unless DYLD_FORCE_FLAT_NAMESPACE is also used.
+
+       DYLD_FORCE_FLAT_NAMESPACE
+              Force  all  images in the program to be linked as flat-namespace
+              images and ignore any two-level namespace  bindings.   This  may
+              cause programs to fail to execute with a multiply defined symbol
+              error if two-level namespace images are used to allow the images
+              to have multiply defined symbols.
+
+       DYLD_IMAGE_SUFFIX
+              This  is  set  to a string of a suffix to try to be used for all
+              shared libraries used by the program.  For libraries  ending  in
+              ".dylib"  the  suffix  is applied just before the ".dylib".  For
+              all other libraries the suffix is appended to the library  name.
+              This  is  useful  for using conventional "_profile" and "_debug"
+              libraries and frameworks.
+
+       DYLD_PRINT_OPTS
+              When this is set, the dynamic linker writes to file descriptor 2
+              (normally standard error) the command line options.
+
+       DYLD_PRINT_ENV
+              When this is set, the dynamic linker writes to file descriptor 2
+              (normally standard error) the environment variables.
+
+       DYLD_PRINT_LIBRARIES
+              When this is set, the dynamic linker writes to file descriptor 2
+              (normally  standard  error)  the  filenames of the libraries the
+              program is using.  This is useful to make sure that the  use  of
+              DYLD_LIBRARY_PATH is getting what you want.
+
+       DYLD_PRINT_LIBRARIES_POST_LAUNCH
+              This  does  the  same  as  DYLD_PRINT_LIBRARIES but the printing
+              starts after the program gets to its entry point.
+
+       DYLD_BIND_AT_LAUNCH
+              When this is set, the dynamic linker binds all undefined symbols
+              the program needs at launch time. This includes function symbols
+              that can are normally lazily bound at the time  of  their  first
+              call.
+
+       DYLD_PRINT_STATISTICS
+              Right  before  the  process's  main() is called, dyld prints out
+              information about how dyld spent its time.  Useful for analyzing
+              launch performance.
+
+       DYLD_NO_FIX_PREBINDING
+              Normally, dyld will trigger the dyld shared cache to be regener-
+              ated if it notices the cache is out of date  while  launching  a
+              process.   If  this  environment  variable is set, dyld will not
+              trigger a cache rebuild.  This is useful to set while installing
+              a large set of OS dylibs, to ensure the cache is not regenerated
+              until the install is complete.
+
+       DYLD_DISABLE_DOFS
+              Causes dyld not register dtrace static probes with the kernel.
+
+       DYLD_PRINT_INITIALIZERS
+              Causes dyld to print out a line when running  each  initializers
+              in  every image.  Initializers run by dyld included constructors
+              for C++ statically  allocated  objects,  functions  marked  with
+              __attribute__((constructor)), and -init functions.
+
+       DYLD_PRINT_APIS
+              Causes  dyld to print a line whenever a dyld API is called (e.g.
+              NSAddImage()).
+
+       DYLD_PRINT_SEGMENTS
+              Causes dyld to print out a line containing the name and  address
+              range  of  each  mach-o  segment that dyld maps.  In addition it
+              prints information about if the image was from the  dyld  shared
+              cache.
+
+       DYLD_PRINT_BINDINGS
+              Causes  dyld to print a line each time a symbolic name is bound.
+
+       DYLD_PRINT_DOFS
+              Causes dyld to print out information about dtrace static  probes
+              registered with the kernel.
+
+
+SEE ALSO
+       libtool(1), ld(1), otool(1)
+
+
+

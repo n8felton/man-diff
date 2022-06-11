@@ -1,0 +1,32 @@
+MOUNT_NTFS(8)             BSD System Manager's Manual            MOUNT_NTFS(8)
+
+NAME
+     mount_ntfs -- mount an NTFS file system
+
+SYNOPSIS
+     mount_ntfs [-o options] special node
+
+DESCRIPTION
+     The mount_ntfs command attaches the NTFS file system residing on the
+     device special to the global file system namespace at the location indi-
+     cated by node.  This command is normally executed by mount(8) at boot
+     time, but can be used by any user to mount an NTFS file system on any
+     directory that they own (provided, of course, that they have appropriate
+     access to the device that contains the file system).
+
+     The options are as follows:
+
+     -o      Options are specified with a -o flag followed by a comma sepa-
+             rated string of options.  See the mount(8) man page for possible
+             options and their meanings.
+
+SEE ALSO
+     mount(2), unmount(2), fstab(5), mount(8)
+
+HISTORY
+     This NTFS implementation first appeared in Mac OS X 10.5.
+
+AUTHORS
+     This NTFS implementation was written by Anton Altaparmakov
+     <aia21@cantab.net>.
+

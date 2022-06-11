@@ -1,0 +1,50 @@
+UFS.UTIL(8)               BSD System Manager's Manual              UFS.UTIL(8)
+
+NAME
+     ufs.util -- UFS file system utility
+
+SYNOPSIS
+     ufs.util [-m mountflag1 mountflag2 mountflag3 mountflag4] device node
+
+     ufs.util [-p mountflag1 mountflag2 mountflag3 mountflag4] device
+
+     ufs.util [-ksu] device
+
+     ufs.util [-n] device name
+
+DESCRIPTION
+     The ufs.util command supports the mounting, probing, and unmounting of
+     UFS file systems.
+
+     Options:
+
+     -k       get UUID key
+
+     -m mountflag1 mountflag2 mountflag3 mountflag4
+              mount
+
+     -n       set name
+
+     -p mountflag1 mountflag2 mountflag3 mountflag4
+              probe for mounting
+
+     -s       set UUID key
+
+     -u       unmount
+
+     mountflags above are either:
+
+     o   removable or fixed
+
+     o   readonly or writeable
+
+     o   suid or nosuid
+
+     o   dev or nodev
+
+SEE ALSO
+     diskarbitrationd(8)
+
+HISTORY
+     Derived from the Openstep Workspace Manager file system utility programs.
+

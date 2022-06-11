@@ -1,0 +1,33 @@
+CAP(1)                    BSD General Commands Manual                   CAP(1)
+
+NAME
+     cap -- Ruby on Rails web applications deployment utility
+
+SYNOPSIS
+     cap [options] args
+     capify [options] args
+
+DESCRIPTION
+     Capistrano is a utility for deploying web applications would be akin to
+     saying that computers are machines that let you type school papers. It's
+     a gross understatement.  Capistrano is actually capable of doing far, far
+     more than just deploying web apps. However, because deployment of web
+     apps is what Capistrano was originally created for, this manual will
+     focus on that, and then spend a little time at the end showing some of
+     the other possibilities.
+
+     For more information about the cap cap and cap capify commands you can
+     use their --h flag. There is also online documentation available at
+     "http://manuals.rubyonrails.com/read/chapter/97".
+
+SEE ALSO
+     rails(1) ruby(1)
+
+HISTORY
+     Capistrano was originally called SwitchTower. The name was changed in
+     March 2006 in response to a trademark conflict.
+
+AUTHORS
+     Capistrano was created by Jamis Buck <jamis@37signals.com> and
+     David Heinemeier Hansson <david@loudthinking.com>
+

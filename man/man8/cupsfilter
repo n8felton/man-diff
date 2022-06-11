@@ -1,0 +1,44 @@
+cupsfilter(8)                     Apple Inc.                     cupsfilter(8)
+
+
+
+NAME
+       cupsfilter - convert a file to another format using cups filters
+
+SYNOPSIS
+       cupsfilter  [  -c  config-file  ]  -m  mime/type  [  -n  copies  ] [ -o
+       name=value ] [ -p filename.ppd ] [ -t title ] filename
+
+DESCRIPTION
+       cupsfilter is a front-end to the CUPS filter subsystem which allows you
+       to  convert a file to a specific format, just as if you had printed the
+       file through CUPS.
+
+OPTIONS
+       -c config-file
+            Uses the named cupsd.conf configuration file.
+
+       -m mime/type
+            Specifies the destination file type.
+
+       -n copies
+            Specifies the number of copies to generate.
+
+       -o name=value
+            Specifies options to pass to the CUPS filters.
+
+       -p filename.ppd
+            Specifies the PPD file to use.
+
+       -t title
+            Specifies the document title.
+
+SEE ALSO
+       cupsd.conf(5)
+       http://localhost:631/help
+
+COPYRIGHT
+       Copyright 2007 by Apple Inc.
+
+
+

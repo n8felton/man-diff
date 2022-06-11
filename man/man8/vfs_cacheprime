@@ -1,0 +1,66 @@
+VFS_CACHEPRIME(8)                                            VFS_CACHEPRIME(8)
+
+
+
+NAME
+       vfs_cacheprime - prime the kernel file data cache
+
+SYNOPSIS
+       vfs objects = cacheprime
+
+DESCRIPTION
+       This VFS module is part of the samba(7) suite.
+
+       The  vfs_cacheprime VFS module reads chunks of file data near the range
+       requested by clients in order to make sure the data is present  in  the
+       kernel  file  data  cache  at the time when it is actually requested by
+       clients.
+
+       The size of the disk read operations  performed  by  vfs_cacheprime  is
+       determined by the cacheprime:rsize option. All disk read operations are
+       aligned on boundaries that are a multiple of this size. Each  range  of
+       the file data is primed at most once during the time the client has the
+       file open.
+
+       This module is stackable.
+
+OPTIONS
+       cacheprime:rsize = BYTES
+          The number of bytes with which to prime the kernel data cache.
+
+          The following suffixes may be applied to BYTES:
+
+             o  K - BYTES is a number of kilobytes
+
+             o  M - BYTES is a number of megabytes
+
+             o  G - BYTES is a number of gigabytes
+
+EXAMPLES
+       For a hypothetical disk array, it is necessary to ensure that all  read
+       operations  are  of  size  1 megabyte (1048576 bytes), and aligned on 1
+       megabyte boundaries:
+
+
+            [hypothetical]
+            vfs objects = cacheprime
+            cacheprime:rsize = 1M
+
+
+CAVEATS
+       cacheprime is not a a substitute for a general-purpose readahead mecha-
+       nism.  It  is intended for use only in very specific environments where
+       disk operations must be aligned and sized to known values (as  much  as
+       that is possible).
+
+VERSION
+       This man page is correct for version 3.0.25 of the Samba suite.
+
+AUTHOR
+       The  original  Samba  software  and  related  utilities were created by
+       Andrew Tridgell. Samba is now developed by the Samba Team  as  an  Open
+       Source project similar to the way the Linux kernel is developed.
+
+
+
+

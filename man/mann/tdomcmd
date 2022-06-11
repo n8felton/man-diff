@@ -1,0 +1,69 @@
+tdom(n)                                                                tdom(n)
+
+
+
+______________________________________________________________________________
+
+NAME
+       tdom  - tdom is an expat parser object extension to create an in-memory
+       DOM tree from the input while parsing.
+
+SYNOPSIS
+       package require tdom
+
+       set parser [expat]
+
+       tdom $parser enable
+_________________________________________________________________
+
+DESCRIPTION
+       tdom adds the C handler set "tdom" to an tcl  expat  parser  obj.  This
+       handler  set  builds  an in-memory DOM tree out of the input, parsed by
+       the parser. A DOM tree created this way behave exactly like a DOM  tree
+       created by the "dom" command (see there). In fact, tdom is only another
+       interface to the same functionality; it uses the code  behind  the  dom
+       code for building the DOM tree.
+
+       tdom parserObj enable
+
+
+              Adds  the  tdom C handler set to a Tcl expat parser object. Next
+              time, the parser parses input, the tdom C handler functions cre-
+              ate an in-memory DOM tree.
+
+       tdom parserObj getdoc
+
+
+              Returns the DOM tree as domDoc (see there) object.
+
+       tdom parserObj setResultEncoding
+
+
+              See the method setResultEncoding of the dom command.
+
+       tdom parserObj setStoreLineColumn ?boolean?
+
+
+              See the method setStoreLineColumn of the dom command.
+
+       tdom parserObj remove
+
+
+              Removes the tdom C handler set from the parser object.
+
+       tdom parserObj keepEmpties
+
+
+              See the option -keepEmpties of the dom command.
+
+       tdom parserObj setExternalEntityResolver script
+
+
+SEE ALSO
+       dom, expat
+
+KEYWORDS
+       DOM, SAX, C handler set
+
+
+

@@ -1,0 +1,18 @@
+docsetinstalld(8)         BSD System Manager's Manual        docsetinstalld(8)
+
+NAME
+     docsetinstalld -- Documentation set installer daemon
+
+SYNOPSIS
+     docsetinstalld
+
+DESCRIPTION
+     docsetinstalld is the daemon responsible for installing documentation
+     sets for use by Apple's developer tools.
+
+FILES
+     /usr/libexec/docsetinstalld  daemon
+
+SEE ALSO
+     docsetutil(1)
+

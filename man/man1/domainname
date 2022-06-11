@@ -1,0 +1,18 @@
+DOMAINNAME(1)             BSD General Commands Manual            DOMAINNAME(1)
+
+NAME
+     domainname -- set or print the name of the current NIS domain
+
+SYNOPSIS
+     domainname [name-of-domain]
+
+DESCRIPTION
+     Domainname prints the NIS domain name of the current host.  The super-
+     user can set the domain name by supplying an argument.
+
+SEE ALSO
+     hostname(1), getdomainname(2), setdomainname(2)
+
+HISTORY
+     The domainname command appeared in 4.2BSD.
+

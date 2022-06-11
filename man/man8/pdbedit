@@ -1,0 +1,354 @@
+PDBEDIT(8)                                                          PDBEDIT(8)
+
+
+
+NAME
+       pdbedit - manage the SAM database (Database of Samba Users)
+
+SYNOPSIS
+       pdbedit   [-L]   [-v]  [-w]  [-u username]  [-f fullname]  [-h homedir]
+        [-D drive] [-S script] [-p profile]  [-a]  [-t, --password-from-stdin]
+        [-m]  [-r]  [-x]  [-i passdb-backend]  [-e passdb-backend] [-b passdb-
+        backend]  [-g]  [-d debuglevel]  [-s configfile]   [-P account-policy]
+        [-C value] [-c account-control] [-y]
+
+DESCRIPTION
+       This tool is part of the samba(7) suite.
+
+       The  pdbedit program is used to manage the users accounts stored in the
+       sam database and can only be run by root.
+
+       The pdbedit tool uses the passdb modular interface and  is  independent
+       from  the  kind  of users database used (currently there are smbpasswd,
+       ldap, nis+ and tdb based and more can be  added  without  changing  the
+       tool).
+
+       There  are five main ways to use pdbedit: adding a user account, remov-
+       ing a user account, modifing a user  account,  listing  user  accounts,
+       importing users accounts.
+
+OPTIONS
+       -L
+          This  option  lists all the user accounts present in the users data-
+          base. This option prints a list of user/uid pairs separated  by  the
+          ':' character.
+
+          Example: pdbedit -L
+
+
+
+
+
+          sorce:500:Simo Sorce
+          samba:45:Test User
+
+
+
+       -v
+          This option enables the verbose listing format. It causes pdbedit to
+          list the users in the database, printing out the account fields in a
+          descriptive format.
+
+          Example: pdbedit -L -v
+
+
+
+
+
+          ---------------
+          username:       sorce
+          user ID/Group:  500/500
+          user RID/GRID:  2000/2001
+          Full Name:      Simo Sorce
+          Home Directory: \BERSERKERce
+          HomeDir Drive:  H:
+          Logon Script:   \BERSERKER0tlogonce.bat
+          Profile Path:   \BERSERKERrofile
+          ---------------
+          username:       samba
+          user ID/Group:  45/45
+          user RID/GRID:  1090/1091
+          Full Name:      Test User
+          Home Directory: \BERSERKERba
+          HomeDir Drive:
+          Logon Script:
+          Profile Path:   \BERSERKERrofile
+
+
+
+       -w
+          This option sets the "smbpasswd" listing format. It will make  pdbe-
+          dit  list the users in the database, printing out the account fields
+          in a format compatible with the smbpasswd file format. (see the smb-
+          passwd(5) for details)
+
+          Example: pdbedit -L -w
+
+
+          sorce:500:508818B733CE64BEAAD3B435B51404EE:
+                    D2A2418EFC466A8A0F6B1DBB5C3DB80C:
+                    [UX         ]:LCT-00000000:
+          samba:45:0F2B255F7B67A7A9AAD3B435B51404EE:
+                    BC281CE3F53B6A5146629CD4751D3490:
+                    [UX         ]:LCT-3BFA1E8D:
+
+
+       -u username
+          This  option  specifies  the  username  to be used for the operation
+          requested (listing, adding, removing). It is required in add, remove
+          and modify operations and optional in list operations.
+
+       -f fullname
+          This  option can be used while adding or modifing a user account. It
+          will specify the user's full name.
+
+          Example: -f "Simo Sorce"
+
+       -h homedir
+          This option can be used while adding or modifing a user account.  It
+          will specify the user's home directory network path.
+
+          Example: -h "\\\\BERSERKER\\sorce"
+
+       -D drive
+          This  option can be used while adding or modifing a user account. It
+          will specify the windows drive letter to be used  to  map  the  home
+          directory.
+
+          Example: -D "H:"
+
+       -S script
+          This  option can be used while adding or modifing a user account. It
+          will specify the user's logon script path.
+
+          Example: -S "\\\\BERSERKER\\netlogon\\sorce.bat"
+
+       -p profile
+          This option can be used while adding or modifing a user account.  It
+          will specify the user's profile directory.
+
+          Example: -p "\\\\BERSERKER\\netlogon"
+
+       -G SID|rid
+          This option can be used while adding or modifying a user account. It
+          will specify the users' new primary group SID (Security  Identifier)
+          or rid.
+
+          Example: -G S-1-5-21-2447931902-1787058256-3961074038-1201
+
+       -U SID|rid
+          This option can be used while adding or modifying a user account. It
+          will specify the users' new SID (Security Identifier) or rid.
+
+          Example: -U S-1-5-21-2447931902-1787058256-3961074038-5004
+
+       -c account-control
+          This option can be used while adding or modifying a user account. It
+          will specify the users' account control property. Possible flags are
+          listed below.
+
+
+
+             o  N: No password required
+
+             o  D: Account disabled
+
+             o  H: Home directory required
+
+             o  T: Temporary duplicate of other account
+
+             o  U: Regular user account
+
+             o  M: MNS logon user account
+
+             o  W: Workstation Trust Account
+
+             o  S: Server Trust Account
+
+             o  L: Automatic Locking
+
+             o  X: Password does not expire
+
+             o  I: Domain Trust Account
+
+
+
+             Example: -c "[X ]"
+
+       -a
+          This option is used to add a user into the  database.  This  command
+          needs  a  user  name specified with the -u switch. When adding a new
+          user, pdbedit will also ask for the password to be used.
+
+          Example: pdbedit -a -u sorce
+
+
+
+          new password:
+          retype new password
+
+
+
+          Note
+          pdbedit does not call the unix  password  syncronisation  script  if
+          unix  password  sync  has  been set. It only updates the data in the
+          Samba user database.
+
+          If you wish to add a user and synchronise the password that  immedi-
+          ately, use smbpasswd's -a option.
+
+       -t, --password-from-stdin
+          This option causes pdbedit to read the password from standard input,
+          rather than from /dev/tty (like the  passwd(1)  program  does).  The
+          password has to be submitted twice and terminated by a newline each.
+
+       -r
+          This option is used to modify an existing user in the database. This
+          command  needs  a  user  name  specified  with  the -u switch. Other
+          options can be specified to modify the properties of  the  specified
+          user.  This  flag  is kept for backwards compatibility, but it is no
+          longer necessary to specify it.
+
+       -m
+          This option may only be used in conjunction with the -a  option.  It
+          will  make  pdbedit to add a machine trust account instead of a user
+          account (-u username will provide the machine name).
+
+          Example: pdbedit -a -m -u w2k-wks
+
+       -x
+          This option causes pdbedit to delete an account from  the  database.
+          It needs a username specified with the -u switch.
+
+          Example: pdbedit -x -u bob
+
+       -i passdb-backend
+          Use a different passdb backend to retrieve users than the one speci-
+          fied in smb.conf. Can be used to import data into  your  local  user
+          database.
+
+          This  option will ease migration from one passdb backend to another.
+
+          Example: pdbedit -i smbpasswd:/etc/smbpasswd.old
+
+       -e passdb-backend
+          Exports all currently available  users  to  the  specified  password
+          database backend.
+
+          This  option  will ease migration from one passdb backend to another
+          and will ease backing up.
+
+          Example: pdbedit -e smbpasswd:/root/samba-users.backup
+
+       -g
+          If you specify -g, then -i in-backend -e out-backend applies to  the
+          group mapping instead of the user database.
+
+          This  option  will ease migration from one passdb backend to another
+          and will ease backing up.
+
+       -b passdb-backend
+          Use a different default passdb backend.
+
+          Example: pdbedit -b xml:/root/pdb-backup.xml -l
+
+       -P account-policy
+          Display an account policy
+
+          Valid policies are: minimum password age, reset count minutes,  dis-
+          connect  time, user must logon to change password, password history,
+          lockout duration, min password length, maximum password age and  bad
+          lockout attempt.
+
+          Example: pdbedit -P "bad lockout attempt"
+
+
+
+
+
+          account policy value for bad lockout attempt is 0
+
+
+
+       -C account-policy-value
+          Sets an account policy to a specified value. This option may only be
+          used in conjunction with the -P option.
+
+          Example: pdbedit -P "bad lockout attempt" -C 3
+
+
+
+
+
+          account policy value for bad lockout attempt was 0
+          account policy value for bad lockout attempt is now 3
+
+
+
+       -y
+          If you specify -y, then -i in-backend -e out-backend applies to  the
+          account policies instead of the user database.
+
+          This  option  will  allow  to  migrate  account  policies from their
+          default tdb-store into a passdb  backend,  e.g.  an  LDAP  directory
+          server.
+
+          Example: pdbedit -y -i tdbsam: -e ldapsam:ldap://my.ldap.host
+
+       -h|--help
+          Print a summary of command line options.
+
+       -V
+          Prints the program version number.
+
+       -s <configuration file>
+          The  file  specified  contains the configuration details required by
+          the server. The information in this  file  includes  server-specific
+          information  such  as what printcap file to use, as well as descrip-
+          tions of all the  services  that  the  server  is  to  provide.  See
+          smb.conf  for  more information. The default configuration file name
+          is determined at compile time.
+
+       -d|--debuglevel=level
+          level is an integer from 0 to 10. The default value if this  parame-
+          ter is not specified is zero.
+
+          The  higher  this  value,  the more detail will be logged to the log
+          files about the activities of the server. At level 0, only  critical
+          errors  and serious warnings will be logged. Level 1 is a reasonable
+          level for day-to-day running - it generates a small amount of infor-
+          mation about operations carried out.
+
+          Levels  above  1 will generate considerable amounts of log data, and
+          should only be used when investigating a problem. Levels above 3 are
+          designed for use only by developers and generate HUGE amounts of log
+          data, most of which is extremely cryptic.
+
+          Note that specifying this parameter here will override the
+
+          parameter in the smb.conf file.
+
+       -l|--logfile=logdirectory
+          Base directory name for log/debug files. The  extension  ".progname"
+          will  be  appended  (e.g.  log.smbclient, log.smbd, etc...). The log
+          file is never removed by the client.
+
+NOTES
+       This command may be used only by root.
+
+VERSION
+       This man page is correct for version 3.0 of the Samba suite.
+
+SEE ALSO
+       smbpasswd(5), samba(7)
+
+AUTHOR
+       The original Samba software  and  related  utilities  were  created  by
+       Andrew  Tridgell.  Samba  is now developed by the Samba Team as an Open
+       Source project similar to the way the Linux kernel is developed.
+
+       The pdbedit manpage was written by Simo Sorce and Jelmer Vernooij.
+
+
+
+

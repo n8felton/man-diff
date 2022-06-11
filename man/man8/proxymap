@@ -1,0 +1,144 @@
+PROXYMAP(8)                                                        PROXYMAP(8)
+
+
+
+NAME
+       proxymap - Postfix lookup table proxy server
+
+SYNOPSIS
+       proxymap [generic Postfix daemon options]
+
+DESCRIPTION
+       The proxymap(8) server provides read-only table lookup service to Post-
+       fix processes. The purpose of the service is:
+
+       o      To overcome chroot restrictions. For example,  a  chrooted  SMTP
+              server needs access to the system passwd file in order to reject
+              mail for non-existent local addresses, but it is  not  practical
+              to  maintain  a copy of the passwd file in the chroot jail.  The
+              solution:
+
+              local_recipient_maps =
+                  proxy:unix:passwd.byname $alias_maps
+
+       o      To consolidate the number of open lookup tables by  sharing  one
+              open  table  among multiple processes. For example, making mysql
+              connections from every Postfix daemon process  results  in  "too
+              many connections" errors. The solution:
+
+              virtual_alias_maps =
+                  proxy:mysql:/etc/postfix/virtual_alias.cf
+
+              The  total  number  of  connections  is limited by the number of
+              proxymap server processes.
+
+       The proxymap(8) server implements the following requests:
+
+       open maptype:mapname flags
+              Open the table with type maptype and name mapname, as controlled
+              by  flags.  The  reply  includes the maptype dependent flags (to
+              distinguish a fixed string table from a regular  expression  ta-
+              ble).
+
+       lookup maptype:mapname flags key
+              Look  up  the data stored under the requested key.  The reply is
+              the request completion status code (below) and the lookup result
+              value.   The  maptype:mapname and flags are the same as with the
+              open request.
+
+       There is no close command, nor are  tables  implicitly  closed  when  a
+       client  disconnects.  The  purpose  is  to  share tables among multiple
+       client processes.
+
+SERVER PROCESS MANAGEMENT
+       proxymap(8) servers run under control by the Postfix master(8)  server.
+       Each  server  can  handle  multiple simultaneous connections.  When all
+       servers are busy while a client connects, the master(8) creates  a  new
+       proxymap(8)  server  process,  provided  that  the process limit is not
+       exceeded.  Each server  terminates  after  serving  at  least  $max_use
+       clients or after $max_idle seconds of idle time.
+
+SECURITY
+       The  proxymap(8)  server  opens  only  tables that are approved via the
+       proxy_read_maps configuration parameter, does not talk  to  users,  and
+       can  run at fixed low privilege, chrooted or not.  However, running the
+       proxymap server chrooted severely limits usability, because it can open
+       only chrooted tables.
+
+       The proxymap(8) server is not a trusted daemon process, and must not be
+       used to look up sensitive information such as user or group IDs,  mail-
+       box file/directory names or external commands.
+
+       In  Postfix  version  2.2  and  later,  the  proxymap client recognizes
+       requests to access a table for security-sensitive purposes,  and  opens
+       the  table directly. This allows the same main.cf setting to be used by
+       sensitive and non-sensitive processes.
+
+DIAGNOSTICS
+       Problems and transactions are logged to syslogd(8).
+
+BUGS
+       The proxymap(8) server provides service to multiple clients,  and  must
+       therefore not be used for tables that have high-latency lookups.
+
+CONFIGURATION PARAMETERS
+       On  busy  mail systems a long time may pass before proxymap(8) relevant
+       changes to main.cf are picked up. Use the command "postfix  reload"  to
+       speed up a change.
+
+       The  text  below provides only a parameter summary. See postconf(5) for
+       more details including examples.
+
+       config_directory (see 'postconf -d' output)
+              The default location of the Postfix main.cf and  master.cf  con-
+              figuration files.
+
+       daemon_timeout (18000s)
+              How  much  time  a  Postfix  daemon process may take to handle a
+              request before it is terminated by a built-in watchdog timer.
+
+       ipc_timeout (3600s)
+              The time limit for sending  or  receiving  information  over  an
+              internal communication channel.
+
+       max_idle (100s)
+              The  maximum  amount of time that an idle Postfix daemon process
+              waits for an incoming connection before terminating voluntarily.
+
+       max_use (100)
+              The maximal number of incoming connections that a Postfix daemon
+              process will service before terminating voluntarily.
+
+       process_id (read-only)
+              The process ID of a Postfix command or daemon process.
+
+       process_name (read-only)
+              The process name of a Postfix command or daemon process.
+
+       proxy_read_maps (see 'postconf -d' output)
+              The lookup tables that the  proxymap(8)  server  is  allowed  to
+              access.
+
+SEE ALSO
+       postconf(5), configuration parameters
+       master(5), generic daemon options
+
+README FILES
+       Use  "postconf readme_directory" or "postconf html_directory" to locate
+       this information.
+       DATABASE_README, Postfix lookup table overview
+
+LICENSE
+       The Secure Mailer license must be distributed with this software.
+
+HISTORY
+       The proxymap service was introduced with Postfix 2.0.
+
+AUTHOR(S)
+       Wietse Venema
+       IBM T.J. Watson Research
+       P.O. Box 704
+       Yorktown Heights, NY 10598, USA
+
+
+

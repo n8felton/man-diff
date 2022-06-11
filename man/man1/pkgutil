@@ -1,0 +1,212 @@
+pkgutil(1)                BSD General Commands Manual               pkgutil(1)
+
+NAME
+     pkgutil -- Query and manipulate the installer package receipt database.
+
+SYNOPSIS
+     pkgutil [options] [commands]
+
+DESCRIPTION
+     pkgutil reads and manipulates the Installer's receipt database and flat
+     packages.  pkgutil can be used to learn about flat packages, including
+     installation date, location, and which files were or will be installed.
+     Options are processed first, and affect the operation of all commands.
+     Multiple commands are performed sequentially in the given order.
+
+OPTIONS
+     --help, -h  A brief summary of commands and usage.
+
+     --force, -f
+                 Don't ask for confirmation before performing a potentially
+                 destructive or ambiguous operation.
+
+     --verbose, -v
+                 Output in a "human-readable" format with extra headers, foot-
+                 ers, indentation, and other contextual information.
+
+     --debug     Print implementation details and other useless information
+                 while running.
+
+     --volume path
+                 Perform all operations on the specified volume or home direc-
+                 tory.  The root volume '/' will be used if unspecified.
+
+     --edit-pkg package-id
+                 Specifies an existing receipt to be modified in-place by
+                 --learn.
+
+     --only-files
+                 List only files (not directories) in --files listing.
+
+     --only-dirs
+                 List only directories (not files) in --files listing.
+
+     --regexp    Try to match package-id arguments as a regular expression if
+                 an exact match isn't found. See egrep(1) and re_format(7) for
+                 syntax.
+
+DATABASE COMMANDS
+     --packages, --pkgs
+                 List all installed package IDs on the specified --volume.
+
+     --pkgs-plist
+                 List all installed package IDs on the specified --volume in
+                 Mac OS X plist(5) format.
+
+     --pkgs=REGEXP
+                 List all installed package IDs matching REGEXP on the speci-
+                 fied --volume.  The equal sign (=) is required or the search
+                 string will be ignored and all package IDs will be returned.
+                 Be mindful of escaping characters in both your shell and the
+                 regular expression.  (Eg, 'pkgutil --pkgs=\\.D' searches for
+                 package IDs matching the literal '.D' after escaping the
+                 backslash from your shell and then the dot from the regex to
+                 make it literal.) Regular expressions are more complex than
+                 simple shell globbing. A dot (.) matches any character, while
+                 '*' matches zero or more of the previous character. See
+                 re_format(7) for a complete description of the syntax.
+
+     --files package-id
+                 List all of the files managed under the package-id.  This
+                 list will include files installed by other packages if those
+                 other packages have tainted the specified package-id. See the
+                 explanation of tainting in the NOTES section.
+
+     --export-plist package-id
+                 Print all receipt information about the specified package-id
+                 in the standard Mac OS X plist(5) format.
+
+     --import-plist
+                 Load receipt data formatted as a plist(5) from standard
+                 input. Use --export-plist for an example of the data and for-
+                 matting expected.
+
+     --verify package-id
+                 Run repair_packages(8) to verify the specified package-id.
+
+     --repair package-id
+                 Run repair_packages(8) to repair the specified package-id.
+
+     --pkg-info package-id
+                 Print extended information about the specified package-id.
+
+     --pkg-info-plist package-id
+                 Print extended information about the specified package-id in
+                 Mac OS X plist(5) format.
+
+     --forget package-id
+                 Discard all receipt data about package-id, but do not touch
+                 the installed files.  DO NOT use this command from an
+                 installer package script to fix broken package design.
+
+     --unlink package-id
+                 Unlinks (removes) each file referenced by package-id. WARN-
+                 ING: This command makes no attempt to perform reference
+                 counting or dependency analysis. It can easily remove files
+                 required by your system. It may include unexpected files due
+                 to package tainting. Use the --files command first to double
+                 check.
+
+     --learn path
+                 Used within a package's postinstall script to record ACLs or
+                 filesystem permissions applied to path that were not con-
+                 tained within the file archive itself. The installer passes a
+                 reference to the receipt being constructed via the
+                 INSTALL_PKG_SESSION_ID environment variable.
+
+     --pkg-groups package-id
+                 List all of the package groups this package-id is a member
+                 of.
+
+     --groups    List all of the package groups on the specified --volume.
+
+     --groups-plist
+                 List all of the package groups on the specified --volume in
+                 Mac OS X plist(5) format.
+
+     --group-pkgs group-id
+                 List all of the packages that are members of this group-id.
+
+     --file-info path
+                 Show the metadata known about path.
+
+     --file-info-plist path
+                 Show the metadata known about path in Mac OS X plist(5) for-
+                 mat.
+
+FILE COMMANDS
+     --expand pkg-path dir-path
+                 Expand the flat package at pkg-path into a new directory
+                 specified by dir-path.
+
+     --flatten dir-path pkg-path
+                 Flatten the dir-path into a new flat package created at
+                 pkg-path.  The directory to be flattened must have the proper
+                 contents and layout for a flat package.  This is not intended
+                 as a substitute for packagemaker(1).
+
+     --bom path  Extract any BOM files from the flat pkg at path into /tmp and
+                 return the filename(s).  Suggested use is as an argument to
+                 lsbom(8).  Eg, "lsbom `pkgutil --bom path`". Note that flat
+                 package archives may contain no BOM, one BOM, or several
+                 BOMs.
+
+     --payload-files path
+                 List the files archived within the payload of the uninstalled
+                 flat package(s) contained at path.  This should be equivilant
+                 to "lsbom -s `pkgutil --bom path`". Note that flat package
+                 archives may contain more than one package, and the destina-
+                 tion location for the uninstalled package(s) is unknown to
+                 this command.
+
+DEBUG COMMANDS
+     --pkgutil-version
+                 Output the version of the pkgutil command.
+
+     --test      Verify a connection to the receipt database and check that
+                 the client and server agree on the protocol version.
+
+ENVIRONMENT
+     The following environment variables affect the execution of pkgutil.
+
+     INSTALL_PKG_SESSION_ID
+                      Supplied by the Installer when pkgutil is used within a
+                      package script. Overridden by the --edit-pkg option, so
+                      be sure to leave the package unspecified within package
+                      scripts if you want to modify the package being
+                      installed.
+
+     INSTALL_TARGET_VOLUME
+                      Supplied by the Installer when pkgutil is used within a
+                      package script. Overridden by the --volume option, so be
+                      sure to leave the volume unspecified within package
+                      scripts if you want to modify the package being
+                      installed.
+
+NOTES
+     1.   Package tainting is when one package declares its contents should
+          become part of another package. Future upgrades to the other package
+          will behave as if the other package installed the additional files
+          found in the tainting package. This will usually result in the
+          tainting package's files being removed when the tainted package is
+          upgraded.
+
+     2.   The --forget command is a debugging tool and should not be used rou-
+          tinely.  There are better ways to permanently disable upgrade logic
+          within a package.
+
+FILES
+     /usr/libexec/repair_packages
+     /Library/Receipts/db/
+     ~/Library/Receipts/db/
+
+SEE ALSO
+     installer(8)
+     repair_packages(8)
+     packagemaker(1)
+     http://lists.apple.com/mailman/listinfo/installer-dev
+
+BUGS
+     Package dependency analysis and reference counting are not yet available,
+     hence there is no --uninstall command yet.
+

@@ -1,0 +1,191 @@
+WBINFO(1)                                                            WBINFO(1)
+
+
+
+NAME
+       wbinfo - Query information from winbind daemon
+
+SYNOPSIS
+       wbinfo [-a user%password] [--all-domains] [--allocate-gid] [--allocate-
+        uid] [-D domain] [--domain domain] [-g]  [--getdcname domain]  [--get-
+        auth-user]  [-G gid]  [-h]  [-i user]  [-I ip] [-K user%password] [-m]
+        [-n name] [-N netbios-name]  [--own-domain]  [-p]  [-r user]  [-s sid]
+        [--separator]  [--sequence]  [--set-auth-user user%password]  [-S sid]
+        [-t]  [-u]  [--user-domgroups sid]  [--user-sids sid]  [-U uid]   [-V]
+        [-Y sid]
+
+DESCRIPTION
+       This tool is part of the samba(7) suite.
+
+       The  wbinfo program queries and returns information created and used by
+       the winbindd(8) daemon.
+
+       The winbindd(8) daemon must be configured and running  for  the  wbinfo
+       program to be able to return information.
+
+OPTIONS
+       -a|--authenticate username%password
+          Attempt  to  authenticate  a  user  via  winbindd.  This checks both
+          authenticaion methods and reports its results.
+
+          Note
+          Do not be tempted to use this functionality  for  authentication  in
+          third-party applications. Instead use ntlm_auth(1).
+
+       --allocate-gid
+          Get a new GID out of idmap
+
+       --allocate-uid
+          Get a new UID out of idmap
+
+       --all-domains
+          List all domains (trusted and own domain).
+
+       --domain name
+          This  parameter  sets  the  domain on which any specified operations
+          will performed. If special domain name '.' is used to represent  the
+          current  domain  to  which  winbindd  belongs.  Currently  only  the
+          --sequence, -u, and -g options honor this parameter.
+
+       -D|--domain-info domain
+          Show most of the info we have about the domain.
+
+       -g|--domain-groups
+          This option will list all groups available in the Windows NT  domain
+          for which the samba(7) daemon is operating in. Groups in all trusted
+          domains will also be listed.  Note  that  this  operation  does  not
+          assign  group  ids  to any groups that have not already been seen by
+          winbindd(8).
+
+       --get-auth-user
+          Print username and password used by winbindd during session setup to
+          a  domain  controller. Username and password can be set using --set-
+          auth-user. Only available for root.
+
+       --getdcname domain
+          Get the DC name for the specified domain.
+
+       -G|--gid-to-sid gid
+          Try to convert a UNIX group id to a Windows NT SID. If the gid spec-
+          ified  does  not  refer  to  one within the idmap gid range then the
+          operation will fail.
+
+       -i|--user-info user
+          Get user info.
+
+       -I|--WINS-by-ip ip
+          The -I option queries winbindd(8) to send a node status  request  to
+          get the NetBIOS name associated with the IP address specified by the
+          ip parameter.
+
+       -K|--krb5auth username%password
+          Attempt to authenticate a user via Kerberos.
+
+       -m|--trusted-domains
+          Produce a list of domains trusted by  the  Windows  NT  server  win-
+          bindd(8)  contacts  when resolving names. This list does not include
+          the Windows NT domain the server is a Primary Domain Controller for.
+
+       -n|--name-to-sid name
+          The  -n  option  queries winbindd(8) for the SID associated with the
+          name specified. Domain names can be specified before the  user  name
+          by  using the winbind separator character. For example CWDOM1/Admin-
+          istrator refers to the Administrator user in the domain  CWDOM1.  If
+          no  domain is specified then the domain used is the one specified in
+          the smb.conf(5) workgroup parameter.
+
+       -N|--WINS-by-name name
+          The -N option queries winbindd(8) to query the WINS server  for  the
+          IP  address  associated  with the NetBIOS name specified by the name
+          parameter.
+
+       --own-domain
+          List own domain.
+
+       -p|--ping
+          Check whether winbindd is still alive. Prints out either 'succeeded'
+          or 'failed'.
+
+       -r|--user-groups username
+          Try  to obtain the list of UNIX group ids to which the user belongs.
+          This only works for users defined on a Domain Controller.
+
+       -s|--sid-to-name sid
+          Use -s to resolve a SID to a name. This is the  inverse  of  the  -n
+          option  above. SIDs must be specified as ASCII strings in the tradi-
+          tional        Microsoft         format.         For         example,
+          S-1-5-21-1455342024-3071081365-2475485837-500.
+
+       --separator
+          Get the active winbind separator.
+
+       --sequence
+          Show sequence numbers of all known domains
+
+       --set-auth-user username%password
+          Store username and password used by winbindd during session setup to
+          a domain controller. This enables winbindd to operate in  a  Windows
+          2000  domain  with  Restrict Anonymous turned on (a.k.a. Permissions
+          compatiable with Windows 2000 servers only).
+
+       -S|--sid-to-uid sid
+          Convert a SID to a UNIX user id. If the SID does not correspond to a
+          UNIX user mapped by winbindd(8) then the operation will fail.
+
+       -t|--check-secret
+          Verify  that  the  workstation  trust account created when the Samba
+          server is added to the Windows NT domain is working.
+
+       -u|--domain-users
+          This option will list all users available in the Windows  NT  domain
+          for  which  the  winbindd(8)  daemon  is  operating in. Users in all
+          trusted domains will also be listed. Note that this  operation  does
+          not  assign user ids to any users that have not already been seen by
+          winbindd(8)
+
+       --user-domgroups SID
+          Get user domain groups.
+
+       --user-sids SID
+          Get user group SIDs for user.
+
+       -U|--uid-to-sid uid
+          Try to convert a UNIX user id to a Windows NT SID. If the uid speci-
+          fied does not refer to one within the idmap uid range then the oper-
+          ation will fail.
+
+       -Y|--sid-to-gid sid
+          Convert a SID to a UNIX group id. If the SID does not correspond  to
+          a UNIX group mapped by winbindd(8) then the operation will fail.
+
+       -V
+          Prints the program version number.
+
+       -h|--help
+          Print a summary of command line options.
+
+EXIT STATUS
+       The  wbinfo  program  returns 0 if the operation succeeded, or 1 if the
+       operation failed. If the winbindd(8) daemon is not working wbinfo  will
+       always return failure.
+
+VERSION
+       This man page is correct for version 3.0 of the Samba suite.
+
+SEE ALSO
+       winbindd(8) and ntlm_auth(1)
+
+AUTHOR
+       The  original  Samba  software  and  related  utilities were created by
+       Andrew Tridgell. Samba is now developed by the Samba Team  as  an  Open
+       Source project similar to the way the Linux kernel is developed.
+
+       wbinfo and winbindd were written by Tim Potter.
+
+       The  conversion to DocBook for Samba 2.2 was done by Gerald Carter. The
+       conversion to DocBook XML 4.2 for  Samba  3.0  was  done  by  Alexander
+       Bokovoy.
+
+
+
+

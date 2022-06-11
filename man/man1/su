@@ -1,0 +1,65 @@
+SU(1)                     BSD General Commands Manual                    SU(1)
+
+NAME
+     su -- substitute user identity
+
+SYNOPSIS
+     su [-] [-flm] [login [args]]
+
+DESCRIPTION
+     su requests the password for login and switches to that user and group ID
+     after obtaining proper authentication.  A shell is then executed, and any
+     additional shell arguments after the login name are passed to the shell.
+     If su is executed by root, no password is requested and a shell with the
+     appropriate user ID is executed.
+
+     The options are as follows:
+
+     -f      If the invoked shell is csh(1), this option prevents it from
+             reading the ``.cshrc'' file.
+
+     -l      Simulate a full login.  The environment is discarded except for
+             HOME, SHELL, PATH, TERM, and USER.  HOME and SHELL are modified
+             as above.  USER is set to the target login.  PATH is set to
+             ``/bin:/usr/bin''.  TERM is imported from your current environ-
+             ment.  The invoked shell is the target login's, and su will
+             change directory to the target login's home directory.  This
+             option is identical to just passing "-", as in "su -".
+
+     -m      Leave the environment unmodified.  The invoked shell is your
+             login shell, and no directory changes are made.  As a security
+             precaution, if the target user's shell is a non-standard shell
+             (as defined by getusershell(3)) and the caller's real uid is non-
+             zero, su will fail.
+
+     The -l and -m options are mutually exclusive; the last one specified
+     overrides any previous ones.
+
+     Only users in group ``wheel'' (normally gid 0) or group ``admin'' (nor-
+     mally gid 20) can su to ``root''.
+
+     By default (unless the prompt is reset by a startup file) the super-user
+     prompt is set to ``#'' to remind one of its awesome power.
+
+SEE ALSO
+     csh(1), login(1), sh(1), skey(1), kinit(1), kerberos(1), passwd(5),
+     group(5), environ(7)
+
+ENVIRONMENT
+     Environment variables used by su :
+
+     HOME  Default home directory of real user ID unless modified as specified
+           above.
+
+     PATH  Default search path of real user ID unless modified as specified
+           above.
+
+     TERM  Provides terminal type which may be retained for the substituted
+           user ID.
+
+     USER  The user ID is always the effective ID (the target user ID) after
+           an su unless the user ID is 0 (root).
+
+HISTORY
+     A su command appeared in Version 7 AT&T UNIX.
+

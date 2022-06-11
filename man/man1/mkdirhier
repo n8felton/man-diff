@@ -1,0 +1,20 @@
+MKDIRHIER(1)                                                      MKDIRHIER(1)
+
+
+
+NAME
+       mkdirhier - makes a directory hierarchy
+
+SYNOPSIS
+       mkdirhier directory ...
+
+DESCRIPTION
+       The  mkdirhier  command creates the specified directories. Unlike mkdir
+       if any of the parent directories of  the  specified  directory  do  not
+       exist, it creates them as well.
+
+SEE ALSO
+       mkdir(1)
+
+
+

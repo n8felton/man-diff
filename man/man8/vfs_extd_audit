@@ -1,0 +1,32 @@
+VFS_EXTD_AUDIT(8)                                            VFS_EXTD_AUDIT(8)
+
+
+
+NAME
+       vfs_extd_audit - record selected Samba VFS operations
+
+SYNOPSIS
+       vfs objects = extd_audit
+
+DESCRIPTION
+       This VFS module is part of the samba(7) suite.
+
+       The  extd_audit  VFS  module records selected client operations to both
+       the smbd(8) log and system log (using syslog(3)).
+
+       Other than logging to the smbd(8) log, vfs_extd_audit is  identical  to
+       vfs_audit(8).
+
+       This module is stackable.
+
+VERSION
+       This man page is correct for version 3.0.25 of the Samba suite.
+
+AUTHOR
+       The  original  Samba  software  and  related  utilities were created by
+       Andrew Tridgell. Samba is now developed by the Samba Team  as  an  Open
+       Source project similar to the way the Linux kernel is developed.
+
+
+
+

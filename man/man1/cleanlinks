@@ -1,0 +1,34 @@
+cleanlinks(1)                                                    cleanlinks(1)
+
+
+
+NAME
+       cleanlinks - remove dangling symbolic links and empty directories
+
+SYNOPSIS
+       cleanlinks
+
+DESCRIPTION
+       The  cleanlinks  program searches the directory tree descended from the
+       current directory for symbolic links whose targets do  not  exist,  and
+       removes  them.  It then removes all empty directories in that directory
+       tree.
+
+       cleanlinks is useful for cleaning up a shadow link  tree  created  with
+       lndir(1) after files have been removed from the real directory.
+
+DIAGNOSTICS
+       A  message  will be printed upon encountering each dangling symlink and
+       empty directory.
+
+SEE ALSO
+       lndir(1).
+
+AUTHOR
+       The version of the cleanlinks included in this X.Org Foundation release
+       was originally written by David Dawes wrote as a part of XFree86.
+
+       Colin Watson wrote this manual page, originally for the Debian Project.
+
+
+

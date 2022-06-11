@@ -1,0 +1,335 @@
+podcast(1)                BSD General Commands Manual               podcast(1)
+
+NAME
+     podcast -- Podcast Producer command line tool
+
+SYNOPSIS
+     podcast [--server serverhost] [--pass password] [--user username]
+             [--checksslcert] [--timeout network_timeout]
+
+     podcast --listcameras
+     podcast --listworkflows
+
+     podcast --submit --file file_path [--file file_path] --workflow
+             workflow_name [--metadata metadata_file_path]
+             [--upload_buffer_size buffer_size]
+
+     podcast --list_uploads
+     podcast --clear_completed_uploads
+
+     podcast --isbound
+     podcast --bind camera_name
+     podcast --unbind camera_name
+
+     podcast --presets
+     podcast --devices
+     podcast --setconfig key=value[;key=value]
+     podcast --getconfig
+
+     podcast --status camera_name [--update_preview]
+     podcast --start camera_name [--audio_only]
+     podcast --stop camera_name --metadata metadata_file_path --workflow
+             workflow_name
+     podcast --pause camera_name
+     podcast --resume camera_name
+     podcast --cancel camera_name
+
+     podcast --help
+
+CONNECTIVITY OPTIONS
+     [--server serverhost]               The location of the Podcast Producer
+                                         server.  Format: 'myserver.exam-
+                                         ple.com' or 'https://myserver.exam-
+                                         ple.com:8170/podcastproducer'.  If
+                                         omitted, podcast will use `hostname`
+
+     [--user username]                   The username for authentication.  If
+                                         omitted, podcast will use $USER
+
+     [--pass password]                   The password for authentication.  If
+                                         omitted, podcast will prompt for it
+
+     [--checksslcert]                    Validate server SSL certificate
+
+     [--timeout network_timeout]         Specify a network timeout in seconds
+                                         (default is 60 seconds)
+
+QUERY OPERATIONS
+     --listcameras                       List available cameras
+
+     --listworkflows                     List available workflws
+
+SUBMISSION OPERATIONS
+     --submit                            Submit a recording or a file
+
+     --file file_path                    Submit external file(s) (requires
+                                         --workflow)
+
+     --workflow workflow_name            The workflow to use for processing
+                                         (--file only)
+
+     [--metadata metadata_file_path]     The metadata (XML plist) to use for
+                                         processing (--file only)
+
+     [--upload_buffer_size buffer_size]  Specifies the network transfer size
+                                         for an upload operation (default is
+                                         128K)
+
+UPLOAD OPERATIONS
+     --list_uploads                      Lists pending uploads and progress
+                                         status
+
+     --clear_completed_uploads           Clears completed uploads from list
+
+AGENT BINDING OPERATIONS
+     --isbound                           Check if the local camera agent is
+                                         bound to a server (returns 1 if
+                                         bound, 0 if unbound)
+
+     --bind camera_name                  Bind camera to a server
+
+     --unbind camera_name                Remove binding for camera on a server
+
+AGENT CONFIGURATION OPERATIONS
+     --presets                           Lists available capture presets for
+                                         camera agent configuration
+
+     --devices                           Lists available devices for camera
+                                         agent configuration
+
+     --setconfig key=value[;key=value]   Write an agent configuration setting
+                                         (requires root)
+
+     --getconfig                         Read agent configuration settings
+                                         (requires root)
+
+CONFIGURATION SETTINGS
+     Capture                             Value is a "<Type>:<Quality>" pair.
+
+                                         Types: "Audio" or "Video" or "Screen"
+
+                                         Qualities: "Good" or "Better" or
+                                         "Best"
+
+     AudioDevice                         Automatic | SysPref | <DeviceID>
+
+                                         Automatic will use the default audio
+                                         device input.
+
+                                         SysPref will use the audio device
+                                         input from System Preferences.
+
+                                         A specific <DeviceID> will be used
+                                         for audio (list devices with
+                                         --devices)
+
+     VideoDevice                         Automatic | <DeviceID>
+
+                                         Automatic will use the default video
+                                         device input.
+
+                                         A specific <DeviceID> will be used
+                                         for video (list devices with
+                                         --devices)
+
+CAMERA CONTROL OPERATIONS
+     --status camera_name [--update_preview]
+                                         Get status of a specific remote cam-
+                                         era. Optionally, ask for the preview
+                                         image to be updated
+
+     --start camera_name [--audio_only]  Start capture on a specific remote
+                                         camera. Optionally, start recording
+                                         with audio only mode
+
+     --stop camera_name                  Stop capture on a specific remote
+                                         camera (requires --workflow and
+                                         --metadata)
+
+     --pause camera_name                 Pause capture on a specific remote
+                                         camera
+
+     --resume camera_name                Resume capture on a specific remote
+                                         camera
+
+     --cancel camera_name                Cancel capture for a specific remote
+                                         camera
+
+HELP OPTIONS
+     --help                              Output a help listing
+
+RETURN VALUES
+     Returns 0 if command completed successfully.  Errors in the 10-19 range
+     are local command line issues.  Errors in the 20-29 range are server con-
+     nectivity problems.  Errors in the 30-39 range are server command prob-
+     lems.  Errors numbered 40 and above are agent response errors.
+
+     Returns 10 if root is required.
+
+     Returns 11 if there was an error reading or writing to a Plist
+
+     Returns 12 if there were command line parameter errors.
+
+     Returns 20 if the server is unavailable.
+
+     Returns 21 if there was a server hostname lookup failure.
+
+     Returns 22 if there was a server timeout.
+
+     Returns 23 if the server is not running SSL.
+
+     Returns 24 if the server certificate is not valid (only with
+     --checksslcert).
+
+     Returns 25 if there was a bad response from the server.
+
+     Returns 26 if the server returned an authorization failure.
+
+     Returns 30 if the submission create failed.
+
+     Returns 31 if the upload server is unavailable.
+
+     Returns 32 if the file upload failed.
+
+     Returns 33 if the file copy failed.
+
+     Returns 34 if the submission complete failed.
+
+     Returns 35 if the agent bind failed on the server.
+
+     Returns 36 if an agent command failed on the server.
+
+     Returns 37 if an unknown server error occurred.
+
+COMMAND EXAMPLES
+     List Workflows on the server:
+
+     podcast --server myserver.example.com --user username --pass password
+     --listworkflows
+
+     Submit a third-party file to the server:
+
+     podcast --server myserver.example.com --user username --pass password
+     --submit --file /path/to/file --workflow 'Workflow1' --metadata
+     /path/to/metadata.plist
+
+     Submit more than one file to the server:
+
+     podcast --server myserver.example.com --user username --pass password
+     --submit --file /path/to/file1 --file /path/to/file2 --workflow
+     'Workflow1' --metadata /path/to/metadata.plist
+
+     Bind an agent to a server:
+
+     podcast --server myserver.example.com --user adminuser --pass password
+     --bind 'MyCamera'
+
+     Write a set of configuration settings for the agent (requires root):
+
+     podcast --setconfig
+     'Capture=Video:Good;VideoDevice=iSight;AudioDevice=Automatic'
+
+     Start a recording on a remote agent:
+
+     podcast --server myserver.example.com --user username --pass password
+     --start 'MyCamera'
+
+     Stop a recording on a remote agent:
+
+     podcast --server myserver.example.com --user username --pass password
+     --start 'MyCamera' --workflow 'Workflow1' --metadata
+     /path/to/metadata.plist
+
+OUTPUT EXAMPLES
+     This is example output from --listworkflows:
+
+     <?xml version="1.0" encoding="UTF-8"?>
+     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+     <plist version='1.0'>
+             <dict>
+                     <key>workflows</key>
+                     <array>
+                             <dict>
+                                     <key>name</key>
+                                     <string>Workflow1</string>
+                                     <key>title</key>
+                                     <string>Physics 13 Workflow</string>
+                                     <key>description</key>
+                                     <string>Create podcast for Fall 2007 Physics 13</string>
+                                     <key>uuid</key>
+                                     <string>53F32376-B563-4A01-B481-120E9E337DB7</string>
+                                     <key>user_requirements</key>
+                                     <array>
+                                             <string>Title</string>
+                                             <string>Description</string>
+                                     </array>
+                             </dict>
+                             <dict>
+                                     <key>name</key>
+                                     <string>Workflow2</string>
+                                     <key>title</key>
+                                     <string>Chemistry 5 Workflow</string>
+                                     <key>description</key>
+                                     <string>Create podcast for Fall 2007 Chemistry 5</string>
+                                     <key>uuid</key>
+                                     <string>BBA1DB24-F6DE-475D-B51B-E7A780888F16</string>
+                                     <key>user_requirements</key>
+                                     <array>
+                                             <string>Title</string>
+                                             <string>Description</string>
+                                     </array>
+                             </dict>
+                     </array>
+             </dict>
+     </plist>
+
+     This is example output from --listcameras:
+
+     <?xml version="1.0" encoding="UTF-8"?>
+     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+     <plist version='1.0'>
+             <dict>
+                     <key>cameras</key>
+                     <array>
+                             <dict>
+                                     <key>name</key>
+                                     <string>WilderHall_Room102</string>
+                                     <key>uuid</key>
+                                     <string>A4640553-1C93-4FCD-98FE-917AF1700C6B</string>
+                                     <key>preview_url</key>
+                                     <string>https://podcastproducer.voxclamantis.edu:8170/agent_previews/A4640553-1C93-4FCD-98FE-917AF1700C6B.jpg</string>
+                             </dict>
+                             <dict>
+                                     <key>name</key>
+                                     <string>SteeleHall_Room006</string>
+                                     <key>uuid</key>
+                                     <string>B6DBECAC-3472-4692-B0FC-6143A46A7B53</string>
+                                     <key>preview_url</key>
+                                     <string>https://podcastproducer.voxclamantis.edu:8170/agent_previews/B6DBECAC-3472-4692-B0FC-6143A46A7B53.jpg</string>
+                             </dict>
+                     </array>
+             </dict>
+     </plist>
+
+METADATA EXAMPLES
+     This is an example of a metadata file submitted with --metadata:
+
+     <?xml version="1.0" encoding="UTF-8"?>
+     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+     <plist version="1.0">
+             <dict>
+                     <key>Author</key>
+                     <string>Professor Rick Hathaway</string>
+                     <key>Comment</key>
+                     <string>Strangely, things fall together.  Sorry Yeats.</string>
+                     <key>Copyright</key>
+                     <string>Copyright (c) 2007 Vox Clamantis College</string>
+                     <key>Description</key>
+                     <string>Gravitation is a phenomenon through which all objects attract each other.</string>
+                     <key>Keywords</key>
+                     <string>gravitation phys13</string>
+                     <key>Title</key>
+                     <string>Lecture 4 -- The theory of gravitation</string>
+             </dict>
+     </plist>
+

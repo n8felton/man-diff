@@ -1,0 +1,98 @@
+ant(1)                                                                  ant(1)
+
+
+
+NAME
+       ant - a Java based make tool.
+
+
+SYNOPSIS
+       ant [OPTION]... [TARGET [TARGET2] [TARGET3] ...]]
+
+
+DESCRIPTION
+       Like make, ant is a tool that can compile Java projects. But unlike it,
+       ant is based on Java which means that it will  run  on  every  platform
+       that  has a Java Virtual Machine. This makes it a great tool for build-
+       ing Java software.
+
+       By default it takes information from build.xml which describes the tar-
+       gets.
+
+
+       -help, -h
+              print help on the command line options
+
+       -projecthelp, -p
+              gives information on possible targets for this project
+
+       -version
+              prints the version number and then exits ant
+
+       -quiet, -q
+              be extra quiet
+
+       -verbose, -v
+              be extra verbose
+
+       -debug, -d
+              print debugging information
+
+       -emacs, -e
+              produce logging information without adornments
+
+       -logfile <file>, -l <file>
+              use the given file to output log to
+
+       -logger <classname>
+              the class which is to perform logging
+
+       -listener <classname>
+              add an instance of the given class as a project listener
+
+       -noinput
+              do not allow interactive input
+
+       -buildfile <file>, -file <file>, -f <file>
+              use  the  given buildfile instead of the default build.xml file.
+              This is the ant equivalent of Makefile
+
+       -D<property>=<value>
+              use value for the given property
+
+       -keep-going, -k
+              execute all targets that do not depend on failed target(s)
+
+       -propertyfile <file>
+              load all properties from file with -D properties  taking  prece-
+              dence
+
+       -inputhandler <class>
+              the class which will handle input requests
+
+       -find <file>, -s <file>
+              (s)earch  for  buildfile  towards the root of the filesystem and
+              use it
+
+       -nice number
+              A niceness value for the main thread: 1 (lowest)  to  10  (high-
+              est); 5 is the default
+
+       -nouserlib
+              Run ant without using the jar files from ${user.home}/.ant/lib
+
+       -noclasspath
+              Run ant without using CLASSPATH
+
+       -autoproxy
+              Java 1.5+ : use the OS proxies
+
+       -main <class>
+              override ant's normal entry point
+
+
+SEE ALSO
+       make(1) java(1) build.xml(5)
+
+
+

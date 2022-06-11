@@ -1,0 +1,55 @@
+NTPTRACE(8)               BSD System Manager's Manual              NTPTRACE(8)
+
+NAME
+     ntptrace -- trace a chain of NTP servers back to the primary source
+
+SYNOPSIS
+     ntptrace [-vdn] [-r retries] [-t timeout] [server]
+
+DESCRIPTION
+     The ntptrace utility determines where a given Network Time Protocol (NTP)
+     server gets its time from, and follows the chain of NTP servers back to
+     their master time source.  If given no arguments, it starts with
+     ``localhost''.
+
+     Here is an example of the output from ntptrace:
+
+     % ntptrace
+     localhost: stratum 4, offset 0.0019529, synch distance 0.144135
+     server2ozo.com: stratum 2, offset 0.0124263, synch distance 0.115784
+     usndh.edu: stratum 1, offset 0.0019298, synch distance 0.011993, refid 'WWVB'
+
+     On each line, the fields are (left to right): the host name, the host
+     stratum, the time offset between that host and the local host (as mea-
+     sured by ntptrace; this is why it is not always zero for ``localhost''),
+     the host synchronization distance, and (only for stratum-1 servers) the
+     reference clock ID.  All times are given in seconds.  Note that the stra-
+     tum is the server hop count to the primary source, while the synchroniza-
+     tion distance is the estimated error relative to the primary source.
+     These terms are precisely defined in RFC 1305.
+
+     The following options are available:
+
+     -d      Turn on some debugging output.
+
+     -n      Turn off the printing of host names; instead, host IP addresses
+             are given.  This may be necessary if a nameserver is down.
+
+     -r retries
+             Set the number of retransmission attempts for each host; the
+             default is 5.
+
+     -t timeout
+             Set the retransmission timeout (in seconds); the default is 2.
+
+     -v      Print verbose information about the NTP servers.
+
+SEE ALSO
+     ntpd(8), ntpdc(8)
+
+     D L Mills, Network Time Protocol (Version 3), RFC1305.
+
+BUGS
+     This program makes no attempt to improve accuracy by doing multiple sam-
+     ples.
+

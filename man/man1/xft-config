@@ -1,0 +1,77 @@
+xft-config(1)                                                    xft-config(1)
+
+
+
+NAME
+       xft-config  - report Xft version, compiler, linker, and/or installation
+       directory information
+
+SYNOPSIS
+       xft-config { --exec-prefix[=local_prefix] |  --prefix[=local_prefix]  |
+       --cflags | --libs } ...
+
+       xft-config --version
+
+DESCRIPTION
+       xft-config  reports  information  of  interest  to users and developers
+       about the installed version of the X FreeType library, Xft(3).  Depend-
+       ing  on  how it is invoked, xft-config reports the installed version of
+       Xft, the compiler and linker flags that are  required  to  successfully
+       compile and link C (or C-compatible) code that uses the library, and/or
+       the directories used by the GNU Autotools to install its  files.   Note
+       that if the system's installed version of Xft came from an OS vendor or
+       other third party, the actual location of its  files  may  differ  from
+       those  reported  by xft-config.  The system adminstrator can also relo-
+       cate Xft's files.
+
+       If invoked without any arguments, xft-config will print a usage message
+       on standard error and exit.
+
+OPTIONS
+       --cflags
+              Report the compiler flags that are required to compile code that
+              uses Xft symbols.
+
+       --exec-prefix[=local_prefix]
+              If specified without the parameter local_prefix, report the file
+              specification  prefix  that  Xft  uses  for installation of exe-
+              cutable files.  If local_prefix is specified, it is used instead
+              of  the  file specification prefix used for installation of exe-
+              cutable files by Xft and the value of the option argument speci-
+              fied  with  --prefix,  if any, when compile and linker flags are
+              reported (with --cflags and --libs, respectively).
+
+       --libs Report the linker flags that are required to link code that uses
+              Xft symbols.
+
+       --prefix[=local_prefix]
+              If specified without the parameter local_prefix, report the file
+              specification prefix that Xft uses for  installation  of  files.
+              If  local_prefix  is  specified,  it is used instead of the file
+              specification prefix used for installation of files by Xft  when
+              compile and linker flags are reported (with --cflags and --libs,
+              respectively); also see --exec-prefix.
+
+       --version
+              Report the version of the Xft library installed  on  the  system
+              and exit.
+
+OPERANDS
+       xft-config  does  not recognize any non-option arguments.  At least one
+       option must be specified.
+
+EXIT STATUS
+       0      Information was successfully reported.
+
+       1      xft-config was invoked with invalid arguments, or  no  arguments
+              at all.
+
+AUTHOR
+       xft-config  was written by Keith Packard.  This manual page was written
+       by Branden Robinson.
+
+SEE ALSO
+       Xft(3)
+
+
+

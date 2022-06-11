@@ -1,0 +1,59 @@
+VFS_PREALLOC(8)                                                VFS_PREALLOC(8)
+
+
+
+NAME
+       vfs_prealloc - preallocate matching files to a predetermined size
+
+SYNOPSIS
+       vfs objects = prealloc
+
+DESCRIPTION
+       This VFS module is part of the samba(7) suite.
+
+       The vfs_prealloc VFS module preallocates files to a specified size each
+       time a new file is created. This is useful in environments where  files
+       are  of  a predetermined size will be written to a disk subsystem where
+       extending file allocations is expensive.
+
+       This module is stackable.
+
+OPTIONS
+       prealloc:EXT = BYTES
+          Preallocate all files with the extension EXT to the  size  specified
+          by BYTES.
+
+          The following suffixes may be applied to BYTES:
+
+             o  K - BYTES is a number of kilobytes
+
+             o  M - BYTES is a number of megabytes
+
+             o  G - BYTES is a number of gigabytes
+
+EXAMPLES
+       A  process  writes  TIFF files to a Samba share, and the is known these
+       files will almost always be around 4 megabytes (4194304 bytes):
+
+
+               [frames]
+            path = /data/frames
+            vfs objects = prealloc
+            prealloc:tiff = 4M
+
+
+CAVEATS
+       vfs_prealloc is not supported on all platforms  and  filesystems.  Cur-
+       rently only XFS filesystems on Linux and IRIX are supported.
+
+VERSION
+       This man page is correct for version 3.0.25 of the Samba suite.
+
+AUTHOR
+       The  original  Samba  software  and  related  utilities were created by
+       Andrew Tridgell. Samba is now developed by the Samba Team  as  an  Open
+       Source project similar to the way the Linux kernel is developed.
+
+
+
+

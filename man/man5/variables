@@ -1,0 +1,47 @@
+VARIABLES(5)                       Net-SNMP                       VARIABLES(5)
+
+
+
+NAME
+           variables - Format of specifying variable names to SNMP tools.
+
+SYNOPSIS
+           system.sysdescr.0
+
+DESCRIPTION
+       Variable  names are in the format of Object Identifiers (ASN.1).  There
+       are several methods of representation. Each variable name is  given  in
+       the  format  of  A.B.C.D..., where A, B, C, and D are subidentifiers in
+       one of two forms of notation.  Each subidentifier may be encoded  as  a
+       decimal  integer, or a symbol as found in the RFC1066 MIB.  The case of
+       the symbols is not significant.
+       If there is no leading "." in the  variable  name,  the  name  will  be
+       formed   as   if   having   been   preceded   with  "iso.org.dod.inter-
+       net.mgmt.mib.".  A "." must be placed before the first variable if  the
+       user is to fully specify the name.  For example:
+
+       1.1.0 system.sysDescr.0 and 1.sysDescr.0
+
+       all refer to the same variable name.  Likewise:
+
+       .1.3.6.1.2.1.1.1.0     .iso.org.dod.internet.mgmt.mib.system.sysdescr.0
+       .1.3.6.1.2.1.1.sysdescr.0
+
+       All refer to the same variable name.
+
+       The description of the variables in the MIB is given in the set of  MIB
+       files  defined  by  the  MIBS environment variable (or the default list
+       defined   at   compilation   time)   and   the   MIB   files   in   the
+       /usr/share/snmp/mibs directory (or the MIBDIRS environment variable).
+
+SEE ALSO
+       RFC 1065, RFC 1066, RFC 1067, ISO IS 8824(ASN.1)
+
+BUGS
+       The  parser  of  the  MIB  files file is not expected to handle bizarre
+       (although correct) interpretations of the ASN.1 notation.
+
+
+
+
+

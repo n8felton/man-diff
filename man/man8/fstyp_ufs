@@ -1,0 +1,17 @@
+FSTYP_UFS(8)              BSD System Manager's Manual             FSTYP_UFS(8)
+
+NAME
+     fstyp_ufs -- check for a UFS volume
+
+SYNOPSIS
+     fstyp_ufs device
+
+DESCRIPTION
+     The fstyp_ufs utility is not intended to be run directly, but rather
+     called by fstyp(8) while it is trying to determine which file system type
+     is present on the given device.  It returns 1 if it thinks the device
+     contains a UFS volume, and 0 otherwise.
+
+SEE ALSO
+     fstyp(8)
+

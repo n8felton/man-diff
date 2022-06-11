@@ -1,0 +1,78 @@
+RPCINFO(8)                BSD System Manager's Manual               RPCINFO(8)
+
+NAME
+     rpcinfo -- report RPC information
+
+SYNOPSIS
+     rpcinfo -p [host]
+     rpcinfo [-n portnum] -u host program [version]
+     rpcinfo [-n portnum] -t host program [version]
+     rpcinfo -b program version
+     rpcinfo -d program version
+
+DESCRIPTION
+     rpcinfo makes an RPC call to an RPC server and reports what it finds.
+
+OPTIONS
+     -p      Probe the portmapper on host, and print a list of all registered
+             RPC programs.  If host is not specified, it defaults to the value
+             returned by hostname(1).
+
+     -u      Make an RPC call to procedure 0 of program on the specified host
+             using UDP, and report whether a response was received.
+
+     -t      Make an RPC call to procedure 0 of program on the specified host
+             using TCP, and report whether a response was received.
+
+     -n      Use portnum as the port number for the -t and -u options instead
+             of the port number given by the portmapper.
+
+     -b      Make an RPC broadcast to procedure 0 of the specified program and
+             version using UDP and report all hosts that respond.
+
+     -d      Delete registration for the RPC service of the specified program
+             and version.  This option can be exercised only by the super-
+             user.
+
+     The program argument can be either a name or a number.
+
+     If a version is specified, rpcinfo attempts to call that version of the
+     specified program.  Otherwise, rpcinfo attempts to find all the regis-
+     tered version numbers for the specified program by calling version 0
+     (which is presumed not to exist; if it does exist, rpcinfo attempts to
+     obtain this information by calling an extremely high version number
+     instead) and attempts to call each registered version.  Note: the version
+     number is required for -b and -d options.
+
+EXAMPLES
+     To show all of the RPC services registered on the local machine use:
+
+           example% rpcinfo -p
+
+     To show all of the RPC services registered on the machine named klaxon
+     use:
+
+           example% rpcinfo -p klaxon
+
+     To show all machines on the local net that are running the Yellow Pages
+     service use:
+
+           example% rpcinfo -b ypserv 'version' | uniq
+
+     where 'version' is the current Yellow Pages version obtained from the
+     results of the -p switch above.
+
+     To delete the registration for version 1 of the walld service use:
+
+           example% rpcinfo -d walld 1
+
+SEE ALSO
+     rpc(5), portmap(8)
+
+     RPC Programming Guide.
+
+BUGS
+     In releases prior to SunOS 3.0, the Network File System (NFS) did not
+     register itself with the portmapper; rpcinfo cannot be used to make RPC
+     calls to the NFS server on hosts running such releases.
+

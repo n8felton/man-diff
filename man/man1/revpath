@@ -1,0 +1,33 @@
+REVPATH(1)                                                          REVPATH(1)
+
+
+
+NAME
+       revpath  -  generate a relative path that can be used to undo a change-
+       directory
+
+SYNOPSIS
+       revpath path
+
+DESCRIPTION
+       The revpath program prints out a relative path that is the  ``reverse''
+       or  ``inverse''  of  path.   Start with two directories top and bottom,
+       with the latter below the former, and path is the  location  of  bottom
+       relative to top.  The output of revpath is the location of top relative
+       to bottom.  The resulting path contains a trailing `/'  character  when
+       the result is non-trivial.  If path is equivalent to `.', the resulting
+       output is empty.  If path is invalid in some way (e.g., doesn't  repre-
+       sent  the path to a subdirectory) the output is also empty and no error
+       messages are ever generated.
+
+DIAGNOSTICS
+       There are no diagnostics.  Error conditions are silently  ignored,  and
+       the exit status is always 0.
+
+BUGS
+       It  isn't  possible  to  reverse arbitrary relative paths.  If any path
+       element between the two end points of path  is  a  symbolic  link,  the
+       results will probably be incorrect.
+
+
+

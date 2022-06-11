@@ -1,0 +1,23 @@
+SHOWRGB(1)                                                          SHOWRGB(1)
+
+
+
+NAME
+       showrgb - uncompile an rgb color-name database
+
+SYNOPSIS
+       showrgb [ database ]
+
+DESCRIPTION
+       The  showrgb  program reads an rgb color-name database compiled for use
+       with the dbm database routines and converts it  back  to  source  form,
+       printing  the  result  to standard output.  The default database is the
+       one that X was built with, and may be overridden on the  command  line.
+       Specify the database name without the .pag or .dir suffix.
+
+FILES
+       /usr/X11/lib/X11/rgb
+                           default database.
+
+
+

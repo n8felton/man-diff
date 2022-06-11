@@ -1,0 +1,132 @@
+MAKESTRS(1)                                                        MAKESTRS(1)
+
+
+
+NAME
+       makestrs - makes string table C source and header(s)
+
+SYNOPSIS
+       makestrs [-f source] [-i includedir] [-abioptions ...]
+
+DESCRIPTION
+       The  makestrs  command creates string table C source files and headers.
+       If -f source is not specified makestrs will read  from  stdin.   The  C
+       source  file is always written to stdout.  makestrs creates one or more
+       C header files as specified in the source file.  The following  options
+       may be specified: -sparcabi, -intelabi, -functionabi, -arrayperabi, and
+       -defaultabi.
+
+       -sparcabi is used on SPARC platforms conforming to the SPARC Compliance
+       Definition, i.e. SVR4/Solaris.
+
+       -intelabi  is used on Intel platforms conforming to the System V Appli-
+       cation Binary Interface, i.e. SVR4.
+
+       -earlyR6abi may be used in addition to -intelabi for  situations  where
+       the  vendor  wishes to maintain binary compatibility between X11R6 pub-
+       lic-patch 11 (and earlier) and X11R6 public-patch 12 (and later).
+
+       -functionabi generates a functional abi to the string table. This mech-
+       anism  imposes  a  severe performance penalty and it's recommended that
+       you not use it.
+
+       -arrayperabi results in a separate array for each string. This  is  the
+       default behavior if makestrs was compiled with -DARRAYPERSTR (it almost
+       never is).
+
+       -defaultabi forces the generation of the "normal" string table even  if
+       makestrs  was  compiled  with  -DARRAYPERSTR.  Since makestrs is almost
+       never compiled with -DARRAYPERSTR this is the default  behavior  if  no
+       abioptions are specified.
+
+       -i  includedir  forces  the  reading  of  templates from the includedir
+       instead of the local directory. This is useful to have separate  source
+       and build directories.
+
+SYNTAX
+       The  syntax  for  string-list  file  is  (items  in square brackets are
+       optional):
+           #prefix <text>
+           #feature <text>
+           #externref <text>
+           #externdef [<text>]
+           [#ctempl <text>]
+
+           #file <filename>
+           #table <tablename>
+           [#htempl]
+           <text>
+           <text>
+           [#table <tablename>
+           <text>
+           <text>
+            ...
+           #table <tablename>
+            ...]
+           [#file <filename>
+            ...]
+
+       In words you may have one or more #file directives. Each #file may have
+       one or more #table directives.
+
+       The #prefix directive determines the string that makestr will prefix to
+       each definition.
+
+       The #feature directive determines the string that makestr will use  for
+       the feature-test macro, e.g. X[TM]STRINGDEFINES.
+
+       The  #externref  directive  determines the string that makestr will use
+       for the extern clause, typically this will be "extern" but Motif  wants
+       it to be "externalref"
+
+       The  #externdef  directive  determines the string that makestr will use
+       for the declaration, typically this will be the null string (note  that
+       makestrs  requires  a trailing space in this case, i.e. "#externdef "),
+       and Motif will use "externaldef(_xmstrings).
+
+       The #ctmpl directive determines the name of the file used as a template
+       for the C source file that is generated
+
+       Each  #file  <filename> directive will result in a corresponding header
+       file by that name containing the appropriate definitions  as  specified
+       by command line options. A single C source file containing the declara-
+       tions for the definitions in all the headers will be printed to stdout.
+
+       The #htmpl directive determines the name of the file used as a template
+       for the C header file that is generated.
+
+       Each #table <tablename> directive will be processed in accordance  with
+       the  ABI.  On most platforms all tables will be catenated into a single
+       table with the name of the first table for that file. To conform to the
+       Intel ABI separate tables will be generated with the names indicated.
+
+       The  template  files  specified by the #ctmpl and #htmpl directives are
+       processed by copying line for line from the template file to the appro-
+       priate  output  file.  The  line  containing  the  string <<<STRING_TA-
+       BLE_GOES_HERE>>> is not copied to the output file. The appropriate data
+       is  then  copied  to the output file and then the remainder of the tem-
+       plate file is copied to the output file.
+
+BUGS
+       makestrs is not very forgiving of syntax errors. Sometimes you  need  a
+       trailing  space  after # directives, other times they will mess you up.
+       No warning messages are emitted.
+
+SEE ALSO
+       SPARC Compliance Definition 2.2., SPARC International Inc., 535 Middle-
+       field Road, Suite 210, Menlo Park, CA  94025
+
+       System   V   Application   Binary   Interface,   Third   Edition,  ISBN
+       0-13-100439-5 UNIX Press, PTR Prentice Hall, 113 Sylvan Avenue,  Engle-
+       wood Cliffs, NJ  07632
+
+       System  V  Application Binary Interface, Third Edition, Intel386 Archi-
+       tecture Processor Supplement ISBN 0-13-104670-5 UNIX Press,  PTR  Pren-
+       tice Hall, 113 Sylvan Avenue, Englewood Cliffs, NJ  07632
+
+       System  V  Application Binary Interface, Third Edition, SPARC Architec-
+       ture Processor Supplement ISBN 0-13-104696-9 UNIX Press,  PTR  Prentice
+       Hall, 113 Sylvan Avenue, Englewood Cliffs, NJ  07632
+
+
+

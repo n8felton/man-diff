@@ -1,0 +1,405 @@
+domNode(n)                                                          domNode(n)
+
+
+
+______________________________________________________________________________
+
+NAME
+       domNode - Manipulates an instance of a DOM node object
+
+SYNOPSIS
+        $nodeObject method  arg arg ...
+_________________________________________________________________
+
+ DESCRIPTION
+       This  command manipulates one particular instance of a DOM node object.
+       method indicates a specific method of the  node  class.  These  methods
+       should closely conform to the W3C recommendation "Document Object Model
+       (Core)   Level   1"    (http://www.w3.org/TR/REC-DOM-Level-1/level-one-
+       core.html)  as  well  to  parts  of the W3C draft "XML Pointer Language
+       (XPointer)" (http://www.w3.org/TR/1998/WD-xptr-19980303).
+
+       The selectNodes method implements the "XML Path Language  (XPath)  Ver-
+       sion      1.0"      W3C     recommendation     16     November     1999
+       (http://www.w3.org/TR/1999/REC-xpath-19991116). Look at these documents
+       for a deeper understanding of the functionality.
+
+       The valid methods are:
+
+       nodeType
+              Returns  the  node  type  of that node object. This can be: ELE-
+              MENT_NODE, TEXT_NODE, CDATA_SECTION_NODE, COMMENT_NODE  or  PRO-
+              CESSING_INSTRUCTION_NODE.
+
+       nodeName
+              Returns  the  node name of that node object. This is the element
+              (tag) name for element nodes (type  ELEMENT_NODE),  "#text"  for
+              text node or "#cdata" for cdata section nodes.
+
+       nodeValue ?newValue?
+              Returns  the  value of that node object. This is the the text or
+              the data for element nodes of type TEXT_NODE, COMMENT_NODE, PRO-
+              CESSING_INSTRUCTION_NODE or CDATA_SECTION_NODE). Otherwise it is
+              empty. If the node is  a  TEXT_NODE,  COMMENT_NODE  or  PROCESS-
+              ING_INSTRUCTION_NODE  and  the  optional  argument  newValue  is
+              given, the node is set to that value.
+
+       hasChildNodes
+              Returns 1 if the has children. Otherwise 0 is returned.
+
+       parentNode ?objVar?
+              Returns the parent node.
+
+       childNodes
+              Returns a list of direct children node objects.
+
+       childNodesLive
+              Returns a "live" nodeList object of the child nodes of the  node
+              in  the sense of the DOM recommendation. This nodeList object is
+              "live" in the sense that, for instance, changes to the  children
+              of  the  node  object  that  it was created from are immediately
+              reflected in the nodes returned by the NodeList accessors; it is
+              not  a  static  snapshot  of  the  content of the node. The both
+              accessors know by the nodeList object are "item <index>",  which
+              returns  the indexth item in the collection, and "length", which
+              returns the number of nodes in the list.
+
+       firstChild ?objVar?
+              Returns the first child as a node object.
+
+       lastChild ?objVar?
+              Returns the last child as a node object.
+
+       nextSibling  ?objVar?
+              Returns the next sibling relativ to the current node as  a  node
+              object.
+
+       previousSibling ?objVar?
+              Returns  the  next sibling relativ to the current node as a node
+              object.
+
+       getElementsByTagName name
+              Returns a list of all elements in  the  subtree  matching  (glob
+              style) name.
+
+       getElementsByTagNameNS uri localname
+              Returns  a  list  of  all elements in the subtree matching (glob
+              style) localname and having the given namespace uri.
+
+       getElementById id
+              Returns the node having a id attribute with value id.
+
+       hasAttribute attributeName
+              Returns 1 if the object node contains  an  attribute  with  name
+              attributeName . Otherwise 0 is returned.
+
+       getAttribute attributeName  ?defaultValue?
+              Returns  the  value of the attribute attributeName. If attribute
+              is not available defaultValue is returned.
+
+       setAttribute attributeName newValue  ?attributeName newValue ...?
+              Sets the value for one or more attributes.  Every  attributeName
+              is  set  to  the  corresponding  newValue.  If  there  isn't  an
+              attribute for one or more of the attributeName this will  create
+              that attribute.
+
+       removeAttribute attributeName
+              Removes the attribute attributeName.
+
+       hasAttributeNS uri localName
+              Returns  1  if  the  object  node contains an attribute with the
+              local name localName within the namespace uri.  Otherwise  0  is
+              returned.
+
+       getAttributeNS uri localName ?defaultValue?
+              Returns the value of the attribute with the local name localName
+              within the namespace URI uri.  If  the  node  dosn't  have  that
+              attribute the defaultValue is returned.
+
+       setAttributeNS  uri  qualifiedName newValue ?uri qualifiedName newValue
+       ...?
+
+
+              Sets  the value for one or more full qualified attributes. Every
+              attribute qualifiedName with the namespace URI uri will  be  set
+              to  newValue.  This  will  create  a new attribute, if it wasn't
+              avialble before. If you want to set an attribute within a names-
+              pace  you  must  specify the attribute name with prefix, even if
+              you want to set an already existing attribute to  a  new  value.
+              While searching, if the attribute already exists, only the given
+              uri and the localname of the qualifiedName is used.
+
+
+
+                     $node setAttributeNS "http://some.uri.com/wow" prefix:attr1 attrValue
+
+              If the uri is the empty string and the attribute name  hasn't  a
+              prefix,  this  method  has  the same effect as the method setAt-
+              tribute.
+
+
+
+                     $node setAttributeNS "" attri "some Value"
+
+              XML namespace nodes are not in any namespace. Set them this way:
+
+
+
+                     $node setAttributeNS "" xmlns:myprefix "myNamespaceURI"
+                     $node setAttributeNS "" xmlns "newDefaultNamespace"
+
+              If  your  qualifiedName  has  the  prefix "xml" and you give the
+              empty string as uri, the namespace of the attribute defaults  to
+              "http://www.w3.org/XML/1998/namespace", as the DOM 2 recommenda-
+              tion requests. With  the  exceptions  of  the  special  prefixes
+              "xmlns"  and  "xml"  you always must provide a non emtpy uri, if
+              your qualifiedName has a prefix.
+
+       removeAttributeNS uri localName
+              Removes the attribute with the local name localName  within  the
+              namespace uri.
+
+       attributes ?attributeNamePattern?
+              Returns  all  attributes  matching the attributeNamePattern.  If
+              attributeNamePattern isn't given all attributes are returned  as
+              a Tcl list.
+
+       appendChild newChild
+              Append  newChild  to  the  end  of  the  child list of the node.
+              newChild must be in the document fragment list.
+
+       insertBefore newChild  refChild
+              Insert newChild before the refChild into the list of children of
+              node.  If  refChild  is the empty string, insert newChild at the
+              end of the child nodes list of that node.
+
+       replaceChild newChild  oldChild
+              Replace newChild with oldChild in list of children of that node.
+              newChild  must  be in the document fragment list.  oldChild will
+              be part of the document fragment list after this operation.
+
+       removeChild child
+              Removes child from the list of children of that node child  will
+              be  part  of the document fragment list after this operation. It
+              is not physically deleted.
+
+       delete Deletes the given node and its complete child tree and frees the
+              complete  internal memory. The affected nodes are not accessible
+              through the document fragment list.
+
+       cloneNode ?-deep?
+              Clones this node and adds the new create node into the  document
+              fragment  list. If the -deep option is specified, all descendant
+              nodes are also cloned.
+
+       ownerDocument ?domObjVar?
+              Returns the document object of the document  this  node  belongs
+              to.
+
+       find attrName attrVal ?objVar?
+              Finds  the  node with the attribute name attrName, and attribute
+              value attrVal in the subtree starting the current node.
+
+       child number|all type attrName attrValue
+              (XPointer) child
+
+       descendant number|all type attrName attrValue
+              (XPointer) descendant
+
+       ancestor number|all type attrName attrValue
+              (XPointer) ancestor
+
+       fsibling number|all type attrName attrValue
+              (XPointer) fsibling
+
+       psibling number|all type attrName attrValue
+              (XPointer) psibling
+
+       root  objVar
+              (XPointer) root
+
+       text   Returns all text node children of that  current  node  combined,
+              i.e. appended into one string.
+
+       target For  a  processing instruction node the target part is returned.
+              Otherwise an error is generated.
+
+       data   For a processing instruction node the data part is returned. For
+              a  text  node,  comment  node or cdata section node the value is
+              returned.  Otherwise an error is generated.
+
+       prefix Returns the namespace prefix.
+
+       namespaceURI
+              Returns the URI from the namespace of the given node.
+
+       localName
+              Returns the localName from the tag name of the given node.
+
+       selectNodes xpathQuery ?typeVar?
+              Returns the result of applying the XPath query xpathQuery to the
+              subtree.  This  can be a string/value, a list of strings, a list
+              of nodes or a list of attribute name / value pairs.  If  typeVar
+              is  given  the  result  type  name  is  store into that variable
+              (empty, bool, number, string, nodes, attrnodes or mixed).
+
+
+                     set paragraphNodes [$node selectNodes {chapter[3]//para[@type='warning' or @type='error'} ]
+                     foreach paragraph $paragraphNodes {
+                         lappend  values [$paragraph selectNodes attribute::type]
+                     }
+
+
+              The expression context of the XPath  query  is  the  node.  That
+              means, every namespace prefix in the query is resolved using the
+              namespace declaration that are in scope of the node.
+
+       getLine
+              Returns the line number of that node in the orignal parsed  XML.
+
+       getColumn
+              Returns  the  column  number  of that node in the orignal parsed
+              XML.
+
+       asList Returns the DOM substree starting form the  current  node  as  a
+              nested Tcl list.
+
+       asXML ?-indent none/1..8? ?-channel channelId? ?-escapeNonASCII?
+              Returns  the  DOM substree starting from the current node as the
+              root node of the result as an (optional indented) XML string  or
+              sends  the output directly to the given channelId. If the option
+              -escapeNonASCII is given, every non 7  bit  ASCII  character  in
+              attribute  values  or  element PCDATA content will be escaped as
+              character reference in decimal representation.
+
+       asHTML ?-channel channelId? ?-escapeNonASCII?  ?-htmlEntities?
+              Returns the DOM substree starting from the current node  as  the
+              root  node of the result serialized acording to HTML rules (HTML
+              elements are recognized regardless of case, without end tags for
+              emtpy  HTML  elements  etc.),  as  string  or  sends  the output
+              directly to the given channelId. If the  option  -escapeNonASCII
+              is given, every non 7 bit ASCII character in attribute values or
+              element PCDATA content will be escaped as character reference in
+              decimal  representation. If the option -htmlEntities is given, a
+              character is outputed using a HTML 4.01 character entity  refer-
+              ence, if one is defined for it.
+
+       asText For ELEMENT_NODEs, the asText method outputs the string-value of
+              every text node descendant of node in document order without any
+              escaping. For every other node type, this method outputs the the
+              XPath string value of that node.
+
+       appendFromList list
+              Parses list , creates an according DOM subtree and appends  this
+              subtree to the current node.
+
+       appendFromScript tclScript
+              Appends  the  nodes  created  in the tclScript by Tcl functions,
+              which have been built using  dom  createNodeCmd,  to  the  given
+              node.
+
+       insertBeforeFromScript tclScript refChild
+              Inserts  the  nodes  created  in the tclScript by Tcl functions,
+              which have  been  built  using  dom  createNodeCmd,  before  the
+              refChild  into  to  the list of children of node. If refChild is
+              the empty string, the new nodes will be appended.
+
+       appendXML XMLstring
+              Parses XMLstring, creates an according DOM subtree  and  appends
+              this subtree to the current node.
+
+       simpleTranslate outputVar specifications
+              Translate  the  subtree starting at the object node according to
+              the specifications in specifications and outputs the  result  in
+              the variable outputVar . The translation is very similar to Cost
+              Simple mode.
+
+       toXPath
+              Returns a XPath, which exactly addresses the given node  in  its
+              document.  This  XPath  is only valid as there are no changes to
+              DOM tree made later one.
+
+       getBaseURI
+              Returns the baseURI of the node. This method  is  deprecated  in
+              favor of the baseURI method.
+
+       baseURI ?URI?
+              Returns  the  present baseURI of the node. If the optional argu-
+              ment URI is given, sets the base URI of the node and of  all  of
+              its  child  nodes  out  of the same enitity as node to the given
+              URI.
+
+       disableOutputEscaping ?boolean?
+              This method works only for text nodes; for every other nodes  it
+              returns error. Without the optional argument it returns, if dis-
+              abling output escaping is on. The  return  value  0  means,  the
+              characters  of  the text node will be escaped, to generate valid
+              XML, if serialized. This is the default for every parsed or cre-
+              ated  text  node  (with  the  exception  of that text nodes in a
+              result tree of an XSLT transformation, for which disabling  out-
+              put  escaping  was requested explicitely in the stylesheet). The
+              return value 1 means, that output escaping is disabled for  this
+              text  node.  If  such  a  text node is serialized (with asXML or
+              asHTML), it is literarily written, without escaping of the  spe-
+              cial  XML  characters.  If the optional boolean value boolean is
+              given, the flag is set accordingly. You should not set this flag
+              to 1, until you really know, what you do.
+
+       precedes refnode
+              Compares  the relative order of the node and refnode. Both nodes
+              must be part of the same documents and not out of  the  fragment
+              list of the document. Returns true, if node is in document order
+              (in the sense of the XPath 1.0  recommendation)  before  refnode
+              and false otherwise.
+
+       normalize ?-forXPath?
+              Puts all Text nodes in the full depth of the sub-tree underneath
+              this Node into a "normal" form where only structure (e.g.,  ele-
+              ments,  comments,  processing  instructions  and CDATA sections)
+              separates Text nodes, i.e.,  there  are  neither  adjacent  Text
+              nodes  nor  empty  Text nodes. If the option -forXPath is given,
+              all CDATA sections in the nodes are converted to text nodes,  as
+              a first step before the normalization.
+
+       xslt    ?-parameters    parameterList?    ?-ignoreUndeclaredParameters?
+       ?-xsltmessagecmd script? stylesheet ?outputVar?
+              Applies  an  XSLT  transformation on the document using the XSLT
+              stylesheet (given as domDoc). Returns a document object contain-
+              ing  the result document of that transformation and stores it in
+              the optional outputVar.
+
+              The optional -parameters option sets top  level  <xsl:param>  to
+              string values. The parameterList has to be a tcl list consisting
+              of parameter name and value pairs.
+
+              If the option -ignoreUndeclaredParameters is given, then parame-
+              ter  names in the parameterList given to the -parameters options
+              that are not declared as top-level parameters in the  stylesheet
+              are  silently  ignored. Without this option, an error is raised,
+              if the user tries to set a top-level  parameter,  which  is  not
+              declared in the stylesheet.
+
+              The -xsltmessagecmd option sets a callback for xslt:message ele-
+              ments in the stylesheet. The  actual  command  consists  of  the
+              script,  given  as argument to the option, appended with the XML
+              Fragment from instantiating the xsl:message element  content  as
+              string  (as  if  the  XPath  string()  function  would have been
+              applied to the XML Fragment) and a flag, which indicates, if the
+              xsl:message has an attribute "terminate" with the value "yes".
+
+       @attrName
+              Returns  the  value  of  the  attribute attrName.  Short cut for
+              getAttribute.
+
+       Otherwise, if an unknown method name is given,  the  command  with  the
+       same  name  as  the given method within the namespace ::dom::domNode is
+       tried to be executed. This allows quick method additions on Tcl  level.
+
+SEE ALSO
+       dom, domDoc
+
+KEYWORDS
+       XML, DOM, document, node, parsing
+
+
+

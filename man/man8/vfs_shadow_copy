@@ -1,0 +1,83 @@
+VFS_SHADOW_COPY(8)                                          VFS_SHADOW_COPY(8)
+
+
+
+NAME
+       vfs_shadow_copy  -  Make  a  Samba share read only for a specified time
+       period
+
+SYNOPSIS
+       vfs objects = shadow_copy
+
+DESCRIPTION
+       This VFS module is part of the samba(7) suite.
+
+       The  vfs_shadow_copy  VFS  module  functionality  that  is  similar  to
+       Microsoft Shadow Copy services. When setup properly, this module allows
+       Microsoft Shadow Copy  clients  to  browse  "shadow  copies"  on  Samba
+       shares.
+
+       This module is stackable.
+
+CONFIGURATION
+       vfs_shadow_copy  relies  on  a filesystem snapshot implementation. Many
+       common filesystems have native support for this.
+
+       Filesystem snapshots must be mounted on specially named directories  in
+       order  to  be  recognized by vfs_shadow_copy. The snapshot mount points
+       must be immediate children of a the directory being shared.
+
+       The snapshot naming convention is @GMT-YYYY.MM.DD-hh.mm.ss, where:
+
+       o  YYYY is the 4 digit year
+
+       o  MM is the 2 digit month
+
+       o  DD is the 2 digit day
+
+       o  hh is the 2 digit hour
+
+       o  mm is the 2 digit minute
+
+       o  ss is the 2 digit second.
+
+
+
+The vfs_shadow_copy snapshot naming convention can be produced with  the  fol-
+lowing date(1) command:
+
+
+
+
+     TZ=GMT date +@GMT-%Y.%m.%d-%H.%M.%S
+
+
+
+EXAMPLES
+       Add shadow copy support to user home directories:
+
+
+               [homes]
+            vfs objects = shadow_copy
+
+
+CAVEATS
+       This is not a backup, archival, or version control solution.
+
+       With  Samba  or  Windows  servers, vfs_shadow_copy is designed to be an
+       end-user tool only. It does not replace  or  enhance  your  backup  and
+       archival  solutions  and  should in no way be considered as such. Addi-
+       tionally, if you need version control, implement a version control sys-
+       tem.
+
+VERSION
+       This man page is correct for version 3.0.25 of the Samba suite.
+
+AUTHOR
+       The  original  Samba  software  and  related  utilities were created by
+       Andrew Tridgell. Samba is now developed by the Samba Team  as  an  Open
+       Source project similar to the way the Linux kernel is developed.
+
+
+
+

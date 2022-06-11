@@ -1,0 +1,51 @@
+IDMAP_TDB(8)                                                      IDMAP_TDB(8)
+
+
+
+NAME
+       idmap_tdb - Samba's idmap_tdb Backend for Winbind
+
+DESCRIPTION
+       The  idmap_tdb plugin is the default backend used by winbindd for stor-
+       ing SID/uid/gid mapping tables and  implements  both  the  "idmap"  and
+       "idmap alloc" APIs.
+
+IDMAP OPTIONS
+       range = low - high
+          Defines the available matching uid and gid range for which the back-
+          end is authoritative. Note that the range commonly matches the allo-
+          cation  range  due  to the fact that the same backend will store and
+          retrieve SID/uid/gid mapping entries. If the  parameter  is  absent,
+          Winbind  fail  over  to  use the "idmap uid" and "idmap gid" options
+          from smb.conf.
+
+IDMAP ALLOC OPTIONS
+       range = low - high
+          Defines the available matching uid and gid range from which winbindd
+          can  allocate for users and groups. If the parameter is absent, Win-
+          bind fail over to use the "idmap uid" and "idmap gid"  options  from
+          smb.conf.
+
+EXAMPLES
+       The  following  example  is  equivalent to the pre-3.0.25 default idmap
+       configuration using the "idmap backend = tdb" setting.
+
+
+            [global]
+                idmap domains = ALLDOMAINS
+                idmap config ALLDOMAINS:default = yes
+                idmap config ALLDOMAINS:backend = tdb
+                idmap config ALLDOMAINS:range   = 10000 - 50000
+
+                idmap alloc backend = tdb
+                idmap alloc config:range = 10000 - 50000
+
+
+AUTHOR
+       The original Samba software  and  related  utilities  were  created  by
+       Andrew  Tridgell.  Samba  is now developed by the Samba Team as an Open
+       Source project similar to the way the Linux kernel is developed.
+
+
+
+

@@ -1,0 +1,165 @@
+NEWFS(8)                  BSD System Manager's Manual                 NEWFS(8)
+
+NAME
+     newfs -- construct a new file system
+
+ALERT
+     UFS SUPPORT IS IN THE PROCESS OF BEING DEPRECATED.
+
+SYNOPSIS
+     newfs [-NO] [-S sector-size] [-T disktype] [-a maxcontig] [-b block-size]
+           [-c cylinders] [-d rotdelay] [-e maxbpg] [-f frag-size] [-i bytes]
+           [-k skew] [-l interleave] [-m free space] [-n rotational positions]
+           [-o optimization] [-p sectors] [-r revolutions] [-s size]
+           [-t tracks] [-u sectors] [-v volume name] [-x sectors] special
+
+DESCRIPTION
+     The newfs utility replaces the more obtuse mkfs(8) program.  The newfs
+     utility builds a file system on the specified special device basing its
+     defaults on the information in the disk label.  Typically the defaults
+     are reasonable, however newfs has numerous options to allow the defaults
+     to be selectively overridden.
+
+     The following options define the general layout policies.
+
+     -N          Causes the file system parameters to be printed out without
+                 really creating the file system.
+
+     -O          Creates a 4.3BSD format filesystem.  This options is primar-
+                 ily used to build root filesystems that can be understood by
+                 older boot ROMs.
+
+     -T disktype
+                 This specifies the disk type.
+
+     -a maxcontig
+                 This specifies the maximum number of contiguous blocks that
+                 will be laid out before forcing a rotational delay (see the
+                 -d option).  The default value is one.  See tunefs(8) for
+                 more details on how to set this option.
+
+     -b block-size
+                 The block size of the file system, in bytes.
+
+     -c #cylinders/group
+                 The number of cylinders per cylinder group in a file system.
+                 The default value is 16.
+
+     -d rotdelay
+                 This specifies the expected time (in milliseconds) to service
+                 a transfer completion interrupt and initiate a new transfer
+                 on the same disk.  The default is 4 milliseconds.  See
+                 tunefs(8) for more details on how to set this option.
+
+     -e maxbpg   This indicates the maximum number of blocks any single file
+                 can allocate out of a cylinder group before it is forced to
+                 begin allocating blocks from another cylinder group.  The
+                 default is about one quarter of the total blocks in a cylin-
+                 der group.  See tunefs(8) for more details on how to set this
+                 option.
+
+     -f frag-size
+                 The fragment size of the file system in bytes.
+
+     -i number of bytes per inode
+                 This specifies the density of inodes in the file system.  The
+                 default is to create an inode for each 2048 bytes of data
+                 space.  If fewer inodes are desired, a larger number should
+                 be used; to create more inodes a smaller number should be
+                 given.
+
+     -m free space %
+                 The percentage of space reserved from normal users; the mini-
+                 mum free space threshold.  The default value used is 10%.
+                 See tunefs(8) for more details on how to set this option.
+
+     -n rotational positions
+                 Determines how many rotational time slots there are in one
+                 revolution of the disk.
+
+     -o optimization preference
+                 (``space'' or ``time'') The file system can either be
+                 instructed to try to minimize the time spent allocating
+                 blocks, or to try to minimize the space fragmentation on the
+                 disk.  If the value of minfree (see above) is less than 10%,
+                 the default is to optimize for space; if the value of minfree
+                 is greater than or equal to 10%, the default is to optimize
+                 for time.  See tunefs(8) for more details on how to set this
+                 option.
+
+     -s size     The size of the file system in sectors.
+
+     The following options override the standard sizes for the disk geometry.
+     Their default values are taken from the disk label.  Changing these
+     defaults is useful only when using newfs to build a file system whose raw
+     image will eventually be used on a different type of disk than the one on
+     which it is initially created (for example on a write-once disk).  Note
+     that changing any of these values from their defaults will make it impos-
+     sible for fsck to find the alternate superblocks if the standard
+     superblock is lost.
+
+     -S sector-size
+                 The size of a sector in bytes (almost never anything but
+                 512).
+
+     -k sector 0 skew, per track
+                 Used to describe perturbations in the media format to compen-
+                 sate for a slow controller.  Track skew is the offset of sec-
+                 tor 0 on track N relative to sector 0 on track N-1 on the
+                 same cylinder.
+
+     -l hardware sector interleave
+                 Used to describe perturbations in the media format to compen-
+                 sate for a slow controller.  Interleave is physical sector
+                 interleave on each track, specified as the denominator of the
+                 ratio:
+                       sectors read/sectors passed over
+                 Thus an interleave of 1/1 implies contiguous layout, while
+                 1/2 implies logical sector 0 is separated by one sector from
+                 logical sector 1.
+
+     -p spare sectors per track
+                 Spare sectors (bad sector replacements) are physical sectors
+                 that occupy space at the end of each track.  They are not
+                 counted as part of the sectors/track (-u) since they are not
+                 available to the file system for data allocation.
+
+     -r revolutions/minute
+
+
+
+
+
+                 The speed of the disk in revolutions per minute.
+
+     -t #tracks/cylinder
+                 The number of tracks/cylinder available for data allocation
+                 by the file system.
+
+     -u sectors/track
+                 The number of sectors per track available for data allocation
+                 by the file system.  This does not include sectors reserved
+                 at the end of each track for bad block replacement (see the
+                 -p option.)
+
+     -v volume name
+                 Volume name (file system name) in ASCII or UTF-8 format.  The
+                 default is "untitled".
+
+     -x spare sectors per cylinder
+                 Spare sectors (bad sector replacements) are physical sectors
+                 that occupy space at the end of the last track in the cylin-
+                 der.  They are deducted from the sectors/track (-u) of the
+                 last track of each cylinder since they are not available to
+                 the file system for data allocation.
+
+SEE ALSO
+     fs(5), dumpfs(8), fdisk(8), fsck(8), mount(8), pdisk(8), tunefs(8)
+
+     M. McKusick, W. Joy, S. Leffler, and R. Fabry, "A Fast File System for
+     UNIX,", ACM Transactions on Computer Systems 2, 3, pp 181-197, August
+     1984, (reprinted in the BSD System Manager's Manual).
+
+HISTORY
+     The newfs command appeared in 4.2BSD.
+

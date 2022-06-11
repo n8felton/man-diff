@@ -1,0 +1,41 @@
+dirt(1)                   BSD General Commands Manual                  dirt(1)
+
+NAME
+     dirt -- A Directory Tool for testing Directory Services
+
+SYNOPSIS
+     dirt [-c] [-g] [-s] [-l | -m path | -n]
+          [-q query_iterations [-d seconds]] -u username [-p password]
+
+DESCRIPTION
+     The dirt tool is a command line utility for testing Directory Services.
+     Common usages are to do simple authentication tests on various nodes
+     (including search node) as well as repetitive stress testing.
+
+     The options are as follows:
+
+     options:
+
+     -l       Search Local node only
+
+     -c       Search the Contacts search path (default is to use the Authenti-
+              cation path)
+
+     -m path  Search on node named path
+
+     -q n     Perform the specified query operation n times. (specify 0 to
+              loop forever)
+
+     -d n     Sleep n seconds between each query iteration.  Default is 0.
+
+     -g       Search for groups instead of users.
+
+     -a auth_method
+              Use specified authentication method. Available methods:
+                    nt --> SMB-NT
+
+     -s       Grep the DS headers for final status code.
+
+SEE ALSO
+     DirectoryService(8) dscl(1) DirectoryServiceAttributes(7)
+

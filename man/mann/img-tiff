@@ -1,0 +1,73 @@
+img-tiff(n)                                                        img-tiff(n)
+
+
+
+NAME
+       img-tiff - Img, Tagged Image File Format (tiff)
+
+SYNOPSIS
+       package require Tk
+
+       package require img::tiff  ?1.3?
+
+       image create photo ?name? ?options?
+
+
+DESCRIPTION
+       The  package  img::tiff  is a sub-package of Img. It can be loaded as a
+       part of the complete Img support, via package require Img,  or  on  its
+       own, via package require img::tiff.
+
+       Like  all packages of Img it does not provide new commands, but extends
+       the existing Tk command image so  that  it  supports  files  containing
+       raster images in the Tagged Image File Format (tiff). More specifically
+       img::tiff extends Tk's photo image type.
+
+       The name of the new format handler is tiff.  This handler provides  new
+       additional  configuration  options.  See  section TIFF OPTIONS for more
+       detailed explanations.
+
+       All of the above means that in a call like
+
+       image create photo ?name? ?options?
+
+       [1]    Image data in tiff format (options -data and -file) is  detected
+              automatically.
+
+       [2]    The  format  name  tiff is recognized by the option -format.  In
+              addition the value for the option is treated  as  list  and  may
+              contain  any  of  the  special  options  listed  in section TIFF
+              OPTIONS.
+
+TIFF OPTIONS
+       The handler provides two options to influence the  writing  of  a  TIFF
+       image. There are no options to influence the reader.
+
+       -compression type
+              This  option specifies the type of compression to use when writ-
+              ing TIFF data. It has to be one  of  none,  jpeg,  packbits,  or
+              deflate. The default is none.
+
+       -byteorder type
+              This  option  specifies  the  byteorder to use when writing TIFF
+              data. It has to be  one  of  bigendian,  littleendian,  network,
+              smallendian,  or  the  empty  string.  The  default is the empty
+              string.
+
+              The values bigendian and network are aliases of each  other,  as
+              are littleendian and smallendian.
+
+SEE ALSO
+       img-bmp,  img-gif,  img-ico,  img-intro, img-jpeg, img-pcx, img-pixmap,
+       img-png, img-ppm, img-ps, img-sgi, img-sun, img-tga, img-tiff, img-win-
+       dow, img-xbm, img-xpm
+
+KEYWORDS
+       image handling, tiff, tk
+
+COPYRIGHT
+       Copyright (c) 1995-2003 Jan Nijtmans <nijtmans@users.sourceforge.com>
+
+
+
+

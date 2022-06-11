@@ -1,0 +1,54 @@
+PLUTIL(1)                 BSD General Commands Manual                PLUTIL(1)
+
+NAME
+     plutil -- property list utility
+
+SYNOPSIS
+     plutil [command_option] [other_options] file
+             ...
+
+DESCRIPTION
+     plutil can be used to check the syntax of property list files, or convert
+     a plist file from one format to another.
+
+     The first argument indicates the operation to perform, one of:
+
+     -help         Show the usage information for the command and exit.
+
+     -lint         Check the named property list files for syntax errors.
+                   This is the default command option if none is specified.
+
+     -convert fmt  Convert the named file to the indicated format and write
+                   back to the file system.  If the file can't be loaded due
+                   to invalid syntax, the operation fails.
+
+                   fmt is one of:  xml1, for version 1 of the XML plist format
+                                   binary1, for version 1 of the binary plist
+                                   format
+
+     There are a few additional options:
+
+     --            Specifies that all further arguments are file names
+
+     -s            Don't print anything on success.
+
+     -o path       Specify an alternate path name for the result of the -con-
+                   vert operation; this option is only useful with a single
+                   file to be converted.  Specifying - as the path outputs to
+                   stdout (only allowed with XML output).
+
+     -e extension  Specify an alternate extension for converted files, and the
+                   output file names are otherwise the same.
+
+DIAGNOSTICS
+     The plutil command exits 0 on success, and 1 on failure.
+
+SEE ALSO
+     plist(5)
+
+STANDARDS
+     The plutil command obeys no one's rules but its own.
+
+HISTORY
+     The plutil command first appeared in Mac OS X 10.2.
+

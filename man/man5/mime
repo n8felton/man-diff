@@ -1,0 +1,73 @@
+mime.types(5)                     Apple Inc.                     mime.types(5)
+
+
+
+NAME
+       mime.types - mime type description file for cups
+
+DESCRIPTION
+       The mime.types file defines the recognized file types.
+
+       Additional  file  types  can  be added to mime.types or (preferably) in
+       additional files in the CUPS configuration directory with the extension
+       ".types".
+
+       Each  line  in  the  mime.types file is a comment, blank, or rule line.
+       Comment lines start with the # character. Rule  lines  start  with  the
+       MIME type name and are optionally followed by a series of file recogni-
+       tion rules that are used to automatically identify print and web files:
+
+           super/type rule [ ... ruleN]
+       The rules may be grouped using parenthesis, joined using "+" for a log-
+       ical AND and "," or whitespace for a logical OR, and negated using "!".
+
+RULES
+       Rules  take  two  forms  - a filename extension by itself and functions
+       with test values inside parenthesis. The following functions are avail-
+       able:
+
+       match("pattern")
+            Pattern match on filename
+
+       ascii(offset,length)
+            True if bytes are valid printable ASCII (CR, NL, TAB, BS, 32-126)
+
+       printable(offset,length)
+            True  if bytes are printable 8-bit chars (CR, NL, TAB, BS, 32-126,
+            128-254)
+
+       string(offset,"string")
+            True if bytes are identical to string
+
+       istring(offset,"string")
+            True if a case-insensitive comparison of the bytes is identical
+
+       char(offset,value)
+            True if byte is identical
+
+       short(offset,value)
+            True if 16-bit integer is identical
+
+       int(offset,value)
+            True if 32-bit integer is identical
+
+       locale("string")
+            True if current locale matches string
+
+       contains(offset,range,"string")
+            True if the range contains the string
+
+STRING CONSTANTS
+       String constants can be specified inside quotes ("") for  strings  con-
+       taining whitespace and angle brackets (<>) for hexadecimal strings.
+
+SEE ALSO
+       classes.conf(5),   cupsd(8),   cupsd.conf(5),   mime.convs(5),   print-
+       ers.conf(5),
+       http://localhost:631/help
+
+COPYRIGHT
+       Copyright 2007 by Apple Inc.
+
+
+

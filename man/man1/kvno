@@ -1,0 +1,39 @@
+KVNO(1)                                                                KVNO(1)
+
+
+
+NAME
+       kvno - print key version numbers of Kerberos principals
+
+SYNOPSIS
+       kvno  [-h]  | [-q] [-c ccache] [-e etype] [-k keytab] service1 service2
+       ...
+
+DESCRIPTION
+       Kvno acquires a service ticket for each of the specified Kerberos prin-
+       cipals and prints out the key version numbers of each.
+
+OPTIONS
+       -h     prints a usage statement and exits.
+
+       -q     suppress printing.
+
+       -c ccache
+              specifies  the  name  of  a  credentials  cache to use.  If this
+              option is not specified then the default  credentials  cache  is
+              used.
+
+       -e enctype
+              specifies  the  enctype  which will be requested for the session
+              key of all the services named on the command line.  This is use-
+              ful in certain backward compatibility situations.
+
+       -k keytab
+              specifies  the  name  of a keytab which will be used to validate
+              the service ticket.
+
+SEE ALSO
+       kinit(1), kdestroy(1)
+
+
+

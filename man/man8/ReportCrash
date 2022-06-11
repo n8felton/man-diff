@@ -1,0 +1,98 @@
+ReportCrash(8)            BSD System Manager's Manual           ReportCrash(8)
+
+NAME
+     ReportCrash -- crash notification and crash report generation
+
+SYNOPSIS
+     ReportCrash
+
+DESCRIPTION
+     ReportCrash is the system process responsible for generating crash
+     reports and notifying users when an application crashes. A crash report
+     contains information that can help a developer diagnose the cause of a
+     crash.
+
+     ReportCrash is started automatically by launchd in response to a crash.
+     If the crashed process was running in the user's bootstrap context then
+     ReportCrash will be started as a LaunchAgent in the same context and the
+     crash report will be saved in the user's ~/Library/Logs/CrashReporter/
+     directory. If the crashed process was running in the root bootstrap con-
+     text then ReportCrash will be started as a LaunchDaemon and the crash
+     report will be saved in the system's /Library/Logs/CrashReporter direc-
+     tory.
+
+     The filename for the crashreport will be of the format:
+
+     <ProcessName>_<YYYY-MM-DD-HHMMSS>_<Host>.crash
+
+     The system.log will be used to log the filenames of succesfully saved
+     crash reports or any errors that are encountered while reporting a crash.
+     If a crash report could not be saved to disk then the contents of the
+     crash report will also be written to the system.log.
+
+     A maximum of 20 crash reports will be maintained for any particular
+     process, user and host. Once that threshold has been reached the oldest
+     crash report will be deleted when a new report is saved.
+
+     For application (as opposed to background process) crashes ReportCrash
+     will, by default, display a dialog notifying the user which application
+     has crashed and offering the options of ignoring the crash, relaunching
+     the crashed application or viewing the crash report and (optionally)
+     sending it to Apple.
+
+     Crash reports which are submitted to Apple are analyzed using automated
+     mechanisms which assist in identifying and prioritizing problems to be
+     fixed in future OS releases. No personal information is gathered and the
+     submitter of the crash report will NOT receive any response from Apple.
+     User's who need support must use authorized support channels such as
+     http://www.apple.com/support.  Developers who are ADC members should
+     report bugs using http://bugreporter.apple.com since that channel allows
+     for two way communication between Apple and the bug reporter.
+
+     If the developer tools are installed then the CrashReporterPrefs applica-
+     tion in /Developer/Applications/Utilities/ can be used to enable a spe-
+     cial crash reporting mode for developers. In developer mode crash dialogs
+     will be displayed for both background processes and applications. The
+     dialogs will contain additional information and they will offer the
+     option of attaching to the crashed process with gdb when appropriate.
+     Operating in developer mode may result in rare system or application
+     deadlocks.
+
+     CrashReporterPrefs can also be used to suppress all crash reporter
+     dialogs for unattended operation.
+
+     The generation of crash reports can be disabled entirely by editing both
+     the /System/Library/LaunchDaemons/com.apple.ReportCrash.plist and /Sys-
+     tem/Library/LaunchAgetns/com.apple.ReportCrash.plist so that they con-
+     tain:
+
+             <key>Disabled</key>
+             <true/>
+
+     A reboot will be required for the changes to take effect.
+
+     More information about crash reporting and deciphering crash reports can
+     be found in Technote 2123: http://developer.apple.com/tech-
+     notes/tn2004/tn2123.html
+
+FILES
+     ~/Library/Logs/CrashReporter/                              user process
+                                                                crash reports
+     /Library/Logs/CrashReporter/                               system process
+                                                                crash reports
+     /System/Library/LaunchAgents/com.apple.ReportCrash.plist   controls
+                                                                launching
+                                                                ReportCrash
+                                                                for user
+                                                                process
+                                                                crashes
+     /System/Library/LaunchDaemons/com.apple.ReportCrash.plist  controls
+                                                                launching
+                                                                ReportCrash
+                                                                for system
+                                                                process
+                                                                crashes
+
+SEE ALSO
+     launchd(8), launchd.plist(8)
+

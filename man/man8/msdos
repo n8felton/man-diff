@@ -1,0 +1,38 @@
+MSDOS.UTIL(8)             BSD System Manager's Manual            MSDOS.UTIL(8)
+
+NAME
+     msdos.util -- DOS/Windows (FAT) file system utility
+
+SYNOPSIS
+     msdos.util [-m mountflag1 mountflag2 mountflag3 mountflag4] device node
+
+     msdos.util [-p mountflag1 mountflag2 mountflag3 mountflag4] device
+
+     msdos.util [-u] device
+
+     msdos.util [-n] device name
+
+DESCRIPTION
+     The msdos.util command supports the mounting, probing, and unmounting of
+     FAT file systems.
+
+     Options:
+           -m mountflag1 mountflag2 mountflag3 mountflag4
+                       mount
+           -n          set name
+           -p mountflag1 mountflag2 mountflag3 mountflag4
+                       probe for mounting
+           -u          unmount
+
+     mountflags above are either:
+           o   removable or fixed
+           o   readonly or writeable
+           o   suid or nosuid
+           o   dev or nodev
+
+SEE ALSO
+     diskarbitrationd(8)
+
+HISTORY
+     Derived from the Openstep Workspace Manager file system utility programs.
+

@@ -1,0 +1,25 @@
+AMAVISD(8)                                                          AMAVISD(8)
+
+
+
+NAME
+       amavisd - Amavisd-new daemon
+
+SYNOPSIS
+       amavisd
+
+DESCRIPTION
+       Amavisd is set up to act as a mini-SMTP server.
+
+
+OPTIONS
+        Debug Debug option.
+
+FILES
+       N/A
+
+SEE ALSO
+
+
+
+

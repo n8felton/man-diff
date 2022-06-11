@@ -1,0 +1,87 @@
+iodbc-config(1)              iODBC Driver Manager              iodbc-config(1)
+
+
+
+NAME
+       iodbc-config - script to get information about the installed version of
+       iODBC
+
+
+SYNOPSIS
+       iodbc-config   [--prefix[=DIR]]    [--exec-prefix[=DIR]]    [--version]
+       [--cflags]   [--libs]   [--static-libs]   [--libtool-libs]  [--odbcini]
+       [--odbcinstini]
+
+
+DESCRIPTION
+       iodbc-config is a tool that is used to configure to determine the  com-
+       piler and linker flags that should be used to compile and link programs
+       that use iODBC.
+
+OPTIONS
+       iodbc-config accepts the following options:
+
+       --version
+               Print the currently installed version of iODBC on the  standard
+               output.
+
+       --cflags
+               Print the compiler flags that are necessary to compile an iODBC
+               program.
+
+       --libs  Print the linker flags that are necessary to link an iODBC pro-
+               gram using dynamic libraries (if supported).
+
+       --static-libs
+               Print the linker flags that are necessary to link an iODBC pro-
+               gram using static libraries.
+
+       --libtool-libs
+               Print the linker flags that are necessary to link an iODBC pro-
+               gram in a libtool environment.
+
+       --odbcini
+               Print the path of the system wide odbc.ini file.
+
+       --odbcinstini
+               Print the path of the system wide odbcinst.ini file.
+
+       --prefix[=PREFIX]
+               If  specified,  use  PREFIX  instead of the installation prefix
+               that iODBC was built with when computing  the  output  for  the
+               --cflags  and  --libs options. This option is also used for the
+               exec prefix if --exec-prefix was  not  specified.  This  option
+               must be specified before any --libs or --cflags options.
+
+               If PREFIX is not specified, the --prefix flag shows where iODBC
+               is currently installed.
+
+       --exec-prefix=PREFIX
+               If specified, use PREFIX instead of the installation exec  pre-
+               fix that iODBC was built with when computing the output for the
+               --cflags and --libs options.  This  option  must  be  specified
+               before any --libs or --cflags options.
+
+
+EXAMPLES
+       To compile a program that calls the iODBC API, make sure the iodbc-con-
+       fig program can be found in the PATH environment variable, before using
+       the following Makefile fragment:
+
+           CFLAGS=`iodbc-config --cflags`
+           LDLIBS=`iodbc-config --libs`
+
+           iodbctest: iodbctest.c
+                cc $(CFLAGS) -o iodbctest iodbctest.c $(LDLIBS)
+
+
+
+COPYRIGHT
+       Copyright (C) 1996-2004 by OpenLink Software
+
+
+AUTHOR
+       iODBC Administrator <iodbc@openlinksw.com>
+
+
+

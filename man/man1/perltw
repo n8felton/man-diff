@@ -1,0 +1,144 @@
+PERLTW(1)              Perl Programmers Reference Guide              PERLTW(1)
+
+
+
+NAME
+       perltw - YcAexxxa Perl <<u<<n
+
+DESCRIPTION
+       Awai"O"i Perl aoxN|a!
+
+       +-q 5.8.0 a(C)9|}(C)l, Perl "a3AExFS1u1/2ao Unicode (,Uoe1/2X) xa'(C),
+       x]3s+-axa'(C)xF3\|h(C)OxB>>y"tYHY~ao1/2s1/2Xxe|i; CJK (xxxeAu)
+       <<K~O"axxaox@3iY-:-.  Unicode ~Ooe>>U(C)Eao1/4D.C,
+       ,O1I2[>>\Y@~ExW(C)O|3ao|r2A: |exeY@~E, aFxeY@~E, YHxI"aaI9|iaox@xA
+       (SAEA3/4_a, +-OSQ"Exa, au(C)OSBxa, SAESB"Oxa, |L<<xxa, |L|a|wxa, uYuY).
+       Y|x](R)e CxF|hoOS@.~"t2I>>PY>>O (|p PC xI3Aa-:-9|o).
+
+       Perl Y>>"YH Unicode 9|i|ae3/4bS@. 3oaiYU Perl xo3iao|r|e_e(R)AEYiYI
+       Unicode aiYU; Perl ao"c|i>>Poa2A ("O|pYc3WaiYU|ixn1i) x] a1i Unicode
+       9|i|ae3/4bS@.  |bcexJxIceYX(R)E, ~oxF3B2zYH Unicode
+       xS<<eao1/2s1/2Xxe|iAx|sao,e(R)AE, Perl 'L"NxF Encode 3oO1/4O2O,
+       YiYHAySA>>'(C)o|aAa"uxI1/4gxJAA|3ao1/2s1/2X,e(R)AE.
+
+       Encode (C)u|u1/4O2Oxa'(C)xU|CYcAexxxaao1/2s1/2Xxe|i ('big5' aiYU
+       'big5-eten'):
+
+           big5-eten   Big5 1/2s1/2X (StExN(C)u|u|rSI)
+           big5-hkscs  Big5 + >>'aY~|r9|o, 2001 |~a(C)
+           cp950       |r1/2X9| 950 (Big5 + .L3n2KY[ao|r2A)
+                                                         _
+       A|"O"O>>i, +-N Big5 1/2s1/2XaoAE(R)xAa|" Unicode,  >>YAaxJxU|C<<uYO:
+
+           perl -Mencoding=big5,STDOUT,utf8 -pe1 < file.big5 > file.utf8
+
+       Perl x]xoabxF "piconv", x@xaS1YbYH Perl 1/4g|"ao|r2AAa'<<xu"au{|i,
+       YIak|pxU:
+
+           piconv -f big5 -t utf8 < file.big5 > file.utf8
+           piconv -f utf8 -t big5 < file.utf8 > file.big5
+
+       YtY~, SQYI encoding 1/4O2O, SAYiYH>>'(C)o1/4gYXYH|r2A~o3ae|iaou{|i1/2X,
+       |pxU(C)OYU:
+
+           #!/usr/bin/env perl
+           # +-OoE big5 |r|e,NaR; 1/4D.CceYXxJxI1/4D.Ccu>>~3L3]~o big5 1/2s1/2X
+           use encoding 'big5', STDIN => 'big5', STDOUT => 'big5';
+           print length("Ad3/4m");            #  2 (Auxb,1aiYU|r2A)
+           print length('Ad3/4m');            #  4 (3aexb,1aiYU|ix,2O)
+           print index("1/2I1/2I+-D>>L", "I1/2I+-"); # -1 (xLY]St|1xl|r|e)
+           print index('1/2I1/2I+-D>>L', 'I1/2I+-'); #  1 (+-q2AxGO|ix,2O9|}(C)l)
+
+       |b3I<<ax@|C"Oxl,I, "1/2I" ao2AxGO|ix,2O>>P "1/2I" ao2Ax@O|ix,2Ou2|X|"
+       Big5 1/2Xao "I1/2"; "1/2I" ao2AxGO|ix,2O<<h>>P "+-D" ao2Ax@-
+       O|ix,2Ou2|X|" "I+-".  3o,N"MxFYH<<e Big5 1/2Xxn1i3B2zxW+-`"LaooYAD.
+
+       ABY~aoxxxa1/2s1/2X
+
+       |paG>>YnSo|haoxxxa1/2s1/2X, YiYH+-q CPAN (<http://www.cpan.org/>) xU,u
+       Encode::HanExtra 1/4O2O. Y|YO<<e'L"NxU|C1/2s1/2Xxe|i:
+
+           cccii       1980 |~xa<<O.|aoxxxa,eoTYae'<<1/2X
+           euc-tw      Unix (C)u|u|r2A9|o, Y]St CNS11643 Y+- 1-7
+           big5plus    xxxa1/4AE|ixAESb3N+-A1/4sooa-:-.|ao Big5+
+           big5ext     xxxa1/4AE|ixAESb3N+-A1/4sooa-:-.|ao Big5e
+
+       YtY~, Encode::HanConvert 1/4O2O<<h'L"NxFA2AcAa'<<YIao"aoO1/2s1/2X:
+
+           big5-simp   Big5 YcAexxxa>>P Unicode A2Aexxxax~Aa
+           gbk-trad    GBK A2Aexxxa>>P Unicode YcAexxxax~Aa
+
+       Y.Q|b GBK >>P Big5 xS9|ix~Aa, 1/2DoN|O,O1/4O2Oxoabao b2g.pl >>P g2b.pl
+       "axau{|i, (C)I|bu{|ixo"IYIxU|C1/4gak:
+
+           use Encode::HanConvert;
+           $euc_cn = big5_to_gb($big5); # +-q Big5 Aa~o GBK
+           $big5 = gb_to_big5($euc_cn); # +-q GBK Aa~o Big5
+
+       9|ix@"Bao,eoT
+                                                  _
+       1/2DoN|O Perl xoabaoxj9|q>>i(C)uxaYo (xL(C) Yb~OYI^xa1/4gao),
+       "O3/4C2BSo|hAo(C)o Perl aoa3/4AN, YHxI Unicode ao"IYIxe|i. xL1L,
+       Y~3iao,e.1/2~U.iAx'I:
+
+       'L"N Perl ,e.1/2aoooS}
+
+
+       <http://www.perl.com/>
+           Perl aoo9| (YN1/4UuUASx1/2YqouA@)
+
+       <http://www.cpan.org/>
+           Perl oi|X"aAAoo (Comprehensive Perl Archive Network)
+
+       <http://lists.perl.org/>
+           Perl 9|l>>1/41/2x3/4Ax@Ay
+
+       3/4C2B Perl aoooS}
+
+
+       <http://www.oreilly.com.tw/chinese/perl/index.html>
+           YcAexxxaa(C)ao1/4UuUAS Perl (R)NAC
+
+       <http://groups.google.com/groups?q=tw.bbs.comp.lang.perl>
+           >>OAEW Perl 3s1/2uoQ1/2xoI (x]'N~O|Uxj BBS ao Perl 3s1/2ua(C))
+
+       Perl "IYIaI9|o.|
+
+
+       <http://www.pm.org/groups/asia.shtml#Taiwan>
+           >>OAEW Perl +-A1/4s2Ox@Ay
+
+       <http://irc.elixus.org/>
+           AAYB"o1/2uxW2axN<<C
+
+       Unicode ~UAoooS}
+
+
+       <http://www.unicode.org/>
+           Unicode 3/4C3N3/4C.| (Unicode 1/4D.Cao"i(C)waI)
+
+       <http://www.cl.cam.ac.uk/%7Emgk25/unicode.html>
+           Unix/Linux xWao UTF-8 xI Unicode ua<<EoY
+
+       xxxaxAE,eoT
+
+
+       ~oxo>>oYs "YcAexxxa" xLYs "AcAexxxa"?
+           <http://www.csie.ntu.edu.tw/~b7506051/mozilla/faq.html#faqglossary>
+
+       xxxaxAE3nAeAp.u
+           <http://www.cpatch.org/>
+
+       Linux 3nAexxxaxAEp1o
+           <http://www.linux.org.tw/CLDP/>
+
+SEE ALSO
+       Encode, Encode::TW, encoding, perluniintro, perlunicode
+
+AUTHORS
+       Jarkko Hietaniemi <jhi@iki.fi>
+
+       Autrijus Tang (o(C)vo~) <autrijus@autrijus.org>
+
+
+

@@ -1,0 +1,102 @@
+radiusconfig(8)           BSD System Manager's Manual          radiusconfig(8)
+
+NAME
+     radiusconfig -- tool to configure radiusd
+
+SYNOPSIS
+     radiusconfig command [command-options] [-q]
+
+DESCRIPTION
+     radiusconfig is a utility for configuring radiusd and its configuration
+     files. It must be run by root.
+
+USAGE
+     -q                    Suppress prompts.
+
+   Queries
+     -getconfig
+     Returns configuration data from radiusd.conf and eap.conf in plist for-
+     mat.
+
+     -getconfigxml
+     Returns configuration data from radiusd.conf and eap.conf in xml plist
+     format.
+
+     -nascount
+     Returns the number of RADIUS clients.
+
+     -naslist [--with-status]
+     Returns the list of RADIUS clients in plist format. If the --with-status
+     option is used, an IMCP ping is sent to each client and the responses, or
+     lack thereof, are included in the results.
+
+     -naslistxml [--with-status]
+     Returns the list of RADIUS clients in xml plist format. If the --with-
+     status option is used, an IMCP ping is sent to each client and the
+     responses, or lack thereof, are included in the results.
+
+     -help
+     Print usage information.
+
+     -ver
+     Displays version information.
+
+   Setup
+     ---capture-base-station base-station-IP primary-RADIUS-IP [secondary=IP]
+     [wpa-key-timeout=minutes] [wait-for-restart]
+     Pairs an Airport Base Station to a RADIUS server. The shared secret is
+     set in the RADIUS client database and on the base station.
+
+     -disable-tls
+     Changes eap.conf to contain a commented-out TLS section.
+
+     -enable-tls
+     Changes eap.conf to contain an active TLS section.
+
+     -installcerts private-key certificate [trusted-ca-list [yes | no
+     [common-name]]]
+     Changes eap.conf to contain an active TLS section and configures the cer-
+     tificates. The yes or no option specifies whether or not to check a cer-
+     tificate revocation list. The random file is replaced and the dh file is
+     created if absent.
+
+     -addclient nas-name shortname [type]
+     Adds a client.
+
+     -importclients xml-plist-file
+     Imports a list of clients from a file.
+
+     -removeclient nas-name [nas-name ...]
+     Removes a client.
+
+     -setconfig key value [key value ...]
+     Sets parameters in the radiusd.conf and eap.conf files.
+
+     -setgroup nas-name group-name
+     Assigns an access control group for a specific client of the RADIUS
+     server.
+
+     -rotatelog [-n file-count] base-file
+     Preserves file-count log files.
+
+     -autorotatelog [on | off | status] [-n file-count]
+     Configures a periodic task to rotate the radius logs on a daily basis.
+
+     -getssid host
+     Queries the base station at the host address for its WiFi network name
+     (SSID).
+
+     -start
+     Tells launchd to keep RADIUS running.
+
+     -stop
+     Disables RADIUS in launchd.
+
+FILES
+     /usr/sbin/radiusconfig
+     /etc/raddb/eap.conf
+     /etc/raddb/radiusd.conf
+
+SEE ALSO
+     radiusd(8)
+

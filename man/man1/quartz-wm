@@ -1,0 +1,51 @@
+quartz-wm(1)                                                      quartz-wm(1)
+
+
+
+NAME
+       quartz-wm - Aqua Window Manager for the X Window System on OS X
+
+SYNTAX
+       quartz-wm [ --only-proxy ]
+
+DESCRIPTION
+       quartz-wm  is  a  window  manager  for the X Window System. It provides
+       titlebars for X11 windows that aim to match the look and feel of native
+       Mac  OS X windows. It also contains functionality to bridge between the
+       system pasteboard and the X server's PRIMARY and CLIPBOARD  selections.
+
+OPTIONS
+       quartz-wm accepts the following command line options:
+
+       --only-proxy
+               This  option  indicates  that the program should not attempt to
+               manage any of the  display's  screens.  However  the  selection
+               proxying features will still be enabled, meaning that a differ-
+               ent window manager may be used, but cut and paste will work  as
+               if quartz-wm were running.
+
+CUSTOMIZATION
+       quartz-wm  can  be customized using the defaults(1) command. The avail-
+       able options are:
+
+       defaults write com.apple.x11 wm_ffm -bool true
+               Enables focus-follows-mouse mode. Windows belonging  to  the  X
+               server  may then be focused by moving the pointer over them, as
+               well as the default mode of clicking in them.
+
+       defaults write com.apple.x11 wm_click_through -bool true
+               Disables the default behavior of  swallowing  window-activating
+               mouse events.
+
+       defaults write com.apple.x11 wm_limit_size -bool false
+               Prevents  the  size of each window being limited to the size of
+               the current head.
+
+ENVIRONMENT VARIABLES
+       DISPLAY This variable is used to determine which X server to use.
+
+SEE ALSO
+       X(7), Xquartz(1), xrdb(1), twm(1)
+
+
+

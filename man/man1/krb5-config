@@ -1,0 +1,51 @@
+KRB5-CONFIG(1)                                                  KRB5-CONFIG(1)
+
+
+
+NAME
+       krb5-config - tool for linking against MIT Kerberos libraries
+
+SYNOPSIS
+       krb5-config  [  --help  |  --all  |  --version  | --vendor | --prefix |
+       --exec-prefix | --cflags | --libs libraries ]
+
+DESCRIPTION
+       krb5-config tells the application programmer what special flags to  use
+       to  compile and link programs against the installed Kerberos libraries.
+
+OPTIONS
+       --help print usage message.  This is the default.
+
+       --all  prints version, vendor, prefix and exec-prefix.
+
+       --version
+              prints the version of the installed Kerberos implementation.
+
+       --vendor
+              prints the vendor of the installed Kerberos implementation.
+
+       --prefix
+              prints the prefix with which Kerberos was built.
+
+       --exec-prefix
+              prints the exec-prefix with which Kerberos was built.
+
+       --cflags
+              prints the compiler flags with which Kerberos was built.
+
+       --libs libraries
+              list compiler options required to link with libraries.  Possible
+              values for libraries are:
+
+                   krb5         Kerberos 5 application
+                   gssapi       GSSAPI application with Kerberos 5 bindings
+                   krb4         Kerberos 4 application
+                   kadm-client  Kadmin client
+                   kadm-server  Kadmin server
+                   kdb          Application that accesses the kerberos database
+
+SEE ALSO
+       kerberos(1), cc(1)
+
+
+

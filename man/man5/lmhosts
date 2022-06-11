@@ -1,0 +1,83 @@
+LMHOSTS(5)                                                          LMHOSTS(5)
+
+
+
+NAME
+       lmhosts - The Samba NetBIOS hosts file
+
+SYNOPSIS
+       lmhosts is the samba(7) NetBIOS name to IP address mapping file.
+
+DESCRIPTION
+       This file is part of the samba(7) suite.
+
+       lmhosts  is  the  Samba  NetBIOS name to IP address mapping file. It is
+       very similar to the /etc/hosts file format, except  that  the  hostname
+       component must correspond to the NetBIOS naming format.
+
+FILE FORMAT
+       It  is  an  ASCII  file  containing  one line for NetBIOS name. The two
+       fields on each line are separated from each other by white  space.  Any
+       entry beginning with '#' is ignored. Each line in the lmhosts file con-
+       tains the following information:
+
+       o  IP Address - in dotted decimal format.
+
+       o  NetBIOS Name - This name format is a maximum fifteen character  host
+          name,  with  an optional trailing '#' character followed by the Net-
+          BIOS name type as two hexadecimal digits.
+
+          If the trailing '#' is omitted then the given  IP  address  will  be
+          returned  for all names that match the given name, whatever the Net-
+          BIOS name type in the lookup.
+
+       An example follows:
+
+
+
+
+       #
+       # Sample Samba lmhosts file.
+       #
+       192.9.200.1    TESTPC
+       192.9.200.20   NTSERVER#20
+       192.9.200.21   SAMBASERVER
+
+
+
+       Contains three IP to NetBIOS name mappings. The first and third will be
+       returned  for  any  queries  for  the  names "TESTPC" and "SAMBASERVER"
+       respectively,  whatever  the  type  component  of  the   NetBIOS   name
+       requested.
+
+       The  second mapping will be returned only when the "0x20" name type for
+       a name "NTSERVER" is queried. Any other name type will not be resolved.
+
+       The  default  location  of the lmhosts file is in the same directory as
+       the smb.conf(5) file.
+
+FILES
+       lmhosts is loaded from the configuration  directory.  This  is  usually
+       /etc/samba or /usr/local/samba/lib.
+
+VERSION
+       This man page is correct for version 3.0 of the Samba suite.
+
+SEE ALSO
+       smbclient(1), smb.conf(5), and smbpasswd(8)
+
+AUTHOR
+       The  original  Samba  software  and  related  utilities were created by
+       Andrew Tridgell. Samba is now developed by the Samba Team  as  an  Open
+       Source project similar to the way the Linux kernel is developed.
+
+       The  original  Samba  man pages were written by Karl Auer. The man page
+       sources were converted to YODL format (another excellent piece of  Open
+       Source  software,  available  at  ftp://ftp.icce.rug.nl/pub/unix/)  and
+       updated for the Samba 2.0 release by Jeremy Allison. The conversion  to
+       DocBook for Samba 2.2 was done by Gerald Carter. The conversion to Doc-
+       Book XML 4.2 was done by Alexander Bokovoy.
+
+
+
+

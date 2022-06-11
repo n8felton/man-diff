@@ -1,0 +1,95 @@
+KINIT(1)                                                              KINIT(1)
+
+
+
+NAME
+       kinit - obtain and cache Kerberos ticket-granting ticket
+
+SYNOPSIS
+       kinit  [-V] [-l lifetime] [-s start_time] [-r renewable_life] [-p | -P]
+              [-f | -F] [-a | -A] [-v] [-R] [-k [-t keytab_file]] [-S ser-
+              vice_name] [principal]
+
+DESCRIPTION
+       kinit  obtains and caches an initial ticket-granting ticket for princi-
+       pal.  Any existing tickets for principal are overwritten.   kinit  will
+       try  to  acquire  both Kerberos 5 and Kerberos 4 initial tickets if the
+       appropriate configuration information is available.
+
+OPTIONS
+       -V     display verbose output.
+
+       -l lifetime
+              requests a ticket with the  lifetime  lifetime.  The  value  for
+              lifetime  must  be  followed immediately by one of the following
+              delimiters:
+
+                 s  seconds
+                 m  minutes
+                 h  hours
+                 d  days
+
+              as in "kinit -l 90m".  You cannot mix units; a value of  '3h30m'
+              will result in an error.
+
+              If  the  -l option is not specified, the default ticket lifetime
+              (configured by each site) is used.  Specifying a ticket lifetime
+              longer  than  the  maximum  ticket  lifetime (configured by each
+              site) results in a ticket with the maximum lifetime.
+
+       -s start_time
+              requests a  postdated  ticket,  valid  starting  at  start_time.
+              Postdated tickets are issued with the invalid flag set, and need
+              to be validated by the kdc before use.
+
+       -r renewable_life
+              requests renewable tickets, with  a  total  lifetime  of  renew-
+              able_life.  The duration is in the same format as the -l option,
+              with the same delimiters.
+
+       -f     request forwardable tickets.
+
+       -F     request tickets which are not forwardable.
+
+       -p     request proxiable tickets.
+
+       -P     request tickets which are not proxiable.
+
+       -a     request tickets containing the host's local address(es).
+
+       -A     request address-less tickets.
+
+       -v     requests that the ticket granting ticket in the cache (with  the
+              invalid  flag  set) be passed to the kdc for validation.  If the
+              ticket is within its requested time range, the cache is replaced
+              with the validated ticket.
+
+       -R     requests  renewal  of  the ticket-granting ticket.  Note that an
+              expired ticket cannot be renewed, even if the  ticket  is  still
+              within its renewable life.  This option will only get Kerberos 4
+              tickets if the kdc must support Kerberos 5 to Kerberos 4  ticket
+              conversion.
+
+       -k [-t keytab_file]
+              requests  a host ticket, obtained from a key in the local host's
+              keytab file.  The name and location of the keytab  file  may  be
+              specified  with the -t keytab_file option; otherwise the default
+              name and location will be used.  This option will only get  Ker-
+              beros 4 tickets if the kdc must support Kerberos 5 to Kerberos 4
+              ticket conversion.
+
+       -S service_name
+              specify an alternate service name to use  when  getting  initial
+              tickets.   (Applicable to Kerberos 5 or if using both Kerberos 5
+              and Kerberos 4 with a kdc that supports Kerberos 5 to Kerberos 4
+              ticket conversion.)
+
+FILES
+       /etc/krb5.keytab
+              default location for the local host's keytab file.
+
+SEE ALSO
+       klist(1), kdestroy(1), kpasswd(1), kswitch(1)
+
+
+

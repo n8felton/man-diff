@@ -1,0 +1,125 @@
+stackshot(1)              BSD General Commands Manual             stackshot(1)
+
+NAME
+     stackshot -- capture user and kernel space stack traces, using a kernel
+     stack trace facility
+
+SYNOPSIS
+     stackshot [-D] [-i] [-f path] [-n number] [-p pid] [-B size]
+
+DESCRIPTION
+     The stackshot daemon is used to capture stack traces for each thread on
+     the system; this includes both user space and kernel stacks. The result-
+     ing view of the system is consistent.  Stack pages that are paged out are
+     not captured--this caveat does not apply to kernel space stacks, which
+     are wired. The stack snapshot is triggered upon pressing a special key
+     chord; this is currently Control-Option-Command-Shift-Period
+
+     The daemon also triggers a stack snapshot upon reception of the SIGINFO
+     signal.
+
+     The following options are available:
+
+     -D       Turn on debugging.
+
+     -i       Do an immediate snapshot, and exit.
+
+     -f path  Output the log information to the specified path.  This
+              supercedes any preference configuration (see below).
+
+     -n number
+              Limit the number of snapshots taken; the default is 1.
+
+     -p pid   Log the stack information for the specified process-ID only.
+
+     -B size  Specify the size of the trace buffer; the default is 52 kilo-
+              bytes.
+
+     -t       Attempt symbolication. Currently, this starts up a separate sym-
+              bolicator thread, and signals that thread to begin symbolication
+              using atos(1) when a snapshot is triggered. The current imple-
+              mentation may take several seconds to perform the address-symbol
+              translations, depending on the state of the system. The symboli-
+              cated trace file is appended to:
+              /Library/Logs/stackshot-syms.log.
+
+SYMBOLICATION
+     Symbolication (as with the -t option, or the symstacks.rb script
+     described below) is performed against the currently executing process
+     images, which may have been either fully or partially stripped of debug-
+     ging symbols. Additionally, kernel stacks are symbolicated against
+     /mach_kernel, which typically has all local and debugging symbols
+     stripped (as with "strip -S -x"). In either case, symbol matching may not
+     always be accurate.  If in doubt, you may run the unstripped executable
+     images, or symbolicate the trace file directly against the unstripped
+     images using an alternate mechanism, such as gdb. The symstacks.rb script
+     (see below) can take a "-k" argument, which specifies the location of an
+     alternate kernel image to symbolicate with--this can be an unstripped
+     kernel image. When filing bug reports, it is best to include both the
+     trace file ("stackshot.log") and the symbolicated trace ("stackshot-
+     syms.log").
+
+NOTES
+     The stackshot daemon is intended to be run by the launchd(8) super-dae-
+     mon.  It reads configuration information from
+     ~root/Library/Preferences/com.apple.stackshot.plist.  The keys it looks
+     for are
+
+     Trace File    Specifies the file to use.  The default is
+                   /Library/Logs/stackshot.log.
+
+     Trace Server  A dictionary containing ``Host'' (as a string) and ``Port''
+                   (as an integer) keys, for a server.  If both a file and
+                   server are specified, stackshot will attempt to use both.
+                   The server is expected to do nothing other than accept a
+                   connection, accept a stream of data, and write it to a file
+                   of its choosing.
+
+     Buffer Size   Specifies the size of the trace buffer.
+
+FILES
+     ~root/Library/Preferences/com.apple.stackshot.plist
+                             Preference file used for configuration informa-
+                             tion.
+     /System/Library/LaunchDaemons/com.apple.stackshot.plist
+                             Configuration file used by launchd(8).
+     /usr/sbin/symstacks.rb  ruby(1) script to process the output of stackshot
+                             and turn symbol addresses into symbol names. It
+                             reads a stackshot trace file from standard input
+                             or a file specified with "-f" , and writes the
+                             symbolicated version to standard output, or to a
+                             file specified with "-w". See caveats above
+                             regarding accuracy of symbolication against
+                             stripped images. The "-k" argument to the script
+                             can specify the location of a kernel image, which
+                             will be used for symbolication. The "-s" argument
+                             forces the script to symbolicate kernel stacks
+                             alone, which can be useful in conjunction with
+                             the "-k" argument to symbolicate kernel stacks on
+                             systems which differ from the one which generated
+                             the trace file. Note that symbolication is per-
+                             formed against currently running process images,
+                             so the script must be executed on the same (or
+                             identical) system for accuracy, and any processes
+                             of interest must be currently executing.
+
+SEE ALSO
+     launchd(8)
+
+BUGS
+     Certain types of deadlocks (especially driver/kernel level deadlocks) may
+     prevent triggering stackshot when the hot-key combination is pressed.
+
+     Depending upon the type of deadlock, there may be issues accessing the
+     filesystem and/or network, preventing publication of the data once the
+     traces are gathered.
+
+     The daemon makes a minimal effort to ensure that the log file has space
+     allocated, and does no processing afterwards. The aforementioned ruby(1)
+     script can be used to translate addresses to symbols. It is up to the
+     user to examine the file (and perhaps send it off to someone for debug-
+     ging) afterwards.
+
+     The symbolication is not perfect, and may benefit from human scrutiny or
+     post-processing.
+

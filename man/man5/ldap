@@ -1,0 +1,285 @@
+LDAP.CONF(5)                                                      LDAP.CONF(5)
+
+
+
+NAME
+       ldap.conf, .ldaprc - ldap configuration file
+
+SYNOPSIS
+       /etc/openldap/ldap.conf, .ldaprc
+
+DESCRIPTION
+       If  the  environment  variable LDAPNOINIT is defined, all defaulting is
+       disabled.
+
+       The ldap.conf configuration file is used to set system-wide defaults to
+       be applied when running ldap clients.
+
+       Users  may create an optional configuration file, ldaprc or .ldaprc, in
+       their home directory which will be used  to  override  the  system-wide
+       defaults  file.   The  file  ldaprc in the current working directory is
+       also used.
+
+
+       Additional configuration files can be specified using the LDAPCONF  and
+       LDAPRC  environment  variables.   LDAPCONF  may be set to the path of a
+       configuration file.  This path can be absolute or relative to the  cur-
+       rent working directory.  The LDAPRC, if defined, should be the basename
+       of a file in the current working directory or in the user's home direc-
+       tory.
+
+       Environmental  variables  may  also  be  used to augment the file based
+       defaults.  The name of the variable is the option name  with  an  added
+       prefix  of  LDAP.  For example, to define BASE via the environment, set
+       the variable LDAPBASE to the desired value.
+
+       Some options are user-only.  Such options are ignored if present in the
+       ldap.conf (or file specified by LDAPCONF).
+
+OPTIONS
+       The  configuration options are case-insensitive; their value, on a case
+       by case basis, may  be  case-sensitive.   The  different  configuration
+       options are:
+
+       URI <ldap[s]://[name[:port]] ...>
+              Specifies  the  URI(s)  of  an  LDAP server(s) to which the LDAP
+              library should connect.  The URI scheme may be  either  ldap  or
+              ldaps  which  refer  to  LDAP  over  TCP and LDAP over SSL (TLS)
+              respectively.  Each server's name can be specified as a  domain-
+              style  name  or an IP address literal.  Optionally, the server's
+              name can followed by a ':' and the port number the  LDAP  server
+              is  listening  on.   If  no port number is provided, the default
+              port for the scheme is used (389 for ldap://, 636 for ldaps://).
+              A space separated list of URIs may be provided.
+
+       BASE <base>
+              Specifies the default base DN to use when performing ldap opera-
+              tions.  The base must be specified as a  Distinguished  Name  in
+              LDAP format.
+
+       BINDDN <dn>
+              Specifies the default bind DN to use when performing ldap opera-
+              tions.  The bind DN must be specified as a Distinguished Name in
+              LDAP format.  This is a user-only option.
+
+       HOST <name[:port] ...>
+              Specifies  the  name(s)  of  an LDAP server(s) to which the LDAP
+              library should connect.  Each server's name can be specified  as
+              a  domain-style name or an IP address and optionally followed by
+              a ':' and the port number the ldap server is  listening  on.   A
+              space  separated  list of hosts may be provided.  HOST is depre-
+              cated in favor of URI.
+
+       PORT <port>
+              Specifies  the  default  port  used  when  connecting  to   LDAP
+              servers(s).   The  port  may  be specified as a number.  PORT is
+              deprecated in favor of URI.
+
+       REFERRALS <on/true/yes/off/false/no>
+              Specifies if the client should  automatically  follow  referrals
+              returned  by  LDAP  servers.   The default is on.  Note that the
+              command  line  tools  ldapsearch(1)  &co  always  override  this
+              option.
+
+       SIZELIMIT <integer>
+              Specifies  a  size  limit  to use when performing searches.  The
+              number should be a non-negative integer.  SIZELIMIT of zero  (0)
+              specifies unlimited search size.
+
+       TIMELIMIT <integer>
+              Specifies  a  time  limit  to use when performing searches.  The
+              number should be a non-negative integer.  TIMELIMIT of zero  (0)
+              specifies unlimited search time to be used.
+
+       DEREF <when>
+              Specifies  how  alias  dereferencing  is  done when performing a
+              search. The <when> can be specified as one of the following key-
+              words:
+
+              never  Aliases are never dereferenced. This is the default.
+
+              searching
+                     Aliases  are  dereferenced  in  subordinates  of the base
+                     object, but not  in  locating  the  base  object  of  the
+                     search.
+
+              finding
+                     Aliases  are  only  dereferenced  when  locating the base
+                     object of the search.
+
+              always Aliases are dereferenced both in searching and in  locat-
+                     ing the base object of the search.
+
+SASL OPTIONS
+       If OpenLDAP is built with Simple Authentication and Security Layer sup-
+       port, there are more options you can specify.
+
+       SASL_MECH <mechanism>
+              Specifies the SASL  mechanism  to  use.   This  is  a  user-only
+              option.
+
+       SASL_REALM <realm>
+              Specifies the SASL realm.  This is a user-only option.
+
+       SASL_AUTHCID <authcid>
+              Specifies  the  authentication  identity.   This  is a user-only
+              option.
+
+       SASL_AUTHZID <authcid>
+              Specifies the proxy authorization identity.  This is a user-only
+              option.
+
+       SASL_SECPROPS <properties>
+              Specifies  Cyrus  SASL security properties. The <properties> can
+              be specified as a comma-separated list of the following:
+
+              none   (without any  other  properties)  causes  the  properties
+                     defaults ("noanonymous,noplain") to be cleared.
+
+              noplain
+                     disables   mechanisms   susceptible   to  simple  passive
+                     attacks.
+
+              noactive
+                     disables mechanisms susceptible to active attacks.
+
+              nodict disables mechanisms  susceptible  to  passive  dictionary
+                     attacks.
+
+              noanonymous
+                     disables mechanisms which support anonymous login.
+
+              forwardsec
+                     requires forward secrecy between sessions.
+
+              passcred
+                     requires  mechanisms  which  pass client credentials (and
+                     allows mechanisms which can pass credentials to do so).
+
+              minssf=<factor>
+                     specifies the minimum acceptable security strength factor
+                     as an integer approximating the effective key length used
+                     for  encryption.   0  (zero)  implies  no  protection,  1
+                     implies integrity protection only, 56 allows DES or other
+                     weak ciphers, 112 allows  triple  DES  and  other  strong
+                     ciphers, 128 allows RC4, Blowfish and other modern strong
+                     ciphers.  The default is 0.
+
+              maxssf=<factor>
+                     specifies the maximum acceptable security strength factor
+                     as  an  integer (see minssf description).  The default is
+                     INT_MAX.
+
+              maxbufsize=<factor>
+                     specifies the maximum security layer receive buffer  size
+                     allowed.   0  disables  security  layers.  The default is
+                     65536.
+
+TLS OPTIONS
+       If OpenLDAP is built with Transport Layer Security support,  there  are
+       more  options you can specify.  These options are used when an ldaps://
+       URI is selected (by default or otherwise) or when the application nego-
+       tiates TLS by issuing the LDAP Start TLS operation.
+
+       TLS_CACERT <filename>
+              Specifies  the  file  that  contains certificates for all of the
+              Certificate Authorities the client will recognize.
+
+       TLS_CACERTDIR <path>
+              Specifies the path of  a  directory  that  contains  Certificate
+              Authority   certificates   in  separate  individual  files.  The
+              TLS_CACERT is always used before TLS_CACERTDIR.
+
+       TLS_CERT <filename>
+              Specifies the file that contains the client  certificate.   This
+              is a user-only option.
+
+       TLS_KEY <filename>
+              Specifies  the  file  that contains the private key that matches
+              the certificate stored in the TLS_CERT file. Currently, the pri-
+              vate  key  must  not  be  protected with a password, so it is of
+              critical importance that the key file  is  protected  carefully.
+              This is a user-only option.
+
+       TLS_CIPHER_SUITE <cipher-suite-spec>
+              Specifies   acceptable   cipher   suite  and  preference  order.
+              <cipher-suite-spec>  should  be  a  cipher   specification   for
+              OpenSSL, e.g., HIGH:MEDIUM:+SSLv2.
+
+       TLS_RANDFILE <filename>
+              Specifies  the file to obtain random bits from when /dev/[u]ran-
+              dom is not available. Generally set to the name of the EGD/PRNGD
+              socket.   The  environment variable RANDFILE can also be used to
+              specify the filename.
+
+       TLS_REQCERT <level>
+              Specifies what checks to perform on server certificates in a TLS
+              session, if any. The <level> can be specified as one of the fol-
+              lowing keywords:
+
+              never  The client will not request or check any server  certifi-
+                     cate.
+
+              allow  The server certificate is requested. If no certificate is
+                     provided, the session proceeds normally. If  a  bad  cer-
+                     tificate  is provided, it will be ignored and the session
+                     proceeds normally.
+
+              try    The server certificate is requested. If no certificate is
+                     provided,  the  session  proceeds normally. If a bad cer-
+                     tificate is provided, the session is  immediately  termi-
+                     nated.
+
+              demand | hard
+                     These  keywords are equivalent. The server certificate is
+                     requested. If no certificate is provided, or a  bad  cer-
+                     tificate  is  provided, the session is immediately termi-
+                     nated. This is the default setting.
+
+       TLS_CRLCHECK <level>
+              Specifies if the Certificate Revocation List  (CRL)  of  the  CA
+              should  be  used  to  verify if the server certificates have not
+              been revoked. This requires TLS_CACERTDIR parameter to  be  set.
+              <level> can be specified as one of the following keywords:
+
+              none   No CRL checks are performed
+
+              peer   Check the CRL of the peer certificate
+
+              all    Check the CRL for a whole certificate chain
+
+ENVIRONMENT VARIABLES
+       LDAPNOINIT
+              disable all defaulting
+
+       LDAPCONF
+              path of a configuration file
+
+       LDAPRC basename of ldaprc file in $HOME or $CWD
+
+       LDAP<option-name>
+              Set <option-name> as from ldap.conf
+
+FILES
+       /etc/openldap/ldap.conf
+              system-wide ldap configuration file
+
+       $HOME/ldaprc, $HOME/.ldaprc
+              user ldap configuration file
+
+       $CWD/ldaprc
+              local ldap configuration file
+
+SEE ALSO
+       ldap(3), openssl(1), sasl(3)
+
+AUTHOR
+       Kurt Zeilenga, The OpenLDAP Project
+
+ACKNOWLEDGEMENTS
+       OpenLDAP   is   developed   and  maintained  by  The  OpenLDAP  Project
+       (http://www.openldap.org/).  OpenLDAP is  derived  from  University  of
+       Michigan LDAP 3.3 Release.
+
+
+

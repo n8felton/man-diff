@@ -1,0 +1,195 @@
+PERLJP(1)              Perl Programmers Reference Guide              PERLJP(1)
+
+
+
+NAME
+       perljp - AEuEU,i Perl Y~YxYE
+
+AaIA
+       Perl xIAx3|xOxex|x3x1/2!
+
+       Perl 5.8.0 xexeicUni-   _
+       codeYuYYi1/4YEx~AcEyxE9| 21/2xuxiicx1/2xI.e2IYeYAEYoE,>>uoE3oxIE,>>uY3i1/4YExIYuYYi1/4YEx~
+       CJK
+       (Aae1n,iicAEuEU,iicYIYoYoYe)xo'bxaxAE2Axixexbx.xciLUnicodexIAx3|AaexIE,>>uxooixAxIE,>>uY3i1/4YExCo.x|x3xExoIU>>Ox.xcE,1/2au~3ExCxcxeicAix<<xeA3/4icxIxcxbxcx1/2xI'OxIE,>>uiEY(R)YeY.YaE,>>uicY-
+       Yei1/4YeE,>>uicYcYeYOYcE,>>uicYOYOYeYxE,>>uicYCYLi1/4YoYiYEY~i1/4YeE,>>uicxExExExEiExaicx3xixbxCxIOSYUYoYAi1/4x~AEE1/4<<xEAexaxAExxxcE,>>u(PCxaxexOMac-
+       intosh)x~x1xCxE'bxbxixAExxxbx1iL
+
+       Per_ 1/4<<cExI Unicode xCAEooix.xbx1iLPerl
+       Y1Y YeYxYEAEaxIE,>>uIoYeYAEYeYexaAuu~E1/2,1/2xI Unicode
+       xoAoAoxEx.xAExxxbx1iLx1/2x.xAEAEb1/2DIIxIxcxaxExIicx3xixbxC>>ExixixAEx-
+       xcxuxbx9|xbxEE,>>uY3i1/4YExEAD+-bx1xeYaY,Yai1/4YeiciO Encode
+       ixx~E,1/2aAoE-:-xuxixAExaxeicUnicode
+       xEx3xixexIE,>>uY3i1/4YExIAe,BEN'1xa'EA+-xE1Ox"xexex|xExExAxAExxxbx1iL
+
+       ,1/2>>bAAxC Encode x~YuYYi1/4YEx1xeE,>>uY3i1/4YExIoE21/4xIxExaxexCx1iL
+
+         7bit-jis      AdobeStandardEncoding AdobeSymbol       AdobeZdingbat
+         ascii             big5              big5-hkscs        cp1006
+         cp1026            cp1047            cp1250            cp1251
+         cp1252            cp1253            cp1254            cp1255
+         cp1256            cp1257            cp1258            cp37
+         cp424             cp437             cp500             cp737
+         cp775             cp850             cp852             cp855
+         cp856             cp857             cp860             cp861
+         cp862             cp863             cp864             cp865
+         cp866             cp869             cp874             cp875
+         cp932             cp936             cp949             cp950
+         dingbats          euc-cn            euc-jp            euc-kr
+         gb12345-raw       gb2312-raw        gsm0338           hp-roman8
+         hz                iso-2022-jp       iso-2022-jp-1     iso-8859-1
+         iso-8859-10       iso-8859-11       iso-8859-13       iso-8859-14
+         iso-8859-15       iso-8859-16       iso-8859-2        iso-8859-3
+         iso-8859-4        iso-8859-5        iso-8859-6        iso-8859-7
+         iso-8859-8        iso-8859-9        iso-ir-165        jis0201-raw
+         jis0208-raw       jis0212-raw       johab             koi8-f
+         koi8-r            koi8-u            ksc5601-raw       MacArabic
+         MacCentralEurRoman  MacChineseSimp    MacChineseTrad    MacCroatian
+         MacCyrillic       MacDingbats       MacFarsi          MacGreek
+         MacHebrew         MacIcelandic      MacJapanese       MacKorean
+         MacRoman          MacRomanian       MacRumanian       MacSami
+         MacSymbol         MacThai           MacTurkish        MacUkrainian
+         nextstep          posix-bc          shiftjis          symbol
+         UCS-2BE           UCS-2LE           UTF-16            UTF-16BE
+         UTF-16LE          UTF-32            UTF-32BE          UTF-32LE
+         utf8              viscii
+
+       (A'1141/4iIa)
+
+       Iax"xDicE,>>uY3i1/4YEFOOxIYOYiYxYexoUTF-8xEEN'1x1xexExIicoE21/4xIxex|xEx.xbx1iL
+
+           perl -Mencoding=FOO,STDOUT,utf8 -pe1 < file.FOO > file.utf8
+
+       xbxcicPerlxExIicA'Eox~PerlxC1/2nx<<xixcE,>>uY3i1/4YEEN'1Yaei1/4YAEYLYeYAEYLicpiconvxaEOAox.xAExxxexIxCicoE21/4xIxex|xEx1xex3xExaxCx-
+       xbx1iL
+
+          piconv -f FOO -t utf8 < file.FOO > file.utf8
+          piconv -f utf8 -t FOO < file.utf8 > file.FOO
+
+       About (jcode.pl|Jcode.pm|JPerl)
+                     _
+       5.8oEAoxIicY1Y YeYxYEx~EUC-JPxCxcxixDYeYAEYeYexAx+-xIo.x|x3xEx~xCx-
+       xbx.xciLxbxcicAEb1/2DIIxoo.x|YaY,Yai1/4YexEx.xAExIJcode.pmx~(
+       http://openlab.jp/Jcode/
+       )icperl4INxIYaei1/4YAEYLYeYAEYLxEx.xAExIjcode.pl(
+       http://srekcah.org/jcode/                     _                                     _   _                                                              _
+       )x~x1/2xix3/4xiA,oBx.icAEuEU,ixIo.x"xeCGIxCxex IoINxuxixAExxxex3xExo,aeA,x,xIEyxa3/4 xEx xExxx<<xE>>xxixixbx1iLxcxAx.icAEuEU,ixExexeAuu~E1/2,1/2xox|xbx o.x|x3xExIEO2AC1/2xCx.xciL
+
+       5.005oEAoxIPerlxExIicAEuEU,ixEAEA21/2x.xcYii1/4Y<<YeYxYoECicJperlx~A,oBx.xbx.xc(
+       http://homepage2.nifty.com/kipp/perl/jperl/index.html )iLxbxcicMac OS
+       9.x/Clas-
+       sicINxIPerlicMacPerlxIAEuEU,iECxaMacJPerlxEx.xAEA,oBx.xAExbx.xciL(
+       http://world.std.com/~habilis/macjperl/
+       ).x3xixexCxIE,>>uY3i1/4YExEx.xAEEUC-JPxE2Ax"Shift_JISxax1/2xIxbxbo.x|x3xEx~xCx-
+       icxbxcAEuEU,ixExexeAuu~E1/2,1/2xoo.x|x3xExa2AC1/2xCx.xciL
+
+       Perl5.8xCxIicx3xixexIuiC1/2x~x1xUxAEPerlEUAIxAx+-xC1/4A,1/2xCx-
+       xe3/4axEicAEuEU,ixIxBxExexo3/4au-
+       114xIE,>>uY3i1/4YExox1xUxAEicx.x<<xaAE+->>bxEo.x|x3xEx~xCx-
+       xbx1iLxuxexEicCPANxExEx<<xec.x.xxE,>>uY3i1/4YEINxIYaY,Yai1/4YexoAEb1/4ex1xex3xExa'EA+-xExCx-
+       xexex|xExExAxAExxxbx1iL
+
+       o   AEb1/2DII
+
+           oE21/4xIIaxIxxxAxixaShift_JISxIAEbIIxoEUC-JPxEEN'1x.xAE1/2DIIx.xbx1iL
+
+             # jcode.pl
+             require "jcode.pl";
+             while(<>){
+               jcode::convert(*_, 'euc', 'sjis');
+               print;
+             }
+             # Jcode.pm
+             use Jcode;
+             while(<>){
+                   print Jcode->new($_, 'sjis')->euc;
+             }
+             # Perl 5.8
+             use Encode;
+             while(<>){
+               from_to($_, 'shiftjis', 'euc-jp');
+               print;
+             }
+             # Perl 5.8 - encoding xoIoINx.xAE
+             use encoding 'euc-jp', STDIN => 'shiftjis';
+             while(<>){
+                   print;
+             }
+                        _
+       o   Jperl ,B'1Y1Y YeYxYE
+
+            xxxixaexe"shebang"xoEN11x1xexAx+-xCicJperlINxIscriptxIxUxExoxExIEN11xEx.xEIoIN2AC1/2xAxE>>xxixixbx1iL
+
+              #!/path/to/jperl
+              c
+              #!/path/to/perl -Mencoding=euc-jp
+                   _                                   _
+            3/4Ux.x xI perldoc encoding xo>>23/4Ex.xAEx xAxuxxiL
+                    _
+       xuxexE3/4Ux.x
+
+       PerlxExIEAAcxE>>nIAx~EOAox.xAExaxeicPerlxIc.uiC1/2xaUni-        _
+       codeYuYYi1/4YEicx1/2x.xAEEncodeYaY,Yai1/4YexI>>EINEixExEx~oUx<<x IOIaxuxixAExxxbx1iE>>ACoxEx~xeicxUxExoxE+-N,ixCxIxcxexbx1x~iEiLoE21/4xIY3YbYoYExCx1/2xixexIoiEoxo+-UI-:-x1xex3xEx~2AC1/2xCx1iL
+
+         perldoc perlunicode # PerlxIUnicodeYuYYi1/4YEA'EI
+         perldoc Encode      # EncodeYaY,Yai1/4YexE'Ox.xAE
+         perldoc Encode::JP  # x|xAAEuEU,iE,>>uY3i1/4YExE'Ox.xAE
+
+       PerlA'EIxE'Ox1xe URL
+
+
+       <http://www.perl.com/>
+           Perl YUi1/4YaYUi1/4Y, (O'Reilly and Associates)
+
+       <http://www.cpan.org/>
+           CPAN (Comprehensive Perl Archive Network)
+
+       <http://lists.perl.org/>
+           Perl Yai1/4YeYoYoYeY1YE1/2,
+
+       PerlxI1/2xAEAxEIoI(C)xA URL
+
+
+       <http://www.oreilly.com.tw/chinese/>
+           O'Reilly 1/4OxIPerl'OIc1/2nAO(EEAI>>uAae1n,i)
+
+       <http://www.oreilly.com.cn/chinese/>
+           O'Reilly 1/4OxIPerl'OIc1/2nAO('EAI>>uAae1n,i)
+
+       <http://www.oreilly.co.jp/catalog.htm>
+           YaYeYxYei1/41/4OxIPerl'OIc1/2nAO(AEuEU,i)
+
+       Perl Yaei1/4Y9|i1/4YoYei1/4Yx
+
+
+       <http://www.pm.org/groups/asia.shtml#China>
+           Aae1niEAae2UcII+-9||IA1niE
+
+       <http://www.pm.org/groups/asia.shtml#Japan>
+           AEuEU
+
+       <http://www.pm.org/groups/asia.shtml#Korea%20(Republic%20of)>
+           'U1niEAc'UI+-1niE
+
+       <http://www.pm.org/groups/asia.shtml#Taiwan>
+           AaeINiEAae2UI+-1niE
+
+       Unicode'OIcxIURL
+
+
+       <http://www.unicode.org/>
+           Unicode Y3YoY1/2i1/4Y.YcYa (Unicodeu~3ExIAaAeAAAI)
+
+       <http://www.cl.cam.ac.uk/%7Emgk25/unicode.html>
+           UTF-8 and Unicode FAQ for Unix/Linux
+
+       <http://kldp.org/Translations/html/UTF8-Unicode-KLDP/UTF8-Uni-
+       code-KLDP.html>
+           UTF-8 and Unicode FAQ for Unix/Linux (YIYoYoYeIo)
+
+AUTHORS
+       Jarkko Hietaniemi <jhi@iki.fi> Dan Kogai (3/4(R)>>oiiAAE) <danko-
+       gai@dan.co.jp>
+
+
+

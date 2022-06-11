@@ -1,0 +1,122 @@
+
+NSMB.CONF(5)                BSD File Formats Manual               NSMB.CONF(5)
+
+NAME
+     nsmb.conf -- configuration file for SMB requests
+
+DESCRIPTION
+     The nsmb.conf file contains information about the computers, users, and
+     shares or mount points for the SMB network protocol.
+
+     The configuration hierarchy is made up of several sections, each section
+     containing a few or several lines of parameters and their assigned val-
+     ues.  Each of these sections must begin with a section name enclosed
+     within square brackets, similar to:
+
+           [section_name]
+
+     The end of each section is marked by either the start of a new section,
+     or by the abrupt ending of the file, commonly referred to as the EOF.
+     Each section may contain zero or more parameters such as:
+
+           [section_name]
+           key=value
+
+     where key represents a parameter name, and value would be the parameter's
+     assigned value.
+
+     The SMB library uses the following information for section names:
+
+     A)      [default]
+     B)      [SERVER]
+     C)      [SERVER:USER]
+     D)      [SERVER:USER:SHARE]
+
+     Possible keywords may include:
+
+     Keyword        Section    Comment
+                    A B C D
+     addr           - + - -    IP address of the SMB server
+     dos charsets   + - - -    dos charset
+     nbns           + + - -    address of NetBIOS name server (WINS)
+     nbscope        + + - -    NetBIOS scope
+     nbtimeout      + + - -    timeout for NetBIOS name servers
+     port445        + + - -    how to use SMB TCP/UDP ports
+     minauth        + + - -    minimum authentication level allowed
+     streams        + + - -    use NTFS Streams if supported by the server
+     soft           + + - -    Make the mount soft.  Fail file system calls
+                               after a number of seconds.
+     domain         + + + +    The domain name to use when logging into the
+                               server.
+
+     The minimum authentication level can be one of:
+
+     kerberos  Kerberos - NTLMv2, NTLM, LM, and plain-text password authenti-
+               cation are not attempted.
+
+     ntlmv2    NTLMv2 - Kerberos authentication is attempted if a Kerberos
+               token can be obtained, otherwise NTLMv2 authentication is
+               attempted; if the server doesn't support encrypted passwords,
+               the authentication fails.
+
+     ntlm      NTLM - Kerberos authentication is attempted if a Kerberos token
+               can be obtained, otherwise NTLMv2 authentication is attempted
+               and, if that fails, NTLMv1 authentication is attempted, with
+               zeroes in the LM hash; if the server doesn't support encrypted
+               passwords, the authentication fails.
+
+     lm        LM - Kerberos authentication is attempted if a Kerberos token
+               can be obtained, otherwise NTLMv2 authentication is attempted
+               and, if that fails, NTLMv1 authentication is attempted, includ-
+               ing the LM hash; if the server doesn't support encrypted pass-
+               words, the authentication fails.
+
+     none      none - The same as lm except that, if the server doesn't sup-
+               port encrypted passwords, plain-text passwords are used.
+
+     (Note: "NetBIOS" as used below means "NetBIOS over TCP/IP.")
+
+     "how to use SMB TCP/UDP ports" can be one of:
+
+     normal        (default) Attempt to connect via port 445. If that is
+                   unsuccessful, try to connect via NetBIOS.
+
+     netbios_only  Do not attempt to connect via port 445.
+
+     no_netbios    Attempt to connect via port 445. If that is unsuccessful,
+                   do not try to connect via NetBIOS.
+
+FILES
+     /etc/nsmb.conf  The global configuration file.
+
+     ~/Library/Preferences/nsmb.conf
+                     The user's configuration file, conflicts will be over-
+                     written by the global file.
+
+EXAMPLES
+     What follows is a sample configuration file which may, or may not match
+     your environment:
+
+           # Configuration file for example.com
+           [default]
+           minauth=ntlmv2
+           streams=yes
+           soft=yes
+           domain=DOMAIN
+           [WIN98]
+           addr=windows98.apple.com
+
+     All lines which begin with the `#' character are comments and will not be
+     parsed.  The ``default'' section specifies that only Kerberos and NTLMv2
+     authentication should be attempted; NTLM authentication should not be
+     attempted if NTLMv2 authentication fails, and plain-text authentication
+     should not be attempted if the server doesn't support encrypted pass-
+     words.
+
+SEE ALSO
+     smbutil(1), mount_smbfs(8)
+
+AUTHORS
+     This manual page was originally written by Sergey Osokin
+     <osa@FreeBSD.org> and Tom Rhodes <trhodes@FreeBSD.org>.
+

@@ -1,0 +1,81 @@
+gccmakedep(1)                                                    gccmakedep(1)
+
+
+
+NAME
+       gccmakedep - create dependencies in makefiles using 'gcc -M'
+
+SYNOPSIS
+       gccmakedep  [  -sseparator  ]  [  -fmakefile ] [ -a ] [ -- options -- ]
+       sourcefile ...
+
+DESCRIPTION
+       The gccmakedep program calls 'gcc -M' to output makefile rules describ-
+       ing  the  dependencies  of each sourcefile, so that make(1) knows which
+       object files must be recompiled when a dependency has changed.
+
+       By default, gccmakedep places its output in the file named makefile  if
+       it  exists, otherwise Makefile.  An alternate makefile may be specified
+       with the -f option.  It first searches the makefile for a  line  begin-
+       ning with
+
+           # DO NOT DELETE
+
+       or  one  provided with the -s option, as a delimiter for the dependency
+       output.  If it finds it, it will delete everything following this up to
+       the  end  of  the  makefile  and put the output after this line.  If it
+       doesn't find it, the program will append the string to the makefile and
+       place the output after that.
+
+EXAMPLE
+       Normally,  gccmakedep  will be used in a makefile target so that typing
+       'make depend' will bring the dependencies up to date for the  makefile.
+       For example,
+           SRCS = file1.c file2.c ...
+           CFLAGS = -O -DHACK -I../foobar -xyz
+           depend:
+                   gccmakedep -- $(CFLAGS) -- $(SRCS)
+
+OPTIONS
+       The  program will ignore any option that it does not understand, so you
+       may use the same arguments that you would for gcc(1), including -D  and
+       -U  options  to  define  and undefine symbols and -I to set the include
+       path.
+
+       -a     Append the dependencies to the file instead of replacing  exist-
+              ing dependencies.
+
+       -fmakefile
+              Filename.   This  allows you to specify an alternate makefile in
+              which gccmakedep can place its output.  Specifying  "-"  as  the
+              file  name  (that  is,  -f-) sends the output to standard output
+              instead of modifying an existing file.
+
+       -sstring
+              Starting string delimiter.  This option permits you to specify a
+              different  string  for  gccmakedep  to look for in the makefile.
+              The default is "# DO NOT DELETE".
+
+       -- options --
+              If gccmakedep encounters a double hyphen (--)  in  the  argument
+              list,  then  any  unrecognized  arguments  following  it will be
+              silently ignored.  A second double hyphen terminates  this  spe-
+              cial  treatment.   In this way, gccmakedep can be made to safely
+              ignore esoteric compiler arguments that might normally be  found
+              in a CFLAGS make macro (see the EXAMPLE section above).  -D, -I,
+              and -U options appearing between the pair of double hyphens  are
+              still processed normally.
+
+SEE ALSO
+       gcc(1), make(1), makedepend(1).
+
+AUTHOR
+       The version of the gccmakedep included in this X.Org Foundation release
+       was originally written by the XFree86 Project based on code supplied by
+       Hongjiu Lu.
+
+       Colin Watson wrote this manual page, originally for the Debian Project,
+       based partly on the manual page for makedepend(1).
+
+
+

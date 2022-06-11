@@ -1,0 +1,56 @@
+UMOUNT(8)                 BSD System Manager's Manual                UMOUNT(8)
+
+NAME
+     umount -- unmount filesystems
+
+SYNOPSIS
+     umount [-fv] special | node
+     umount -a | -A [-fv] [-h host] [-t type]
+
+DESCRIPTION
+     The umount command calls the unmount(2) system call to remove a special
+     device or the remote node (rhost:path) from the filesystem tree at the
+     point node.  If either special or node are not provided, the appropriate
+     information is taken from the fstab(5) file.
+
+     The options are as follows:
+
+     -a      All the filesystems described in fstab(5) are unmounted.
+
+     -A      All the currently mounted filesystems except the root are
+             unmounted.
+
+     -f      The filesystem is forcibly unmounted.  Active special devices
+             continue to work, but all other files return errors if further
+             accesses are attempted.  The root filesystem cannot be forcibly
+             unmounted.
+
+     -h host
+             Only filesystems mounted from the specified host will be
+             unmounted.  This option is implies the -A option and, unless oth-
+             erwise specified with the -t option, will only unmount NFS
+             filesystems.
+
+     -t type
+             Is used to indicate the actions should only be taken on filesys-
+             tems of the specified type.  More than one type may be specified
+             in a comma separated list.  The list of filesystem types can be
+             prefixed with ``no'' to specify the filesystem types for which
+             action should not be taken.  For example, the umount command:
+
+                   umount -a -t nfs,hfs
+
+             umounts all filesystems of the type NFS and HFS.
+
+     -v      Verbose, additional information is printed out as each filesystem
+             is unmounted.
+
+FILES
+     /etc/fstab  filesystem table
+
+SEE ALSO
+     unmount(2), fstab(5), mount(8)
+
+HISTORY
+     A umount command appeared in Version 6 AT&T UNIX.
+

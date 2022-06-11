@@ -1,0 +1,91 @@
+img-ps(n)                                                            img-ps(n)
+
+
+
+NAME
+       img-ps - Img, Adobe PostScript Format (ps)
+
+SYNOPSIS
+       package require Tk
+
+       package require img::ps  ?1.3?
+
+       image create photo ?name? ?options?
+
+
+DESCRIPTION
+       The package img::ps is a sub-package of Img. It can be loaded as a part
+       of the complete Img support, via package require Img, or  on  its  own,
+       via package require img::ps.
+
+       Like  all packages of Img it does not provide new commands, but extends
+       the existing Tk command image so  that  it  supports  files  containing
+       raster  images  in  the Adobe PostScript Format (ps). More specifically
+       img::ps extends Tk's photo image type.
+
+       The name of the new format handler is ps.  This  handler  provides  new
+       additional  configuration  options.  See section PostScript OPTIONS for
+       more detailed explanations.
+
+       Note that this package provides a pdf handler too, i.e. a  handler  for
+       the  Adobe  Portable  Document  Format.  That  handler accepts the same
+       options as the ps handler.
+
+       The package delegates the actual conversion of data in  PostScript  and
+       PDF  format  into  a  raster  image  to the ghostscript application. It
+       therefore depends upon the presence of said  application  and  is  non-
+       functional is ghostscript is not present.
+
+       All of the above means that in a call like
+
+       image create photo ?name? ?options?
+
+       [1]    Image  data  in  ps  and PDF format (options -data and -file) is
+              detected automatically.
+
+       [2]    The format names ps and pdf are recognized by the  option  -for-
+              mat.   In  addition  the value for the option is treated as list
+              and may contain any of the special  options  listed  in  section
+              PostScript OPTIONS.
+
+PostScript OPTIONS
+       The handler provides two options, both influencing the reading of Post-
+       Script or PDF images. The handler is not able to write images in  Post-
+       Script or PDF.
+
+       -index n
+              This  option  is for reading from PostScript/PDF data containing
+              more than one page. When specified it will read the n'th page in
+              the  data.  The  first  page  is  at index 0 and will be read by
+              default, i.e. when the option is not specified.
+
+              Note: This option is not yet implemented.
+
+       -zoom X Y
+              Multiply image size by the given scale factors. If Y is missing,
+              the  default  is  the  same  as  X. X and Y are allowed to be in
+              floating point format, but they are rounded to the nearest prac-
+              tically  possible value. For postscript this means the zoom fac-
+              tors should be multiples of 1/72.
+
+REQUIREMENTS
+       The code provided by Img does not perform the interpretation  and  ras-
+       terizing  of  the input by itself but delegates this to the gs applica-
+       tion. This is the GhostScript implementation of PostScript (and PDF).
+
+       If gs is not installed this format handler cannot be used.
+
+SEE ALSO
+       img-bmp, img-gif, img-ico, img-intro,  img-jpeg,  img-pcx,  img-pixmap,
+       img-png, img-ppm, img-ps, img-sgi, img-sun, img-tga, img-tiff, img-win-
+       dow, img-xbm, img-xpm
+
+KEYWORDS
+       ghostscript, gs, image handling, pdf, postscript, ps, tk
+
+COPYRIGHT
+       Copyright (c) 1995-2003 Jan Nijtmans <nijtmans@users.sourceforge.com>
+
+
+
+

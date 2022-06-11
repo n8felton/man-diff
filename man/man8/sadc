@@ -1,0 +1,50 @@
+sadc(8)                   BSD System Manager's Manual                  sadc(8)
+
+NAME
+     sadc -- system activity data collector
+
+SYNOPSIS
+     /usr/lib/sa/sadc [-m mode] [t n] [ofile]
+
+DESCRIPTION
+     The sadc tool is used to collect cumulative system activity data.  The
+     sample system data is collected at intervals t seconds apart, in a loop n
+     times.  The binary sample data is written to ofile if specified.  Other-
+     wise, the binary data is written to stdout.  If the ofile file does not
+     exist, it is created, otherwise it is truncated.
+
+     sadc is intended to be used as the engine behind the sar(1) command, and
+     is not typically invoked on the command line.  Two shell scripts, sa1 and
+     sa2, are provided to drive the typical sampling, saving, and reporting
+     process.
+
+OPTIONS
+     The following options modify the way data is collected by sadc.
+
+     -m mode  Modify the collection of system statistics as specified by mode.
+              Currently only one mode is supported.
+
+              PPP      By default, the collection of ppp network interface
+                       statistics is turned off.  This is because the number
+                       of ppp connections can be very high, causing the raw
+                       data file to grow unexpectedly large, especially  when
+                       samples are collected at short intervals.  Use the PPP
+                       mode to turn the collection back on.
+
+EXAMPLES
+     /usr/lib/sa/sadc 15 20 /tmp/sample.out
+
+     This call collects 20 samples at 15 second intervals.  The binary data is
+     written to the /tmp/sample.out file
+
+FILES
+     /var/log/sa/sadd  Default daily activity file that holds the binary sam-
+                       pling data.  dd are digits that represent the day of
+                       the month.
+     /usr/lib/sa/sa1   Shell script used to drive the sar data collection.
+     /usr/lib/sa/sa2   Shell script used to drive the sar data reporting.
+
+SEE ALSO
+     fs_usage(1), netstat(1), sar(1), sc_usage(1), top(1), vm_stat(1),
+     iostat(8), sa1(8), sa2(8)
+

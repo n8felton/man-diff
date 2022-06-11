@@ -1,0 +1,48 @@
+CUPS-GENPPDCONFIG(8)        Gutenprint Manual Pages       CUPS-GENPPDCONFIG(8)
+
+
+
+NAME
+       cups-genppdconfig  -  a  user-friendly interface to generate Gutenprint
+       PPD files for use with CUPS
+
+SYNOPSIS
+       cups-genppdconfig [-d ppd_directory]
+       update-cups-genppd [-d pdd_directory]
+
+DESCRIPTION
+       cups-genppdconfig generates Gutenprint PPD files  for  use  with  CUPS.
+       The  program  allows  the selection of the base directory to create the
+       PPDs in, and the printers and languages desired.  The default  settings
+       are taken from the contents of the base directory.  Note that unselect-
+       ing an item will not remove it from the disk; you must remove  unwanted
+       printers  and  languages  by deleting the files and directories respec-
+       tively.
+
+       If dialog is installed, it will be used to create the  user  interface,
+       using  colour,  3D-look  dialog  boxes etc.  If dialog cannot be found,
+       perlmenu will be used instead to create a simpler, though  functionally
+       identical, interface.
+
+OPTIONS
+       -d ppd-directory
+              Use  ppd-directory as the base directory to create PPD files in.
+              The  default  printer  and  language  selections  will  also  be
+              obtained from this directory.  By default, the base directory is
+              /usr/share/cups/model/gutenprint.
+
+SEE ALSO
+       cups-genppd(8), cups-genppdupdate(8), dialog(1), CUPS Software Adminis-
+       trators Manual, http://localhost:631/documentation.html
+
+COPYRIGHT
+       Copyright (C)  2002-2003 Roger Leigh (rleigh@debian.org)
+
+       This program is free software; you can redistribute it and/or modify it
+       under the terms of the GNU General Public License, version 2,  as  pub-
+       lished by the Free Software Foundation.
+
+       This manual page was written by Roger Leigh (rleigh@debian.org).
+
+
+

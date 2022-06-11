@@ -1,0 +1,31 @@
+StartupItemContext(8)     BSD System Manager's Manual    StartupItemContext(8)
+
+NAME
+     StartupItemContext -- Execute a program in StartupItem context
+
+SYNOPSIS
+     StartupItemContext [program [arguments]]
+
+DESCRIPTION
+     The StartupItemContext utility launches the specified program in Star-
+     tupItem bootstrap context.  Each Darwin and Mac OS X login creates a
+     unique bootstrap subset context to contain login specific Mach port reg-
+     istrations with the bootstrap server.  All such registrations performed
+     within the context of that subset are only visible to other processes
+     within that context or subsequent subsets of it.  Therefore, a Mach port
+     based service/daemon launched within a login context will not be visible
+     to other such contexts.
+
+     To override this, a root user can use the StartupItemContext utility to
+     launch the program within the same bootstrap context as all other Star-
+     tupItems. All subsequent Mach port bootstrap registrations perfomed by
+     the program will be visible system-wide.
+
+NOTES
+     All bootstrap port lookups will also be resticted to the StartupItem con-
+     text. The services provided on a per-login basis (clipboard, etc...) will
+     not be available to the program.
+
+SEE ALSO
+     SystemStarter(8)
+

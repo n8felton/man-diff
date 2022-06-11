@@ -1,0 +1,80 @@
+KLIST(1)                                                              KLIST(1)
+
+
+
+NAME
+       klist - list cached Kerberos tickets
+
+SYNOPSIS
+       klist  [-5]  [-4]  [-e] [[-c] [-A] [-f] [-s] [-a  [-n]]] [-k [-t] [-K]]
+       [cache_name | keytab_name]
+
+DESCRIPTION
+       Klist lists the Kerberos principal and Kerberos tickets held in a  cre-
+       dentials cache, or the keys held in a keytab file.
+
+OPTIONS
+       -5     list Kerberos 5 credentials.  This option will not list Kerberos
+              4 credentials unless -4 is also specified.
+
+       -4     list Kerberos 4 credentials.  This option will not list Kerberos
+              5 credentials unless -5 is also specified.
+
+       -e     displays  the encryption types of the session key and the ticket
+              for each credential in the credential cache, or each key in  the
+              keytab file.
+
+       -c     List  tickets  held in a credentials cache.  This is the default
+              if neither -c nor -k is specified.
+
+       -A     lists all caches in the credentials cache.
+
+       -f     shows the flags present in the credentials, using the  following
+              abbreviations:
+
+                   F    Forwardable
+                   f    forwarded
+                   P    Proxiable
+                   p    proxy
+                   D    postDateable
+                   d    postdated
+                   R    Renewable
+                   I    Initial
+                   i    invalid
+                   H    Hardware authenticated
+                   A    preAuthenticated
+                   O    OK as delegate
+                   a    anonymous
+
+
+       -s     causes  klist  to run silently (produce no output), but to still
+              set the exit status according to whether it  finds  the  creden-
+              tials  cache.   The  exit status is '0' if klist finds a creden-
+              tials cache, with a valid ticket granting ticket and '1'  if  it
+              does not.
+
+       -a     display list of addresses in credentials.
+
+       -n     show numeric addresses instead of reverse-resolving addresses.
+
+       -k     List keys held in a keytab file.
+
+       -t     display  the  time entry timestamps for each keytab entry in the
+              keytab file.
+
+       -K     display the value of the encryption key in each keytab entry  in
+              the keytab file.
+
+       If  cache_name  or keytab_name is not specified, klist will display the
+       credentials in the system default credentials cache or keytab  file  as
+       appropriate.
+
+FILES
+       /etc/krb5.keytab
+              default location for the local host's keytab file.
+
+SEE ALSO
+       kinit(1), kdestroy(1), kpasswd(1), kswitch(1)
+
+
+

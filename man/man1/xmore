@@ -1,0 +1,23 @@
+xmore(1)                                                              xmore(1)
+
+
+
+NAME
+       xmore - plain text display program for the X Window System
+
+SYNOPSIS
+       xmore [filename]
+
+DESCRIPTION
+       xmore is a plain text browser.
+
+ENVIRONMENT
+       XPSERVERLIST
+              ${XPSERVERLIST}  must  be  set, identifying the available Xprint
+              servers.  See Xprint(7) for more details.
+
+SEE ALSO
+       X11(7), xman(1)
+
+
+

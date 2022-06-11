@@ -1,0 +1,95 @@
+RTADVD(8)                 BSD System Manager's Manual                RTADVD(8)
+
+NAME
+     rtadvd -- router advertisement daemon
+
+SYNOPSIS
+     rtadvd [-dDfMRs] [-c configfile] interface ...
+
+DESCRIPTION
+     rtadvd sends router advertisement packets to the specified interfaces.
+
+     The program will daemonize itself on invocation.  It will then send
+     router advertisement packets periodically, as well as in response to
+     router solicitation messages sent by end hosts.
+
+     Router advertisements can be configured on a per-interface basis, as
+     described in rtadvd.conf(5).
+
+     If there is no configuration file entry for an interface, or if the con-
+     figuration file does not exist altogether, rtadvd sets all the parameters
+     to their default values.  In particular, rtadvd reads all the interface
+     routes from the routing table and advertises them as on-link prefixes.
+
+     rtadvd also watches the routing table.  By default, if an interface
+     direct route is added/deleted on an advertising interface and no static
+     prefixes are specified by the configuration file, rtadvd adds/deletes the
+     corresponding prefix to/from its advertising list, respectively.  The -s
+     option may be used to disable this behavior.  Moreover, if the status of
+     an advertising interface changes, rtadvd will start or stop sending
+     router advertisements according to the latest status.
+
+     Basically, hosts MUST NOT send Router Advertisement messages at any time
+     (RFC 2461, Section 6.2.3).  However, it would sometimes be useful to
+     allow hosts to advertise some parameters such as prefix information and
+     link MTU.  Thus, rtadvd can be invoked if router lifetime is explicitly
+     set zero on every advertising interface.
+
+     The command line options are:
+
+     -c      Specify an alternate location, configfile, for the configuration
+             file.  By default, /etc/rtadvd.conf is used.
+
+     -d      Print debugging information.
+
+     -D      Even more debugging information is printed.
+
+     -f      Foreground mode (useful when debugging).
+
+     -M      Specify an interface to join the all-routers site-local multicast
+             group.  By default, rtadvd tries to join the first advertising
+             interface appeared in the command line.  This option has meaning
+             only with the -R option, which enables routing renumbering proto-
+             col support.
+
+     -R      Accept router renumbering requests.  If you enable it, certain
+             IPsec setup is suggested for security reasons.  On KAME-based
+             systems, rrenumd(8) generates router renumbering request packets.
+             This option is currently disabled, and is ignored by rtadvd with
+             a warning message.
+
+     -s      Do not add or delete prefixes dynamically.  Only statically con-
+             figured prefixes, if any, will be advertised.
+
+     Upon receipt of signal SIGUSR1, rtadvd will dump the current internal
+     state into /var/run/rtadvd.dump.
+
+     Use SIGTERM to kill rtadvd gracefully.  In this case, rtadvd will trans-
+     mit router advertisement with router lifetime 0 to all the interfaces (in
+     accordance with RFC2461 6.2.5).
+
+DIAGNOSTICS
+     The rtadvd utility exits 0 on success, and >0 if an error occurs.
+
+FILES
+     /etc/rtadvd.conf                  The default configuration file.
+     /var/run/rtadvd.pid               contains the pid of the currently run-
+                                       ning rtadvd.
+     /var/run/rtadvd.dump              in which rtadvd dumps its internal
+                                       state.
+
+SEE ALSO
+     rtadvd.conf(5), rrenumd(8), rtsol(8)
+
+HISTORY
+     The rtadvd command first appeared in WIDE Hydrangea IPv6 protocol stack
+     kit.
+
+CAVEAT
+     There used to be some text that recommended users not to let rtadvd
+     advertise Router Advertisement messages on an upstream link to avoid
+     undesirable icmp6(4) redirect messages.  However, based on the later dis-
+     cussion in the IETF ipng working group, all routers should rather adver-
+     tise the messages regardless of the network topology, in order to ensure
+     reachability.
+

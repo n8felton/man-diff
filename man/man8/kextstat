@@ -1,0 +1,64 @@
+KEXTSTAT(8)               BSD System Manager's Manual              KEXTSTAT(8)
+
+NAME
+     kextstat -- display status of dynamically loaded kernel extensions
+
+SYNOPSIS
+     kextstat [-b kext_bundle_id] [-k] [-l]
+
+DESCRIPTION
+     The kextstat utility displays the status of any kernel extensions cur-
+     rently loaded in the kernel.  The following information is shown for each
+     loaded kernel extension:
+
+     Index     The load index of the kernel extension (used to track refer-
+               ences).  Gaps in the list indicate kernel extensions that have
+               been unloaded.
+
+     Refs      The number of references to this extension by others.  If
+               nonzero, the extension cannot be unloaded.
+
+     Address   The address in kernel space where the extension has been
+               loaded.
+
+     Size      The number of bytes of kernel memory that the extension occu-
+               pies.  If this is zero, the extension is actually a built-in
+               part of the kernel that has a record as an extension for
+               resolving dependencies among extensions.
+
+     Wired     The number of wired bytes of kernel memory that the extension
+               occupies.
+
+     Name      The CFBundleIdentifier of the kernel extension.
+
+     (Version)
+               The CFBundleVersion of the kernel extension.
+
+     <Linked Against>
+               The index numbers of all other kernel extensions that this
+               extension has a reference to.
+
+     The following options are available:
+
+     -b kext_bundle_id
+               Display the status of only the kernel extension with the given
+               bundle identifier.  This option trumps the -k option; if both
+               are given and a kernel component is specified, its information
+               is shown.
+
+     -k        Don't show information for built-in components of the kernel.
+
+     -l        Print the list of loaded kexts only and omit the header (useful
+               for running output through text-analysis tools).
+
+DIAGNOSTICS
+     The kextstat utility exits with a status of 0 on success and with a
+     nonzero status if an error occurs.
+
+SEE ALSO
+     kextcache(8), kextd(8), kextload(8), kextunload(8)
+
+HISTORY
+     The kextstat command is based on the command kldstat written by Doug
+     Rabson <dfr@FreeBSD.org>
+

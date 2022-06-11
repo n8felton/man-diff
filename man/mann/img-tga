@@ -1,0 +1,91 @@
+img-tga(n)                                                          img-tga(n)
+
+
+
+NAME
+       img-tga - Img, Truevision Targa Format (tga)
+
+SYNOPSIS
+       package require Tk
+
+       package require img::tga  ?1.3?
+
+       image create photo ?name? ?options?
+
+
+DESCRIPTION
+       The  package  img::tga  is  a sub-package of Img. It can be loaded as a
+       part of the complete Img support, via package require Img,  or  on  its
+       own, via package require img::tga.
+
+       Like  all packages of Img it does not provide new commands, but extends
+       the existing Tk command image so  that  it  supports  files  containing
+       raster  images  in the Truevision Targa Format (tga). More specifically
+       img::tga extends Tk's photo image type.
+
+       The name of the new format handler is tga.  This handler  provides  new
+       additional  configuration  options.  See  section  TGA OPTIONS for more
+       detailed explanations.
+
+       All of the above means that in a call like
+
+       image create photo ?name? ?options?
+
+       [1]    Image data in tga format (options -data and -file)  is  detected
+              automatically.
+
+       [2]    The  format  name  tga  is recognized by the option -format.  In
+              addition the value for the option is treated  as  list  and  may
+              contain  any  of  the  special  options  listed  in  section TGA
+              OPTIONS.
+
+SUPPORTED TGA TYPES
+        24-bit pixels: True-color (RGB, each channel 8 bit).
+        32-bit pixels: True-color with alpha channel (RGBA, each channel 8 bit).
+
+        List of currently supported features:
+
+        Type   |     Read      |     Write     |
+               | -file | -data | -file | -data |
+        ----------------------------------------
+        24-bit | Yes   | Yes   | Yes   | Yes   |
+        32-bit | Yes   | Yes   | Yes   | Yes   |
+
+        All images types may be either uncompressed (Targa-Type 2) or
+        run-length encoded (Targa-Type 10).
+
+
+TGA OPTIONS
+       The handler provides the following options:
+
+       -verbose bool
+              This option is supported for reading and writing.
+
+              If set to true, additional information about  the  loaded/stored
+              image is printed to stdout. Default is false.
+
+       -compression type
+              This option is supported for writing only.
+
+              Set the compression mode to either none or rle.  Default is rle.
+
+       -matte bool
+              This option is supported for reading and writing.
+
+              If set to false, a matte (alpha) channel is ignored during read-
+              ing or writing. Default is true.
+
+SEE ALSO
+       img-bmp,  img-gif,  img-ico,  img-intro, img-jpeg, img-pcx, img-pixmap,
+       img-png, img-ppm, img-ps, img-sgi, img-sun, img-tga, img-tiff, img-win-
+       dow, img-xbm, img-xpm
+
+KEYWORDS
+       image handling, tga, tk
+
+COPYRIGHT
+       Copyright (c) 1995-2003 Jan Nijtmans <nijtmans@users.sourceforge.com>
+
+
+
+

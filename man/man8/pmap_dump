@@ -1,0 +1,19 @@
+PMAP_DUMP(8)              BSD System Manager's Manual             PMAP_DUMP(8)
+
+NAME
+     pmap_dump -- print a list of all registered RPC programs
+
+SYNOPSIS
+     pmap_dump
+
+DESCRIPTION
+     The pmap_dump command can be used to restart a running portmapper or to
+     print a list of all registered RPC programs on the local host. If you
+     want to use the program to restart the portmapper you have to redirect
+     the output of pmap_dump to a file. After this you can restart the
+     portmapper and restore the list of the registered RPC programs by feeding
+     the output of pmap_dump to the command.
+
+SEE ALSO
+     pmap_set(8), portmap(8)
+

@@ -1,0 +1,26 @@
+AMAVISD-NANNY(8)                                              AMAVISD-NANNY(8)
+
+
+
+NAME
+       amavisd-nanny - Amavisd nanny
+
+SYNOPSIS
+       amavisd-nanny
+
+DESCRIPTION
+       Amavisd-nanny  is  a  program to show the status and keep an eye on the
+       health of child processes in amavisd-new.
+
+
+OPTIONS
+        Debug Debug option.
+
+FILES
+       N/A
+
+SEE ALSO
+
+
+
+

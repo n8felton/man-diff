@@ -1,0 +1,170 @@
+PERLKO(1)              Perl Programmers Reference Guide              PERLKO(1)
+
+
+
+NAME
+       perlko - Perlou CN+-13/4i AIAUuu
+
+DESCRIPTION                            _
+       PerlAC 1/41/4oeci cA1/2A oIA>> E cuCO'I'U !
+                            _
+       P_rlAo 5.8.0AECoIAI_A 'IAUua/ISO 10646ci 'eCN +-x1uASCN AocoA>>_CO'I'U.
+       A 'IAUua AocoAC AIE A,.I CNABAIA>> on.OCN 1/41/4oe oc+-1ci1/4 A 'IAUua
+       AIAuci 3/42oi _O3/4uoi Ao+-Yuu 3I,(R) 3/42AIoi AO'A 1/4o,1Ao AIAUuuA>>
+       AocoCO'I'U.  A '_AUua'A Au 1/41/4oeci1/4 3/42AI'A ,ouc 3/4o3/4i,| ASCN
+       CY+-a A1/4oe - A .'AC 9|oAE3/4 3/4EAEAoa, Ao,+- 3/4EAEAoa, +-x,(R)1/2o
+       3/4EAEAoa, AIuucI uc32 3/4AE1/2A3/4AEAC oe9|o1I oec 1/2oA(C),3AE(R),
+       3/4AE9|o 1(R)AU, E-:-oe,(R) 1(R)AU, CNABAIAC CNAU, CN+-13/4iAC CN+-U,
+       AIo>>3/4iAC oi3a, oI1I AIuo3/4EAC CY+-a A1/4oe ui-,| 1/4oceCI'A oIA>>
+       ,nCY.I CIoi AO+-a 9|S1(R)ci_+-aA,ci 3/42AI'o  oc 3/4o3/4i 1x +-1oi
+       +-x,(R)oi cicu A1/4oeci oiA CN 1(R)AU AyCOou AIAUuuci 3/4u 1/4o AO'A
+       ,ouc +-UAU'A 1o.DAIoi  +-aA, 1(R)AU AyCOci1/4 AocoCIoi AOAo 3/4E'o
+       3/4AEAO ,1Ao +-UAU,|  AE-:-COCIoi AO1/2A'I'U.
+                           _
+       PerlAo 3>>oIAuA,.I A 'IAUua,| 1(R)AU CYCoA>> ASCO >>cceCO'I'U. o,'U
+       +-,A1/4AuA,.I ,>>CI,e Perl 1/2oA(C),3AE(R) 3/4Eci1/4  UTF-8 1(R)AUcA>>
+       3/4u 1/4o AOoi, ocA3/4 CO1/4ocI c_>>eAU(c1,| ue3/4i, Ax+-O1/2A, index,
+       substr)oi 1UAIAE(R) 'UAS 'e1/2A A 'IAUua +-UAU 'UAS.I ucAUCO_I'U. ('o
+       AU1/41/4CN oIAo perlunicode ,A'o3/4oA>> AuoiCI1/2E1/2AcA.) A 'IAUuaoi
+       3I,(R) o,+-buC+-a Auci 3I,(R) 3/42AIoi AO3/4uoi, c(C)AuE-:- 3I,(R)
+       3/42AIoi AO'A oc+-1/oc 3/4o3/4ioo AIAUuuA,.I AOAa.AA>> CIoi AIue
+       AIAUuuA,.I uE uYAIAIcI 1(R)1/4,| 'U.c'A oIA>> u1/2+-a ASCO 'Encode'oi
+       3_4_c'1/2A'I'U. 1<<3/4uo,'U 'Encode',|  1/2a1/4 1/4o,1Ao AIAUuu >>cAIAC
+       o E A>> 1/2+-oO CO 1/4o AO1/2A'I'U.
+
+       'Encode''A 'UA1/2ou ooAo CN+-13/4i AIAUuuA>> AocoCO'I'U.
+
+       euc-kr
+             US-ASCIIcI KS X 1001A>> ooAI 3/42'A ,OAE1/41UAIAE(R) AIAUuu (EcE-:- cI1/4oCuAI9|ooi
+             oO,2.) KS X 2901ou RFC 1557 Auoi.
+
+       cp949
+                   MS-Windows 9x/MEci1/4 3/42AI'A E(R)Aa cI1/4oCu.  euc-krci 8,822AUAC
+                   CN+-U A1/2AyA>> 'oCN oIAO.  alias'A uhc, windows-949, x-windows-949,
+                   ks_c_5601-1987. ,C ,9|Ao,. AI,SAo AuAyCIAo 3/4EAo AI,SAIAo,,, Microsoft
+                   A|Coci1/4 CP949AC AC1I.I 3/42AIoi AOA1/2.
+
+       johab
+                   KS X 1001:1998 oI.I 3ci1/4 +-OAxCN A9|COCu.  1(R)AU .1AEUAa,(R)'A cp949cI
+                   ,9|AuoiAo.I US-ASCIIcI  KS X 1001ci 8,822AUAC CN+-U A1/2AyA>> 'oCN oIAO.
+                   AIAUuu 1ae1/2AAo AuCo 'U,S.
+
+       iso-2022-kr                                                 _
+                   RFC 1557ci1/4 +-OAxCN CN+-13/4i AIAI3Y ,bAI +-3E ce AIAUuuA,.I US-ASCIIcI
+                   KS X 1001A>> .1AEUAa,(R).I CI'A Aici1/4 euc-kro_ ooAo,, AIAUuu 1ae1/2AAI 'U,S.
+                   1997-83a oae+-iAo 3/42c'A,3a 'o AI>>o ,bAI +-3E ci 3/42AIAo 3/4EA1/2.
+
+       ksc5601-raw
+                   KS X 1001(KS C 5601)A>> GL(Ai, MSB,| 0A,.I CN oaeci) ci 3o3/4OA>> 9|SAC
+                   AIAUuu. US-ASCIIcI oaCOCIAo 3/4Eoi 'Uu9|A,.I 3/42AI'A AIAo X11 uici1/4 +-U2A
+                   AIAUuu (ksc5601.1987-0. '0'Ao GLA>> AC1ICO.)A,.I 3/42AI'A oIA>> A|cUCIoi'A
+                   oAAC 3/4_A1/2. KS C 5601Ao 19973a KS X 1001.I AI,SA>> 1U2U3/4uA1/2.  19983aci'A  uI
+                   +-UAU (A .IE oIELcI ui.I >>oCY oIEL)oi 'oCOA3A1/2.
+
+        ,i oiAo >>cce c1A|,| 3/4AE.ici o,AO'I'U.
+                                                           _ _
+       c1,| ue3/4i, euc-kr AIAUuuA,.I uE AEAAIA>> UTF-8.I o E CI.A,e 'UA1/2ou
+       ooAI CI,e uE'I'U.
+
+           perl -Mencoding=euc-kr,STDOUT,utf8 -pe1  < file.euckr > file.utf8
+          _ _
+       cao E Ao 'UA1/2ou ooAI CO 1/4o AO1/2A'I'U.
+
+           perl -Mencoding=utf8,STDOUT,euc-kr -pe1  < file.utf8  > file.euckr
+                _ _
+         AI.+- o E A>> A>>'o AEi,(R)CIoO CO 1/4o AOuu.I Encode ,ouaA>> 1/2a1/4
+       1/4o1/4oCIoO Perl.I,, 3/42AI piconvoi Perlci ue3/4i AO1/2A'I'U.
+       +-x AI,Sci1/4 3/4E 1/4o AOuiAI piconv'A Unixci AO'A iconv,|
+       ,ou".I CN oIAO'I'U. +-x >>cce1yAo 3/4AE.icI oo1/2A'I'U.
+
+          piconv -f euc-kr -t utf8 < file.euckr > file.utf8
+          piconv -f utf8 -t euc-kr < file.utf8 > file.euckr
+
+         9|C, 'PerlIO::encoding' ,ouaA>> 1/2a1/4 CN+-13/4i AIAUuuA>> 3/42,e1/4 +-UAU 'UAS
+       (1UAIAE(R) 'UASoi 3/4AE'I9|o) A3,(R),| 1/2+-oO CO 1/4o AO1/2A'I'U.
+
+         #!/path/to/perl
+
+         use encoding 'euc-kr', STDIN => 'euc-kr',
+                                STDOUT-> 'euc-kr', STDERR=>'euc-kr';
+
+         print length("oi3a");        # 2  (A<< uucECY'A +-UAU 'UAS A3,(R),| Ao1/2A)
+         print length('oi3a');        # 4  (AUAo uucECY'A 1UAIAE(R) 'UAS A3,(R),| Ao1/2A)
+         print index("CNo, 'euco", "co");   # -1 ('co'AI 3/4oA1/2)
+         print index('CNo, 'euco', 'co');   # 7 (81oAocI 91oAo 1UAIAE(R)oi 'co'AC
+                                                   AUuaoaou AIAiCO.)
+
+       'o AU1/41/4E-:- 3/4Eoi 1/2IA,,e...
+
+         PerlA>> 1/43AiCI,e  'e'U_-:- AU1/41/4CN 1(R)1/4oi ooAI uu9|o cA,c, AI 1(R)1/4,| AeCO
+       Perl Au1Y >>O 3/4AE'I9|o A 'IAUua Aoco, EncodeAC >>cce1y uici ,1Ao oIA>>
+       1eci 1/4o AO1/2A'I'U.  3/4AEA-:- AI 1(R)1/4'A CoAc ,ouI cu3/4i.I 3/42c(C) AO1/2A'I'U.
+
+       Perl ou.A AU.a
+
+       ASci1/4 3/4o+-bCN  1(R)1/4 cUciuu 'UA1/2ou ooAo AU.aoi AO1/2A'I'U. AI
+       ,n.IAo oaAU cIAuCN oIAI 3/4AE'Ioi AIoI 'eCYAuAI oI,, ,oAo oIAO'I'U.
+
+       <http://www.perl.com/>
+              O'ReillyAC Perl AY AEaAIAo
+
+       <http://www.cpan.org/>
+                   Comprehensive Perl Archive Network
+
+       <http://lists.perl.org/>
+             Perl ,bAI,u ,(R)1/2oAE(R). ,1Ao ,(R)1/2oAE(R) oiciuY
+             perl-unicodeci1/4 'Encode'ci 'eCO 3iACCO.
+
+       PerlA>> 'o +-ioO oooICI'AuY uucoA>> AU 1/4o AO'A CN+-13/4i ou.A
+       >>cAIAE(R)
+
+
+       <http://www.perl.or.kr/>
+             Perl CN+-1 >>cceAU ,oAO
+
+       <news:han.comp.lang.perl/>
+             CN+-13/4i Perl 'o1/2o +-x.i
+
+       <http://seoul.pm.org/>
+             Perl ,AoA1/2o (1/4ci)
+
+       <http://www.perlmania.or.kr/>
+             Home for Korean Perlmanias
+
+       <http://www.oreilly.co.kr/perl/>
+             O'Reillyci1/4 3acA CN+-13/4i Perl 1/4Au ,n.I
+
+       <http://www.perlschool.net/>
+             Perl +-aAE oAA 1x 1/4O1/2o, AO+-U ucCa, ou.A COcU >>cAIAE(R) ,uA(C)
+
+       <http://www.perl.co.kr>
+             Perlci ou.AuE CGI, DB, c~uc uici 'eCN  Axo, 1x 'o1/2o A|oo
+        _
+       A 'IAUua 1x CN+-13/4i AIAUuu ou.A AU.a
+
+
+       <http:/_www.unicode.org/>
+             A 'IAUua AA1/4O1/2A3/4o.
+
+       <http://std.dkuug.dk/JTC1/SC2/WG2>
+           +-ao>>AuA,.I UnicodecI ooAo ISO CYAOAI  ISO/IEC 10646 UCS(Universal
+           Character Set)A>> ,,ua'A  ISO/IEC JTC1/SC2/WG2AC AY AEaAIAo.
+
+       <http://jshin.net/faq/qa8.html>
+             CN+-13/4i 1(R)AU AyCO 1x AIAUuuci 'eCN 3/4E3>>.
+
+       <http:/_www.cl.cam.ac.uk/~mgk25/_nicode.html>
+             A 'D1/2o/,(R)'a1/2oci1/4 A 'IAUuacI UTF-8 >>cceci 'eCN 1(R)'aAy(FAQ)
+
+       <http://kldp.org/Translations/html/UTF8-Unicode-KLDP/UTF8-Uni-
+       code-KL_P.html>                 _
+             A 'D1/2o/,(R)'a1/2oci1/4 A 'IAUuacI UTF-8 >>cceci 'eCN 1(R)'aAy(FAQ)AC  CN+-13/4i 1oca
+
+SEE ALSO
+       Encode, Encode::KR, encoding, perluniintro, perlunicode
+
+AUTHORS
+       Jarkko Hietaniemi <jhi@iki.fi> 1/2AAx1/2A <jshin@mailaps.org>
+
+
+

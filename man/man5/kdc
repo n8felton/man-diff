@@ -1,0 +1,225 @@
+KDC.CONF(5)                                                        KDC.CONF(5)
+
+
+
+NAME
+       kdc.conf - Kerberos V5 KDC configuration file
+
+DESCRIPTION
+       kdc.conf  specifies per-realm configuration data to be used by the Ker-
+       beros V5 Authentication Service and Key Distribution  Center  (AS/KDC).
+       This includes database, key and per-realm defaults.
+
+       The  kdc.conf  file  uses the same format as the krb5.conf file.  For a
+       basic description of the syntax, please refer to the krb5.conf descrip-
+       tion.
+
+       The following sections are currently used in the kdc.conf file:
+
+       [kdcdefaults]
+              Contains  parameters  which control the overall behaviour of the
+              KDC.
+
+       [realms]
+              Contains  subsections  keyed  by  Kerberos  realm  names   which
+              describe per-realm KDC parameters.
+
+KDCDEFAULTS SECTION
+       The following relations are defined in the [kdcdefaults] section:
+
+       kdc_ports
+              This  relation  lists the ports which the Kerberos server should
+              listen on, by default.  This list is a comma separated  list  of
+              integers.   If  this  relation is not specified, the compiled-in
+              default is usually port 88 and port 750.
+
+
+       v4_mode
+              This string specifies how the KDC should respond to Kerberos  IV
+              packets.  Valid  values  for  this  relation are the same as the
+              valid arguments to the -4 flag to krb5kdc.  If this relation  is
+              not specified, the compiled-in default of none is used.
+
+
+REALMS SECTION
+       Each  tag  in  the [realms] section of the file names a Kerberos realm.
+       The value of the tag is a subsection where the relations in  that  sub-
+       section define KDC parameters for that particular realm.
+
+       For  each  realm,  the  following tags may be specified in the [realms]
+       subsection:
+
+
+       acl_file
+              This string specifies the location of the  access  control  list
+              (acl)  file  that  kadmin uses to determine which principals are
+              allowed which permissions on the database. The default value  is
+              /var/db/krb5kdc/kadm5.acl.
+
+
+       admin_keytab
+              This  string Specifies the location of the keytab file that kad-
+              min uses to authenticate to the database.  The default value  is
+              /var/db/krb5kdc/kadm5.keytab.
+
+
+       database_name
+              This  string specifies the location of the Kerberos database for
+              this realm.
+
+
+       default_principal_expiration
+              This absolute time string specifies the default expiration  date
+              of principals created in this realm.
+
+
+       default_principal_flags
+              This  flag string specifies the default attributes of principals
+              created in this realm.  The format for the string  is  a  comma-
+              separated list of flags, with '+' before each flag to be enabled
+              and '-' before each flag to be disabled.   The  default  is  for
+              postdateable, forwardable, tgt-based, renewable, proxiable, dup-
+              skey, allow-tickets, and service to be enabled, and  all  others
+              to be disabled.
+
+              There are a number of possible flags:
+
+              postdateable
+                     Enabling  this  flag allows the principal to obtain post-
+                     dateable tickets.
+
+              forwardable
+                     Enabling this flag allows the principal  to  obtain  for-
+                     wardable tickets.
+
+              tgt-based
+                     Enabling  this  flag allows a principal to obtain tickets
+                     based on a ticket-granting-ticket, rather than  repeating
+                     the  authentication  process  that was used to obtain the
+                     TGT.
+
+              renewable
+                     Enabling this flag allows the principal to obtain  renew-
+                     able tickets.
+
+              proxiable
+                     Enabling  this  flag allows the principal to obtain proxy
+                     tickets.
+
+              dup-skey
+                     Enabling this flag allows the principal to obtain a  ses-
+                     sion   key  for  another  user,  permitting  user-to-user
+                     authentication for this principal.
+
+              allow-tickets
+                     Enabling this flag means that the KDC will issue  tickets
+                     for  this  principal.   Disabling  this  flag essentially
+                     deactivates the principal within this realm.
+
+              preauth
+                     If this flag is enabled on a client principal, then  that
+                     principal  is  required  to  preauthenticate  to  the KDC
+                     before receiving any tickets.  On  a  service  principal,
+                     enabling  this  flag  means that service tickets for this
+                     principal will only be issued to clients with a TGT  that
+                     has the preauthenticated ticket set.
+
+              hwauth If  this  flag is enabled, then the principal is required
+                     to preauthenticate using a hardware device before receiv-
+                     ing any tickets.
+
+              pwchange
+                     Enabling  this  flag  forces  a  password change for this
+                     principal.
+
+              service
+                     Enabling this flag allows the the KDC  to  issue  service
+                     tickets for this principal.
+
+              pwservice
+                     If  this  flag  is  enabled, it marks this principal as a
+                     password change service.  This should  only  be  used  in
+                     special  cases,  for  example,  if  a user's password has
+                     expired, the user has to get tickets for  that  principal
+                     to  be able to change it without going through the normal
+                     password authentication.
+
+
+       dict_file
+              This string location of the dictionary file  containing  strings
+              that are not allowed as passwords.  If this tag is not set or if
+              there is no policy assigned to the principal, then no check will
+              be done.
+
+
+       kadmind_port
+              This  port number specifies the port on which the kadmind daemon
+              is to listen for this realm.
+
+
+       kpasswd_port
+              This port number specifies the port on which the kadmind  daemon
+              is to listen for this realm.
+
+
+       key_stash_file
+              This string specifies the location where the master key has been
+              stored with kdb5_stash.
+
+
+       kdc_ports
+              This string specifies the list of ports that the KDC is to  lis-
+              ten  to  for  this realm.  By default, the value of kdc_ports as
+              specified in the [kdcdefaults] section is used.
+
+
+       master_key_name
+              This string specifies the name of the principal associated  with
+              the master key.  The default value is K/M.
+
+
+       master_key_type
+              This key type string represents the master key's key type.
+
+
+       max_life
+              This  delta  time string specifes the maximum time period that a
+              ticket may be valid for in this realm.
+
+
+       max_renewable_life
+              This delta time string specifies the maximum time period that  a
+              ticket may be renewed for in this realm.
+
+
+       supported_enctypes
+              list  of  key:salt  strings  that specifies the default key/salt
+              combinations of principals for this realm
+
+
+       kdc_supported_enctypes
+              specifies the permitted key-salt combinations of principals  for
+              this realm
+
+
+       reject_bad_transit
+              this  boolean  specifies  whether  or  not the list of transited
+              realms for cross-realm tickets should  be  checked  against  the
+              transit  path  computed  from  the realm names and the [capaths]
+              section of its krb5.conf file
+
+
+DATE FORMAT
+       For valid date format examples (both absolute  time  and  delta  time),
+       please see the DATE FORMAT section of the kadmin manpage.
+
+
+FILES
+       /var/db/krb5kdc/kdc.conf
+
+
+SEE ALSO
+       krb5.conf(5), krb5kdc(8), kadmin(8)
+
+
+

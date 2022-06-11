@@ -1,0 +1,50 @@
+cupsd(8)                          Apple Inc.                          cupsd(8)
+
+
+
+NAME
+       cupsd - common unix printing system daemon
+
+SYNOPSIS
+       cupsd [ -c config-file ] [ -f ] [ -F ] [ -h ] [ -l ]
+
+DESCRIPTION
+       cupsd  is  the scheduler for the Common UNIX Printing System. It imple-
+       ments a printing system based upon the Internet Printing Protocol, ver-
+       sion  1.1.   If  no  options are specified on the command-line then the
+       default configuration file /private/etc/cups/cupsd.conf will be used.
+
+OPTIONS
+       -c config-file
+            Uses the named configuration file.
+
+       -f
+            Run cupsd in the foreground; the default is to run  in  the  back-
+            ground as a "daemon".
+
+       -F
+            Run  cupsd  in the foreground but detach the process from the con-
+            trolling terminal and current directory. This is useful  for  run-
+            ning cupsd from init(8).
+
+       -h
+            Shows the program usage.
+
+       -l
+            This option is passed to cupsd when it is run from launchd(8).
+
+COMPATIBILITY
+       cupsd implements all of the required IPP/1.1 attributes and operations.
+       It also implements several CUPS-specific administration operations.
+
+SEE ALSO
+       backend(7), classes.conf(5),  cups-deviced(8),  cups-driverd(8),  cups-
+       lpd(8),    cups-polld(8),    cupsd.conf(5),    filter(7),   launchd(8),
+       mime.convs(5), mime.types(5), printers.conf(5),
+       http://localhost:631/help
+
+COPYRIGHT
+       Copyright 2007 by Apple Inc.
+
+
+

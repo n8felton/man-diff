@@ -1,0 +1,258 @@
+hdid(8)                                                                hdid(8)
+
+
+
+NAME
+       hdid - HDI driver backing store service
+
+SYNOPSIS
+       hdid [ options ] image
+
+DESCRIPTION
+       Historically, hdid has been the user-level process handling the loading
+       and decompression of disk image data for  the  hard  disk  image  (HDI)
+       driver  in  the Mac OS X kernel.  With Mac OS X version 10.2 and later,
+       certain read/write images and  10.2+-generated  zlib-compressed  (UDZO)
+       images attach in-kernel without a persistent user process.
+
+       With Mac OS X version 10.3, hdid calls the DiskImages.framework and its
+       helpers take care of any out-of-kernel image serving duties.  As of Mac
+       OS X 10.4, hdid calls through to hdiutil attach.  hdid exists primarily
+       for backwards compatibility.  Generally, hdiutil attach should be  used
+       instead  of  hdid.  This man page continues to document certain DiskIm-
+       ages features that are not tool-specific.
+
+       The DiskImages framework supports a variety of flat-file and  dual-fork
+       image  formats,  including  read/write,  read-only,  and read-only com-
+       pressed formats (which it decompresses on the fly).   It  automatically
+       decodes AppleSingle and MacBinary file formats and is capable of mount-
+       ing most images directly from http:// URLs.
+
+       hdiutil detach or diskutil eject should be used to detach (aka "eject")
+       images attached to the system via hdid.
+
+       Beware  that  an  image  you have created and attached is considered an
+       unknown removable device.  For HFS filesystems on such a device,  being
+       unknown  to  the  system  means that the on-disk ownership of files and
+       directories are initially ignored.  On  10.2,  the  owner  values  were
+       dynamically  replaced  with  the  owner  of  /dev/console and the group
+       unknown (gid 99).  On 10.3, the group remains unknown, but the owner is
+       whoever  is  currently  accessing the file (joe sees that he owns files
+       when he looks at the volume; mary sees that she  owns  files  when  she
+       looks).  Owners can be enabled for a particular volume permanently (see
+       disktool/"get info" in the Finder) or temporarily (see EXAMPLES section
+       of hdiutil(1)).  Aside from whether owners are enabled, being removable
+       means that disk arbitration will mount any volumes with special options
+       such as nosuid.
+
+       The  error  "no mountable filesystems" generally means that there is no
+       filesystem in the image or that any filesystem  is  corrupt.   Unfortu-
+       nately,  read-only  device  images  made from mounted journaled volumes
+       will not mount because the journal can't be  replayed.   It  should  be
+       noted,  however,  that  the  error  was  common  on  older systems when
+       remotely logged in to a machine with no one logged in on console.  Disk
+       arbitration  wouldn't  mount  removable  media until the SystemUIServer
+       process was running.  On 10.2 systems,  'disktool  -c  `id  -u`'  would
+       allow image-based volumes to mount in such situations.  With 10.3, vol-
+       umes automatically mount on non-managed systems regardless  of  whether
+       anyone  is  logged  in on console.  Image-based filesystems can also be
+       manually mounted after attaching the image with -nomount.
+
+       Please see the section below on setting up HTTP image  servers  if  you
+       plan  to regularly mount images from web servers or are wondering why a
+       particular image isn't mounting over HTTP.
+
+ARGUMENTS
+       -help  show available options
+
+       -shadow [ <shadowfile> ]
+              Use a shadow file in conjunction with the  data  in  the  image.
+              This  prevents  modification  of  the  original image and allows
+              read-only images to be attached  read/write.   When  blocks  are
+              being  read  from  the  image, blocks present in the shadow file
+              override blocks in the base image.  When blocks are being  writ-
+              ten,  the  writes will be redirected to the shadow file.  If not
+              specified,  -shadow  defaults  to  <imagename>.shadow.   If  the
+              shadow file does not exist, it is created.
+
+       -readonly
+              Attach  the image read only.  Has no effect on read-only images.
+
+       -readwrite
+              Attach the image read/write.  Has no  effect  on  read-only  (or
+              compressed) images.  Used in some cases where a read/write image
+              might default to being attached read-only.
+
+       -nomount
+              Suppress automatic mounting of any  filesystems  in  the  image.
+              This will result in /dev entries being created and (for non-ker-
+              nel-attached images) a process in the background, but no volumes
+              will be mounted.
+
+       -notremovable
+              Make  the  image appear to the system as a fixed disk.  A reboot
+              will be required to cleanly detach the image, though filesystems
+              can  be  unmounted  and  remounted.   This  option requires root
+              access, e.g. via sudo(8).
+
+       -encryption  [  <crypto method>  ]
+              This option specifies  a  particular  encrypted  encoding.   The
+              default  CEncryptedEncoding  automatically recognizes its images
+              so this option should rarely be needed.  Be careful what you are
+              asking  for if the argument to -encryption comes directly before
+              the image name on the command line.
+
+       -stdinpass
+              causes hdid to read a null-terminated passphrase from its  stan-
+              dard  input.   ^@  (control-@) can be typed to explicitly insert
+              the terminator.  This option is designed for automation in which
+              standard input would be attached to a file or pipe.  -passphrase
+              <passphrase> This option is provided for automation purposes but
+              is  very insecure as the passphrase value will be visible in the
+              output of ps(1) (and thus to other users).  -passphrase has been
+              deprecated.
+
+       -imagekey <key>=<value>
+              Specify a key/value pair for the disk image recognition and cre-
+              ation system.  See hdiutil(1) for more information.
+
+       -drivekey <keyname>=<value>
+              Specify a key/value pair for the  IOHDIXHDDrive  object  created
+              (shows  up  in  the  IOKit registry of devices which is viewable
+              with ioreg(8)).
+
+       -section subspec
+              Attach a subset of the disk image.  subspec is any of  <offset>,
+              <first-last>,  or  <start,count>.   All sector numbers are zero-
+              based and ranges are inclusive.
+
+       -kernel
+              hand the image directly to the IOHDIXController  module  in  the
+              kernel  even  if  this image would not normally be sent "in-ker-
+              nel."  If the image cannot be attached, no attempt will be  made
+              to attach it with a user process.
+
+       -nokernel
+              attach  the image with a persistent process instead of attaching
+              in-kernel, even if the default for this  type  of  image  is  to
+              attach  in-kernel.  Use hdiutil(1)'s imageinfo verb to determine
+              if an image will default to mounting in-kernel.
+
+       -plist output a plist describing the image  and  system  entities  (dev
+              entries,  mount  points,  etc)  that were created as a result of
+              attaching the given image.
+
+       -verbose
+              verbose output when attaching an image
+
+       -debug diagnostic output when attaching an image
+
+       -quiet Don't print out resulting /dev entries and filesystems.  Also do
+              not  print any errors.  hdid's exit status will indicate whether
+              the attach was successful.
+
+EXAMPLES
+              $ hdid funstuff.img
+
+       Present funstuff.img as  a  device  so  that  its  filesystems  can  be
+       mounted.
+
+              $ hdid master.dmg -shadow
+
+       Present master.dmg to the filesystems for potential mounting, redirect-
+       ing all write operations to the shadow file master.dmg.shadow.
+
+              $ hdid http://my.webserver.com/master.img  -shadow  /tmp/master-
+              shadowfile
+
+       Present master.img to the filesystems for potential mounting, redirect-
+       ing all write operations to the shadow file mastershadowfile  in  /tmp.
+       The  shadow file can be on any mounted read/write filesystem -- keep in
+       mind the consequences of using a remote filesystems (NFS, AFP) for such
+       shadow files.
+
+              hdid -nomount ram://<sectors>
+
+       will attach a ram disk that can be mounted and used after being format-
+       ted with a newfs utility or Disk Utility.app.  A sector is 512 bytes.
+
+       A small shell script to create and mount a ram disk:
+
+              #!/bin/sh
+
+              NUMSECTORS=128000
+              mydev=`hdid -nomount ram://$NUMSECTORS`
+              newfs_hfs $mydev
+              mkdir /tmp/mymount
+              mount -t hfs $mydev /tmp/mymount
+
+OUTPUT
+       Unless -plist is specified, hdid returns one line of  output  per  /dev
+       entry  created.   Each line contains up to three tab-delimited columns.
+       The first column always contains the full path to the /dev  entry  cre-
+       ated.   The  second column will contain the partition type if the image
+       contained a partition map.  The third column will  contain  the  mount-
+       point if the particular /dev entry was mounted.
+
+       If  hdid  is asked to attach an image that is already attached, it will
+       attempt to return the usual information for the attached image,  as  if
+       it  had just been attached.  However, if there are unmounted partitions
+       on the attached image, they will not be remounted.
+
+Mounting Images via HTTP
+       In addition to mounting images from local or  remote  mounted  filesys-
+       tems,  one  can also mount images from HTTP servers without downloading
+       the entire image.  For flat images (UDIF images, or  AppleSingle/MacBi-
+       nary encoded NDIF image files) mounting an image is a matter of passing
+       the http:// URL to hdid:
+
+              hdid http://server.company.com/Images/stuff.dmg
+
+       It should be noted that some web servers (Apache in particular) do  not
+       support  byte-range requests beyond 2 (Apache 1.x) or 4 GB (Apache 2.x)
+       and thus image files larger than those sizes  will  not  be  accessible
+       over  HTTP.  Read/write images may attach, but will not be fully acces-
+       sible.  Segmented images do work correctly over HTTP (assuming they are
+       named  properly)  and  can be used to work around the file size limita-
+       tion.
+
+       Browsing images via HTTP is much more pleasant if the  server  settings
+       are modified to be more friendly to highly-persistent clients.  In par-
+       ticular for Apache, MaxKeepAliveRequests should be  increased  signifi-
+       cantly  beyond  100 or set to 0 (unlimited) and KeepAliveTimeout should
+       be boosted to at least 30 (seconds).  Increasing the number of simulta-
+       neous  clients  may  also  be  desirable because of the increased delay
+       before clients are forcibly disconnected.
+
+       If the image to be served via HTTP is a dual fork NDIF  image  that  is
+       not  encoded  into  a flat-file format such as AppleSingle and the HTTP
+       server is running on Mac OS X, dual fork files may be detected and sup-
+       ported.  Such dual-fork files must be moved or copied using the Finder,
+       or some other  resource-fork-aware  tool.   Properly  copied  dual-fork
+       files  on  a UFS volume have a ._filename file in addition to the file-
+       name you see in the Finder (i.e. stuff.img would also have  ._stuff.img
+       in the same directory).
+
+       In either case, one would specify the URL to the data fork, and DiskIm-
+       ages will determine if it is necessary to access the secondary file.
+
+       Accessing dual fork images on HFS+ filesystems via HTTP  is  only  sup-
+       ported if the HTTP server is on a Mac OS X system.  It is possible that
+       the web server's configuration could prevent  access  to  the  resource
+       fork.  For example, Mac OS X 10.3 security updates have disabled access
+       to the /..namedfork/ paths necessary to access resource forks  on  HFS.
+       Thus  it  may be necessary to tweak web server settings to successfully
+       serve dual-fork images.
+
+       While it is not directly related to  mounting  via  hdid(1),  informing
+       your web server that '.dmg' (and others) are extensions associated with
+       the MIME type application/octet-stream will allow web browsers to down-
+       load  the  files  rather than try to display them.  For apache, you add
+       the extensions to the appropriate line in /etc/httpd/mime.types.
+
+SEE ALSO
+       hdiutil(1), load_hdi(8),  ditto(8),  diskutil(8),  diskarbitrationd(8),
+       ioreg(8)
+
+
+

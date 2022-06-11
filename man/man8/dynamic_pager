@@ -1,0 +1,44 @@
+dynamic_pager(8)          BSD System Manager's Manual         dynamic_pager(8)
+
+NAME
+     dynamic_pager -- external storage manager for dynamic pager
+
+SYNOPSIS
+     dynamic_pager [-E] [-F filename] [-S filesize] [-H high-water-trigger]
+                   [-L low-water-trigger] [-P priority]
+
+DESCRIPTION
+     The dynamic_pager daemon manages a pool of external swap files which the
+     kernel uses to support demand paging.  This pool is expanded with new
+     swap files as load on the system increases.  It is contracted when the
+     swapping resources are no longer needed.  The dynamic_pager daemon also
+     provides a notification service for those applications which wish to
+     receive notices when the external paging pool expands or contracts.
+
+OPTIONS
+     -E      Encrypt the data in the swap files.
+
+     -F      The base name of the filename to use for the external paging
+             files.  By default this is /private/var/vm/swapfile.
+
+     -H      If there are less than high-water-trigger bytes free in the
+             external paging files, the kernel will signal dynamic_pager to
+             add a new external paging file.
+
+     -L      If there are more than low-water-trigger bytes free in the exter-
+             nal paging files, the kernel will coalese in-use pages and signal
+             dynamic_pager to discard an external paging file.
+             Low-water-trigger must be greater than high-water-trigger +
+             filesize.
+
+     -P      This option is currently unimplemented.
+
+     -S      The fixed filesize [in bytes] to use for the paging files.  By
+             default dynamic_pager uses variable sized paging files, using
+             larger sized files as paging demands increase.  The -S, -H and -L
+             options disable that default and cause dynamic_pager to use a
+             series of fixed sized external paging files.
+
+FILES
+     /private/var/vm/swapfile*  Default external paging files.
+

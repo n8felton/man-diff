@@ -1,0 +1,42 @@
+PROFILES(1)                                                        PROFILES(1)
+
+
+
+NAME
+       profiles - A utility to report and change SIDs in registry files
+
+SYNOPSIS
+       profiles [-v] [-c SID] [-n SID] {file}
+
+DESCRIPTION
+       This tool is part of the samba(7) suite.
+
+       profiles is a utility that reports and changes SIDs in windows registry
+       files. It currently only supports NT.
+
+OPTIONS
+       file
+          Registry file to view or edit.
+
+       -v,--verbose
+          Increases verbosity of messages.
+
+       -c SID1 -n SID2
+          Change all occurences of SID1 in file by SID2.
+
+       -h|--help
+          Print a summary of command line options.
+
+VERSION
+       This man page is correct for version 3.0 of the Samba suite.
+
+AUTHOR
+       The original Samba software  and  related  utilities  were  created  by
+       Andrew  Tridgell.  Samba  is now developed by the Samba Team as an Open
+       Source project similar to the way the Linux kernel is developed.
+
+       The profiles man page was written by Jelmer Vernooij.
+
+
+
+

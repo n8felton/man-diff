@@ -1,0 +1,69 @@
+YPSERV(8)                 BSD System Manager's Manual                YPSERV(8)
+
+NAME
+     ypserv -- YP server daemon
+
+SYNOPSIS
+     ypserv [-1] [-a aclfile] [-d] [-x]
+
+DESCRIPTION
+     Ypserv is a fundamental part of the network information system called YP.
+     This server provides information from YP maps to the YP clients on the
+     network.
+
+     A YP map is stored on the server as a db(3) database. A number of YP maps
+     is grouped together in a domain.  Ypserv determines the domains it serves
+     by looking for a directory with the domain name in /var/yp.
+
+     YP hasn't been known for high security through the years. In recent years
+     security has improved by restricting access to the server. In SunOS 4.1
+     has a new file occured named /var/yp/securenet.  It contains networks the
+     server can assume is secure. For information about file format see
+     securenet(5).
+
+     Before the author of this server had seen securenet(5) another format was
+     implemented ypserv.acl(5).  This file format makes it possible to allow
+     and deny hosts and networks access to the server. This file can have any
+     name since it's given by the argument to -a (use full path).
+
+     The file used can be reread by sending a SIGHUP to ypserv. The process
+     pid can be found in the file /var/run/ypserv.pid
+
+     If a host isn't secure all queries to the server will result in a
+     YP_NODOM result.
+
+     If the file /var/yp/ypserv.log exists then messages will be written to
+     the file.
+
+     If a directory named the same as the system domainname exists in /var/yp/
+     (ie. the domainname is foo and directory /var/yp/foo exists), then ypserv
+     will be automatically started at boot time.
+
+     The options are as follows:
+
+     -1      Allow ypserv to answer old YP version 1 requests.
+
+     -a aclfile
+             Don't use /var/yp/securenet.  Use another file with another file
+             format. For futher information see man page for ypserv.acl.
+
+     -d      Use Internet Domain Name System. If a query to map hosts.byname
+             or hosts.byaddr fails, make a DNS query and return the result if
+             successful.  Alternately, if these maps were built on the YP mas-
+             ter using makedbm -b then DNS queries will be done without need-
+             ing to specify -d.
+
+     -x      Terminate the server after processing aclfile or
+             /var/yp/securenet.
+
+FILES
+     /var/yp/ypserv.log
+     /var/yp/securenet
+     /var/run/ypserv.pid
+
+SEE ALSO
+     yp(8), ypserv.acl(5), securenet(5), ypbind(1)
+
+AUTHOR
+     Mats O Jansson <moj@stacken.kth.se>
+

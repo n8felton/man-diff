@@ -1,0 +1,46 @@
+mailto.conf(5)                    Apple Inc.                    mailto.conf(5)
+
+
+
+NAME
+       mailto.conf - configuration file for cups email notifier
+
+DESCRIPTION
+       The  mailto.conf file defines the local mail server and email notifica-
+       tion preferences for CUPS.
+
+       Each line in the file can be a configuration directive, a  blank  line,
+       or a comment. Comment lines start with the # character.
+
+DIRECTIVES
+       Cc cc-address@domain.com
+            Specifies an additional recipient for all email notifications.
+
+       From from-address@domain.com
+            Specifies the sender of email notifications.
+
+       Sendmail sendmail command and options
+            Specifies the sendmail command to use when sending email notifica-
+            tions. Only one Sendmail or SMTPServer line may be present in  the
+            mailto.conf file. If multiple lines are present, only the last one
+            is used.
+
+       SMTPServer servername
+            Specifies a SMTP server to send email notifications to.  Only  one
+            Sendmail  or  SMTPServer  line  may  be present in the mailto.conf
+            file. If multiple lines are present, only the last one is used.
+
+       Subject subject-prefix
+            Specifies a prefix string for the subject line of an email notifi-
+            cation.
+
+SEE ALSO
+       classes.conf(5), cupsd(8), cupsd.conf(5), mime.convs(5), mime.types(5),
+       printers.conf(5),
+       http://localhost:631/help
+
+COPYRIGHT
+       Copyright 2007 by Apple Inc.
+
+
+

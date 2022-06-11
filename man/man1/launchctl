@@ -1,0 +1,171 @@
+launchctl(1)              BSD General Commands Manual             launchctl(1)
+
+NAME
+     launchctl -- Interfaces with launchd
+
+SYNOPSIS
+     launchctl [subcommand [arguments ...]]
+
+DESCRIPTION
+     launchctl interfaces with launchd to load, unload daemons/agents and gen-
+     erally control launchd.  launchctl supports taking subcommands on the
+     command line, interactively or even redirected from standard input.
+     These commands can be stored in $HOME/.launchd.conf or /etc/launchd.conf
+     to be read at the time launchd starts.
+
+SUBCOMMANDS
+     load [-wF] [-S sessiontype] [-D domain] paths ...
+              Load the specified configuration files or directories of config-
+              uration files.  Jobs that are not on-demand will be started as
+              soon as possible.  All specified jobs will be loaded before any
+              of them are allowed to start.
+
+              -w       Remove the disabled key and write the configuration
+                       files back out to disk.
+
+              -F       Force the loading of the plist. Ignore the Disabled
+                       key.
+
+              -S sessiontype
+                       Some jobs only make sense in certain contexts. This
+                       flag instructs launchctl to look for jobs in a differ-
+                       ent location when using the -D flag, and allows
+                       launchctl to restrict which jobs are loaded into which
+                       session types. Currently known session types include:
+                       Aqua, LoginWindow, Background, StandardIO and System.
+
+              -D domain
+                       Look for plist(5) files ending in *.plist in the domain
+                       given. Valid domains include "system," "local," "net-
+                       work" and "all." When providing a session type, an
+                       additional domain is available for use called "user."
+                       For example, without a session type given, "-D system"
+                       would load from property list files from /Sys-
+                       tem/Library/LaunchDaemons.  With a session type passed,
+                       it would load from /System/Library/LaunchAgents.
+
+     unload [-w] [-S sessiontype] [-D domain] paths ...
+              Unload the specified configuration files or directories of con-
+              figuration files.  This will also stop the job if it is running.
+
+              -w       Add the disabled key and write the configuration files
+                       back out to disk.
+
+              -S sessiontype
+                       Some jobs only make sense in certain contexts. This
+                       flag instructs launchctl to look for jobs in a differ-
+                       ent location when using the -D flag, and allows
+                       launchctl to restrict which jobs are loaded into which
+                       session types. Currently known session types include:
+                       Aqua, LoginWindow, Background, StandardIO and System.
+
+              -D domain
+                       Look for plist(5) files ending in *.plist in the domain
+                       given. Valid domains include "system," "local," "net-
+                       work" and "all." When providing a session type, an
+                       additional domain is available for use called "user."
+                       For example, without a session type given, "-D system"
+                       would load from property list files from /Sys-
+                       tem/Library/LaunchDaemons.  With a session type passed,
+                       it would load from /System/Library/LaunchAgents.
+
+     submit -l label [-p executable] [-o path] [-e path] -- command [args]
+              A simple way of submitting a program to run without a configura-
+              tion file. This mechanism also tells launchd to keep the program
+              alive in the event of failure.
+
+              -l label
+                       What unique label to assign this job to launchd.
+
+              -p program
+                       What program to really execute, regardless of what fol-
+                       lows the -- in the submit sub-command.
+
+              -o path  Where to send the stdout of the program.
+
+              -e path  Where to send the stderr of the program.
+
+     remove job_label
+              Remove the job from launchd by label.
+
+     start job_label
+              Start the specified job by label. The expected use of this sub-
+              command is for debugging and testing so that one can manually
+              kick-start an on-demand server.
+
+     stop job_label
+              Stop the specified job by label. If a job is on-demand, launchd
+              may immediately restart the job if launchd finds any criteria
+              that is satisfied.  Non-demand based jobs will always be
+              restarted. Use of this subcommand is discouraged.  Jobs should
+              ideally idle timeout by themselves.
+
+     list     List all of the jobs loaded into launchd.
+
+     setenv key value
+              Set an environmental variable inside of launchd.
+
+     unsetenv key
+              Unset an environmental variable inside of launchd.
+
+     getenv key
+              Get an environmental variable inside of launchd.
+
+     export   Export all of the environmental variables of launchd for use in
+              a shell eval statement.
+
+     getrusage self | children
+              Get the resource utilization statistics for launchd or the chil-
+              dren of launchd.
+
+     log [level loglevel] [only | mask loglevels...]
+              Get and set the syslog(3) log level mask. The available log lev-
+              els are: debug, info, notice, warning, error, critical, alert
+              and emergency.
+
+     limit [cpu | filesize | data | stack | core | rss | memlock | maxproc |
+              maxfiles] [both [soft | hard]]
+              With no arguments, this command prints all the resource limits
+              of launchd as found via getrlimit(2).  When a given resource is
+              specified, it prints the limits for that resource.  With a third
+              argument, it sets both the hard and soft limits to that value.
+              With four arguments, the third and forth argument represent the
+              soft and hard limits respectively.  See setrlimit(2).
+
+     shutdown
+              Tell launchd to prepare for shutdown by removing all jobs.
+
+     umask [newmask]
+              Get or optionally set the umask(2) of launchd.
+
+     bslist [PID]
+              This prints out Mach bootstrap services and their respective
+              states. While the namespace appears flat, it is in fact hierar-
+              chical, thus allowing for certain services to be only available
+              to a subset of processes. The three states a service can be in
+              are active ("A"), inactive ("I") and on-demand ("D").
+
+     bsexec PID command [args]
+              This executes the given command in the same Mach bootstrap
+              namespace hierachy as the given PID.
+
+     help     Print out a quick usage statement.
+
+ENVIRONMENTAL VARIABLES
+     LAUNCHD_SOCKET
+              This variable informs launchctl how to find the correct launchd
+              to talk to. If it is missing, launchctl will use a built-in
+              default.
+
+FILES
+     ~/Library/LaunchAgents         Per-user agents provided by the user.
+     /Library/LaunchAgents          Per-user agents provided by the adminis-
+                                    trator.
+     /Library/LaunchDaemons         System wide daemons provided by the admin-
+                                    istrator.
+     /System/Library/LaunchAgents   Mac OS X Per-user agents.
+     /System/Library/LaunchDaemons  Mac OS X System wide daemons.
+
+SEE ALSO
+     launchd.plist(5), launchd.conf(5), launchd(8)
+

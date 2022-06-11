@@ -1,0 +1,460 @@
+
+ASR(8)                    BSD System Manager's Manual                   ASR(8)
+
+NAME
+     asr -- Apple Software Restore; copy volumes (e.g. from disk images)
+
+SYNOPSIS
+     asr verb [options]
+     asr restore --source source --target target [options]
+     asr server --source source --config configuration [options]
+     asr restore --source asr://source --file file [options]
+     asr imagescan --source [options] image
+     asr help | version
+
+DESCRIPTION
+     asr efficiently copies disk images onto volumes, either directly or via a
+     multicast network stream.  asr can also accurately clone volumes without
+     the use of an intermediate disk image.
+
+     In its first form, asr copies source (usually a disk image, potentially
+     on an HTTP server) to target.  source can be specified using a path in
+     the filesystem, or an http or https URL.  It can also be an asr:// URL to
+     indicate a multicast source.  asr can also be invoked with its second
+     form to act as a multicast server.  In its third form, asr will restore a
+     multicast disk image to a file instead of disk volume.  In its fourth
+     form, asr prepares a disk image to be restored efficiently, adding whole-
+     volume and (optionally) file by file checksum information.  help and
+     version provide usage and version information, respectively.
+
+     source and target can be /dev entries or volume mountpoints.  If restor-
+     ing a multicast disk image to a file, file can be a path to a local file
+     or directory. If the specified path is a file, the disk image is given
+     the specified name. If a directory, the name of the disk image being mul-
+     ticast is used. When specifying server, source has to be a UDIF disk
+     image. Restoring from a multicast stream is accomplished by passing a
+     asr:// url as source.  By default, asr will restore in place, and will
+     not bless (see bless(8)) any folders.  If --erase is specified, any
+     blessed folders on the source will also be blessed on the target.
+           bless -info /Volumes/<vol>
+     will display current blessed folders for the given volume.
+
+     asr generally needs to be run as root (see sudo(8)) in order to accom-
+     plish its tasks.
+
+VERBS
+     Each verb is listed with its description and individual arguments.
+
+     restore    restores a disk image or volume to another volume (including a
+                mounted disk image)
+
+                --source       can be a disk image, /dev entry, or volume
+                               mountpoint. In the latter two cases, the volume
+                               must be unmountable or mounted read-only in
+                               order for a erase blockcopy to occur (thus, one
+                               cannot erase blockcopy the root filesystem as
+                               the source, unless it happened to be mounted
+                               read-only).
+
+                --target       can be a /dev entry, or volume mountpoint. Must
+                               be unmountable in order for a erase blockcopy
+                               to occur.
+
+                --file         when performing a multicast restore, --file can
+                               be specified instead of --target. If the speci-
+                               fied path is a file, the disk image is given
+                               the specified name. If a directory, the name of
+                               the disk image being multicast is used.
+
+                --erase        erase erases target and is required if a fast
+                               block-copy restore is desired.  By default asr
+                               will do a restore-in-place.  Duplicate items
+                               will not harm target contents, but files will
+                               be replaced.  If source is a asr:// url for
+                               restoring from a multicast stream, --erase must
+                               be passed (multicasting only supports erase
+                               block-copy restores).  Passing --erase with
+                               --file indicates any existing file should be
+                               overwritten when doing a multicast file copy.
+
+                --updatebless  When performing a non-erase restore,
+                               --updatebless will update the appropriate
+                               information required for the restored volume to
+                               boot if the source image is bootable (equiva-
+                               lent to sudo bless --mount <volume> --setBoot).
+
+                --format HFS+ | HFSX
+                               specifies the destination filesystem format,
+                               when --erase is also given. If not specified,
+                               the destination will be formatted with the same
+                               filesystem format as the source. If multicast-
+                               ing, the --format specified must be block copy
+                               compatible with the source.  --format is
+                               ignored if --erase is not used. Note: HFS Jour-
+                               naling is an attribute of the source image, and
+                               is not affected by --format.
+
+                --noprompt     suppresses the prompt which usually occurs
+                               before target is erased.  newfs_hfs(8) will be
+                               called on target and once you start writing new
+                               data, there isn't much hope for recovery.  You
+                               have been warned.
+
+                --timeout num  specifies num seconds that a multicast client
+                               should wait when no payload data has been
+                               received over a multicast stream before exit-
+                               ing, allowing the client to stop in case of
+                               server failure/stoppage.  It defaults to 0
+                               (e.g. never time out).
+
+                --puppetstrings
+                               provide progress output that is easy for
+                               another program to parse.  Any program trying
+                               to interpret asr's progress should use
+                               --puppetstrings.
+
+                --noverify     skips the verification steps normally taken to
+                               ensure that a volume has been properly
+                               restored.  --noverify allows images which have
+                               not been scanned to be restored.  Skipping ver-
+                               ification is dangerous for a number of reasons
+                               and should never be used in production systems.
+
+                --disableOwners
+                               prevents the default owner-enabling behavior
+                               for source and target.  Enabling owners is usu-
+                               ally very important for accurate file-by-file
+                               copying.  In block-copy restore mode,
+                               --disableOwners has no effect.
+
+                --wrapper      forces an HFS wrapper to be created on the tar-
+                               get volume if the --erase option is used.  Nor-
+                               mally the creation of a wrapper depends on cer-
+                               tain filesystem variables.  --wrapper is
+                               ignored if --erase is not used.
+
+                --nowrapper    forces an HFS wrapper to not be created on the
+                               target volume if the --erase option is used.
+                               Normally the creation of a wrapper depends on
+                               certain filesystem variables.  --nowrapper is
+                               ignored if --erase is not used.
+
+     server     multicasts source over the network. Requires --erase be passed
+                in by clients (multicasting only supports erase block-copy
+                restores).
+
+                --source   source has to be a UDIF disk image. A path to a
+                           disk image on a local/remote volume can be passed
+                           in, or a http:// url to a disk image that is acces-
+                           sible via a web server.
+
+                --interface
+                           the network interface to be used for multicasting
+                           (e.g. en0) instead of the default network inter-
+                           face.
+
+                --config   server requires a configuration file to be passed,
+                           in standard property list format.  The following
+                           keys/options configure the various parameters for
+                           multicast operation.
+
+                Required
+
+                Data Rate              this is the desired data rate in bytes
+                                       per second.  On average, the stream
+                                       will go slightly slower than this
+                                       speed, but will never exceed it.  It's
+                                       a number in the plist (-int when set
+                                       with defaults(1)).
+
+                                       Note: The performance/reliability of
+                                       the networking infrastructure being
+                                       multicast on is an important factor in
+                                       determining what data rate can be sup-
+                                       ported. Excessive/bursty packet loss
+                                       for a given data rate could be due to
+                                       an inability of the server/client to be
+                                       able to send/receive multicast data at
+                                       that rate, but it's equally important
+                                       to verify that the network infrastruc-
+                                       ture can support multicasting at the
+                                       requested rate.
+
+                Multicast Address      this is the Multicast address for the
+                                       data stream. It's a string in the
+                                       plist.
+
+                Optional
+
+                Client Data Rate       this is the rate the slowest client can
+                                       write data to its target in bytes per
+                                       second.  if asr misses data on the
+                                       first pass (x's during progress) and
+                                       slowing the Data Rate doesn't resolve
+                                       it, setting the Client Data Rate will
+                                       dynamically regulate the speed of the
+                                       multicast stream to allow clients more
+                                       time to write the data. It's a number
+                                       in the plist (-int when set with
+                                       defaults(1)).
+
+                DNS Service Discovery  whether the server should be advertised
+                                       via DNS Service Discovery, a.k.a. Bon-
+                                       jour (tm).  It defaults to true.  It's
+                                       a boolean in the plist (-bool when set
+                                       with defaults(1)).
+
+                Loop Suspend           a limit of the number of times to mul-
+                                       ticast the image file when no clients
+                                       have started a restore operation. Once
+                                       exceeded, the server will stop the
+                                       stream and wait for new clients before
+                                       multicasting the image file. It
+                                       defaults to 0 (e.g. never stop multi-
+                                       casting once a client starts the
+                                       stream), and should not be set to <2.
+                                       It's a number in the plist (-int when
+                                       set with defaults(1)).
+
+                Multicast TTL          the time to live on the multicast pack-
+                                       ets (for multicasting through routers).
+                                       It defaults to 3.  It cannot be set to
+                                       0, and should not be set to 1 (other-
+                                       wise, it could adversely affect some
+                                       network routers).  It's a number in the
+                                       plist (-int when set with defaults(1)).
+
+                Port                   the port of initial client-server hand-
+                                       shake, version checks, multicast
+                                       restore metadata, and stream data.  It
+                                       defaults to 7800.  This should only be
+                                       included/modified if the default port
+                                       cannot be used.  It's a number in the
+                                       plist (-int when set with defaults(1)).
+
+     imagescan  calculate checksums of the data in the provided image and
+                store them in the image.  These checksums are used to ensure
+                proper restores.  Also determines if the disk image is in
+                order for multicasting, and rewrites the file in order if not.
+                If the image has to be reordered, it will require free disk
+                space equal to the size of the disk image being scanned.
+
+                --filechecksum
+                              will calculate/store checksum information
+                              required to perform file copy restores.
+                              --filechecksum can take a significant amount of
+                              time (depending on the number of files in the
+                              image), and will require the user to invoke asr
+                              as root. (see sudo(8) ). Off by default. Note:
+                              without file checksums, erase restores that
+                              would degrade from block copy to file copy will
+                              instead fail.
+
+                --nostream    bypasses the check/reordering of a disk image
+                              file for multicasting. Off by default.  Disk
+                              images will be reordered for multicasting.
+
+BUFFERING
+     The following options control how asr uses memory.  These options can
+     have a significant impact on performance.  asr is optimized for copying
+     between devices (different disk drives, from a network volume to a local
+     disk, etc).  As such, asr defaults to using eight one megabyte buffers.
+     These buffers are wired down (occupying physical memory).  For partition
+     to partition copies on the same device, one large buffer (e.g. 32 MB) is
+     much faster than the default eight medium sized ones. For multicast, 4
+     256k buffers are the default.  Custom buffering for multicast operation
+     is not recommended.
+
+     --csumbuffers and --csumbuffersize allow a different buffer configuration
+     for checksumming operations.  One checksum buffer offers the best perfor-
+     mance.  The default is 1 1MB buffer. Custom checksum buffering is not
+     recommended.
+
+     Like mkfile(8), size defaults to bytes but can be followed by a multi-
+     plier character (e.g. 'm').
+
+     --buffers num
+                 specifies that num buffers should be used.
+
+     --buffersize size
+                 specifies the size of each buffer.
+
+     --csumbuffers num
+                 specifies that num buffers should be used for checksumming
+                 operations (which only affect the target).  Custom checksum
+                 buffering is not recommended.
+
+     --csumbuffersize size
+                 specifies the size of each buffer used for checksumming.
+                 Custom checksum buffering is not recommended.
+
+OTHER OPTIONS
+     --verbose   enables verbose progress and error messages.
+     --debug     enables other progress and error messages.
+
+EXAMPLES
+     Volume cloning:
+           sudo asr restore --source /Volumes/Classic --target
+           /Volumes/install
+
+     Restoring:
+           sudo asr restore -s <compressedimage> -t <targetvol> --erase
+
+     Will erase the target and potentially do a block copy restore.
+
+     Multicast server:
+           asr server --source <compressedimage> --config
+           <configuration.plist>
+
+     Will start up a multicast server for the specified image, using the
+     parameters in the configuration.plist. The image will not start multicas-
+     ting on the network until a client attempts to start a restore. The
+     server will continue to multicast the image until the process is termi-
+     nated.
+
+     An example multicast configuration file:
+           defaults write /tmp/streamconfig "Data Rate" -int 6000000
+           defaults write /tmp/streamconfig "Multicast Address" <mcastaddr>
+           (will create the file /tmp/streamconfig.plist)
+           <mcastaddr> should be appropriate for your network infrastructure
+           and policy, usually from a range assigned by your network
+           administrator.
+
+     Multicast client
+           sudo asr restore --source asr://<hostname> --target <targetvol>
+           --erase
+
+     Multicast client restoring to a file
+           sudo asr restore --source asr://<hostname> --file <file> --erase
+     Will receive the multicast stream from <hostname> and save it to a file.
+     If <file> is a directory, the image of the streamed disk image will be
+     used the save the file. --erase causes any existing file with the same
+     name to be overwritten.
+
+HOW TO USE ASR
+     asr requires a properly created disk image for most efficient operation.
+     This image is most easily made with the Disk Utility application's "Image
+     from Folder" function in OS X 10.3.  The Disk Copy from OS X 10.2.3
+     (v55.6) or later can also be used.
+
+     Basic steps for imaging and restoring a volume:
+
+     1.   Set up the source volume the way you want it.
+
+     2.   Use Disk Utility's "Images -> New -> Image from Folder..." function
+          and select the root of the volume.  Save the image as read-only or
+          compressed.  "Images->New->Image from <device>" is not recommended
+          on 10.3.x.
+
+     3.   Scan the image with "Images -> Scan Image for Restore."
+
+     4.   Select an image or volume and click on the "Restore" tab.  Drag the
+          source image and destination partition to the source and destination
+          fields.  Check "Erase Destination" if you don't need the target's
+          data.  Click Restore.
+
+HOW TO GET THE FASTEST RESTORES
+     If you are trying to understand file copy (slower) vs. block copy (fast):
+     When you see "Restoring...", that means the source image volume is larger
+     than the target volume or the volume geometry of the source image is
+     stretchable to the target size, allowing a high speed block copy to
+     occur.  As of OS X version 10.3, the geometry restrictions have been sig-
+     nificantly relaxed such that stretchable source images are no longer
+     required.
+
+     When you see:
+     Copying "/private/tmp/..." (/dev/diskMsN) to "<target>" (/dev/diskPsQ)...
+     It means the above is not true, and asr has fallen back to a file copy
+     operation.  asr will only block copy if the volume geometries support it
+     AND you are doing an erase restore.  If you are restoring "in place," a
+     file copy is always performed.
+
+     If some target volumes restore quickly and others slowly, the source
+     image was probably created without enough stretch (i.e. "image from
+     device" instead of the "image from folder" recommended above).   For
+     example, if the source was a 60 GB volume, the image will block restore
+     on 60 GB and smaller volumes, but file copy on an 80 GB target under OS X
+     version 10.2.
+
+     By default (given source size > 256 MB), Disk Utility will create an
+     image of a volume that is block restorable to 256 GB.  If you want to
+     create an image that will restore to a larger volume (say a 480 GB RAID
+     set), you will need to set some defaults before you have Disk Utility
+     image the volume:
+
+           defaults write com.apple.frameworks.diskimages \
+                   hfsplus-stretch-parameters -dict \
+                   hfsplus-stretch-threshold 524288 \
+                   hfsplus-stretch-allocation-block-size 4096 \
+                   hfsplus-stretch-allocation-file-size 16777216
+
+     will make a 512 GB stretchable volume.  By default the hfsplus-stretch-
+     allocation-file-size value is 8388608 (8 MB).
+
+     The size of the allocation file will increase image size, so it shouldn't
+     be too big.  It has only been tested with sizes that are multiples of 4k.
+
+     In addition to geometry requirements for supporting block copies, asr
+     requires that the source and destination filesystems be compatible.  A
+     non-HFS+ source can only be used to perform a file copy. HFS+ can be used
+     as the source of a block copy to either an HFS+ or HFSX destination.
+     However, an HFSX source can only be used to block copy to an HFSX desti-
+     nation.  This is because case collision of file names could occur when
+     converting from an HFSX filesystem to HFS+.
+
+COMPATIBILITY
+     asr maintains compatibility with previous syntax, e.g.
+
+     asr -source source -target target [options]
+     asr -source source -server configuration [options]
+     asr -source asr://source -file file [options]
+     asr -imagescan [options] image
+     asr -h | -v
+
+     where -source, -target, and -file are equivalent to --source, --target,
+     and --file respectively, and all [options] are equivalent to their --
+     descriptions.  asr -server configuration is superseded by asr server
+     --config configuration.  The following deprecated options also remain:
+
+     -nocheck   this option is deprecated, but remains for script compatibil-
+                ity.  Use -noverify instead.
+
+     -blockonly
+                this option is deprecated, but remains for script compatibil-
+                ity. On by default.  Note that if an image scanned with
+                -blockonly cannot be block-copied to a particular target an
+                error will occur, since the file-copy information was omitted.
+
+     Note: Compatibility with previous syntax is not guaranteed in the next
+     major OS release.
+
+ERRORS
+     asr will exit with status 1 if it cannot complete the requested opera-
+     tion.  A human readable error message will be printed in most cases.
+     Note that asr will mount the source image as part of verifying its geome-
+     try (see also umount(8) and hdiutil(1) should an image get stuck in this
+     situation).  Using hdiutil(1), particularly the imageinfo, verify, and
+     attach verbs, can help isolate various problems in accessing the image in
+     question.
+
+HISTORY
+     Apple Software Restore got its start as a field service restoration tool
+     used to reconfigure computers' software to 'factory' state.  It later
+     became a more general software restore mechanism and software installa-
+     tion helper application for various Apple computer products.  ASR has
+     been used in manufacturing processes and in shipping computers' System
+     Software Installers.
+
+     For Mac OS X, asr was rewritten as a command line tool for manufacturing
+     and professional customers.  asr is the backend for the Mac OS X Software
+     Restore application that shipped on Macintosh computers as well as the
+     Scan and Restore functionality in Disk Utility.
+
+     Multicast support was added to allow multiple clients to erase restore an
+     image from a multicast network stream.
+
+     Per its history, most functionality in asr is limited to HFS+ volumes.
+
+SEE ALSO
+     hdiutil(1), df(1), bless(8), and what(1)
+

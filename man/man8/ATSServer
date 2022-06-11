@@ -1,0 +1,15 @@
+ATSServer(8)              BSD System Manager's Manual             ATSServer(8)
+
+NAME
+     ATSServer -- Mac OS X system font manager
+
+SYNOPSIS
+     ATSServer
+
+DESCRIPTION
+     ATSServer is a system daemon which provides font management and process-
+     ing.
+
+     There are no configuration options to ATSServer.  Users should not run
+     ATSServer manually.
+

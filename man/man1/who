@@ -1,0 +1,64 @@
+WHO(1)                    BSD General Commands Manual                   WHO(1)
+
+NAME
+     who -- display who is on the system
+
+SYNOPSIS
+     who [-HmqsTu] [am I] [file]
+
+DESCRIPTION
+     The who utility displays information about currently logged in users.  By
+     default, this includes the login name, tty name, date and time of login
+     and remote hostname if not local.
+
+     The options are as follows:
+
+     -H      Write column headings above the output.
+
+     -m      Show information about the terminal attached to standard input
+             only.
+
+     -q      ``Quick mode'': List the names and number of logged in users in
+             columns.  All other command line options are ignored.
+
+     -s      Show the name, line and time fields only.  This is the default.
+
+     -T      Indicate whether each user is accepting messages.  One of the
+             following characters is written:
+
+             +  User is accepting messages.
+             -  User is not accepting messages.
+             ?  An error occurred.
+
+     -u      Show idle time for each user in hours and minutes as hh:mm, `.'
+             if the user has been idle less than a minute, and ``old'' if the
+             user has been idle more than 24 hours.  Additionally, display the
+             PID of the user's login process.
+
+     am I    Equivalent to -m.
+
+     By default, who gathers information from the file /var/run/utmpx.  An
+     alternate file may be specified.
+
+LEGACY DESCRIPTION
+     In legacy mode, -u does not display the PID of the user's login process.
+
+ENVIRONMENT
+     The COLUMNS, LANG, LC_ALL and LC_TIME environment variables affect the
+     execution of who as described in environ(7).
+
+FILES
+     /var/run/utmpx
+
+DIAGNOSTICS
+     The who utility exits 0 on success, and >0 if an error occurs.
+
+SEE ALSO
+     last(1), users(1), w(1), compat(5), utmpx(5)
+
+STANDARDS
+     The who utility conforms to IEEE Std 1003.1-2001 (``POSIX.1'').
+
+HISTORY
+     A who command appeared in Version 1 AT&T UNIX.
+

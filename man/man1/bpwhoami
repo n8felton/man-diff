@@ -1,0 +1,24 @@
+BPWHOAMI(1)               BSD General Commands Manual              BPWHOAMI(1)
+
+NAME
+     bpwhoami -- print the output of a bootparams whoami call
+
+SYNOPSIS
+     bpwhoami
+
+DESCRIPTION
+     This command makes a bootparams whoami call and echos the results to std-
+     out. The output is of the form:
+
+     HOSTNAME=<hostname> DOMAIN=<nis domain name> ROUTER=<router ip address>
+     SERVER=<server ip address>
+
+SEE ALSO
+     bootparams(5) bootparamd(8)
+
+DIAGNOSTICS
+     bpwhoami exits with one of the following values:
+     0       Successfully retrieved information.
+     1       RPC timed out while attempting to retrieve information.
+     2       Unrecoverable error.
+

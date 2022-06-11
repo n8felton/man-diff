@@ -1,0 +1,53 @@
+sc_auth(8)                BSD System Manager's Manual               sc_auth(8)
+
+NAME
+     sc_auth -- smart card authorization setup script
+
+SYNOPSIS
+     sc_auth accept [-v] [-u user] [-d domain] [-k keyname]
+     sc_auth accept [-v] [-u user] [-d domain] -h hash
+     sc_auth remove [-v] [-u user] [-d domain]
+     sc_auth hash   [-k keyname]
+     sc_auth list   [-v] [-u user] [-d domain]
+
+DESCRIPTION
+     sc_auth configures a local user account to permit authentication using a
+     supported smart card.  Authentication is via asymmetric key (also known
+     as public-key) encryption.  sc_auth works with signing keys, but not
+     encryption keys.
+
+     sc_auth can perform the following actions:
+
+     accept   Associate a user with a public key on a card.  The key to use
+              can be specified either by its name or its hash.
+
+     remove   Remove all public keys associated with a user.
+
+     hash     Print the hashes for all keys on all inserted cards.
+
+     list     List all public keys associated with a user.
+
+OPTIONS
+     -u user  Specifies the user whose account is to be modified
+
+     -d domain
+              Specifies the directory domain containing the user account
+
+     -k keyname
+              Specifies a public key by its name
+
+     -h hash  Specifies a public key by its hash
+
+     -v       Verbose mode
+
+NOTES
+     sc_auth is a shell script.  It is intended to be modified by administra-
+     tors to suit their local environments.
+
+     sc_auth is only known to work with a local directory.  Consult the
+     script's source for some limited guidance to using remote directories.
+
+BUGS
+     sc_auth hash might display the hashes of encryption keys as well as sign-
+     ing keys, even though sc_auth accept does not work with encryption keys.
+

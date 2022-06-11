@@ -1,0 +1,41 @@
+ZPRINT(1)                                                            ZPRINT(1)
+
+
+
+NAME
+       zprint - show information about kernel zones
+
+SYNOPSIS
+       zprint [-w] [-s] [-c] [-h] [name]
+
+DESCRIPTION
+       zprint(1)  displays  data  about  Mach  zones.  By default, zprint will
+       print out information about all Mach zones.  If the  optional  name  is
+       specified, zprint will print information about each zone for which name
+       is a substring of the zone's name.
+
+       zprint interprets the following options:
+
+       -c      (Default) zprint prints zone info in columns. Long  zone  names
+               are  truncated  with  '$', and spaces are replaced with '.', to
+               allow for sorting by column.  Pageable  and  collectible  zones
+               are shown with 'P' and 'C' on the far right. Zones with prepos-
+               terously large maximum sizes are shown with '----' in  the  max
+               size and max num elts fields.
+
+       -h      (Default)  Shows  headings  for the columns printed with the -c
+               option.  It may be useful to override this option when  sorting
+               by column.
+
+       -s      zprint  sorts  the  zones,  showing the wasting the most memory
+               first.
+
+       -w      For each zone, zprint calculates how much  space  is  allocated
+               but not currently in use, the space wasted by the zone.
+
+       Any  option (including default options) can be overridden by specifying
+       the option in upper-case;  for  example,  -C  overrides  the  (default)
+       option -c.
+
+
+

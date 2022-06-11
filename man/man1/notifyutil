@@ -1,0 +1,47 @@
+notifyutil(1)             BSD General Commands Manual            notifyutil(1)
+
+NAME
+     notifyutil -- notification command line utility
+
+SYNOPSIS
+     notifyutil [-q] [-v] [-t] [-p key] [-w key] [-# key] [-g key]
+                [-s key val] ...
+
+DESCRIPTION
+     notifyutil is a command-line utility for interacting with the notifyd(8)
+     notification server.  It may be used to post notifications, detect and
+     report notifications, and to examine and set the state value associated
+     with a notification key.
+
+     The following table summarizes the actions that may be performed.
+
+           -p key      Post a notification for key.
+           -w key      Register for key and wait for notifications.
+           -# key      Register for key and wait for # (an integer) notifica-
+                       tions.  E.g. -1 key waits for a single notification.
+           -g key      Get state value for key.
+           -s key val  Set state value for key.
+
+     When invoked with any combination of -w and -# actions, notifyutil regis-
+     ters for notification for the specified key(s).  If any key is given with
+     a -w action, notifyutil runs until interrupted with Control-C.  If all
+     registrations are invoked with -#, the program continues to run until the
+     corresponding number of notifications for each key have been received.
+
+     When a notification for any key that is being monitored is received,
+     notifyutil prints the key on a single line on its standard output.  The
+     -v (verbose), -t (time stamp), and -q (quiet) flags, if specified, modify
+     the output behavior.  The -v flag causes notifyutil to print both the key
+     and the current state value for that key.  The -t flag causes notifyutil
+     to print a time stamp preceeding the notification key.  The -q flag
+     causes notifyutil to operate silently.
+
+     notifyutil processes its command-line arguments from left to right.  For
+     example, the following will register for a single notification for the
+     key ``test.abc'' and then post a notification for that key.
+
+           notifyutil -1 test.abc -p test.abc
+
+SEE ALSO
+     notify(3), notifyd(8)
+

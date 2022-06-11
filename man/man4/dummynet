@@ -1,0 +1,46 @@
+DUMMYNET(4)              BSD Kernel Interfaces Manual              DUMMYNET(4)
+
+NAME
+     dummynet -- traffic shaper, bandwidth manager and delay emulator
+
+DESCRIPTION
+     dummynet is a system facility that permits the control of traffic going
+     through the various network interfaces, by applying bandwidth and queue
+     size limitations, implementing different scheduling and queue management
+     policies, and emulating delays and losses.
+
+     The user interface for dummynet is implemented by the ipfw program, so
+     the reader is referred to the ipfw(8) manpage for a complete description
+     of the capabilities of dummynet and on how to use it.
+
+KERNEL OPTIONS
+     The following options in the kernel configuration file are related to
+     dummynet operation:
+
+       IPFIREWALL               - enable ipfirewall (required for dummynet).
+       IPFIREWALL_VERBOSE       - enable firewall output.
+       IPFIREWALL_VERBOSE_LIMIT - limit firewall output.
+       DUMMYNET                 - enable dummynet operation.
+       NMBCLUSTERS              - set the amount of network packet buffers
+       HZ                       - sets the timer granularity
+
+     Generally, the following options are required:
+
+       options IPFIREWALL
+       options DUMMYNET
+       options HZ=1000       # strongly recommended
+
+     additionally, one may want to increase the number of mbuf clusters (used
+     to store network packets) according to the sum of the bandwidth-delay
+     products and queue sizes of all configured pipes.
+
+SEE ALSO
+     setsockopt(2), bridge(4), ip(4), ipfw(8), sysctl(8)
+
+HISTORY
+     dummynet was initially implemented as a testing tool for TCP congestion
+     control by Luigi Rizzo <luigi@iet.unipi.it>, as described on ACM Computer
+     Communication Review, Jan.97 issue.  Later it has been then modified to
+     work at the ip and bridging level, integrated with the IPFW packet fil-
+     ter, and extended to support multiple queueing and scheduling policies.
+

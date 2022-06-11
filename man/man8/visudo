@@ -1,0 +1,142 @@
+VISUDO(8)                    MAINTENANCE COMMANDS                    VISUDO(8)
+
+
+
+NAME
+       visudo - edit the sudoers file
+
+SYNOPSIS
+       visudo [ -c ] [ -f sudoers ] [ -q ] [ -s ] [ -V ]
+
+DESCRIPTION
+       visudo edits the sudoers file in a safe fashion, analogous to vipw(8).
+       visudo locks the sudoers file against multiple simultaneous edits, pro-
+       vides basic sanity checks, and checks for parse errors.  If the sudoers
+       file is currently being edited you will receive a message to try again
+       later.
+
+       There is a hard-coded list of editors that visudo will use set at com-
+       pile-time that may be overridden via the editor sudoers Default vari-
+       able.  This list defaults to the path to vi(1) on your system, as
+       determined by the configure script.  Normally, visudo does not honor
+       the VISUAL or EDITOR environment variables unless they contain an edi-
+       tor in the aforementioned editors list.  However, if visudo is config-
+       ured with the --with-enveditor flag or the enveditor Default variable
+       is set in sudoers, visudo will use any the editor defines by VISUAL or
+       EDITOR.  Note that this can be a security hole since it allows the user
+       to execute any program they wish simply by setting VISUAL or EDITOR.
+
+       visudo parses the sudoers file after the edit and will not save the
+       changes if there is a syntax error.  Upon finding an error, visudo will
+       print a message stating the line number(s) where the error occurred and
+       the user will receive the "What now?" prompt.  At this point the user
+       may enter "e" to re-edit the sudoers file, "x" to exit without saving
+       the changes, or "Q" to quit and save changes.  The "Q" option should be
+       used with extreme care because if visudo believes there to be a parse
+       error, so will sudo and no one will be able to sudo again until the
+       error is fixed.  If "e" is typed to edit the  sudoers file after a
+       parse error has been detected, the cursor will be placed on the line
+       where the error occurred (if the editor supports this feature).
+
+OPTIONS
+       visudo accepts the following command line options:
+
+       -c  Enable check-only mode.  The existing sudoers file will be checked
+           for syntax and a message will be printed to the standard output
+           detailing the status of sudoers.  If the syntax check completes
+           successfully, visudo will exit with a value of 0.  If a syntax
+           error is encountered, visudo will exit with a value of 1.
+
+       -f  Specify and alternate sudoers file location.  With this option
+           visudo will edit (or check) the sudoers file of your choice,
+           instead of the default, /private/etc/sudoers.  The lock file used
+           is the specified sudoers file with ".tmp" appended to it.
+
+       -q  Enable quiet mode.  In this mode details about syntax errors are
+           not printed.  This option is only useful when combined with the -c
+           flag.
+
+       -s  Enable strict checking of the sudoers file.  If an alias is used
+           before it is defined, visudo will consider this a parse error.
+           Note that it is not possible to differentiate between an alias and
+           a hostname or username that consists solely of uppercase letters,
+           digits, and the underscore ('_') character.
+
+       -V  The -V (version) option causes visudo to print its version number
+           and exit.
+
+ENVIRONMENT
+       The following environment variables are used only if visudo was config-
+       ured with the --with-env-editor option:
+
+        VISUAL                 Invoked by visudo as the editor to use
+        EDITOR                 Used by visudo if VISUAL is not set
+
+FILES
+        /private/etc/sudoers           List of who can run what
+        /private/etc/sudoers.tmp       Lock file for visudo
+
+DIAGNOSTICS
+       sudoers file busy, try again later.
+           Someone else is currently editing the sudoers file.
+
+       /private/etc/sudoers.tmp: Permission denied
+           You didn't run visudo as root.
+
+       Can't find you in the passwd database
+           Your userid does not appear in the system passwd file.
+
+       Warning: undeclared Alias referenced near ...
+           Either you are using a {User,Runas,Host,Cmnd}_Alias before defining
+           it or you have a user or hostname listed that consists solely of
+           uppercase letters, digits, and the underscore ('_') character.  If
+           the latter, you can ignore the warnings (sudo will not complain).
+           In -s (strict) mode these are errors, not warnings.
+
+       Warning: runas_default set after old value is in use ...
+           You have a runas_default Defaults setting listed in the sudoers
+           file after its value has already been used.  This means that
+           entries prior to the runas_default setting will match based on the
+           default value of runas_default (root) whereas entries after the
+           runas_default setting will match based on the new value.  This is
+           usually unintentional and in most cases the <runas_default> setting
+           should be placed before any Runas_Alias or User specifications.  In
+           -s (strict) mode this is an error, not a warning.
+
+SEE ALSO
+       vi(1), sudoers(5), sudo(8), vipw(8)
+
+AUTHOR
+       Many people have worked on sudo over the years; this version of visudo
+       was written by:
+
+        Todd Miller
+
+       See the HISTORY file in the sudo distribution or visit
+       http://www.sudo.ws/sudo/history.html for more details.
+
+CAVEATS
+       There is no easy way to prevent a user from gaining a root shell if the
+       editor used by visudo allows shell escapes.
+
+BUGS
+       If you feel you have found a bug in visudo, please submit a bug report
+       at http://www.sudo.ws/sudo/bugs/
+
+SUPPORT
+       Commercial support is available for sudo, see
+       http://www.sudo.ws/sudo/support.html for details.
+
+       Limited free support is available via the sudo-users mailing list, see
+       http://www.sudo.ws/mailman/listinfo/sudo-users to subscribe or search
+       the archives.
+
+DISCLAIMER
+       Visudo is provided ``AS IS'' and any express or implied warranties,
+       including, but not limited to, the implied warranties of merchantabil-
+       ity and fitness for a particular purpose are disclaimed.  See the
+       LICENSE file distributed with sudo or
+       http://www.sudo.ws/sudo/license.html for complete details.
+
+
+

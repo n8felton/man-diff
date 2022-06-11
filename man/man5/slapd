@@ -1,0 +1,143 @@
+SLAPD.REPLOG(5)                                                SLAPD.REPLOG(5)
+
+
+
+NAME
+       slapd.replog - slapd replication log format
+
+SYNOPSIS
+       slapd.replog slapd.replog.lock
+
+DESCRIPTION
+       The  file  slapd.replog  is  produced  by  the stand-alone LDAP daemon,
+       slapd(8), when changes are made to its local database that  are  to  be
+       propagated to one or more replica slapds.  The file consists of zero or
+       more records, each one corresponding to a change, addition, or deletion
+       from the slapd database.  The file is meant to be read and processed by
+       slurpd(8), the stand-alone LDAP update replication daemon.  The records
+       are separated by a blank line.  Each record has the following format.
+
+       The  record  begins  with  one or more lines indicating the replicas to
+       which the change is to be propagated:
+
+            replica: <hostname[:portnumber]>
+
+       Next, the time the change took place given, as the  number  of  seconds
+       since  00:00:00  GMT, Jan. 1, 1970, with an optional decimal extension,
+       in order to make times unique.  Note that slapd  does  not  make  times
+       unique,  but  slurpd makes all times unique in its copies of the replog
+       files.
+
+            time: <integer[.integer]>
+
+       Next, the distinguished name of the entry being changed is given:
+
+            dn: <distinguishedname>
+
+       Next, the type of change being made is given:
+
+            changetype: <[modify|add|delete|modrdn]>
+
+       Finally, the change information itself is given, the  format  of  which
+       depends  on  what kind of change was specified above.  For a changetype
+       of modify, the format is one or more of the following:
+
+            add: <attributetype>
+            <attributetype>: <value1>
+            <attributetype>: <value2>
+            ...
+            -
+
+       Or, for a replace modification:
+
+            replace: <attributetype>
+            <attributetype>: <value1>
+            <attributetype>: <value2>
+            ...
+            -
+
+       Or, for a delete modification:
+
+            delete: <attributetype>
+            <attributetype>: <value1>
+            <attributetype>: <value2>
+            ...
+            -
+
+       If no attributetype lines are given, the  entire  attribute  is  to  be
+       deleted.
+
+       For a changetype of add, the format is:
+
+            <attributetype1>: <value1>
+            <attributetype1>: <value2>
+            ...
+            <attributetypeN>: <value1>
+            <attributetypeN>: <value2>
+
+       For a changetype of modrdn, the format is:
+
+            newrdn: <newrdn>
+            deleteoldrdn: 0 | 1
+
+       where  a value of 1 for deleteoldrdn means to delete the values forming
+       the old rdn from the entry, and a value of 0 means to leave the  values
+       as non-distinguished attributes in the entry.
+
+       For  a changetype of delete, no additional information is needed in the
+       record.
+
+       The format of the values  is  the  LDAP  Directory  Interchange  Format
+       described in ldif(5).
+
+       Access  to  the  slapd.replog  file  is synchronized through the use of
+       flock(3) on the file slapd.replog.lock.  Any process reading or writing
+       this file should obey this locking convention.
+
+EXAMPLE
+       The  following  sample slapd.replog file contains information on one of
+       each type of change.
+
+            replica: truelies.rs.itd.umich.edu
+            replica: judgmentday.rs.itd.umich.edu
+            time: 797612941
+            dn: cn=Babs Jensen,dc=example,dc=com
+            changetype: add
+            objectclass: person
+            cn: babs
+            cn: babs jensen
+            sn: jensen
+
+            replica: truelies.rs.itd.umich.edu
+            replica: judgmentday.rs.itd.umich.edu
+            time: 797612973
+            dn: cn=Babs Jensen,dc=example,dc=com
+            changetype: modify
+            add: description
+            description: the fabulous babs
+
+            replica: truelies.rs.itd.umich.edu
+            replica: judgmentday.rs.itd.umich.edu
+            time: 797613020
+            dn: cn=Babs Jensen,dc=example,dc=com
+            changetype: modrdn
+            newrdn: cn=Barbara J Jensen
+            deleteoldrdn: 0
+
+FILES
+       slapd.replog
+              slapd replication log file
+
+       slapd.replog.lock
+              lockfile for slapd.replog
+
+SEE ALSO
+       ldap(3), ldif(5), slapd(8), slurpd(8)
+
+ACKNOWLEDGEMENTS
+       OpenLDAP  is  developed  and  maintained  by   The   OpenLDAP   Project
+       (http://www.openldap.org/).   OpenLDAP  is  derived  from University of
+       Michigan LDAP 3.3 Release.
+
+
+

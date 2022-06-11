@@ -1,0 +1,84 @@
+CPAN(1)                Perl Programmers Reference Guide                CPAN(1)
+
+
+
+NAME
+       cpan - easily interact with CPAN from the command line
+
+SYNOPSIS
+               # with arguments, installs specified modules
+               cpan module_name [ module_name ... ]
+
+               # with switches, installs modules with extra behavior
+               cpan [-cimt] module_name [ module_name ... ]
+
+               # without arguments, starts CPAN shell
+               cpan
+
+               # without arguments, but some switches
+               cpan [-ahrv]
+
+DESCRIPTION
+       This script provides a command interface (not a shell) to CPAN.pm.
+
+       Meta Options
+
+       These options are mutually exclusive, and the script processes them in
+       this order: [ahvr].  Once the script finds one, it ignores the others,
+       and then exits after it finishes the task.  The script ignores any
+       other command line options.
+
+       -a  Creates the CPAN.pm autobundle with CPAN::Shell->autobundle.
+
+       -h  Prints a help message.
+
+       -r  Recompiles dynamically loaded modules with CPAN::Shell->recompile.
+
+       -v  Print the script version and CPAN.pm version.
+
+       Module options
+
+       These options are mutually exclusive, and the script processes them in
+       alphabetical order.
+
+       c   Runs a `make clean` in the specified module's directories.
+
+       i   Installed the specified modules.
+
+       m   Makes the specified modules.
+
+       t   Runs a `make test` on the specified modules.
+
+       Examples
+
+               # print a help message
+               cpan -h
+
+               # print the version numbers
+               cpan -v
+
+               # create an autobundle
+               cpan -a
+
+               # recompile modules
+               cpan -r
+
+               # install modules
+               cpan -i Netscape::Booksmarks Business::ISBN
+
+TO DO
+       * add options for other CPAN::Shell functions autobundle, clean, make,
+       recompile, test
+
+BUGS
+       * none noted
+
+SEE ALSO
+       Most behaviour, including environment variables and configuration,
+       comes directly from CPAN.pm.
+
+AUTHOR
+       brian d foy <bdfoy@cpan.org>
+
+
+

@@ -1,0 +1,544 @@
+security(1)               BSD General Commands Manual              security(1)
+
+NAME
+     security -- Command line interface to keychains and Security.framework
+
+SYNOPSIS
+     security [-hilqv] [-p prompt] [command] [command_options] [command_args]
+
+DESCRIPTION
+     A simple command line interface which lets you administer Keychains,
+     manipulate keys and certificates, and do just about anything the Security
+     framework is capable of from the command line.  New commands are con-
+     stantly being added over time.
+
+     By default security will execute the command supplied and report if any-
+     thing went wrong.
+
+     If the -i or -p options are provided, security will enter interactive
+     mode and allow the user to enter multiple commands on stdin.  When EOF is
+     read from stdin security will exit.
+
+     Here is a complete list of the options available:
+
+     -h       If no arguments are specified show a list of all commands.  If
+              arguments are provided show usage for each the specified com-
+              mands.  This options is basically the same as the help command.
+
+     -i       Run security in interactive mode.  A prompt (security> by
+              default) will be displayed and the user will be able to type
+              commands on stdin until an EOF is encountered.
+
+     -l       Before security exits run
+                    /usr/bin/leaks -nocontext
+              on itself to see if the command(s) you executed leaks.
+
+     -p prompt
+              This option implies the -i option but changes the default prompt
+              to the argument specified instead.
+
+     -q       Will make security less verbose.
+
+     -v       Will make security more verbose.
+
+SECURITY COMMAND SUMMARY
+     security provides a rich variety of commands (command in the SYNOPSIS),
+     each of which often has a wealth of options, to allow access to the broad
+     functionality provided by the Security framework.  However, you don't
+     have to master every detail for security to be useful to you.
+
+     Here are brief descriptions of all the security commands:
+
+     help                    Show all commands. Or show usage for a command.
+     list-keychains          Display or manipulate the keychain search list.
+     default-keychain        Display or set the default keychain.
+     login-keychain          Display or set the login keychain.
+     create-keychain         Create keychains and add them to the search list.
+     delete-keychain         Delete keychains and remove them from the search
+                             list.
+     lock-keychain           Lock the specified keychain.
+     unlock-keychain         Unlock the specified keychain.
+     set-keychain-settings   Set Nm settings for a keychain.
+     show-keychain-info      Show the settings for keychain.
+     dump-keychain           Dump the contents of one or more keychains.
+     create-keypair          Create an asymmetric key pair.
+     add-generic-password    Add a generic password item.
+     add-internet-password   Add an internet password item.
+     add-certificates        Add certificates to a keychain.
+     find-generic-password   Find a generic password item.
+     find-internet-password  Find an internet password item.
+     find-certificate        Find a certificate item.
+     create-db               Create a db using the DL.
+     import                  Import item(s) into a keychain.
+     export                  Export item(s) from a keychain.
+     install-mds             Install (or re-install) the MDS database.
+     add-trusted-cert        Add a certificate to Trust Settings.
+     remove-trusted-cert     Remove a certificate to Trust Settings.
+     dump-trust-settings     Display contents of Trust Settings.
+     user-trust-settings-enable
+                             Display or manipulate user-level Trust Settings.
+     trust-settings-export   Export Trust Settings.
+     trust-settings-import   Import Trust Settings.
+     verify-cert             Verify certificate(s).
+     authorize               Authorize rights.
+     authorizationdb         Make changes to the authorization policy data-
+                             base.
+     execute-with-privileges
+                             Execute tool with privileges.
+     leaks                   Run /usr/bin/leaks on this proccess.
+
+COMMON COMMAND OPTIONS
+     This section describes the command_options that are available across all
+     security commands.
+
+     -h       Show a usage message for the specified command.  This option is
+              basically the same as the help command.
+
+SECURITY COMMANDS
+     Here (finally) are details on all the security commands and the options
+     each accepts.
+
+     help [-h]
+            Show all commands. Or show usage for a command.
+
+     list-keychains [-h] [-d user|system|common] [-s [keychain...]]
+            Display or set the keychain search list.
+
+            Options:
+            -d user|system|common
+                     Specify the preferences domain to be used.
+            -s       Set the search list to the specified keychains
+
+     default-keychain [-h] [-d user|system|common] [-s [keychain]]
+            Display or set the default keychain.
+
+            Options:
+            -d user|system|common
+                     Specify the preferences domain to be used.
+            -s       Set the default keychain to the specified keychain.
+                     Unset it if no keychain is specified.
+
+     login-keychain [-h] [-d user|system|common] [-s [keychain]]
+            Display or set the login keychain.
+
+            Options:
+            -d user|system|common
+                     Specify the preferences domain to be used.
+            -s       Set the login keychain to the specified keychain.  Unset
+                     it if no keychain is specified.
+
+     create-keychain [-hP] [-p password] [keychain...]
+            Create keychains and add them to the search list.  if no keychains
+            are specified the user is prompted for one.
+
+            Options:
+            -P              Prompt the user for a password using the Secu-
+                            rityAgent.
+            -p password     Use password as the password for the keychains
+                            being created.
+
+            If neither -P or -p password are specified the user is prompted
+            for a password.
+
+     delete-keychain [-h] [keychain...]
+            Delete keychains and remove them from the search list.
+
+     lock-keychain [-h] [-a|keychain]
+            Lock keychain. Or the default is none is specified.  If the -a
+            options is specified all keychains are locked.
+
+     unlock-keychain [-hu] [-p password] [keychain]
+            Unlock keychain. Or the default is none is specified.
+
+     set-keychain-settings [-hlu] [-t timeout] [keychain]
+            Set settings for keychain. Or the default is none is specified.
+            -l              Lock keychain when the system sleeps
+            -u              Lock keychain after certain period of time speci-
+                            fied using -t.
+            -t timeout      Automatically lock keychain after timeout seconds
+                            of inactivity.
+
+     show-keychain-info [-h]
+            Show the settings for keychain.
+
+     dump-keychain [-adhir]
+            Dump the contents of one or more keychains.
+            -a              Dump acl of items.
+            -d              Dump cleartext data of items.
+            -i              Interactive acl editing mode.
+            -r              Dump raw (possibly ciphertext) data of items.
+
+     create-keypair [-h] [-a alg] [-s size] [-f from_date] [-t to_date] [-v
+     days] [-k keychain] [-n name] [-A|-T app1:app2:...]
+            Create an asymmetric key pair.
+
+     add-generic-password [-h] [-a account_name] [-s service_name] [-w
+     password_data] [keychain]
+            Add a generic password item.
+
+     add-internet-password [-h] [-a account_name] [-d security_domain] [-p
+     path] [-P port] [-r protocol] [-s server_name] [-t authentication_type]
+     [-w password_data] [keychain]
+            Add an internet password item.
+
+     add-certificates [-h] [-k keychain] file...
+            Add certficates contained in the specified files to the default
+            keychain.  The files must contain one DER encoded X509 certificate
+            each.
+            -k keychain     Use keychain rather than the default keychain.
+
+     find-generic-password [-gh] [-a account-name] [-s service-name]
+     [-keychain...]
+            Find a generic password item.
+
+     find-internet-password [-gh] [-a account_name] [-d security_domain] [-p
+     path] [-P port] [-r protocol] [-s server_name] [-t authentication_type]
+     [keychain...]
+            Find an internet password item.
+
+     find-certificate [-ahmp] [-e email_address] [keychain...]
+            Find a certificate item.  If no keychain arguments are provided,
+            security will search the default search list.
+
+            Options:
+            -a              Find all matching certificates, not just the first
+                            one.
+            -g dl|cspdl     Use the AppleDL (default) or AppleCspDL
+            -e email_address
+                            Match on "email_address" when searching.
+            -m              Show the email addresses in the certificate.
+            -p              Output certificate in pem form.  The default is to
+                            dump the attributes and keychain the cert is in.
+
+            Examples
+
+            security> find-certificate -a -p > allcerts.pem
+                     Exports all certificates from all keychains into a pem
+                     file called allcerts.pem.
+
+            security> find-certificate -a -e me@foo.com -p > certs.pem
+                     Exports all certificates from all keychains with the
+                     email address mb@foo.com into a pem file called
+                     certs.pem.
+
+     create-db [-aho0] [-g dl|cspdl] [-m mode] [name]
+            Create a db using the DL.  If name isn't provided security will
+            prompt the user to type a name.
+
+            Options:
+            -a              Turn off autocommit
+            -g dl|cspdl     Use the AppleDL (default) or AppleCspDL
+            -m mode         Set the file permissions to mode.
+            -o              Force using openparams argument
+            -0              Force using version 0 openparams
+
+            Examples
+
+            security> create-db -m 0644 test.db
+
+            security> create-db -g cspdl -a test2.db
+
+     export [-k keychain] [-t item_type] [-f item_format] [-w] [-p
+     item_format] [-P passphrase] [-o outfile]
+            Export one or more items from a keychain to one of a number of
+            external representations.  If keychain isn't provided, items will
+            be exported from the user's default keychain.
+
+            Options:
+            -k keychain     Specify keychain from which item(s) will be
+                            exported.
+            -t item_type    Specify the type of items to export. Possible
+                            types are certs, allKeys, pubKeys, privKeys, iden-
+                            tities, and all. The default is all. An identity
+                            consists of both a certificate and the correspond-
+                            ing provate key.
+            -f item_format  Specify the format of the exported data. Possible
+                            formats are openssl, bsafe, pkcs7, pkcs8, pkcs12,
+                            x509, openssh1, openssh2, and pemseq. The default
+                            is pemseq if more than one item is being exported.
+                            The default is openssl if one key is being
+                            exported. The default is x509 if one certificate
+                            is being exported.
+            -w              Specifies that private keys are to be wrapped on
+                            export.
+            -p              Specifies that PEM armour is to be applied to the
+                            output data.
+            -P passphrase   Specify the wrapping passphrase immediately. The
+                            default is to obtain a secure passphrase via GUI.
+            -o outfile      Write the output data to outfile. Default is to
+                            write data to stdout.
+
+            Examples
+
+            security> export -k login.keychain -t certs -o /tmp/certs.pem
+
+            security> export -k newcert.keychain -t identities -f pkcs12 -o
+                     /tmp/mycerts.p12
+
+     import inputfile [-k keychain] [-t item_type] [-f item_format] [-w] [-P
+     passphrase] [-a attributeName attributeValue]
+            Import one or more items from inputfile into a keychain. If
+            keychain isn't provided, items will be imported into the user's
+            default keychain.
+
+            Options:
+            -k keychain     Specify keychain into which item(s) will be
+                            imported.
+            -t item_type    Specify the type of items to import. Possible
+                            types are cert, pub, priv, session, cert, and agg.
+                            Pub, priv, and session refer to keys; agg is one
+                            of the aggregate types (pkcs12 and PEM sequence).
+                            The command can often figure out what item_type an
+                            item contains based in the filename and/or
+                            item_format.
+            -f item_format  Specify the format of the exported data. Possible
+                            formats are openssl, bsafe, raw, pkcs7, pkcs8,
+                            pkcs12, x509, openssh1, openssh2, and pemseq. The
+                            command can often figure out what format an item
+                            is in based in the filename and/or item_type.
+            -w              Specifies that private keys are wrapped and must
+                            be unwrapped on import.
+            -P passphrase   Specify the unwrapping passphrase immediately. The
+                            default is to obtain a secure passphrase via GUI.
+            -a attributeName attributeValue
+                            Specify Optional extended attribute name and
+                            value. Can be used multiple times. This is only
+                            valid when importing keys (only).
+
+            Examples
+
+            security> import /tmp/certs.pem -k
+
+            security> import /tmp/mycerts.p12 -t agg -k newcert.keychain
+
+            security> import /tmp/mycerts.p12 -f pkcs12 -k newcert.keychain
+
+     install-mds
+            Install (or re-install) the Module Directory Services (MDS) data-
+            base. This is a system tool which is not normally used by users.
+            There are no options.
+
+     add-trusted-cert [-d] [-r resultType] [-p policy] [-a appPath] [-s
+     policyString] [-e allowedError] [-u keyUsage] [-k keychain] [-i
+     settingsFileIn] [-o settingsFileOut] [-D] certFile
+            Add certificate (in DER or PEM format) from certFile to per-user
+            or local Admin Trust Settings. When modifying per-user Trust Set-
+            tings, user authentication is required via an authentication dia-
+            log. When modifying admin Trust Settings, the process must be run-
+            ning as root, or admin authentication is required.
+
+            Options:
+            -d              Add to admin cert store; default is user.
+            -r resultType   resultType = trustRoot|trustAsRoot|deny|unspeci-
+                            fied; default is trustRoot.
+            -p policy       Specify policy constraint (ssl, smime, codeSign,
+                            IPSec, iChat, basic, swUpdate, pkgSign, pkinit-
+                            Client, pkinitServer, eap).
+            -r resultType   resultType = trustRoot|trustAsRoot|deny|unspeci-
+                            fied; default is trustRoot.
+            -a appPath      Specify application constraint.
+            -s policyString
+                            Specify policy-specific string.
+            -e allowedError
+                            Specify allowed error, an integer.
+            -u keyUsage     Specify key usage, an integer.
+            -k keychain     Specify keychain to which cert is added.
+            -i settingsFileIn
+                            Input trust settings file; default is user domain.
+            -o settingsFileOut
+                            Output trust settings file; default is user
+                            domain.
+            -D              Add default setting instead of per-cert setting.
+                            No certFile is specified when using this option
+
+            Examples
+                  security> add-trusted-cert /tmp/cert.der
+                  security> add-trusted-cert -d .tmp/cert.der
+
+   remove-trusted-cert [-d] [-D] certFile
+          Remove certificate (in DER or PEM format) in certFile from per-user
+          or local Admin Trust Settings. When modifying per-user Trust Set-
+          tings, user authentication is required via an authentication dialog.
+          When modifying admin Trust Settings, the process must be running as
+          root, or admin authentication is required.
+
+          Options:
+          -d              Remove from admin cert store; default is user.
+          -D              Remove Default Root Cert setting instead of an
+                          actual cert setting. No certFile is specified when
+                          using this option.
+
+   dump-trust-settings [-s] [-d]
+          Display Trust Settings.
+
+          Options:
+          -s              Display trusted system certs; default is user.
+          -d              Display trusted admin certs; default is user.
+
+   user-trust-settings-enable [-d] [-e]
+          Display or manipulate user-level Trust Settings. With no arguments,
+          shows the current state of the user-level Trust Settings enable.
+          Otherwise enables or disables user-level Trust Settings.
+
+          Options:
+          -d              Disable user-level Trust Settings.
+          -e              Enable user-level Trust Settings.
+
+   trust-settings-export [-s] [-d] settings_file
+          Export Trust Settings to the specified file.
+
+          Options:
+          -s              Export system Trust Settings; default is user.
+          -d              Export admin Trust Settings; default is user.
+
+   trust-settings-import [-d] settings_file
+          Import Trust Settings from the specified file. When modifying per-
+          user Trust Settings, user authentication is required via an authen-
+          tication dialog. When modifying admin Trust Settings, the process
+          must be running as root, or admin authentication is required.
+
+          Options:
+          -d              Import admin Trust Settings; default is user.
+
+   verify-cert [-c certFile] [-r rootCertFile] [-p policy] [-k keychain] [-n]
+   [-l] [-e emailAddress] [-s sslHost] [-q]
+          Verify one or more certificates.
+
+          Options:
+          -c certFile     Certificate to verify, in DER or PEM format. Can be
+                          specified more than once; leaf certificate has to be
+                          specified first.
+          -r rootCertFile
+                          Root certificate, in DER or PEM format. Can be spec-
+                          ified more than once. If not specified, the system
+                          anchor certificates are used. If one root certifi-
+                          cate is specified, and zero (non-root) certificates
+                          are specified, the root certificate is verified
+                          against itself.
+          -p policy       Specify verification policy (ssl, smime, codeSign,
+                          IPSec, iChat, basic, swUpdate, pkgSign, pkinit-
+                          Client, pkinitServer, eap). Default is basic.
+          -k keychain     Keychain to search for intermediate certs. Can be
+                          specified multiple times. Default is the current
+                          user's keychain search list.
+          -n              Avoid searching any keychains.
+          -l              Species that the leaf certificate is a CA cert. By
+                          default, a leaf certificate with a Basic Constraints
+                          extension with the CA bit set fails verification.
+          -e emailAddress
+                          Specify email address for the smime policy.
+          -s sslHost      Specify SSL host name for the ssl policy.
+          -q              Quiet, no stdout or stderr.
+
+          Examples
+
+          security> verify-cert -c applestore0.cer -c applestore1.cer -p ssl
+                   -s store.apple.com
+
+          security> verify-cert -r serverbasic.crt
+
+   authorize [-updPiew] [right...]
+          Authorize requested right(s).  The extend-rights flag will be passed
+          by default.
+
+          Options:
+          -u              Allow user interaction.
+          -p              Allow returning partial rights.
+          -d              Destroy acquired rights.
+          -P              Pre-authorize rights only.
+          -l              Operate authorization in least privileged mode.
+          -i              Internalize authref passed on stdin.
+          -e              Externalize authref to stdout
+          -w              Wait while holding AuthorizationRef until stdout is
+                          closed. This will allow client to read externalized
+                          AuthorizationRef from pipe.
+
+          Examples
+
+          security> security authorize -ud my-right
+                   Basic authorization of my-right.
+
+          security> security -q authorize -uew my-right | security -q
+                   authorize -i my-right
+                   Authorizing a right and passing it to another command as a
+                   way to add authorization to shell scripts.
+
+   authorizationdb read <right-name>
+
+   authorizationdb write <right-name> [allow|deny|<rulename>]
+
+   authorizationdb remove <right-name>
+          Read/Modify authorization policy database. Without a rulename write
+          will read a dictionary as a plist from stdin.
+
+          Examples
+
+          security> security authorizationdb read system.privilege.admin >
+                   /tmp/aewp-def
+                   Read definition of system.privilege.admin right.
+
+          security> security authorizationdb write system.preferences <
+                   /tmp/aewp-def
+                   Set system.preferences to definition of system.privi-
+                   lege.admin right.
+
+          security> security authorizationdb write system.preferences
+                   authenticate-admin
+                   Every change to preferences requires an Admin user to
+                   authenticate.
+
+   execute-with-privileges <program> [args...]
+          Execute tool with privileges.  On success stdin will be read and
+          forwarded to the tool.
+
+   leaks [-h] [-cycles] [-nocontext] [-nostacks] [-exclude symbol]
+          Run /usr/bin/leaks on this proccess.  This is to help find memory
+          leaks after running certain commands.
+
+          Options:
+          -cycles         Use a stricter algorithm (See leaks(1) for details).
+          -nocontext      Withhold the hex dumps of the leaked memory.
+          -nostacks       Don't show stack traces of leaked memory.
+          -exclude symbol
+                          Ignore leaks called from symbol.
+
+ENVIRONMENT
+     MallocStackLogging
+              When using the leaks command or the -l option it's probably a
+              good idea to set this environment variable before security is
+              started.  Doing so will allow leaks to display symbolic back-
+              traces.
+
+FILES
+     ~/Library/Preferences/com.apple.security.plist
+
+              Propertylist file containing the current users default keychain
+              and keychain search list.
+
+     /Library/Preferences/com.apple.security.plist
+
+              Propertylist file containing the system default keychain and
+              keychain search list.  This is used by processes started at
+              boottime, or those requesting to use the system search domain,
+              such as system daemons.
+
+     /Library/Preferences/com.apple.security-common.plist
+
+              Propertylist file containing the a common keychain search list
+              which is appended to every users searchlist and to the system
+              search list as well.
+
+SEE ALSO
+     certtool(1), leaks(1)
+
+HISTORY
+     security was first introduced in Mac OS X version 10.3
+
+AUTHORS
+     Michael Brouwer
+
+BUGS
+     security still needs a lot more commands before it can be considered com-
+     plete.  In particular it should someday supersede both the certtool and
+     systemkeychain commands.
+

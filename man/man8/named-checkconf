@@ -1,0 +1,49 @@
+NAMED-CHECKCONF(8)                   BIND9                  NAMED-CHECKCONF(8)
+
+
+
+NAME
+       named-checkconf - named configuration file syntax checking tool
+
+SYNOPSIS
+       named-checkconf [-v] [-j] [-t directory] {filename} [-z]
+
+DESCRIPTION
+       named-checkconf checks the syntax, but not the semantics, of a named
+       configuration file.
+
+OPTIONS
+       -t directory
+           chroot to directory so that include directives in the configuration
+           file are processed as if run by a similarly chrooted named.
+
+       -v
+           Print the version of the named-checkconf program and exit.
+
+       -z
+           Perform a check load the master zonefiles found in named.conf.
+
+       -j
+           When loading a zonefile read the journal if it exists.
+
+       filename
+           The name of the configuration file to be checked. If not specified,
+           it defaults to /etc/named.conf.
+
+RETURN VALUES
+       named-checkconf returns an exit status of 1 if errors were detected and
+       0 otherwise.
+
+SEE ALSO
+       named(8), BIND 9 Administrator Reference Manual.
+
+AUTHOR
+       Internet Systems Consortium
+
+COPYRIGHT
+       Copyright (C) 2004, 2005, 2007 Internet Systems Consortium, Inc.
+       ("ISC")
+       Copyright (C) 2000-2002 Internet Software Consortium.
+
+
+

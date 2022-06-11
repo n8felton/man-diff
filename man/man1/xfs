@@ -1,0 +1,199 @@
+XFS(1)                                                                  XFS(1)
+
+
+
+NAME
+       xfs - X font server
+
+SYNOPSIS
+       xfs   [-config  configuration_file]  [-daemon]  [-droppriv]  [-ls  lis-
+       ten_socket] [-nodaemon] [-port tcp_port] [-user username]
+
+DESCRIPTION
+       Xfs is the X Window System font server.  It supplies fonts to X  Window
+       System display servers.
+
+STARTING THE SERVER
+       The  server  is  usually run by a system administrator, and started via
+       boot files like /etc/rc.local.  Users may also wish  to  start  private
+       font servers for specific sets of fonts.
+
+OPTIONS
+       -config configuration_file
+               Specifies  the configuration file the font server will use.  If
+               this  parameter   is   not   specified,   the   default   file,
+               /usr/X11/lib/X11/fs/config will be used.
+
+       -ls listen_socket
+               Specifies  a file descriptor which is already set up to be used
+               as the listen socket.  This option is only intended to be  used
+               by  the  font server itself when automatically spawning another
+               copy of itself to handle additional connections.
+
+       -port tcp_port
+               Specifies the TCP port number on which the server  will  listen
+               for connections.  The default port number is 7100.
+
+       -daemon Instructs  xfs to fork and go into the background automatically
+               at startup  If this option is not specified, xfs will run as  a
+               regular process (unless xfs was built to daemonize by default).
+
+       -droppriv
+               If specified, xfs will attempt to run as  user  and  group  xfs
+               (unless  the  -user  option is used). This has been implemented
+               for security reasons, as xfs may have undiscovered buffer over-
+               flows  or  other  paths  for  possible  exploit, both local and
+               remote.  With this option, you may also wish  to  specify  "no-
+               listen  =  tcp" in the config file, which ensures that xfs will
+               not to use a TCP port at all.
+
+       -nodaemon
+               When xfs is built to  daemonize  (run  in  the  background)  by
+               default,  this  prevents  that  and  starts xfs up as a regular
+               process.
+
+       -user username
+               This is equivalent to -droppriv except that  xfs  will  run  as
+               user username.
+
+SIGNALS
+       SIGTERM This causes the font server to exit cleanly.
+
+       SIGUSR1 This signal is used to cause the server to re-read its configu-
+               ration file.
+
+       SIGUSR2 This signal is used to cause the server  to  flush  any  cached
+               data it may have.
+
+       SIGHUP  This  signal  is used to cause the server to reset, closing all
+               active connections and re-reading the configuration file.
+
+CONFIGURATION
+       The configuration language is a list of keyword and value pairs.   Each
+       keyword is followed by an '=' and then the desired value.
+
+       Recognized keywords include:
+
+
+       catalogue (list of string)
+              Ordered  list  of  font  path element names.  Use of the keyword
+              "catalogue" is very misleading at present, the current implemen-
+              tation  only supports a single catalogue ("all"), containing all
+              of the specified fonts.
+
+       alternate-servers (list of string)
+              List of alternate servers for this font server.
+
+       client-limit (cardinal)
+              Number of clients this font server will support before  refusing
+              service.   This is useful for tuning the load on each individual
+              font server.
+
+       clone-self (boolean)
+              Whether this font server should attempt to clone itself when  it
+              reachs the client-limit.
+
+       default-point-size (cardinal)
+              The default pointsize (in decipoints) for fonts that don't spec-
+              ify.  The default is 120.
+
+       default-resolutions (list of resolutions)
+              Resolutions the server supports by  default.   This  information
+              may  be  used  as  a hint for pre-rendering, and substituted for
+              scaled fonts which do not specify a resolution.  A resolution is
+              a  comma-separated  pair  of  x  and y resolutions in pixels per
+              inch.  Multiple resolutions are separated by commas.
+
+       error-file (string)
+              Filename of the error file.  All warnings  and  errors  will  be
+              logged here.
+
+       no-listen (trans-type)
+              Disable  a  transport  type. For example, TCP/IP connections can
+              be disabled with no-listen tcp
+
+       port (cardinal)
+              TCP port on which the server will listen for connections.
+
+       use-syslog (boolean)
+              Whether syslog(3) (on supported  systems)  is  to  be  used  for
+              errors.
+
+       deferglyphs (string)
+              Set  the mode for delayed fetching and caching of glyphs.  Value
+              is "none", meaning deferred glyphs is disabled,  "all",  meaning
+              it  is  enabled  for  all fonts, and "16", meaning it is enabled
+              only for 16-bits fonts.
+
+EXAMPLE
+       #
+       # sample font server configuration file
+       #
+
+       # allow a max of 10 clients to connect to this font server
+       client-limit = 10
+
+       # when a font server reaches its limit, start up a new one
+       clone-self = on
+
+       # alternate font servers for clients to use
+       alternate-servers = hansen:7101,hansen:7102
+
+       # where to look for fonts
+       # the first is a set of Speedo outlines, the second is a set of
+       # misc bitmaps and the last is a set of 100dpi bitmaps
+       #
+       catalogue = /usr/X11R6/lib/X11/fonts/speedo,
+            /usr/X11R6/lib/X11/fonts/misc,
+            /usr/X11R6/lib/X11/fonts/100dpi/
+
+       # in 12 points, decipoints
+       default-point-size = 120
+
+       # 100 x 100 and 75 x 75
+       default-resolutions = 100,100,75,75
+       use-syslog = off
+
+
+FONT SERVER NAMES
+       One of the following forms can be used  to  name  a  font  server  that
+       accepts TCP connections:
+
+           tcp/hostname:port
+           tcp/hostname:port/cataloguelist
+
+       The  hostname  specifies  the  name (or decimal numeric address) of the
+       machine on which the font server is running.  The port is  the  decimal
+       TCP  port  on  which the font server is listening for connections.  The
+       cataloguelist specifies a list of catalogue names, with '+' as a  sepa-
+       rator.
+
+       Examples: tcp/fs.x.org:7100, tcp/18.30.0.212:7101/all.
+
+       One  of  the  following  forms  can  be used to name a font server that
+       accepts DECnet connections:
+
+           decnet/nodename::font$objname
+           decnet/nodename::font$objname/cataloguelist
+
+       The nodename specifies the name (or decimal  numeric  address)  of  the
+       machine  on which the font server is running.  The objname is a normal,
+       case-insensitive DECnet object name.   The  cataloguelist  specifies  a
+       list of catalogue names, with '+' as a separator.
+
+       Examples:  DECnet/SRVNOD::FONT$DEFAULT, decnet/44.70::font$special/sym-
+       bols.
+
+SEE ALSO
+       X(7), The X Font Service Protocol,
+       Font server implementation overview
+
+BUGS
+       Multiple catalogues should be supported.
+
+AUTHORS
+       Dave Lemke, Network Computing Devices, Inc
+       Keith Packard, Massachusetts Institute of Technology
+
+
+

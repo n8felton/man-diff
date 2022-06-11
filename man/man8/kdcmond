@@ -1,0 +1,50 @@
+kdcmond(8)                BSD System Manager's Manual               kdcmond(8)
+
+NAME
+     kdcmond -- KDC monitoring daemon -- Open Directory Single Sign On
+
+SYNOPSIS
+     kdcmond [-n] [-s] [-d] [-v debug_level] [-c path]
+
+DESCRIPTION
+     kdcmond is an (AT&T) init-like process that launches, monitors, and
+     relaunches the Kerberos KDC ( krb5kdc ) process. It also registers the
+     KDC over Rendezvous using the following DNS records:
+
+     TXT 7200 _kerberos.hostname.
+
+     SRV 7200 _kerberos._udp.REALM.
+
+     SRV 7200 _kerberos._tcp.REALM.
+
+     When the network state changes kdcmond sends a SIGUSER1 signal to the
+     krb5kdc process to notify the KDC to re-initlaize its network listeners.
+
+OPTIONS
+     -n       prevents kdcmond from daemonizing
+
+     -d       prevents kdcmond from registering the KDC over Rendezvous
+
+     -c path  provides an alternate location for the kdc.conf file, which will
+              be passed to the krb5kdc process
+
+     -v debug_level
+              Sets the level of debugging information emitted by the daemon
+
+     -s       sends the debug output from kdcmond to syslog
+
+FILES
+     /var/db/krb5kdc/kdc.conf
+     The realm name and port numbers are read from this file
+
+DIAGNOSTICS
+     Debug level 1 provides status information, higher levels add progressivly
+     more levels of detail.
+
+SEE ALSO
+     configd(8), kerberos(1), kerberosautoconfig(8), kdcsetup(8),
+     krbservicesetup(8), krb5kdc(8), sso_util(8)
+
+BUGS
+     Only the first realm in the kdc.conf file is registered via rendezvous.
+

@@ -1,0 +1,75 @@
+SystemStarter(8)          BSD System Manager's Manual         SystemStarter(8)
+
+NAME
+     SystemStarter -- Start, stop, and restart system services
+
+SYNOPSIS
+     SystemStarter [-gvxdDqn] [action [service]]
+
+DESCRIPTION
+     The SystemStarter utility may be used to start, stop, and restart the
+     system services which are described in the /Library/StartupItems/ and
+     /System/Library/StartupItems/ paths.
+
+     The optional action argument specifies which action SystemStarter per-
+     forms on the startup items.  The optional service argument specifies
+     which startup items to perform the action on.  If no service is speci-
+     fied, all startup items will be acted on; otherwise, only the item pro-
+     viding the service, any items it requires, or any items that depend on it
+     will be acted on.
+
+     During boot SystemStarter is invoked by rc (see rc(8)) and is responsible
+     for starting all startup items in an order that satisfies each item's
+     requirements.
+
+ACTIONS
+     start    start all items, or start the item that provides the specified
+              service and all items providing services it requires.
+
+     stop     stop all items, or stop the item that provides the specified
+              service and all items that depend on it.
+
+     restart  restart all items, or restart the item providing the specified
+              service.
+
+OPTIONS
+     -g       (ignored)
+
+     -v       verbose (text mode) startup
+
+     -x       (ignored)
+
+     -r       (ignored)
+
+     -d       print debugging output
+
+     -D       print debugging output and dependencies
+
+     -q       be quiet (disable debugging output)
+
+     -n       don't actually perform action on items (no-run mode)
+
+NOTES
+     Unless an explicit call to ConsoleMessage is made, SystemStarter examines
+     the exit status of the startup item scripts to determine the success or
+     failure of the services provided by that script.
+
+     In Darwin it is preferable to create custom startup items than to modify
+     rc, and at some point SystemStarter may entirely encompass the role of
+     rc.
+
+FILES
+     /Library/StartupItems/         User-installed startup items.
+     /System/Library/StartupItems/  System-provided startup items.
+
+SEE ALSO
+     ConsoleMessage(8)
+
+     rc(8)
+
+HISTORY
+     The SystemStarter utility appeared in Darwin 1.0
+
+     SystemStarter was extended in Darwin 6.0 to support partial startup and
+     interprocess communication.
+

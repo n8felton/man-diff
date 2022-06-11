@@ -1,0 +1,69 @@
+subscriptions.conf(5)             Apple Inc.             subscriptions.conf(5)
+
+
+
+NAME
+       subscriptions.conf - subscriptions file for cups
+
+DESCRIPTION
+       The  subscriptions.conf  file  defines the local subscriptions that are
+       active. It is normally located in the /etc/cups directory and is gener-
+       ated  automatically by the cupsd(8) program when subscriptions are cre-
+       ated, renewed, or cancelled.
+
+       Each line in the file can be a configuration directive, a  blank  line,
+       or a comment. Comment lines start with the # character.
+
+DIRECTIVES
+       <Subscription NNN> ... </Subscription>
+            Defines a subscription.
+
+       Events name [ ... name ]
+            Specifies the events that are subscribed.
+
+       ExpirationTime unix-time
+            Specifies  the  expiration  time  of a subscription as a UNIX time
+            value in seconds since January 1st, 1970.
+
+       Interval seconds
+            Specifies the preferred time interval for event  notifications  in
+            seconds.
+
+       JobId job-id
+            Specifies the job ID associated with the subscription.
+
+       LeaseDuration seconds
+            Specifies  the  number  of  seconds that the subscription is valid
+            for. If 0, the subscription does not expire.
+
+       NextEventId number
+            Specifies the next notify-sequence-number to use for the subscrip-
+            tion.
+
+       NextSubscriptionId number
+            Specifies the next subscription-id to use.
+
+       Owner username
+            Specifies the user that owns the subscription.
+
+       PrinterName printername
+            Specifies the printer or class associated with the subscription.
+
+       Recipient uri
+            Specifies  the  notify-recipient-uri value for push-type notifica-
+            tions.
+
+       UserData hex-escaped-data
+            Specifies user data to be included in event notifications. This is
+            typically the "from" address in mailto: notifications.
+
+SEE ALSO
+       classes.conf(5), cupsd(8), cupsd.conf(5), mime.convs(5), mime.types(5),
+       printers.conf(5)
+       http://localhost:631/help
+
+COPYRIGHT
+       Copyright 2007 by Apple Inc.
+
+
+

@@ -1,0 +1,59 @@
+PLAINRSA-GEN(8)           BSD System Manager's Manual          PLAINRSA-GEN(8)
+
+NAME
+     plainrsa-gen -- generator for Plain RSA keys
+
+SYNOPSIS
+     plainrsa-gen [-b bits] [-e pubexp] [-f outfile] [-h]
+
+DESCRIPTION
+     plainrsa-gen can be used to generate Plain RSA keys for authentication
+     purposes.  Using Plain RSA keys is optional.  Other possibilities are
+     Pre-shared keys or X.509 certificates.
+
+     -b bits
+             bit length of the key.  Default is 1024, recommended length is
+             2048 or even 4096 bits.  Note that generating longer keys takes
+             more time.
+
+     -e pubexp
+             value of the RSA public exponent.  Default is 0x3.  Don't change
+             this unless you really know what you are doing!
+
+     -f outfile
+             write the resulting key to outfile instead of stdout.  If the
+             file already exists it won't be overwritten.  You wouldn't like
+             to lose your private key by accident, would you?
+
+OUTPUT FILE FORMAT
+     This is the secret private key that should never leave your computer:
+
+     : RSA   {
+             # RSA 1024 bits
+             # pubkey=0sAQOrWlcwbAIdNSMhDt...
+             Modulus: 0xab5a57306c021d3523...
+             PublicExponent: 0x03
+             PrivateExponent: 0x723c3a2048...
+             Prime1: 0xd309b30e6adf9d85c01...
+             Prime2: 0xcfdc2a8aa5b2b3c90e3...
+             Exponent1: 0x8cb122099c9513ae...
+             Exponent2: 0x8a92c7071921cd30...
+             Coefficient: 0x722751305eafe9...
+       }
+
+     The line pubkey=0sAQOrW... of the private key contains a public key that
+     should be stored in the other peer's configuration in this format:
+
+     : PUB 0sAQOrWlcwbAIdNSMhDt...
+
+     You can also specify from and to addresses for which the key is valid:
+
+     0.0.0.0/0 10.20.30.0/24 : PUB 0sAQOrWlcwbAIdNSMhDt...
+
+SEE ALSO
+     racoon.conf(5), racoon(8)
+
+HISTORY
+     plainrsa-gen was written by Michal Ludvig <michal@logix.cz> and first
+     appeared in ipsec-tools 0.4.
+

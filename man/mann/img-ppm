@@ -1,0 +1,68 @@
+img-ppm(n)                                                          img-ppm(n)
+
+
+
+NAME
+       img-ppm - Img, Portable Pixmap format (ppm)
+
+SYNOPSIS
+       package require Tk
+
+       package require img::ppm  ?1.3?
+
+       image create photo ?name? ?options?
+
+
+DESCRIPTION
+       The  package  img::ppm  is  a sub-package of Img. It can be loaded as a
+       part of the complete Img support, via package require Img,  or  on  its
+       own, via package require img::ppm.
+
+       Like  all packages of Img it does not provide new commands, but extends
+       the existing Tk command image so  that  it  supports  files  containing
+       raster  images  in  the Portable Pixmap format (ppm). More specifically
+       img::ppm extends Tk's photo image type.
+
+       The name of the new format handler is ppm.  This handler does not  pro-
+       vide additional configuration options.
+
+       All of the above means that in a call like
+
+       image create photo ?name? ?options?
+
+       [1]    Image  data  in ppm format (options -data and -file) is detected
+              automatically.
+
+       [2]    The format name ppm is recognized by the option -format.
+
+SUPPORTED PPM TYPES
+       There are two types of PPM files: RAW (binary)  and  ASCII.   Currently
+       only the RAW format is implemented.
+
+         8-bit pixels: Grayscale, also known as PGM.
+        24-bit pixels: True-color (RGB, each channel 8 bit).
+
+        List of currently supported features:
+
+        Type   |     Read      |     Write     |
+               | -file | -data | -file | -data |
+        ----------------------------------------
+         8-bit | Yes   | Yes   | Yes   | Yes   |
+        24-bit | Yes   | Yes   | Yes   | Yes   |
+
+
+
+SEE ALSO
+       img-bmp,  img-gif,  img-ico,  img-intro, img-jpeg, img-pcx, img-pixmap,
+       img-png, img-ppm, img-ps, img-sgi, img-sun, img-tga, img-tiff, img-win-
+       dow, img-xbm, img-xpm
+
+KEYWORDS
+       image handling, ppm, tk
+
+COPYRIGHT
+       Copyright (c) 1995-2003 Jan Nijtmans <nijtmans@users.sourceforge.com>
+
+
+
+

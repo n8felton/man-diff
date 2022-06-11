@@ -1,0 +1,30 @@
+notifyd(8)                BSD System Manager's Manual               notifyd(8)
+
+NAME
+     notifyd -- notification server
+
+SYNOPSIS
+     notifyd [-d service_name] [-v] [-shm_pages npages] [-no_restart]
+
+DESCRIPTION
+     notifyd is the server for the Mac OS X notification system described in
+     notify(3).  The server is usually started automatically during system
+     startup, and is not run from the command line.
+
+     The -d option causes notifyd to run in a debugging mode.  It registers
+     its mach port with the given service name.  It will stay attached to the
+     terminal and print verbose log messages to the terminal.
+
+     The -v option causes notifyd to produce verbose logging information.
+
+     The -shm_pages npages option sets the number of shared memory pages used
+     for passive notification.  The default is one page.  If a value of zero
+     is specified, shared memory is disabled, and passive notifications are
+     performed using IPC between the client and the server.
+
+     The -no_restart option causes notifyd to register as a non-restartable
+     server with mach_init.
+
+SEE ALSO
+     notify(3).
+

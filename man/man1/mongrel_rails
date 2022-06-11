@@ -1,0 +1,29 @@
+MONGREL_RAILS(1)          BSD General Commands Manual         MONGREL_RAILS(1)
+
+NAME
+     mongrel_rails -- Fast HTTP library and server for Ruby
+
+SYNOPSIS
+     mongrel_rails command [options...]
+     gpgen path [options...]
+
+DESCRIPTION
+     Mongrel is a fast HTTP library and server for Ruby that is intended for
+     hosting Ruby web applications of any kind using plain HTTP rather than
+     FastCGI or SCGI. It is framework agnostic and already supports Ruby On
+     Rails, Og+Nitro, and Camping frameworks.
+
+     mongrel_rails allows you to control the Mongrel server.
+
+     gpgen helps you to create Mongrel plugins.
+
+     For more information about a specific program you can use its --h flag.
+     There is also online documentation available at "http://mongrel.ruby-
+     forge.org".
+
+SEE ALSO
+     rails(1) ruby(1)
+
+AUTHORS
+     Mongrel was created by Zed Shaw <zedshaw@zedshaw.com>
+

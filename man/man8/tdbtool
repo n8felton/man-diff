@@ -1,0 +1,92 @@
+TDBTOOL(8)                                                          TDBTOOL(8)
+
+
+
+NAME
+       tdbtool - manipulate the contents TDB files
+
+SYNOPSIS
+       tdbtool
+
+       tdbtool TDBFILE [COMMANDS...]
+
+DESCRIPTION
+       This tool is part of the samba(1) suite.
+
+       tdbtool  a  tool  for displaying and altering the contents of Samba TDB
+       (Trivial DataBase) files. Each of the  commands  listed  below  can  be
+       entered interactively or provided on the command line.
+
+COMMANDS
+       create TDBFILE
+          Create a new database named TDBFILE.
+
+       open TDBFILE
+          Open an existing database named TDBFILE.
+
+       erase
+          Erase the current database.
+
+       dump
+          Dump the current database as strings.
+
+       cdump
+          Dump the current database as connection records.
+
+       keys
+          Dump the current database keys as strings.
+
+       hexkeys
+          Dump the current database keys as hex values.
+
+       info
+          Print summary information about the current database.
+
+       insert KEY DATA
+          Insert a record into the current database.
+
+       move KEY TDBFILE
+          Move a record from the current database into TDBFILE.
+
+       store KEY DATA
+          Store (replace) a record in the current database.
+
+       show KEY
+          Show a record by key.
+
+       delete KEY
+          Delete a record by key.
+
+       list
+          Print the current database hash table and free list.
+
+       free
+          Print the current database and free list.
+
+       ! COMMAND
+          Execute the given system command.
+
+       first
+          Print the first record in the current database.
+
+       next
+          Print the next record in the current database.
+
+       quit
+          Exit tdbtool.
+
+CAVEATS
+       The  contents  of the Samba TDB files are private to the implementation
+       and should not be altered with tdbtool.
+
+VERSION
+       This man page is correct for version 3.0.25 of the Samba suite.
+
+AUTHOR
+       The original Samba software  and  related  utilities  were  created  by
+       Andrew  Tridgell.  Samba  is now developed by the Samba Team as an Open
+       Source project similar to the way the Linux kernel is developed.
+
+
+
+

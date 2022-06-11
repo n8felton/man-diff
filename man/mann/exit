@@ -1,0 +1,28 @@
+exit(n)                      Tcl Built-In Commands                     exit(n)
+
+
+
+______________________________________________________________________________
+
+NAME
+       exit - End the application
+
+SYNOPSIS
+       exit ?returnCode?
+_________________________________________________________________
+
+
+DESCRIPTION
+       Terminate  the  process, returning returnCode to the system as the exit
+       status.  If returnCode isn't specified then it defaults to 0.
+
+
+SEE ALSO
+       exec(n), tclvars(n)
+
+
+KEYWORDS
+       exit, process
+
+
+

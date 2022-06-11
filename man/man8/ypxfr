@@ -1,0 +1,53 @@
+YPXFR(8)                  BSD System Manager's Manual                 YPXFR(8)
+
+NAME
+     ypxfr -- get a YP map from YP server
+
+SYNOPSIS
+     ypxfr [-bcf] [-d domain] [-h host] [-s domain] [-C tid prog ipadd port]
+           mapname
+
+DESCRIPTION
+     ypxfr is the utiliy in YP that transfers maps to the local host.
+
+     Since the YP master transfers a map when it has changed, an YP slave
+     should check for missed maps regulary. This can be done via an entry in
+     crontab(5).  The scripts ypxfr_1perhour, ypxfr_2perday and ypxfr_1perday
+     could be used for that.
+
+     The options are as follows:
+
+     -b      Preserve the entry in the database informing a YP server to use
+             DNS to get information about unknown hosts. This option will only
+             have effect on the two maps hosts.byname and hosts.byaddr.
+
+     -c      Don't send a "Clear current map" to local ypserv process. Useful
+             if ypserv isn't running localy to avoid timeout message.
+
+     -f      Force map transfer, even if version of master is older than local
+             copy.
+
+     -d domain
+             Don't use default domain, use the specifiyed domain.
+
+     -h host
+             Get map from host insteed of the maps master host.
+
+     -s domain
+             Specify a source domain other than the target domain.
+
+     -C tid prog ipadd port
+             This option is only used by ypserv. This is to open communication
+             with an yppush on another host.
+
+FILES
+     /usr/sbin/ypxfr_1perhour
+     /usr/sbin/ypxfr_2perday
+     /usr/sbin/ypxfr_1perday
+
+SEE ALSO
+     yp(8), yppush(8), ypserv(8)
+
+AUTHOR
+     Mats O Jansson <moj@stacken.kth.se>
+

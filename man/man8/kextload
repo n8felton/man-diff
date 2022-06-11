@@ -1,0 +1,366 @@
+KEXTLOAD(8)               BSD System Manager's Manual              KEXTLOAD(8)
+
+NAME
+     kextload -- loads, validates, and generates symbols for a kernel exten-
+     sion (kext)
+
+SYNOPSIS
+     kextload [-h] [ -v [0-6] | -q ] [-t] [-i | -I] [-x] [-z] [-e] [-c] [-D]
+              [-k kernel_file] [-d extension] ...  [-r directory] ...  [ -l |
+              -m | -n | -A | -a kext_id@address ] ...  [-s directory]
+              [-p personality] ...  [-b bundle_id] ...  [--] [extension] ...
+
+DESCRIPTION
+     The kextload program is used to explicitly load kernel extensions
+     (kexts), validate them to see that they can be loaded by other mecha-
+     nisms, such as kextd(8), and to generate symbol files for debugging the
+     kext in a running kernel.  In order to load a kext into the kernel
+     kextload must be invoked as the superuser; for all other uses it can be
+     invoked by any user.
+
+     kextload is a formal interface for kext loading in the Darwin OS and in
+     Mac OS X.  Software and installers can rely on its presence and invoke it
+     in order to load kexts.
+
+     kextload has many options, but most of them are rarely necessary.  See
+     the EXAMPLES section for tips on common uses.  The arguments and options
+     available are these:
+
+     extension
+              The pathname of a kext bundle to load or otherwise use.  Kexts
+              can also be specified by CFBundleIdentifier with the -b option.
+
+     -a kext_id@address
+              Treat the kext whose CFBundleIdenfier is kext_id as being loaded
+              at address when generating symbol files and not loading.  When
+              generating symbols only, all dependencies must have known
+              addresses.  Use this option repeatedly for every nonkernel
+              dependency.  This option implies the use of the -n option. See
+              also -A and -n.
+
+     -A       When generating symbol files and not loading, look up all depen-
+              dency kext addresses within the running kernel.  This option
+              implies the use of the -n option. See also -a and -n.
+
+     -b bundle_id
+              Look up the kext whose CFBundleIdentifier is bundle_id within
+              the set of known kexts and load it.  See the -d, -e, and -r
+              options for more information.
+
+     -c       Ignore any repository cache files and scan all kext bundles to
+              gather information.  If this option is not given, kextload will
+              attempt to use cache files and to create them if they are out of
+              date or don't exist.
+
+     -d extension
+              Add extension to the set of known kexts for resolving dependen-
+              cies.  This is useful for adding a single kext from a directory
+              while excluding the others.  See the -e and -r options for more
+              information.
+
+     -D       Don't check the kernel for already loaded kexts when resolving
+              dependencies.  This behavior is now the default and so this
+              option is deprecated and redundant.  Note that this can result
+              in load failures if a different version of a dependency is
+              already loaded.  This option is relevant only when loading a
+              kext into the kernel.  The -A option overrides this option as it
+              must check the kernel for which kexts are loaded.
+
+     -e       Don't use the contents of /System/Library/Extensions as the
+              default repository of kexts.  If you use this option you will
+              have to explicitly specify all dependencies of the kext being
+              loaded or otherwise worked on using the -d and -r options.
+
+     -h       Print a help message describing each option flag.
+
+     -i       Interactive mode; pause at each stage of loading for user input
+              to continue.  This allows for debugger setup when the kext needs
+              to be debugged during its earliest stages of running.
+
+     -I       (capital i) Interactive mode as -i for the specified kext and
+              all of its dependencies.
+
+     -k kernel_file
+              Link against the given kernel_file.  Allowed only with the -n
+              option to generate debug symbols.  By default kextload attempts
+              to get link symbols from the running kernel,
+
+     /var/run/mach.sym,
+              and
+
+     /mach_kernel,
+              in that order (the UUIDs must match that of the running kernel
+              for the disk-based files).
+
+     -l       Load and start the kext only; don't send I/O Kit personalities
+              to the kernel to begin matching.  Matching may still occur if
+              the personalities are present from an earlier load operation.
+              You may want to use kextunload(8) before loading a kext with
+              this option.
+
+     -L       Same as -r (remains for backward compatibility).
+
+     -m       Don't load the kext, but do send its personalities to the kernel
+              to begin matching.  Use this option after you have loaded a
+              driver with -l and after setting up the debugger.
+
+     -n       Neither load the kext nor send personalities to the kernel.
+              This option is for use when generating debug symbols only with
+              the -s option, or when validating kexts with the -t option.  See
+              also the -a and - A options.
+
+     -p personality
+              Send only the named personalities from the kext to the kernel.
+              Repeat for each personality desired, or use the -i option to
+              have kextload ask for each personality.
+
+     -q       Quiet mode; print no informational or error messages.  This
+              option excludes -v.  If kextload is run with -q in a way that
+              might require user interaction, as with the -i and -I options,
+              and some uses of -n, the program will silently exit with an
+              error status.
+
+     -r directory
+              Use directory as a repository of kexts.  This adds to the set of
+              known kexts for resolving dependencies or looking up by
+              CFBundleIdentifier when using the -b option.  This is not recur-
+              sive; only the directory's immediate contents are scanned.  See
+              also the -c, -d, and -e options.
+
+     -s directory
+              Write all generated symbol files into directory.  The directory
+              must already exist.  Symbol files are named after the CFBundleI-
+              dentifier of each kexts with a .sym suffix appended.
+
+     -t       Perform all possible tests on the named kext(s) and indicate
+              whether the kext is loadable, or if not, what problems it has.
+              Note that tests are performed in three stages, validation,
+              authentication, and dependency resolution; a failure at any
+              stage can make tests in further stages impossible.  Thus, a kext
+              with validation failures may have unreported authentication
+              problems or missing dependencies.
+
+     -v [1-6]
+              Verbose mode; print information about the kext scanning and
+              loading process. Higher levels of verbosity include all lower
+              levels.  The levels of verbose output are these:
+
+              0    suppresses informational messages (errors are still
+                   printed); see also -q
+
+              1    prints basic kext scanning information
+
+              2    prints basic load information
+
+              3    prints detailed kext scanning information
+
+              4    prints basic information on every kext encountered
+
+              5    prints detailed information on every kext encountered
+
+              6    prints detailed load information
+              If -v is not specified only the essential information about the
+              load operation is printed (such as whether the kext was already
+              loaded).
+
+              A kext can also specify verbose printing for just itself using
+              the OSBundleDebugLevel top-level info dictionary property.  Its
+              values are 1 and 2, for basic and detailed information, respec-
+              tively.
+
+              This option excludes - q .
+
+     -x       Run kextload in safe boot mode (indicating startup with the
+              Shift key held down).  Kexts that don't specify a proper value
+              for the OSBundleRequired info dictionary property, or those in
+              which every personality contains a nonzero IOKitDebug property,
+              will not load.  This option implies the use of the -c option.
+
+     -z       Don't authenticate kexts.  This option is for convenience during
+              development, and is allowed only for operations that don't actu-
+              ally load a kext into the kernel (such as when generating sym-
+              bols).
+
+     -Z       Don't try to resolve dependencies.  This option is allowed only
+              when using the -n and -t options to test a kext for problems.
+              It is not allowed with the -s option as generating symbols
+              requires dependencies to be resolved.
+
+     --       End of all options. Only kext names follow.
+
+EXAMPLES
+     Here are the common uses and usage patterns for kextload.
+
+   Basic loading
+     To load a kext you must run kextload as the superuser and supply a kext
+     bundle name; no options are required:
+
+               kextload TabletDriver.kext
+
+     Alternatively, you can use the -b option to specify a kext by its
+     CFBundleIdentifier:
+
+               kextload -b com.mycompany.driver.TabletDriver
+
+     With no additional options kextload will look in /System/Library/Exten-
+     sions for a kext with the given CFBundleIdentifier.  Adding repository
+     directories with the -r option or individual kexts with the -d option
+     expands the set of kexts that kextload looks among:
+
+               kextload -r ${USER}/Library/Extensions TabletDriver.kext
+
+     If you're modifying system startup to load a kext, be sure to check
+     whether the system is starting up in safe boot mode (typically when the
+     user presses the Shift key) and use the -x option to indicate this.  (The
+     various rc files in /etc can simply use the $SafeBoot shell variable on
+     the command line. It evaluates to an empty string during normal startup
+     and "-x" during safe boot mode.)
+
+   Validating Kexts
+     The -t option causes kextload to perform all possible validation and
+     authentication checks on the specified kexts and to attempt to resolve
+     their dependencies.  If there are any problems with the specified kexts,
+     kextload prints a list of the problems.
+
+     The -t option is typically used with -n after a load failure to pinpoint
+     a problem.  It can be used with any other set of options, however.
+
+     If you want to validate a kext in isolation, as in a build environment
+     where dependencies may not be available, you can use the -e and -Z
+     options to omit the /System/Library/Extensions repository and to suppress
+     dependency resolution, respectively:
+
+               kextload -entZ PacketSniffer.kext
+
+     Only validation and authentication checks will be performed.
+
+   Generating Debug Symbols When Loading
+     To generate a symbol file for use with gdb when loading a kext, use the
+     -s option to specify a directory where symbol files will be written for
+     the kext being loaded and all its dependencies.
+
+               kextload -s ~/ksyms PacketSniffer.kext
+
+   Generating Debug Symbols For an Already-Loaded Kext
+     If you want to generate symbols for a kext that's already loaded, whether
+     on the same system or on another, use the -s option along with the -n
+     option.  Since in this case addresses must be known for the kext and all
+     its dependencies, though, you must specify these.  If you don't indicate
+     them on the command line, kextload will ask you for the load address of
+     each kext needed.  Use kextstat(8) on the machine you're generating sym-
+     bols for to get these addresses and enter them at each prompt.
+
+               kextload -n -s ~/ksyms GrobbleEthernet.kext
+               enter the hexadecimal load addresses for these modules:
+               com.apple.iokit.IONetworkingFamily: 0x1001000
+               ...
+
+     Alternatively, if you know the CFBundleIdentifiers of all the kexts, you
+     can use the -a option for each kext (you needn't specify -n when using
+     the -a option):
+
+               kextload -s ~/ksyms \
+               -a com.apple.iokit.IONetworkingFamily@0x1001000 \
+               -a com.apple.iokit.IOPCIFamily@0x1004000 \
+               -a com.mycompany.driver.GrobbleEthernet@0x1007000 \
+               GrobbleEthernet.kext
+
+     Simplest of all, however, provided you can run kextload on the same
+     machine as the loaded kext, is to use the -A option, which checks with
+     the kernel for all loaded kexts and automatically gets their load
+     addresses.
+
+               kextload -s ~/ksyms -A GrobbleEthernet.kext
+
+   Explicitly Specifying Dependencies
+     Because kextload resolves dependencies automatically, it's possible that
+     a kext other than the one you intend might get used as a dependency (such
+     as when there are multiple versions, or if you're working on a new ver-
+     sion of a kext that's already installed in /System/Library/Extensions).
+     By default, when loading a kext into the kernel kextload checks which
+     versions of possible dependencies are already loaded in order to assure a
+     successful load.  When not loading, however, it always chooses the most
+     recent versions of any dependencies.
+
+     If you want to have complete control over the set of extensions used to
+     resolve dependencies, use the -e, -d, and -r options.  The -e option
+     excludes the standard /System/Library/Extensions folder, leaving the set
+     of candidate extensions for dependency resolution entirely up to you.  To
+     specify candidate dependencies you use either -d, which names a single
+     kext as a candidate, or -r, which adds an entire directory of extensions.
+
+               kextload -n -s ~/ksyms -e \
+               -d /System/Library/Extensions/System.kext \
+               -r ~/TestKexts -d JoystickSupport.kext JoystickDriver.kext
+
+     Note also that if you use -e, you must supply some version of the Sys-
+     tem.kext bundle in order to supply information about the kernel.  This
+     should always match the kernel you're linking against, which is by
+     default the installed kernel on the machine you're using kextload on; you
+     can use the -k option to indicate a different kernel file.
+
+   Debug-Loading an I/O Kit Driver
+     If you need to debug an I/O Kit driver's early startup code, you must
+     load the driver on the target machine without starting matching by using
+     the -l option:
+
+               kextload -l DiskController.kext
+
+     Once you have done this, you can use the generated symbol file in your
+     debug session to set breakpoints and then trigger matching by running
+     kextload again on the target machine with the -m option:
+
+               kextload -m DiskController.kext
+
+     You may wish to use the -p option as well in order to send selected per-
+     sonalities to the kernel.  Alternatively, you can use the -i option for
+     the whole process, which causes kextload to pause just before loading any
+     personalities and then to ask you for each personality whether that one
+     should be sent to the kernel:
+
+               kextload -i DiskController.kext
+
+   Debug-Loading a non-I/O Kit Kext
+     A non-I/O Kit kext doesn't have a personality-matching phase of loading;
+     it just starts executing.  In order to debug a non-I/O Kit kext's startup
+     code, you must use the -i or -I option, which pauses loading at each sig-
+     nificant stage so that you can set up your debugging session as needed
+     before proceeding.
+
+FILES
+     /System/Library/Extensions  The standard system repository of kernel
+                                 extensions
+     directoryname/Caches/*      Cache files for a given directory of kernel
+                                 extensions
+     /var/run/mach.sym           The symbol file for the running kernel, writ-
+                                 ten by kextd(8) at system startup.
+     /mach_kernel                The default kernel file, used for linking as
+                                 a last resort.
+
+DIAGNOSTICS
+     kextload exits with a zero status upon success.  Upon failure, it prints
+     an error message and continues processing any kexts if possible, then
+     exits with a nonzero status.
+
+     For a kext to be loadable, it must be valid, authentic, have all depen-
+     dencies met (that is, all dependencies must be found and loadable).  A
+     valid kext has a well formed bundle, info dictionary, and executable.  An
+     authentic kext's component files are owned by root:wheel, with permis-
+     sions nonwritable by group and other.  If your kext fails to load, try
+     using the -t option to print diagnostics related to validation and
+     authentication.
+
+     Also, of course, the executable must contain code for the host machine's
+     architecture and link successfully.  However, since this is expensive to
+     do, these checks are not made unless the kext is actually being linked.
+     You can confirm these aspects of loadability by attempting to generate
+     symbol files using the -s option.
+
+SEE ALSO
+     kextcache(8), kextd(8), kextstat(8), kextunload(8)
+
+BUGS
+     Upon encountering a kext with validation errors, kextload typically
+     prints an error message about that kext, even if it isn't involved in the
+     load request.
+

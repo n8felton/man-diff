@@ -1,0 +1,757 @@
+NET(8)                                                                  NET(8)
+
+
+
+NAME
+       net - Tool for administration of Samba and remote CIFS servers.
+
+SYNOPSIS
+       net  {<ads|rap|rpc>}  [-h]  [-w workgroup]  [-W myworkgroup]  [-U user]
+        [-I ip-address] [-p port] [-n myname] [-s conffile]  [-S server]  [-l]
+        [-P] [-d debuglevel] [-V]
+
+DESCRIPTION
+       This tool is part of the samba(7) suite.
+
+       The samba net utility is meant to work just like the net utility avail-
+       able for windows and DOS. The first argument should be used to  specify
+       the  protocol  to use when executing a certain command. ADS is used for
+       ActiveDirectory, RAP is using for old (Win9x/NT3) clients and  RPC  can
+       be used for NT4 and Windows 2000. If this argument is omitted, net will
+       try to determine it automatically. Not all commands  are  available  on
+       all protocols.
+
+OPTIONS
+       -h|--help
+          Print a summary of command line options.
+
+       -w target-workgroup
+          Sets  target  workgroup  or  domain. You have to specify either this
+          option or the IP address or the name of a server.
+
+       -W workgroup
+          Sets client workgroup or domain
+
+       -U user
+          User name to use
+
+       -I ip-address
+          IP address of target server to use. You have to specify either  this
+          option or a target workgroup or a target server.
+
+       -p port
+          Port  on  the  target  server  to  connect  to (usually 139 or 445).
+          Defaults to trying 445 first, then 139.
+
+       -n <primary NetBIOS name>
+          This option allows you to override the NetBIOS name that Samba  uses
+          for itself. This is identical to setting the
+
+          parameter in the smb.conf file. However, a command line setting will
+          take precedence over settings in smb.conf.
+
+       -s <configuration file>
+          The file specified contains the configuration  details  required  by
+          the  server.  The  information in this file includes server-specific
+          information such as what printcap file to use, as well  as  descrip-
+          tions  of  all  the  services  that  the  server  is to provide. See
+          smb.conf for more information. The default configuration  file  name
+          is determined at compile time.
+
+       -S server
+          Name  of  target  server. You should specify either this option or a
+          target workgroup or a target IP address.
+
+       -l
+          When listing data, give more information on each item.
+
+       -P
+          Make queries to the external server using the machine account of the
+          local server.
+
+       -d|--debuglevel=level
+          level  is an integer from 0 to 10. The default value if this parame-
+          ter is not specified is zero.
+
+          The higher this value, the more detail will be  logged  to  the  log
+          files  about the activities of the server. At level 0, only critical
+          errors and serious warnings will be logged. Level 1 is a  reasonable
+          level for day-to-day running - it generates a small amount of infor-
+          mation about operations carried out.
+
+          Levels above 1 will generate considerable amounts of log  data,  and
+          should only be used when investigating a problem. Levels above 3 are
+          designed for use only by developers and generate HUGE amounts of log
+          data, most of which is extremely cryptic.
+
+          Note that specifying this parameter here will override the
+
+          parameter in the smb.conf file.
+
+COMMANDS
+   CHANGESECRETPW
+       This  command  allows the Samba machine account password to be set from
+       an external application to a machine account password that has  already
+       been  stored  in  Active  Directory. DO NOT USE this command unless you
+       know exactly what you are doing. The use of this command requires  that
+       the  force  flag  (-f)  be  used also. There will be NO command prompt.
+       Whatever information is piped into stdin, either by typing at the  com-
+       mand line or otherwise, will be stored as the literal machine password.
+       Do NOT use this without care and  attention  as  it  will  overwrite  a
+       legitimate machine password without warning. YOU HAVE BEEN WARNED.
+
+   TIME
+       The  NET TIME command allows you to view the time on a remote server or
+       synchronise the time on the local server with the time  on  the  remote
+       server.
+
+
+   TIME
+       Without  any  options,  the  NET  TIME command displays the time on the
+       remote server.
+
+
+   TIME SYSTEM
+       Displays the time on the remote server in a format ready for /bin/date
+
+
+   TIME SET
+       Tries to set the date and time of the  local  server  to  that  on  the
+       remote server using /bin/date.
+
+
+   TIME ZONE
+       Displays the timezone in hours from GMT on the remote computer.
+
+   [RPC|ADS]  JOIN [TYPE] [-U username[%password]] [createupn=UPN] [createcom-
+       puter=OU] [options]
+       Join a domain. If the account already exists on the server, and  [TYPE]
+       is  MEMBER,  the  machine will attempt to join automatically. (Assuming
+       that the machine has been created in server manager) Otherwise, a pass-
+       word will be prompted for, and a new account may be created.
+
+       [TYPE]  may be PDC, BDC or MEMBER to specify the type of server joining
+       the domain.
+
+       [UPN] (ADS only) set the principalname attribute during the  join.  The
+       default format is host/netbiosname@REALM.
+
+       [OU] (ADS only) Precreate the computer account in a specific OU. The OU
+       string reads from top to bottom without RDNs, and  is  delimited  by  a
+       '/'. Please note that '' is used for escape by both the shell and ldap,
+       so it may need to be doubled or quadrupled to pass through, and  it  is
+       not used as a delimiter.
+
+   [RPC] OLDJOIN [options]
+       Join  a domain. Use the OLDJOIN option to join the domain using the old
+       style of domain joining - you need to create a trust account in  server
+       manager first.
+
+   [RPC|ADS] USER
+   [RPC|ADS] USER
+       List all users
+
+
+   [RPC|ADS] USER DELETE target
+       Delete specified user
+
+
+   [RPC|ADS] USER INFO target
+       List the domain groups of a the specified user.
+
+
+   [RPC|ADS] USER RENAME oldname newname
+       Rename specified user.
+
+
+   [RPC|ADS] USER ADD name [password] [-F user flags] [-C comment]
+       Add specified user.
+
+   [RPC|ADS] GROUP
+   [RPC|ADS] GROUP [misc options] [targets]
+       List user groups.
+
+
+   [RPC|ADS] GROUP DELETE name [misc. options]
+       Delete specified group.
+
+
+   [RPC|ADS] GROUP ADD name [-C comment]
+       Create specified group.
+
+   [RAP|RPC] SHARE
+   [RAP|RPC] SHARE [misc. options] [targets]
+       Enumerates all exported resources (network shares) on target server.
+
+
+   [RAP|RPC] SHARE ADD name=serverpath [-C comment] [-M maxusers] [targets]
+       Adds  a  share from a server (makes the export active). Maxusers speci-
+       fies the number of users that can be connected to the share  simultane-
+       ously.
+
+
+   SHARE DELETE sharenam
+       Delete specified share.
+
+   [RPC|RAP] FILE
+   [RPC|RAP] FILE
+       List all open files on remote server.
+
+
+   [RPC|RAP] FILE CLOSE fileid
+       Close file with specified fileid on remote server.
+
+
+   [RPC|RAP] FILE INFO fileid
+       Print  information  on specified fileid. Currently listed are: file-id,
+       username, locks, path, permissions.
+
+
+   [RAP|RPC] FILE USER
+       Note
+       Currently NOT implemented.
+
+   SESSION
+   RAP SESSION
+       Without any other options, SESSION enumerates all active SMB/CIFS  ses-
+       sions on the target server.
+
+
+   RAP SESSION DELETE|CLOSE CLIENT_NAME
+       Close the specified sessions.
+
+
+   RAP SESSION INFO CLIENT_NAME
+       Give a list with all the open files in specified session.
+
+   RAP SERVER DOMAIN
+       List  all  servers  in specified domain or workgroup. Defaults to local
+       domain.
+
+   RAP DOMAIN
+       Lists all domains and workgroups visible on the current network.
+
+   RAP PRINTQ
+   RAP PRINTQ LIST QUEUE_NAME
+       Lists the specified print queue and print jobs on the  server.  If  the
+       QUEUE_NAME is omitted, all queues are listed.
+
+
+   RAP PRINTQ DELETE JOBID
+       Delete job with specified id.
+
+   RAP VALIDATE user [password]
+       Validate whether the specified user can log in to the remote server. If
+       the password is not specified on the commandline, it will be  prompted.
+
+       Note
+       Currently NOT implemented.
+
+   RAP GROUPMEMBER
+   RAP GROUPMEMBER LIST GROUP
+       List all members of the specified group.
+
+
+   RAP GROUPMEMBER DELETE GROUP USER
+       Delete member from group.
+
+
+   RAP GROUPMEMBER ADD GROUP USER
+       Add member to group.
+
+   RAP ADMIN command
+       Execute  the  specified  command  on the remote server. Only works with
+       OS/2 servers.
+
+       Note
+       Currently NOT implemented.
+
+   RAP SERVICE
+   RAP SERVICE START NAME [arguments...]
+       Start the specified service on the remote server. Not implemented  yet.
+
+       Note
+       Currently NOT implemented.
+
+
+   RAP SERVICE STOP
+       Stop the specified service on the remote server.
+
+       Note
+       Currently NOT implemented.
+
+   RAP PASSWORD USER OLDPASS NEWPASS
+       Change password of USER from OLDPASS to NEWPASS.
+
+   LOOKUP
+   LOOKUP HOST HOSTNAME [TYPE]
+       Lookup  the  IP address of the given host with the specified type (net-
+       bios suffix). The type defaults to 0x20 (workstation).
+
+
+   LOOKUP LDAP [DOMAIN
+       Give IP address of LDAP server of specified DOMAIN. Defaults  to  local
+       domain.
+
+
+   LOOKUP KDC [REALM]
+       Give  IP  address  of  KDC  for  the specified REALM. Defaults to local
+       realm.
+
+
+   LOOKUP DC [DOMAIN]
+       Give IP's of Domain Controllers for specified
+        DOMAIN. Defaults to local domain.
+
+
+   LOOKUP MASTER DOMAIN
+       Give IP of master browser for specified DOMAIN or  workgroup.  Defaults
+       to local domain.
+
+   CACHE
+       Samba  uses  a  general  caching interface called 'gencache'. It can be
+       controlled using 'NET CACHE'.
+
+       All the timeout parameters support the suffixes:
+
+          s - Seconds
+
+          m - Minutes
+
+          h - Hours
+
+          d - Days
+
+          w - Weeks
+
+
+
+   CACHE ADD key data time-out
+       Add specified key+data to the cache with the given timeout.
+
+
+   CACHE DEL key
+       Delete key from the cache.
+
+
+   CACHE SET key data time-out
+       Update data of existing cache entry.
+
+
+   CACHE SEARCH PATTERN
+       Search for the specified pattern in the cache data.
+
+
+   CACHE LIST
+       List all current items in the cache.
+
+
+   CACHE FLUSH
+       Remove all the current items from the cache.
+
+   GETLOCALSID [DOMAIN]
+       Print the SID of the specified domain, or if the parameter is  omitted,
+       the SID of the domain the local server is in.
+
+   SETLOCALSID S-1-5-21-x-y-z
+       Sets domain sid for the local server to the specified SID.
+
+   GROUPMAP
+       Manage the mappings between Windows group SIDs and UNIX groups. Parame-
+       ters take the for "parameter=value". Common options include:
+
+       o  unixgroup - Name of the UNIX group
+
+       o  ntgroup - Name of the Windows NT group (must be resolvable to a SID
+
+       o  rid - Unsigned 32-bit integer
+
+       o  sid - Full SID in the form of "S-1-..."
+
+       o  type - Type of the group; either 'domain', 'local', or 'builtin'
+
+       o  comment - Freeform text description of the group
+
+
+   GROUPMAP ADD
+       Add a new group mapping entry:
+
+
+
+
+       net groupmap add {rid=int|sid=string} unixgroup=string       [type={domain|local}] [ntgroup=string] [comment=string]
+
+
+
+
+   GROUPMAP DELETE
+       Delete a group mapping entry. If more then one group name matches,  the
+       first entry found is deleted.
+
+       net groupmap delete {ntgroup=string|sid=SID}
+
+
+   GROUPMAP MODIFY
+       Update en existing group entry
+
+
+
+
+
+
+       net groupmap modify {ntgroup=string|sid=SID} [unixgroup=string]        [comment=string] [type={domain|local}]
+
+
+
+
+   GROUPMAP LIST
+       List existing group mapping entries
+
+       net groupmap list [verbose] [ntgroup=string] [sid=SID]
+
+   MAXRID
+       Prints out the highest RID currently in use on the local server (by the
+       active 'passdb backend').
+
+   RPC INFO
+       Print information about the domain of the remote server, such as domain
+       name, domain sid and number of users and groups.
+
+   [RPC|ADS] TESTJOIN
+       Check whether participation in a domain is still valid.
+
+   [RPC|ADS] CHANGETRUSTPW
+       Force change of domain trust password.
+
+   RPC TRUSTDOM
+   RPC TRUSTDOM ADD DOMAIN
+       Add a interdomain trust account for DOMAIN to the remote server.
+
+
+   RPC TRUSTDOM DEL DOMAIM
+       Remove interdomain trust account for DOMAIN from the remote server.
+
+       Note
+       Currently NOT implemented.
+
+
+   RPC TRUSTDOM ESTABLISH DOMAIN
+       Establish  a  trust  relationship  to  a  trusting  domain. Interdomain
+       account must already be created on the remote PDC.
+
+
+   RPC TRUSTDOM REVOKE DOMAIN
+       Abandon relationship to trusted domain
+
+
+   RPC TRUSTDOM LIST
+       List all current interdomain trust relationships.
+
+
+   RPC RIGHTS
+       This subcommand is used to view and manage Samba's  rights  assignments
+       (also  referred  to  as  privileges).  There  are three options current
+       available: list, grant, and revoke. More details on  Samba's  privilege
+       model and its use can be found in the Samba-HOWTO-Collection.
+
+   RPC ABORTSHUTDOWN
+       Abort the shutdown of a remote server.
+
+   RPC SHUTDOWN [-t timeout] [-r] [-f] [-C message]
+       Shut down the remote server.
+
+       -r
+          Reboot after shutdown.
+
+       -f
+          Force shutting down all applications.
+
+       -t timeout
+          Timeout  before system will be shut down. An interactive user of the
+          system can use this time to cancel the shutdown.
+
+
+       -C message
+          Display the specified message on the screen to  announce  the  shut-
+          down.
+
+   RPC SAMDUMP
+       Print  out  sam database of remote server. You need to run this against
+       the PDC, from a Samba machine joined as a BDC.
+
+   RPC VAMPIRE
+       Export users, aliases and groups from remote server  to  local  server.
+       You  need to run this against the PDC, from a Samba machine joined as a
+       BDC.
+
+   RPC GETSID
+       Fetch domain SID and store it in the local secrets.tdb.
+
+   ADS LEAVE
+       Make the remote host leave the domain it is part of.
+
+   ADS STATUS
+       Print out status of machine account of the local machine in ADS. Prints
+       out  quite  some  debug info. Aimed at developers, regular users should
+       use NET ADS TESTJOIN.
+
+   ADS PRINTER
+   ADS PRINTER INFO [PRINTER] [SERVER]
+       Lookup info for PRINTER on SERVER. The printer name  defaults  to  "*",
+       the server name defaults to the local host.
+
+
+   ADS PRINTER PUBLISH PRINTER
+       Publish specified printer using ADS.
+
+
+   ADS PRINTER REMOVE PRINTER
+       Remove specified printer from ADS directory.
+
+   ADS SEARCH EXPRESSION ATTRIBUTES...
+       Perform  a  raw  LDAP  search on a ADS server and dump the results. The
+       expression is a standard LDAP search expression, and the attributes are
+       a list of LDAP fields to show in the results.
+
+       Example: net ads search '(objectCategory=group)' sAMAccountName
+
+   ADS DN DN (attributes)
+       Perform  a raw LDAP search on a ADS server and dump the results. The DN
+       standard LDAP DN, and the attributes are a list of LDAP fields to  show
+       in the result.
+
+       Example:  net ads dn 'CN=administrator,CN=Users,DC=my,DC=domain' SAMAc-
+       countName
+
+   ADS WORKGROUP
+       Print out workgroup name for specified kerberos realm.
+
+   SAM CREATEBUILTINGROUP <NAME>
+       (Re)Create a BUILTIN group. Only a wellknown set of BUILTIN groups  can
+       be  created with this command. This is the list of currently recognized
+       group names: Administrators, Users, Guests, Power Users, Account Opera-
+       tors,  Server Operators, Print Operators, Backup Operators, Replicator,
+       RAS Servers, Pre-Windows 2000 ompatible Access. This command requires a
+       running  Winbindd  with idmap allocation properly configured. The group
+       gid will be allocated out of the winbindd range.
+
+   SAM CREATELOCALGROUP <NAME>
+       Create a LOCAL group (also known as Alias).  This  command  requires  a
+       running  Winbindd  with idmap allocation properly configured. The group
+       gid will be allocated out of the winbindd range.
+
+   SAM DELETELOCALGROUP <NAME>
+       Delete an existing LOCAL group (also known as Alias).
+
+   SAM MAPUNIXGROUP <NAME>
+       Map an existing Unix group and make it a Domain Group, the domain group
+       will have the same name.
+
+   SAM UNMAPUNIXGROUP <NAME>
+       Remove an existing group mapping entry.
+
+   SAM ADDMEM <GROUP> <MEMBER>
+       Add a member to a Local group. The group can be specified only by name,
+       the member can be specified by name or SID.
+
+   SAM DELMEM <GROUP> <MEMBER>
+       Remove a member from a Local group. The group and the  member  must  be
+       specified by name.
+
+   SAM LISTMEM <GROUP>
+       List Local group members. The group must be specified by name.
+
+   SAM LIST <users|groups|localgroups|builtin|workstations> [verbose]
+       List  the  specified  set of accounts by name. If verbose is specified,
+       the rid and description is also provided for each account.
+
+   SAM SHOW <NAME>
+       Show the full DOMAIN\NAME the SID and the type  for  the  corrisponding
+       account.
+
+   SAM SET HOMEDIR <NAME> <DIRECTORY>
+       Set the home directory for a user account.
+
+   SAM SET PROFILEPATH <NAME> <PATH>
+       Set the profile path for a user account.
+
+   SAM SET COMMENT <NAME> <COMMENT>
+       Set the comment for a user or group account.
+
+   SAM SET FULLNAME <NAME> <FULL NAME>
+       Set the full name for a user account.
+
+   SAM SET LOGONSCRIPT <NAME> <SCRIPT>
+       Set the logon script for a user account.
+
+   SAM SET HOMEDRIVE <NAME> <DRIVE>
+       Set the home drive for a user account.
+
+   SAM SET WORKSTATIONS <NAME> <WORKSTATIONS>
+       Set the workstations a user account is allowed to log in from.
+
+   SAM SET DISABLE <NAME>
+       Set the "disabled" flag for a user account.
+
+   SAM SET PWNOTREQ <NAME>
+       Set the "password not required" flag for a user account.
+
+   SAM SET AUTOLOCK <NAME>
+       Set the "autolock" flag for a user account.
+
+   SAM SET PWNOEXP <NAME>
+       Set the "password do not expire" flag for a user account.
+
+   SAM SET PWMUSTCHANGENOW <NAME> [yes|no]
+       Set or unset the "password must change" flag fro a user account.
+
+   SAM POLICY LIST
+       List the avilable account policies.
+
+   SAM POLICY SHOW <account policy>
+       Show the account policy value.
+
+   SAM POLICY SET <account policy> <value>
+       Set  a  value  for  the account policy. Valid values can be: "forever",
+       "never", "off", or a number.
+
+   SAM PROVISION
+       Only available if ldapsam:editposix is set  and  winbindd  is  running.
+       Properly  populates  the ldap tree with the basic accounts (Administra-
+       tor) and groups (Domain Users, Domain Admins,  Domain  Guests)  on  the
+       ldap tree.
+
+   IDMAP DUMP <output file>
+       Dumps the mappings in the specified output file.
+
+   IDMAP RESTORE [input file]
+       Restore the mappings from the specified file or stdin.
+
+   IDMAP SECRET <DOMAIN>|ALLOC <secret>
+       Store  a  secret  for  the sepcified domain, used primarily for domains
+       that use idmap_ldap as a backend. In this case the secret  is  used  as
+       the password for the user DN used to bind to the ldap server.
+
+   USERSHARE
+       Starting  with  version 3.0.23, a Samba server now supports the ability
+       for non-root users to add user define shares to be exported  using  the
+       "net usershare" commands.
+
+       To  set  this  up, first set up your smb.conf by adding to the [global]
+       section : usershare path = /usr/local/samba/lib/usershares Next  create
+       the directory /usr/local/samba/lib/usershares, change the owner to root
+       and set the group owner to the UNIX group who should have  the  ability
+       to  create  usershares, for example a group called "serverops". Set the
+       permissions on /usr/local/samba/lib/usershares  to  01770.  (Owner  and
+       group  all  access,  no  access  for others, plus the sticky bit, which
+       means that a file in that directory can be renamed or deleted  only  by
+       the owner of the file). Finally, tell smbd how many usershares you will
+       allow by adding to the [global] section of smb.conf a line  such  as  :
+       usershare  max  shares  = 100. To allow 100 usershare definitions. Now,
+       members of the UNIX group "serverops" can create user defined shares on
+       demand using the commands below.
+
+       The usershare commands are:
+
+          net  usershare add sharename path [comment] [acl] [guest_ok=[y|n]] -
+          to add or change a user defined share.
+
+          net usershare delete sharename - to delete a user defined share.
+
+          net usershare info [-l|--long] [wildcard sharename] - to print  info
+          about a user defined share.
+
+          net  usershare  list [-l|--long] [wildcard sharename] - to list user
+          defined shares.
+
+
+
+   USERSHARE ADD sharename path [comment] [acl] [guest_ok=[y|n]]
+       Add or replace a new user defined share, with name "sharename".
+
+       "path" specifies the absolute pathname on the system  to  be  exported.
+       Restrictions  may  be put on this, see the global smb.conf parameters :
+       "usershare owner only", "usershare prefix allow list",  and  "usershare
+       prefix deny list".
+
+       The optional "comment" parameter is the comment that will appear on the
+       share when browsed to by a client.
+
+       The optional "acl" field specifies which  users  have  read  and  write
+       access to the entire share. Note that guest connections are not allowed
+       unless the smb.conf parameter "usershare allow guests"  has  been  set.
+       The  definition  of  a  user  defined share acl is : "user:permission",
+       where user is a valid username on the system and permission can be "F",
+       "R", or "D". "F" stands for "full permissions", ie. read and write per-
+       missions. "D" stands for "deny" for a user, ie. prevent this user  from
+       accessing  this  share. "R" stands for "read only", ie. only allow read
+       access to this share (no creation of new files or directories or  writ-
+       ing to files).
+
+       The  default  if  no  "acl"  is  given is "Everyone:R", which means any
+       authenticated user has read-only access.
+
+       The optional "guest_ok" has the same effect as  the  parameter  of  the
+       same  name  in  smb.conf,  in  that it allows guest access to this user
+       defined share. This parameter is only allowed if the  global  parameter
+       "usershare allow guests" has been set to true in the smb.conf.
+
+
+       There  is no separate command to modify an existing user defined share,
+       just use the "net usershare add [sharename]"  command  using  the  same
+       sharename as the one you wish to modify and specify the new options you
+       wish. The Samba smbd daemon notices user defined share modifications at
+       connect  time  so  will see the change immediately, there is no need to
+       restart smbd on adding, deleting or changing a user defined share.
+
+
+   USERSHARE DELETE sharename
+       Deletes the user defined share by name. The Samba smbd  daemon  immedi-
+       ately  notices  this  change, although it will not disconnect any users
+       currently connected to the deleted share.
+
+
+   USERSHARE INFO [-l|--long] [wildcard sharename]
+       Get info on user defined shares owned by the current user matching  the
+       given pattern, or all users.
+
+       net usershare info on its own dumps out info on the user defined shares
+       that were created by the current user, or restricts them to share names
+       that  match the given wildcard pattern ('*' matches one or more charac-
+       ters, '?' matches only one character). If the '-l' or  '--long'  option
+       is  also  given,  it  prints out info on user defined shares created by
+       other users.
+
+       The  information  given  about  a   share   looks   like   :   [foobar]
+       path=/home/jeremy  comment=testme  usershare_acl=Everyone:F  guest_ok=n
+       And is a list of the current settings of the user  defined  share  that
+       can be modified by the "net usershare add" command.
+
+
+   USERSHARE LIST [-l|--long] wildcard sharename
+       List all the user defined shares owned by the current user matching the
+       given pattern, or all users.
+
+       net usershare list on its own list out the names of  the  user  defined
+       shares  that were created by the current user, or restricts the list to
+       share names that match the given wildcard pattern ('*' matches  one  or
+       more  characters,  '?'  matches  only  one  character).  If the '-l' or
+       '--long' option is also given, it includes the names  of  user  defined
+       shares created by other users.
+
+   HELP [COMMAND]
+       Gives usage information for the specified command.
+
+VERSION
+       This man page is complete for version 3.0 of the Samba suite.
+
+AUTHOR
+       The  original  Samba  software  and  related  utilities were created by
+       Andrew Tridgell. Samba is now developed by the Samba Team  as  an  Open
+       Source project similar to the way the Linux kernel is developed.
+
+       The net manpage was written by Jelmer Vernooij.
+
+
+
+

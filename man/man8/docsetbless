@@ -1,0 +1,19 @@
+docsetbless(8)            BSD System Manager's Manual           docsetbless(8)
+
+NAME
+     docsetbless -- Documentation set installation blesser
+
+SYNOPSIS
+     docsetbless
+
+DESCRIPTION
+     docsetbless is used by Apple's developer tools to prepare locations for
+     documentation set installation.
+
+FILES
+     /usr/libexec/docsetbless  Executable
+     /etc/devdocsets           Configuration file of blessed locations
+
+SEE ALSO
+     docsetutil(1)
+

@@ -1,0 +1,234 @@
+RTADVD.CONF(5)              BSD File Formats Manual             RTADVD.CONF(5)
+
+NAME
+     rtadvd.conf -- config file for router advertisement daemon
+
+DESCRIPTION
+     This file describes how the router advertisement packets must be con-
+     structed for each of the interfaces.
+
+     As described in rtadvd(8), you do not have to set this configuration file
+     up at all, unless you need some special configurations.  You may even
+     omit the file as a whole.  In such cases, the rtadvd daemon will automat-
+     ically configure itself using default values specified in the specifica-
+     tion.
+
+     It obeys the famous termcap(5) file format.  Each line in the file
+     describes a network interface.  Fields are separated by a colon (`:'),
+     and each field contains one capability description.  Lines may be con-
+     catenated by the `\' character.  The comment marker is the `#' character.
+
+CAPABILITIES
+     Capabilities describe the value to be filled into ICMPv6 router adver-
+     tisement messages and to control rtadvd(8) behavior.  Therefore, you are
+     encouraged to read IETF neighbor discovery documents if you would like to
+     modify the sample configuration file.
+
+     Note that almost all items have default values.  If you omit an item, the
+     default value of the item will be used.
+
+     There are two items which control the interval of sending router adver-
+     tisements.  These items can be omitted, then rtadvd will use the default
+     values.
+
+     maxinterval
+             (num) The maximum time allowed between sending unsolicited multi-
+             cast router advertisements (unit: seconds).  The default value is
+             600.  Its value must be no less than 4 seconds and no greater
+             than 1800 seconds.
+
+     mininterval
+             (num) The minimum time allowed between sending unsolicited multi-
+             cast router advertisements (unit: seconds).  The default value is
+             the one third of value of maxinterval.  Its value must be no less
+             than 3 seconds and no greater than .75 * the value of
+             maxinterval.
+
+     The following items are for ICMPv6 router advertisement message header.
+     These items can be omitted, then rtadvd will use the default values.
+
+     chlim   (num) The value for Cur Hop Limit field.  The default value is
+             64.
+
+     raflags
+             (num) Flags field in router advertisement message header.  Bit 7
+             (0x80) means Managed address configuration flag bit, and Bit 6
+             (0x40) means Other stateful configuration flag bit.  Bit 4 (0x10)
+             and Bit 3 (0x08) are used to encode router preference.  0x01
+             means high, 0x00 means medium, and 0x11 means low.  The default
+             value is 0.
+
+     rltime  (num) Router lifetime field (unit: seconds).  Its value must be
+             no greater than 3600000.  When rtadvd runs on a host, this value
+             must explicitly set 0 on all the advertising interfaces as
+             described in rtadvd(8).  The default value is 1800.
+
+     rtime   (num) Reachable time field (unit: milliseconds).  The default
+             value is 0, which means unspecified by this router.
+
+     retrans
+             (num) Retrans Timer field (unit: milliseconds).  The default
+             value is 0, which means unspecified by this router.
+
+     The following items are for ICMPv6 prefix information option, which will
+     be attached to router advertisement header.  These items can be omitted,
+     then rtadvd will automatically get appropriate prefixes from the kernel's
+     routing table, and advertise the prefixes with the default parameters.
+
+     clockskew
+             (num) Time skew to adjust link propagation delays and clock skews
+             betwen routers on the link (unit: seconds).  This value is used
+             in consistency check for locally-configured and advertised prefix
+             lifetimes, and has its meaning when the local router configures a
+             prefix on the link with a lifetime that decrements in real time.
+             If the value is 0, it means the consistency check will be skipped
+             for such prefixes.  The default value is 0.
+
+     addrs   (num) Number of prefixes.  Its default is 0, so it must explic-
+             itly be set to positve values if you want to specify any prefix
+             information option.  If its value is 0, rtadvd(8) looks up the
+             system routing table and advertise the prefixes corresponding to
+             interface routes on the interface.  If its value is more than 1,
+             you must specify the index of the prefix for each item below.
+             Indices vary from 0 to N-1, where N is the value of addrs.  Each
+             index shall follow the name of each item, e.g., ``prefixlen2''.
+
+     prefixlen
+             (num) Prefix length field.  The default value is 64.
+
+     pinfoflags
+             (num) Flags field in prefix information option.  Bit 7 (0x80)
+             means On-link flag bit, and Bit 6 (0x40) means Autonomous
+             address-configuration flag bit.  The default value is 0xc0, i.e.,
+             both bits are set.
+
+     addr    (str) The address filled into Prefix field.  Since ``:'' is used
+             for termcap(5) file format as well as IPv6 numeric address, the
+             field MUST be quoted by doublequote character.  This field cannot
+             be omitted if the value of addrs is more than 0.
+
+     vltime  (num) Valid lifetime field (unit: seconds).  The default value is
+             2592000 (30 days).
+
+     vltimedecr
+             (bool) This item means the advertised valid lifetime will decre-
+             ments in real time, which is disabled by default.
+
+     pltime  (num) Preferred lifetime field (unit: seconds).  The default
+             value is 604800 (7 days).
+
+     pltimedecr
+             (bool) This item means the advertised preferred lifetime will
+             decrements in real time, which is disabled by default.
+
+     The following item is for ICMPv6 MTU option, which will be attached to
+     router advertisement header.  This item can be omitted, then rtadvd will
+     use the default value.
+
+     mtu     (num or str) MTU (maximum transmission unit) field.  If 0 is
+             specified, it means that the option will not be included.  The
+             default value is 0.  If the special string ``auto'' is specified
+             for this item, MTU option will be included and its value will be
+             set to the interface MTU automatically.
+
+     The following item controls ICMPv6 source link-layer address option,
+     which will be attached to router advertisement header.  As noted above,
+     you can just omit the item, then rtadvd will use the default value.
+
+     nolladdr
+             (bool) By default (if nolladdr is not specified), rtadvd(8) will
+             try to get link-layer address for the interface from the kernel,
+             and attach that in source link-layer address option.  If this
+             capability exists, rtadvd(8) will not attach source link-layer
+             address option to router advertisement packets.
+
+     The following item controls ICMPV6 home agent information option, which
+     was defined with mobile IPv6 support.  It will be attached to router
+     advertisement header just like other options do.
+
+     hapref  (num) Specifies home agent preference.  If set to non-zero,
+             hatime must be present as well.
+
+     hatime  (num) Specifies home agent lifetime.
+
+     When mobile IPv6 support is turned on for rtadvd(8), advertisement inter-
+     val option will be attached to router advertisement packet, by configur-
+     ing maxinterval explicitly.
+
+     The following items are for ICMPv6 route information option, which will
+     be attached to router advertisement header.  These items are optional.
+
+     routes  (num) Number of routes.  Its default is 0, so it must explicitly
+             be set to positve values if you want to specify any route infor-
+             mation option.  If its value is 0, no route information is sent.
+             If its value is more than 1, you must specify the index of the
+             routes for each item below.  Indices vary from 0 to N-1, where N
+             is the value of routes. Each index shall follow the name of each
+             item, e.g., ``rtrplen2''.
+
+     rtrplen
+             (num) Prefix length field in route information option.  The
+             default value is 64.
+
+     rtrflags
+             (num) Flags field in route information option.  Bit 4 (0x10) and
+             and Bit 3 (0x08) are used to encode router preference for the
+             route.  The default value is 0x00, i.e. medium router preference.
+
+     rtrprefix
+             (str) The prefix filled into the Prefix field of route informa-
+             tion option.  Since ``:'' is used for termcap(5) file format as
+             well as IPv6 numeric address, the field MUST be quoted by double-
+             quote character.  This field cannot be omitted if the value of
+             addrs is more than 0.
+
+     rtrltime
+             (num) route lifetime field in route information option.  (unit:
+             seconds).  The default value is 2592000 (30 days). (not specified
+             in draft-draves-router-selection-01.txt now)
+     You can also refer one line from another by using tc capability.  See
+     termcap(5) for details on the capability.
+
+EXAMPLES
+     As presented above, all of the advertised parameters have default values
+     defined in specifications, and hence you usually do not have to set them
+     by hand, unless you need special non-default values.  It can cause inter-
+     operability problem if you use an ill-configured parameter.
+
+     To override a configuration parameter, you can specify the parameter
+     alone.  With the following configuration, rtadvd(8) overrides the router
+     lifetime parameter for the ne0 interface.
+
+     ne0:\
+             :rltime#0:
+
+     The following example manually configures prefixes advertised from the
+     ef0 interface.  The configuration must be used with the -s option to
+     rtadvd(8).
+
+     ef0:\
+             :addrs#1:addr="3ffe:501:ffff:1000::":prefixlen#64:
+
+     The following example presents the default values in an explicit manner.
+     The configuration is provided just for reference purposes; YOU DO NOT
+     NEED TO HAVE IT AT ALL.
+
+     default:\
+             :chlim#64:raflags#0:rltime#1800:rtime#0:retrans#0:\
+             :pinfoflags#192:vltime#2592000:pltime#604800:mtu#0:
+     ef0:\
+             :addrs#1:addr="3ffe:501:ffff:1000::":prefixlen#64:tc=default:
+
+SEE ALSO
+     termcap(5), rtadvd(8), rtsol(8)
+
+     Thomas Narten, Erik Nordmark and W. A. Simpson, ``Neighbor Discovery for
+     IP version 6 (IPv6)'', RFC 2461
+
+     Richard Draves, ``Default Router Preferences and More-Specific Routes'',
+     draft-ietf-ipngwg-router-selection-01.txt
+
+HISTORY
+     The rtadvd(8) and the configuration file rtadvd.conf first appeared in
+     WIDE Hydrangea IPv6 protocol stack kit.
+

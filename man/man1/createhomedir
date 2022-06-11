@@ -1,0 +1,41 @@
+createhomedir(1)          BSD General Commands Manual         createhomedir(1)
+
+NAME
+     createhomedir -- create and populate home directories on the local com-
+     puter.
+
+SYNOPSIS
+     createhomedir [-scbalh] [-n directoryDomainName] [-u username]
+
+DESCRIPTION
+     createhomedir provides several options for creating and populating home
+     directories.
+
+OPTIONS
+     -s       creates home directories for server home paths only (default).
+
+     -c       creates home directories for local home paths only.
+
+     -b       creates home directories for both server and local home paths.
+
+     -a       creates home directories for users defined in all directory
+              domains of the servers search path.
+
+     -l       creates home directories for users defined in the local direc-
+              tory domain.
+
+     -n directoryDomainName
+              creates home directories for users defined in a specific direc-
+              tory domain in the servers search path.
+
+     -u username
+              creates a home directory for a specific user defined in the
+              domain(s) identified in the -a, -l, or -n parameter. If you omit
+              the -a, -l, and -n parameters when you use the -u parameter, -a
+              is assumed.
+
+     -h       usage help.
+
+FILES
+     /usr/sbin/createhomedir                       location of tool
+

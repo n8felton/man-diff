@@ -1,0 +1,1203 @@
+Plotchart(n)                       Plotchart                      Plotchart(n)
+
+
+
+______________________________________________________________________________
+
+NAME
+       Plotchart - Simple plotting and charting package
+
+SYNOPSIS
+       package require Tcl  ?8.3?
+
+       package require Tk  ?8.3?
+
+       package require Plotchart  ?1.1?
+
+       ::Plotchart::createXYPlot w xaxis yaxis
+
+       ::Plotchart::createStripchart w xaxis yaxis
+
+       ::Plotchart::createPolarPlot w radius_data
+
+       ::Plotchart::createIsometricPlot w xaxis yaxis stepsize
+
+       ::Plotchart::create3DPlot w xaxis yaxis zaxis
+
+       ::Plotchart::createPiechart w
+
+       ::Plotchart::createBarchart w xlabels yaxis noseries
+
+       ::Plotchart::createHorizontalBarchart w xlabels yaxis noseries
+
+       ::Plotchart::createTimechart w time_begin time_end noitems
+
+       ::Plotchart::createGanttchart    w    time_begin    time_end    noitems
+       ?text_width?
+
+       $anyplot title text
+
+       $anyplot saveplot filename
+
+       $anyplot xtext text
+
+       $anyplot ytext text
+
+       $anyplot xconfig -option value ...
+
+       $anyplot yconfig -option value ...
+
+       $xyplot plot series xcrd ycrd
+
+       $xyplot contourlines xcrd ycrd values ?classes?
+
+       $xyplot contourfill xcrd ycrd values ?classes?
+
+       $xyplot contourbox xcrd ycrd values ?classes?
+
+       $xyplot colorMap colours
+
+       $xyplot grid xcrd ycrd
+
+       $polarplot plot series radius angle
+
+       $plot3d plotfunc function
+
+       $plot3d plotfuncont function contours
+
+       $plot3d gridsize nxcells nycells
+
+       $plot3d plotdata data
+
+       $plot3d colours fill border
+
+       $xyplot dataconfig series -option value ...
+
+       $pie plot data
+
+       $pie colours colour1 colour2 ...
+
+       $barchart plot series ydata colour
+
+       $barchart plot series xdata colour
+
+       $timechart period text time_begin time_end colour
+
+       $timechart milestone text time colour
+
+       $timechart vertline text time
+
+       $ganttchart task text time_begin time_end completed
+
+       $ganttchart milestone text time colour
+
+       $ganttchart vertline text time
+
+       $ganttchart connect from to
+
+       $ganttchart summary text args
+
+       $ganttchart color keyword newcolor
+
+       $ganttchart font keyword newfont
+
+       $isoplot plot rectangle x1 y1 x2 y2 colour
+
+       $isoplot plot filled-rectangle x1 y1 x2 y2 colour
+
+       $isoplot plot circle xc yc radius colour
+
+       $isoplot plot filled-circle xc yc radius colour
+
+       ::Plotchart::viewPort w pxmin pymin pxmax pymax
+
+       ::Plotchart::worldCoordinates w xmin ymin xmax ymax
+
+       ::Plotchart::world3DCoordinates w xmin ymin zmin xmax ymax zmax
+
+       ::Plotchart::coordsToPixel w x y
+
+       ::Plotchart::coords3DToPixel w x y z
+
+       ::Plotchart::polarCoordinates w radmax
+
+       ::Plotchart::polarToPixel w rad phi
+
+       ::Plotchart::pixelToCoords w x y
+
+       ::Plotchart::pixelToIndex w x y
+
+       ::Plotchart::determineScale xmin xmax
+
+_________________________________________________________________
+
+DESCRIPTION
+       Plotchart is a Tcl-only package that focuses on the  easy  creation  of
+       xy-plots,  barcharts and other common types of graphical presentations.
+       The emphasis is on ease of use, rather than flexibility. The procedures
+       that  create  a plot use the entire canvas window, making the layout of
+       the plot completely automatic.
+
+       This results in the creation of an xy-plot in, say, ten lines of code:
+
+
+           package require Plotchart
+
+           canvas .c -background white -width 400 -height 200
+           pack   .c -fill both
+
+           #
+           # Create the plot with its x- and y-axes
+           #
+           set s [::Plotchart::createXYPlot .c {0.0 100.0 10.0} {0.0 100.0 20.0}]
+
+           foreach {x y} {0.0 32.0 10.0 50.0 25.0 60.0 78.0 11.0 } {
+               $s plot series1 $x $y
+           }
+
+           $s title "Data series"
+
+
+       A drawback of the package might be that it does not do any data manage-
+       ment.  So if the canvas that holds the plot is to be resized, the whole
+       plot must be redrawn.  The advantage, though, is that it offers a  num-
+       ber of plot and chart types:
+
+       o      XY-plots  like  the  one  shown  above  with  any number of data
+              series.
+
+       o      Stripcharts, a kind of XY-plots where  the  horizontal  axis  is
+              adjusted  automatically.  The result is a kind of sliding window
+              on the data series.
+
+       o      Polar plots, where the coordinates are polar instead  of  carte-
+              sian.
+
+       o      Isometric  plots,  where the scale of the coordinates in the two
+              directions is always the same, i.e. a circle  in  world  coordi-
+              nates appears as a circle on the screen.
+
+              You  can zoom in and out, as well as pan with these plots (Note:
+              this works best if no axes are drawn, the  zooming  and  panning
+              routines  do  not distinguish the axes), using the mouse buttons
+              with the control key and the arrow keys with the control key.
+
+       o      Piecharts, with automatic scaling to indicate the proportions.
+
+       o      Barcharts, with either vertical or horizontal bars, stacked bars
+              or bars side by side.
+
+       o      Timecharts,  where bars indicate a time period and milestones or
+              other important moments in time are represented by triangles.
+
+       o      3D plots (both for displaying surfaces and 3D bars)
+
+PLOT CREATION COMMANDS
+       You create the plot or chart with one single command and then fill  the
+       plot with data:
+
+       ::Plotchart::createXYPlot w xaxis yaxis
+              Create a new xy-plot.
+
+              w widget (in)
+                     Name of the existing canvas widget to hold the plot.
+
+              xaxis list (in)
+                     A 3-element list containing minimum, maximum and stepsize
+                     for the x-axis, in this order.
+
+              yaxis list (in)
+                     A 3-element list containing minimum, maximum and stepsize
+                     for the y-axis, in this order.
+
+
+       ::Plotchart::createStripchart w xaxis yaxis
+              Create  a  new  strip chart. The only difference to a regular XY
+              plot is that the x-axis will be automatically adjusted when  the
+              x-coordinate of a new point exceeds the maximum.
+
+              w widget (in)
+                     Name of the existing canvas widget to hold the plot.
+
+              xaxis list (in)
+                     A 3-element list containing minimum, maximum and stepsize
+                     for the x-axis, in this order.
+
+              yaxis list (in)
+                     A 3-element list containing minimum, maximum and stepsize
+                     for the y-axis, in this order.
+
+
+       ::Plotchart::createPolarPlot w radius_data
+              Create a new polar plot.
+
+              w widget (in)
+                     Name of the existing canvas widget to hold the plot.
+
+              radius_data list (in)
+                     A  2-element  list containing maximum radius and stepsize
+                     for the radial axis, in this order.
+
+
+       ::Plotchart::createIsometricPlot w xaxis yaxis stepsize
+              Create a new isometric plot, where the vertical and the horizon-
+              tal coordinates are scaled so that a circle will truly appear as
+              a circle.
+
+              w widget (in)
+                     Name of the existing canvas widget to hold the plot.
+
+              xaxis list (in)
+                     A 2-element list containing minimum, and maximum for  the
+                     x-axis, in this order.
+
+              yaxis list (in)
+                     A  2-element list containing minimum, and maximum for the
+                     y-axis, in this order.
+
+              stepsize float|noaxes (in)
+                     Either the stepsize used by  both  axes  or  the  keyword
+                     noaxes  to  signal  the  plot that it should use the full
+                     area of the widget, to not draw any of the axes.
+
+
+       ::Plotchart::create3DPlot w xaxis yaxis zaxis
+              Create a new 3D plot.
+
+              w widget (in)
+                     Name of the existing canvas widget to hold the plot.
+
+              xaxis list (in)
+                     A 3-element list containing minimum, maximum and stepsize
+                     for the x-axis, in this order.
+
+              yaxis list (in)
+                     A 3-element list containing minimum, maximum and stepsize
+                     for the y-axis, in this order.
+
+              zaxis list (in)
+                     A 3-element list containing minimum, maximum and stepsize
+                     for the z-axis, in this order.
+
+
+       ::Plotchart::createPiechart w
+              Create a new piechart.
+
+              w widget (in)
+                     Name of the existing canvas widget to hold the plot.
+
+
+       ::Plotchart::createBarchart w xlabels yaxis noseries
+              Create  a  new  barchart with vertical bars. The horizontal axis
+              will display the labels contained in the argument  xlabels.  The
+              number  of series given by noseries determines both the width of
+              the bars, and the way the series will be drawn.
+
+              If the keyword stacked was specified the series  will  be  drawn
+              stacked  on  top  of  each  other. Otherwise each series that is
+              drawn will be drawn shifted to the right.
+
+              w widget (in)
+                     Name of the existing canvas widget to hold the plot.
+
+              xlabels list (in)
+                     List of labels for the x-axis. Its length also determines
+                     the number of bars that will be plotted per series.
+
+              yaxis list (in)
+                     A 3-element list containing minimum, maximum and stepsize
+                     for the y-axis, in this order.
+
+              noseries int|stacked (in)
+                     The number of data series that will be plotted. This  has
+                     to  be an integer number greater than zero (if stacked is
+                     not used).
+
+
+       ::Plotchart::createHorizontalBarchart w xlabels yaxis noseries
+              Create a new barchart with horizontal bars.  The  vertical  axis
+              will  display  the labels contained in the argument ylabels. The
+              number of series given by noseries determines both the width  of
+              the bars, and the way the series will be drawn.
+
+              If  the  keyword  stacked was specified the series will be drawn
+              stacked from left to right. Otherwise each series that is  drawn
+              will be drawn shifted upward.
+
+              w widget (in)
+                     Name of the existing canvas widget to hold the plot.
+
+              ylabels list (in)
+                     List of labels for the y-axis. Its length also determines
+                     the number of bars that will be plotted per series.
+
+              yaxis list (in)
+                     A 3-element list containing minimum, maximum and stepsize
+                     for the x-axis, in this order.
+
+              noseries int|stacked (in)
+                     The  number of data series that will be plotted. This has
+                     to be an integer number greater than zero (if stacked  is
+                     not used).
+
+
+       ::Plotchart::createTimechart w time_begin time_end noitems
+              Create  a  new  timechart.   The  time axis (= x-axis) goes from
+              time_begin to time_end, and the vertical spacing  is  determined
+              by the number of items to plot.
+
+              w widget (in)
+                     Name of the existing canvas widget to hold the plot.
+
+              time_begin string (in)
+                     The  start time given in a form that is recognised by the
+                     clock scan command (e.g. "1 january 2004").
+
+              time_end string (in)
+                     The end time given in a form that is  recognised  by  the
+                     clock scan command (e.g. "1 january 2004").
+
+              noitems int (in)
+                     Expected/maximum  number  of  items.  This determines the
+                     vertical spacing.
+
+       ::Plotchart::createGanttchart    w    time_begin    time_end    noitems
+       ?text_width?
+              Create a new Gantt chart.  The time axis (=  x-axis)  goes  from
+              time_begin  to  time_end, and the vertical spacing is determined
+              by the number of items to plot.  Via the specific  commands  you
+              can then add tasks and connections between the tasks.
+
+              w widget (in)
+                     Name of the existing canvas widget to hold the plot.
+
+              time_begin string (in)
+                     The  start time given in a form that is recognised by the
+                     clock scan command (e.g. "1 january 2004").
+
+              time_end string (in)
+                     The end time given in a form that is  recognised  by  the
+                     clock scan command (e.g. "1 january 2004").
+
+              noitems int (in)
+                     Expected/maximum  number  of  items.  This determines the
+                     vertical spacing.
+
+              text_width int
+                     Expected/maximum width of the descriptive  text  (roughly
+                     in  characters,  for  the  actual  space reserved for the
+                     text, it is assumed that a character is about ten  pixels
+                     wide). Defaults to 20.
+
+PLOT METHODS
+       Each of the creation commands explained in the last section returns the
+       name of a new object command that can be used to manipulate the plot or
+       chart.  The subcommands available to a chart command depend on the type
+       of the chart.
+
+       General subcommands for all types of charts. $anyplot  is  the  command
+       returned by the creation command:
+
+       $anyplot title text
+              Specify the title of the whole chart.
+
+              text string (in)
+                     The text of the title to be drawn.
+
+
+       $anyplot saveplot filename
+              Draws the plot into a file, using PostScript.
+
+              filename string (in)
+                     Contain the path name of the file to write the plot to.
+
+
+       $anyplot xtext text
+              Specify  the  title  of  the x-axis, for those plots that have a
+              straight x-axis.
+
+              text string (in)
+                     The text of the x-axis label to be drawn.
+
+
+       $anyplot ytext text
+              Specify the title of the y-axis, for those  plots  that  have  a
+              straight y-axis.
+
+              text string (in)
+                     The text of the y-axis label to be drawn.
+
+
+       $anyplot xconfig -option value ...
+              Set  one  or  more configuration parameters for the x-axis.  The
+              following options are supported:
+
+              format fmt
+                     The format for the numbers along the axis.
+
+              ticklength length
+                     The length of the tickmarks (in pixels).
+
+              ticklines boolean
+                     Whether to draw ticklines (true) or not (false).
+
+              scale scale_data
+                     New scale data for the axis, i.e. a 3-element  list  con-
+                     taining  minimum,  maximum  and stepsize for the axis, in
+                     this order.
+
+                     Beware: Setting this option will clear all data from  the
+                     plot.
+
+
+       $anyplot yconfig -option value ...
+              Set  one  or  more configuration parameters for the y-axis. This
+              method accepts the same options and values as the  method  xcon-
+              fig.
+
+       Note:  The  commands xconfig and yconfig are currently implemented only
+       for XY-plots and only the option -format has any effect.
+
+       For xy plots and stripcharts:
+
+       $xyplot plot series xcrd ycrd
+              Add a data point to the plot.
+
+              series string (in)
+                     Name of the data series the new point belongs to.
+
+              xcrd float (in)
+                     X-coordinate of the new point.
+
+              ycrd float (in)
+                     Y-coordinate of the new point.
+
+       For xy plots:
+
+       $xyplot contourlines xcrd ycrd values ?classes?
+              Draw contour lines for the values given on the grid. The grid is
+              defined  by the xcrd and ycrd arguments (they give the x- and y-
+              coordinates of the grid cell corners). The values are  given  at
+              these  corners.  The  classes  determine which contour lines are
+              drawn. If a value on one of the corners is missing, the  contour
+              lines in that cell will not be drawn.
+
+              xcrd list (in)
+                     List  of  lists, each value is an x-coordinate for a grid
+                     cell corner
+
+              ycrd list (in)
+                     List of lists, each value is an y-coordinate for  a  grid
+                     cell corner
+
+              values list (in)
+                     List  of  lists,  each  value is the value at a grid cell
+                     corner
+
+              classes list (in)
+                     List of class values or a list of lists of  two  elements
+                     (each  inner  list  the  class value and the colour to be
+                     used). If empty or missing, the  classes  are  determined
+                     automatically.
+
+                     Note:  The  class  values must enclose the whole range of
+                     values.
+
+
+       $xyplot contourfill xcrd ycrd values ?classes?
+              Draw filled contours for the values given on the grid. (The  use
+              of this method is identical to the "contourlines" method).
+
+       $xyplot contourbox xcrd ycrd values ?classes?
+              Draw  the  cells as filled quadrangles. The colour is determined
+              from the average of the values on all four corners.
+
+       $xyplot colorMap colours
+              Set the colours to be used with the contour methods.  The  argu-
+              ment  is  either  a predefined colourmap (grey/gray, jet, hot or
+              cool) or a list of colours. When selecting the colours for actu-
+              ally  drawing  the  contours, the given colours will be interpo-
+              lated (based on the HLS scheme).
+
+              colours list (in)
+                     List of colour names or colour values or one of the  pre-
+                     defined maps:
+
+                     o      grey or gray: gray colours from dark to light
+
+                     o      jet: rainbow colours
+
+                     o      hot: colours from yellow via red to darkred
+
+                     o      cool: colours from cyan via blue to magenta
+
+       $xyplot grid xcrd ycrd
+              Draw the grid cells as lines connecting the (valid) grid points.
+
+              xcrd list (in)
+                     List of lists, each value is an x-coordinate for  a  grid
+                     cell corner
+
+              ycrd list (in)
+                     List  of  lists, each value is an y-coordinate for a grid
+                     cell corner
+
+       For polar plots:
+
+       $polarplot plot series radius angle
+              Add a data point to the polar plot.
+
+              series string (in)
+                     Name of the data series the new point belongs to.
+
+              radius float (in)
+                     Radial coordinate of the new point.
+
+              angle float (in)
+                     Angular coordinate of the new point (in degrees).
+
+       For 3D plots:
+
+       $plot3d plotfunc function
+              Plot a function defined over two variables x and y.  The resolu-
+              tion  is  determined by the set grid sizes (see the method grid-
+              size for more information).
+
+              function string (in)
+                     Name of the procedure that calculates the z-value for the
+                     given  x  and  y coordinates. The procedure has to accept
+                     two float arguments (x is first argument,  y  is  second)
+                     and return a floating-point value.
+
+
+       $plot3d plotfuncont function contours
+              Plot  a  function  defined  over two variables x and y using the
+              contour levels in contours to colour the surface.   The  resolu-
+              tion  is  determined by the set grid sizes (see the method grid-
+              size for more information).
+
+              function string (in)
+                     Name of the procedure that calculates the z-value for the
+                     given  x  and  y coordinates. The procedure has to accept
+                     two float arguments (x is first argument,  y  is  second)
+                     and return a floating-point value.
+
+              contours list (in)
+                     List of values in ascending order that represent the con-
+                     tour levels (the boundaries between the  colours  in  the
+                     contour map).
+
+
+       $plot3d gridsize nxcells nycells
+              Set the grid size in the two directions. Together they determine
+              how many polygons will be drawn for a function plot.
+
+              nxcells int (in)
+                     Number of grid cells in x direction. Has to be an integer
+                     number greater than zero.
+
+              nycells int (in)
+                     Number of grid cells in y direction. Has to be an integer
+                     number greater than zero.
+
+
+       $plot3d plotdata data
+              Plot a matrix of data.
+
+              data list (in)
+                     The data to be plotted. The data has to be provided as  a
+                     nested  list with 2 levels. The outer list contains rows,
+                     drawn in y-direction, and each row is a list  whose  ele-
+                     ments are drawn in x-direction, for the columns. Example:
+
+
+                         set data {
+                         {1.0 2.0 3.0}
+                         {4.0 5.0 6.0}
+                         }
+
+
+
+       $plot3d colours fill border
+              Configure the colours to use for polygon borders and inner area.
+
+              fill color (in)
+                     The colour to use for filling the polygons.
+
+              border color (in)
+                     The colour to use for the border of the polygons.
+
+       For xy plots, stripcharts and polar plots:
+
+       $xyplot dataconfig series -option value ...
+              Set  the  value for one or more options regarding the drawing of
+              data of a specific series.
+
+              series string (in)
+                     Name of the data series whose configuration we are chang-
+                     ing.
+
+       The following option are known:
+
+              colour c
+
+              color c
+                     The colour to be used when drawing the data series.
+
+              type enum
+                     The  drawing mode chosen for the series.  This can be one
+                     of line, symbol, or both.
+
+              symbol enum
+                     What kind of symbol to draw. The value of this option  is
+                     ignored  when  the drawing mode line was chosen. This can
+                     be one of plus, cross, circle, up (triangle pointing up),
+                     down  (triangle  pointing  down),  dot  (filled  circle),
+                     upfilled or downfilled (filled triangles).
+
+       For piecharts:
+
+       $pie plot data
+              Fill a piechart.
+
+              data list (in)
+                     A list of pairs (labels and values). The values determine
+                     the  relative size of the circle segments. The labels are
+                     drawn beside the circle.
+
+       $pie colours colour1 colour2 ...
+              Set the colours to be used.
+
+              colour1 color (in)
+                     The first colour.
+
+              colour2 color (in)
+                     The second colour, and so on.
+
+       For vertical barcharts:
+
+       $barchart plot series ydata colour
+              Add a data series to a barchart.
+
+              series string (in)
+                     Name of the series the values belong to.
+
+              ydata list (in)
+                     A list of values, one for each x-axis label.
+
+              colour color (in)
+                     The colour of the bars.
+
+       For horizontal barcharts:
+
+       $barchart plot series xdata colour
+              Add a data series to a barchart.
+
+              series string (in)
+                     Name of the series the values belong to.
+
+              xdata list (in)
+                     A list of values, one for each y-axis label.
+
+              colour color (in)
+                     The colour of the bars.
+
+       For timecharts:
+
+       $timechart period text time_begin time_end colour
+              Add a time period to the chart.
+
+              text string (in)
+                     The text describing the period.
+
+              time_begin string (in)
+                     Start time of the period.
+
+              time_end string (in)
+                     Stop time of the period.
+
+              colour color (in)
+                     The colour of the bar (defaults to black).
+
+
+       $timechart milestone text time colour
+              Add a milestone (represented as an point-down triangle)  to  the
+              chart.
+
+              text string (in)
+                     The text describing the milestone.
+
+              time string (in)
+                     Time at which the milestone must be positioned.
+
+              colour color (in)
+                     The colour of the triangle (defaults to black).
+
+
+       $timechart vertline text time
+              Add  a  vertical  line  (to  indicate the start of the month for
+              instance) to the chart.
+
+              text string (in)
+                     The text appearing at the top  (an  abbreviation  of  the
+                     date/time for instance).
+
+              time string (in)
+                     Time at which the line must be positioned.
+
+       For Gantt charts:
+
+       $ganttchart task text time_begin time_end completed
+              Add a task with its period and level of completion to the chart.
+              Returns a list of canvas items that  can  be  used  for  further
+              manipulations, like connecting two tasks.
+
+              text string (in)
+                     The text describing the task.
+
+              time_begin string (in)
+                     Start time of the task.
+
+              time_end string (in)
+                     Stop time of the task.
+
+              completed float (in)
+                     The percentage of the task that is completed.
+
+
+       $ganttchart milestone text time colour
+              Add  a  milestone (represented as an point-down triangle) to the
+              chart.
+
+              text string (in)
+                     The text describing the milestone.
+
+              time string (in)
+                     Time at which the milestone must be positioned.
+
+              colour color (in)
+                     The colour of the triangle (defaults to black).
+
+
+       $ganttchart vertline text time
+              Add a vertical line (to indicate the  start  of  the  month  for
+              instance) to the chart.
+
+              text string (in)
+                     The  text  appearing  at  the top (an abbreviation of the
+                     date/time for instance).
+
+              time string (in)
+                     Time at which the line must be positioned.
+
+
+       $ganttchart connect from to
+              Add an arrow that connects the from task with the to task.
+
+              from list (in)
+                     The list of items returned by  the  "task"  command  that
+                     represents the task from which the arrow starts.
+
+              text string (in)
+                     The text summarising the tasks
+
+              args list (in)
+                     One  or more tasks (the lists returned by the "task" com-
+                     mand). They are shifted down to make room  for  the  sum-
+                     mary.
+
+              to list (in)
+                     The  list  of  items  returned by the "task" command that
+                     represents the task at which the arrow ends.
+
+
+       $ganttchart summary text args
+              Add a summary item that spans all the tasks listed. The  graphi-
+              cal representation is a thick bar running from the leftmost task
+              to the rightmost.
+
+              Use this command before connecting the tasks, as the arrow would
+              not be shifted down!
+
+              text string (in)
+                     The text summarising the tasks
+
+              args list (in)
+                     One  or more tasks (the lists returned by the "task" com-
+                     mand). They are shifted down to make room  for  the  sum-
+                     mary.
+
+
+       $ganttchart color keyword newcolor
+              Set  the colour of a part of the Gantt chart. These colours hold
+              for all items of that type.
+
+              keyword string (in)
+                     The keyword indicates which part of the  Gantt  chart  to
+                     change:
+
+                     o      description - the colour of the descriptive text
+
+                     o      completed  -  the  colour of the filled bar repre-
+                            senting the completed part of a task
+
+                     o      left - the colour for the part  that  is  not  yet
+                            completed
+
+                     o      odd - the background colour for the odd entries
+
+                     o      even - the background colour for the even entries
+
+                     o      summary - the colour for the summary text
+
+                     o      summarybar - the colour for the bar for a summary
+
+              newcolor string (in)
+                     The new colour for the chosen items.
+
+
+       $ganttchart font keyword newfont
+              Set  the font of a part of the Gantt chart. These fonts hold for
+              all items of that type.
+
+              keyword string (in)
+                     The keyword indicates which part of the  Gantt  chart  to
+                     change:
+
+                     o      description - the font used for descriptive text
+
+                     o      summary - the font used for summaries
+
+                     o      scale - the font used for the time scale
+
+              newfont string (in)
+                     The new font for the chosen items.
+
+       For isometric plots (to be extended):
+
+       $isoplot plot rectangle x1 y1 x2 y2 colour
+              Plot the outlines of a rectangle.
+
+              x1 float (in)
+                     Minimum x coordinate of the rectangle to be drawn.
+
+              y1 float (in)
+                     Minimum y coordinate of the rectangle.
+
+              x2 float (in)
+                     Maximum x coordinate of the rectangle to be drawn.
+
+              y2 float (in)
+                     Maximum y coordinate of the rectangle.
+
+              colour color (in)
+                     The colour of the rectangle.
+
+
+       $isoplot plot filled-rectangle x1 y1 x2 y2 colour
+              Plot a rectangle filled with the given colour.
+
+              x1 float (in)
+                     Minimum x coordinate of the rectangle to be drawn.
+
+              y1 float (in)
+                     Minimum y coordinate of the rectangle.
+
+              x2 float (in)
+                     Maximum x coordinate of the rectangle to be drawn.
+
+              y2 float (in)
+                     Maximum y coordinate of the rectangle.
+
+              colour color (in)
+                     The colour of the rectangle.
+
+
+       $isoplot plot circle xc yc radius colour
+              Plot the outline of a circle.
+
+              xc float (in)
+                     X coordinate of the circle's centre.
+
+              yc float (in)
+                     Y coordinate of the circle's centre.
+
+              colour color (in)
+                     The colour of the circle.
+
+
+       $isoplot plot filled-circle xc yc radius colour
+              Plot a circle filled with the given colour.
+
+              xc float (in)
+                     X coordinate of the circle's centre.
+
+              yc float (in)
+                     Y coordinate of the circle's centre.
+
+              colour color (in)
+                     The colour of the circle.
+
+       There  are a number of public procedures that may be useful in specific
+       situations: Pro memorie.
+
+COORDINATE TRANSFORMATIONS
+       Besides the commands that deal with  the  plots  and  charts  directly,
+       there  are a number of commands that can be used to convert world coor-
+       dinates to pixels and vice versa.  These include:
+
+       ::Plotchart::viewPort w pxmin pymin pxmax pymax
+              Set the viewport for window w. Should  be  used  in  cooperation
+              with ::Plotchart::worldCoordinates.
+
+              w widget (in)
+                     Name of the window (canvas widget) in question.
+
+              pxmin float (in)
+                     Left-most pixel coordinate.
+
+              pymin float (in)
+                     Top-most  pixel  coordinate (remember: the vertical pixel
+                     coordinate starts with 0 at the top!).
+
+              pxmax float (in)
+                     Right-most pixel coordinate.
+
+              pymax float (in)
+                     Bottom-most pixel coordinate.
+
+
+       ::Plotchart::worldCoordinates w xmin ymin xmax ymax
+              Set the extreme world coordinates for window w. The world  coor-
+              dinates  need not be in ascending order (i.e. xmin can be larger
+              than xmax, so that a reversal of the x-axis is achieved).
+
+              w widget (in)
+                     Name of the window (canvas widget) in question.
+
+              xmin float (in)
+                     X-coordinate to be mapped to left side of viewport.
+
+              ymin float (in)
+                     Y-coordinate to be mapped to bottom of viewport.
+
+              xmax float (in)
+                     X-coordinate to be mapped to right side of viewport.
+
+              ymax float (in)
+                     Y-coordinate to be mapped to top side of viewport.
+
+
+       ::Plotchart::world3DCoordinates w xmin ymin zmin xmax ymax zmax
+              Set the extreme three-dimensional world coordinates  for  window
+              w.  The  world  coordinates need not be in ascending order (i.e.
+              xmin can be larger than xmax, so that a reversal of  the  x-axis
+              is achieved).
+
+              w widget (in)
+                     Name of the window (canvas widget) in question.
+
+              xmin float (in)
+                     X-coordinate  to  be mapped to front side of the 3D view-
+                     port.
+
+              ymin float (in)
+                     Y-coordinate to be mapped to left side of the viewport.
+
+              zmin float (in)
+                     Z-coordinate to be mapped to bottom of viewport.
+
+              xmax float (in)
+                     X-coordinate to be mapped to back side of viewport.
+
+              ymax float (in)
+                     Y-coordinate to be mapped to right side of viewport.
+
+              zmax float (in)
+                     Z-coordinate to be mapped to top side of viewport.
+
+
+       ::Plotchart::coordsToPixel w x y
+              Return a list of pixel coordinates valid for the given window.
+
+              w widget (in)
+                     Name of the window (canvas widget) in question.
+
+              x float (in)
+                     X-coordinate to be mapped.
+
+              y float (in)
+                     Y-coordinate to be mapped.
+
+
+       ::Plotchart::coords3DToPixel w x y z
+              Return a list of pixel coordinates valid for the given window.
+
+              w widget (in)
+                     Name of the window (canvas widget) in question.
+
+              x float (in)
+                     X-coordinate to be mapped.
+
+              y float (in)
+                     Y-coordinate to be mapped.
+
+              y float (in)
+                     Z-coordinate to be mapped.
+
+
+       ::Plotchart::polarCoordinates w radmax
+              Set the extreme polar coordinates for window w. The angle always
+              runs from 0 to 360 degrees and the radius starts at 0. Hence you
+              only need to give the maximum radius.  Note: If the viewport  is
+              not square, this procedure will not adjust the extremes, so that
+              would result in an elliptical plot. The creation routine  for  a
+              polar plot always determines a square viewport.
+
+              w widget (in)
+                     Name of the window (canvas widget) in question.
+
+              radmax float (in)
+                     Maximum radius.
+
+
+       ::Plotchart::polarToPixel w rad phi
+              Wrapper  for a call to ::Plotchart::coordsToPixel, which assumes
+              the world coordinates and viewport are set  appropriately.  Con-
+              verts  polar coordinates to pixel coordinates.  Note: To be use-
+              ful it should be accompanied by a matching ::Plotchart::worldCo-
+              ordinates  procedure. This is automatically taken care of in the
+              creation routine for polar plots.
+
+              w widget (in)
+                     Name of the window (canvas widget) in question.
+
+              rad float (in)
+                     Radius of the point.
+
+              phi float (in)
+                     Angle to the positive x-axis.
+
+
+       ::Plotchart::pixelToCoords w x y
+              Return a list of world coordinates valid for the given window.
+
+              w widget (in)
+                     Name of the window (canvas widget) in question.
+
+              x float (in)
+                     X-pixel to be mapped.
+
+              y float (in)
+                     Y-pixel to be mapped.
+
+       ::Plotchart::pixelToIndex w x y
+              Return the index of the pie segment containing the pixel coordi-
+              nates (x,y)
+
+              w widget (in)
+                     Name of the window (canvas widget) in question, holding a
+                     piechart.
+
+              x float (in)
+                     X-pixel to be mapped.
+
+              y float (in)
+                     Y-pixel to be mapped.
+
+       Furthermore there is a routine to determine "pretty"  numbers  for  use
+       with an axis:
+
+       ::Plotchart::determineScale xmin xmax
+              Determine  "pretty"  numbers  from  the given range and return a
+              list containing the minimum, maximum and stepsize  that  can  be
+              used for a (linear) axis.
+
+              xmin float (in)
+                     Rough minimum value for the scaling
+
+              xmax float (in)
+                     Rough maximum value for the scaling.
+
+OTHER OUTPUT FORMATS
+       Besides output to the canvas on screen, the module is capable, via can-
+       vas postscript, of producing PostScript files. One may  wonder  whether
+       it  is  possible to extend this set of output formats and the answer is
+       "yes". This section tries to sum up the aspects of  using  this  module
+       for another sort of output.
+
+       One  way you can create output files in a different format, is by exam-
+       ining the contents of the canvas after everything has  been  drawn  and
+       render  that  contents  in the right form. This is probably the easiest
+       way, as it involves nothing more than the re-creation of all  the  ele-
+       ments in the plot that are already there.
+
+       The  drawback  of that method is that you need to have a display, which
+       is not always the case if you run a CGI server or something like  that.
+
+       An  alternative is to emulate the canvas command. For this to work, you
+       need to know which canvas subcommands are used and what for. Obviously,
+       the  create  subcommand  is  used  to create the lines, texts and other
+       items. But also the raise and lower subcommands are used, because  with
+       these  the  module can influence the drawing order - important to simu-
+       late a clipping rectangle around the axes.  (The  routine  DrawMask  is
+       responsible  for  this  - if the output format supports proper clipping
+       areas, then a redefinition of this routine might just solve this).
+
+       Furthermore, the module uses the cget subcommand to find out the  sizes
+       of  the  canvas.  A more mundane aspect of this is that the module cur-
+       rently assumes that the text is 14 pixels high and that  80  pixels  in
+       width  suffice for the axis' labels. No "hook" is provided to customise
+       this.
+
+       In summary:
+
+       o      Emulate the create subcommand to create all  the  items  in  the
+              correct format
+
+       o      Emulate  the  cget subcommand for the options -width and -height
+              to allow the correct calculation of the rectangle's position and
+              size
+
+       o      Solve the problem of raising and lowering the items so that they
+              are properly clipped, for instance  by  redefining  the  routine
+              DrawMask.
+
+       o      Take care of the currently fixed text size properties
+
+ROOM FOR IMPROVEMENT
+       In  this version there are a lot of things that still need to be imple-
+       mented:
+
+       o      General options like legends and text to the axes.
+
+       o      More robust handling of incorrect calls (right  now  the  proce-
+              dures may fail when called incorrectly):
+
+              o      The  axis  drawing  routines  can not handle inverse axes
+                     right now.
+
+              o      If the user provides an  invalid  date/time  string,  the
+                     routines simply throw an error.
+
+TODO - SOME PRIVATE NOTES
+       I have the following wishlist:
+
+       o      Isometric plots - allow new items to be implemented easily.
+
+       o      Add support for histograms where the independent axis is numeri-
+              cal.
+
+       o      A general 3D viewer - emphasis on geometry, not a ray-tracer.
+
+KEYWORDS
+       3D bars, 3D surfaces, bar charts, charts,  coordinate  transformations,
+       coordinates, graphical presentation, isometric plots, pie charts, plot-
+       ting, polar plots, strip charts, time charts, xy-plots
+
+COPYRIGHT
+       Copyright (c) 2004 Arjen Markus <arjenmarkus@users.sourceforge.net>
+
+
+
+

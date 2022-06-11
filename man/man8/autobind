@@ -1,0 +1,26 @@
+autobind(8)               BSD System Manager's Manual              autobind(8)
+
+NAME
+     autobind
+
+SYNOPSIS
+     autobind
+
+DESCRIPTION
+     The autobind tool is used to automatically set the DHCP directory binding
+     options if they have not yet been explicitly set. This is run from a tem-
+     porary startup item when upgrading from an earlier version of Mac OS X
+     which did not explicitly set the DHCP binding setting during the Setup
+     Assistant.
+
+     The policy used by autobind is to explictly disable DHCP directory bind-
+     ing if no directory servers are available from DHCP at the time it is
+     run. If one or more servers is available then the DHCP binding is explic-
+     itly enabled.
+
+     autobind must be run as root to make changes to the directory binding
+     settings.
+
+SEE ALSO
+     DirectoryService(8)
+

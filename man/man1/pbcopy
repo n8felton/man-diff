@@ -1,0 +1,56 @@
+PBCOPY(1)                                                            PBCOPY(1)
+
+
+
+NAME
+       pbcopy,  pbpaste  -  provide copying and pasting to the pasteboard (the
+       Clipboard) from command line
+
+SYNOPSIS
+       pbcopy [-help] [-pboard {general | ruler | find | font}]
+
+       pbpaste [-help] [-pboard {general | ruler  |  find  |  font}]  [-Prefer
+       {ascii | rtf | ps}]
+
+DESCRIPTION
+       pbcopy  takes  the standard input and places it in the specified paste-
+       board. If no pasteboard is specified, the general  pasteboard  will  be
+       used  by  default.  The input is placed in the pasteboard as ASCII data
+       unless it begins with the Encapsulated PostScript (EPS) file header  or
+       the  Rich  Text Format (RTF) file header, in which case it is placed in
+       the pasteboard as one of those data types.
+
+       pbpaste removes the data from the pasteboard and writes it to the stan-
+       dard  output.  It normally looks first for ASCII data in the pasteboard
+       and writes that to the standard output; if no  ASCII  data  is  in  the
+       pasteboard  it  looks for Encapsulated PostScript; if no EPS if present
+       it looks for Rich Text.  If none of  those  types  is  present  in  the
+       pasteboard, pbpaste produces no output.
+
+OPTIONS
+       -pboard {general | ruler | find | font}
+              specifies  which  pasteboard  to  copy  to or paste from.  If no
+              pasteboard is given, the general  pasteboard  will  be  used  by
+              default.
+
+       -Prefer {ascii | rtf | ps}
+              tells  pbpaste  what  type of data to look for in the pasteboard
+              first.  As stated above, pbpaste normally looks first for  ASCII
+              data;  however, by specifying -Prefer ps you can tell pbpaste to
+              look first for Encapsulated PostScript.  If you specify  -Prefer
+              rtf,  pbpaste  looks  first  for Rich Text format.  In any case,
+              pbpaste looks for the other formats if the preferred one is  not
+              found.
+
+SEE ALSO
+       ADC Reference Library:
+       Cocoa > Interapplication Communication > Copying and Pasting
+       Carbon  >  Interapplication Communication > Pasteboard Manager Program-
+       ming Guide
+       Carbon > Interapplication Communication > Pasteboard Manager Reference
+
+BUGS
+       There is no way to tell pbpaste to get only a specified data type.
+
+
+

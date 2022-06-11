@@ -1,0 +1,56 @@
+tk_chooseDirectory(n)        Tk Built-In Commands        tk_chooseDirectory(n)
+
+
+
+______________________________________________________________________________
+
+NAME
+       tk_chooseDirectory  -  pops  up  a  dialog box for the user to select a
+       directory.
+
+
+SYNOPSIS
+       tk_chooseDirectory ?option value ...?
+_________________________________________________________________
+
+
+DESCRIPTION
+       The procedure tk_chooseDirectory pops up a dialog box for the  user  to
+       select  a  directory.  The following option-value pairs are possible as
+       command line arguments:
+
+       -initialdir dirname
+              Specifies that the directories in directory should be  displayed
+              when  the  dialog  pops  up. If this parameter is not specified,
+              then the directories in the current working directory  are  dis-
+              played.  If  the parameter specifies a relative path, the return
+              value will convert the relative path to an absolute path.   This
+              option may not always work on the Macintosh.  This is not a bug.
+              Rather, the General Controls control panel on the Mac allows the
+              end user to override the application default directory.
+
+       -parent window
+              Makes  window  the  logical  parent of the dialog. The dialog is
+              displayed on top of its parent window.
+
+       -title titleString
+              Specifies a string to display as the title of the dialog box. If
+              this  option is not specified, then a default title will be dis-
+              played.
+
+       -mustexist boolean
+              Specifies whether the user may specify non-existant directories.
+              If  this parameter is true, then the user may only select direc-
+              tories that already exist.  The default value is false.
+
+
+
+SEE ALSO
+       tk_getOpenFile, tk_getSaveFile
+
+
+KEYWORDS
+       directory selection dialog
+
+
+

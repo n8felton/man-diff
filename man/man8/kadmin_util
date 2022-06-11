@@ -1,0 +1,67 @@
+kadmin_util(8)            BSD System Manager's Manual           kadmin_util(8)
+
+NAME
+     kadmin_util -- Kerberos -- Open Directory Single Sign On
+
+SYNOPSIS
+     kadmin_util -a principal_name -d principal_name [-r REALM] [-h] [-p]
+                 [-v debug_level]
+
+DESCRIPTION
+     kadmin_util is a tool for managing the access control list used by
+     kadmind to control which users have the ability to modify the Kerberos
+     database of user information.  It will look at the acl_file item in the
+     realm section of the kdc config file to determine which acl files to
+     update.
+
+     -a principal_name
+              Adds the given principal name to the acl file with administrator
+              privs.
+
+     -d principal_name
+              Removes the given principal name from the acl. (-a & -d are
+              mutually exclusinve)
+
+     -h       Send a HUP signal to kadmind if the update completes without
+              errors
+
+     -p       Write the output error to standard out in an XML Plist format
+
+     -r REALM
+              Denotes which realm to update. If this parameter is omitted,
+              kadmin_util will operate on the first realm it finds in the kdc
+              config file. To operate on all the available realms use '*' for
+              the realm name
+
+     -v debug_level
+              Sets the debug level (1 = progress >1 for more detail)
+
+EXAMPLES
+     To add adminuser@REALM.COM to the acl file as kerberos administrator for
+     realm REALM.COM
+
+     kadmin_util -a adminuser@REALM.COM -r REALM.COM
+
+     To remove adminuser@REALM.COM from all the realms serviced by this kdc
+     (you need the quotes around the * to keep the shell from substituting
+     filenames)
+
+     kadmin_util -d adminuser@REALM.COM -r '*'
+
+FILES
+     /var/db/krb5kdc/kadm5.acl  the standard acl file location
+     /var/db/krb5kdc/kdc.conf   the default kdc config file
+
+DIAGNOSTICS
+     You can add -v debug_level to any kadmin_util command. Debug level 1 pro-
+     vides status information, higher levels add progressivly more levels of
+     detail.
+
+NOTES
+     The kadmin_util tool is used by the Apple Single Sign On system to set up
+     a KDC integrated with the rest of the Single Sign On components.
+
+SEE ALSO
+     DirectoryService(1), kerberos(1), kadmind(8), kerberosautoconfig(8),
+     kdcmond(8), krbservicesetup(8), krb5kdc(8), sso_util(8)
+

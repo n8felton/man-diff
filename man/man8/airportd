@@ -1,0 +1,13 @@
+airportd(8)               BSD System Manager's Manual              airportd(8)
+
+NAME
+     airportd -- airport daemon
+
+SYNOPSIS
+     airportd
+
+DESCRIPTION
+     airportd Configures various wireless card parameters automatically. For
+     example, automatically connects to a preferred wireless network after
+     restart if the network is available.
+

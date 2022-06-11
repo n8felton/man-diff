@@ -1,0 +1,98 @@
+SLAPADD(8C)                                                        SLAPADD(8C)
+
+
+
+NAME
+       slapadd - Add entries to a SLAPD database
+
+SYNOPSIS
+       /BinaryCache/OpenLDAP/OpenLDAP-106~5/Root/usr/sbin/slapadd   [-v]  [-c]
+       [-g] [-u] [-q] [-w] [-d level] [-b suffix] [-n dbnum]  [-f  slapd.conf]
+       [-F confdir] [-l ldif-file]
+
+DESCRIPTION
+       Slapadd  is used to add entries specified in LDAP Directory Interchange
+       Format (LDIF) to a slapd(8) database.   It  opens  the  given  database
+       determined  by  the  database  number or suffix and adds entries corre-
+       sponding to the provided LDIF to the database.  Databases configured as
+       subordinate  of this one are also updated, unless -g is specified.  The
+       LDIF input is read from standard input or the specified file.
+
+       As slapadd is designed to accept LDIF in database order, as produced by
+       slapcat(8),  it  does  not  verify  that  superior entries exist before
+       adding an entry, does not perform all user and  system  schema  checks,
+       and  does  not maintain operational attributes (such as createTimeStamp
+       and modifiersName).
+
+OPTIONS
+       -v     enable verbose mode.
+
+       -c     enable continue (ignore errors) mode.
+
+       -g     disable subordinate gluing.  Only the specified database will be
+              processed, and not its glued subordinates (if any).
+
+       -u     enable dry-run (don't write to backend) mode.
+
+       -q     enable  quick (fewer integrity checks) mode.  Does fewer consis-
+              tency checks on the input data, and no consistency  checks  when
+              writing  the database.  Improves the load time but if any errors
+              or interruptions occur the resulting database will be  unusable.
+
+       -w     write  syncrepl  context  information.   After  all  entries are
+              added, the contextCSN will be updated with the greatest  CSN  in
+              the database.
+
+       -d level
+              enable debugging messages as defined by the specified level.
+
+       -b suffix
+              Use  the  specified  suffix  to  determine which database to add
+              entries to.  The -b cannot be used in conjunction  with  the  -n
+              option.
+
+       -n dbnum
+              Add entries to the dbnum-th database listed in the configuration
+              file.  The -n cannot be used in conjunction with the -b  option.
+
+       -f slapd.conf
+              specify an alternative slapd.conf(5) file.
+
+       -F confdir
+              specify  a  config  directory.  If both -f and -F are specified,
+              the config file will be read and converted to  config  directory
+              format  and  written  to  the  specified  directory.  If neither
+              option is specified, an  attempt  to  read  the  default  config
+              directory  will  be made before trying to use the default config
+              file. If a valid config directory exists then the default config
+              file is ignored. If dryrun mode is also specified, no conversion
+              will occur.
+
+       -l ldif-file
+              Read LDIF from the specified file instead of standard input.
+
+LIMITATIONS
+       Your slapd(8) should not be running when you do this to ensure  consis-
+       tency of the database.
+
+       slapadd  may  not  provide naming or schema checks.  It is advisable to
+       use ldapadd(1) when adding new entries into an existing directory.
+
+EXAMPLES
+       To import the entries specified in file ldif into your  slapd(8)  data-
+       base give the command:
+
+            /BinaryCache/OpenLDAP/OpenLDAP-106~5/Root/usr/sbin/slapadd -l ldif
+
+SEE ALSO
+       ldap(3), ldif(5), slapcat(8), ldapadd(1), slapd(8)
+
+       "OpenLDAP Administrator's Guide" (http://www.OpenLDAP.org/doc/admin/)
+
+ACKNOWLEDGEMENTS
+       OpenLDAP   is   developed   and  maintained  by  The  OpenLDAP  Project
+       (http://www.openldap.org/).  OpenLDAP is  derived  from  University  of
+       Michigan LDAP 3.3 Release.
+
+
+

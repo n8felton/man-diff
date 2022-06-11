@@ -1,0 +1,38 @@
+XRANDR(1)                                                            XRANDR(1)
+
+
+
+NAME
+       xrandr - primitive command line interface to RandR extension
+
+SYNOPSIS
+       xrandr [-help]  [-display display] [-o orientation] [-q] [-v] [-s size]
+       [-x] [-y] [--screen snum] [--verbose]
+
+DESCRIPTION
+       Xrandr is used to set the screen size, orientation  and/or  reflection.
+       The  -s  option is a small integer index used to specify which size the
+       screen should be set to.  To find out what sizes are available, use the
+       -q option, which reports the sizes available, the current rotation, and
+       the possible rotations and reflections.  The default size is the  first
+       size  specified in the list.  The -o option is used to specify the ori-
+       entation of the screen, and can be one of "normal inverted left right 0
+       1 2 3".
+
+       The -x option instructs the server to reflect the screen on the X axis.
+       The -y option instructs the server to reflect the screen on the Y axis.
+       Reflection is applied after rotation.
+
+       The  -help  option  prints  out  a usage summary.  The --verbose option
+       tells you what xrandr is doing, selects for events, and tells you  when
+       events are received to enable debugging.
+
+SEE ALSO
+       Xrandr(3)
+
+AUTHORS
+       Keith  Packard, and Jim Gettys, Cambridge Research Laboratory, HP Labs,
+       HP.
+
+
+

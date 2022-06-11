@@ -1,0 +1,147 @@
+ROTATELOGS(8)                     rotatelogs                     ROTATELOGS(8)
+
+
+
+NAME
+       rotatelogs - Piped logging program to rotate Apache logs
+
+
+SYNOPSIS
+       rotatelogs [ -l ] logfile [ rotationtime [ offset ]] | [ filesizeM ]
+
+
+
+SUMMARY
+       rotatelogs  is  a  simple  program for use in conjunction with Apache's
+       piped logfile feature. For example:
+
+
+            CustomLog "|bin/rotatelogs /var/logs/logfile 86400" common
+
+
+
+       This creates the files /var/logs/logfile.nnnn where nnnn is the  system
+       time at which the log nominally starts (this time will always be a mul-
+       tiple of the rotation time, so you can synchronize  cron  scripts  with
+       it).  At  the end of each rotation time (here after 24 hours) a new log
+       is started.
+
+
+            CustomLog "|bin/rotatelogs /var/logs/logfile 5M" common
+
+
+
+       This configuration will rotate the logfile whenever it reaches  a  size
+       of 5 megabytes.
+
+
+            ErrorLog "|bin/rotatelogs /var/logs/errorlog.%Y-%m-%d-%H_%M_%S 5M"
+
+
+
+       This  configuration will rotate the error logfile whenever it reaches a
+       size of 5 megabytes, and the suffix to the logfile name will be created
+       of the form errorlog.YYYY-mm-dd-HH_MM_SS.
+
+
+
+OPTIONS
+       -l     Causes the use of local time rather than GMT as the base for the
+              interval. Note that using -l in an environment which changes the
+              GMT  offset  (such  as for BST or DST) can lead to unpredictable
+              results!
+
+       logfile
+              The path plus basename of the logfile. If logfile  includes  any
+              '%'  characters,  it  is  treated  as  a format string for strf-
+              time(3). Otherwise,  the  suffix  .nnnnnnnnnn  is  automatically
+              added and is the time in seconds. Both formats compute the start
+              time from the beginning of the current period.
+
+       rotationtime
+              The time between log file rotations in seconds.
+
+       offset The number of minutes offset  from  UTC.  If  omitted,  zero  is
+              assumed  and  UTC is used. For example, to use local time in the
+              zone UTC -5 hours, specify a value of -300 for this argument.
+
+       filesizeM
+              The maximum file size in megabytes followed by the letter  M  to
+              specify  size  rather  than time. Use this parameter in place of
+              both rotationtime and offset.
+
+
+PORTABILITY
+       The following logfile format string substitutions should  be  supported
+       by  all  strftime(3)  implementations, see the strftime(3) man page for
+       library-specific extensions.
+
+
+       o %A - full weekday name (localized)
+
+
+       o %a - 3-character weekday name (localized)
+
+
+       o %B - full month name (localized)
+
+
+       o %b - 3-character month name (localized)
+
+
+       o %c - date and time (localized)
+
+
+       o %d - 2-digit day of month
+
+
+       o %H - 2-digit hour (24 hour clock)
+
+
+       o %I - 2-digit hour (12 hour clock)
+
+
+       o %j - 3-digit day of year
+
+
+       o %M - 2-digit minute
+
+
+       o %m - 2-digit month
+
+
+       o %p - am/pm of 12 hour clock (localized)
+
+
+       o %S - 2-digit second
+
+
+       o %U - 2-digit week of year (Sunday first day of week)
+
+
+       o %W - 2-digit week of year (Monday first day of week)
+
+
+       o %w - 1-digit weekday (Sunday first day of week)
+
+
+       o %X - time (localized)
+
+
+       o %x - date (localized)
+
+
+       o %Y - 4-digit year
+
+
+       o %y - 2-digit year
+
+
+       o %Z - time zone name
+
+
+       o %% - literal `%'
+
+
+
+
