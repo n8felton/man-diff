@@ -10,7 +10,7 @@ SYNOPSIS
        htcacheclean [ -D ] [ -v ] [ -t ] [ -r ] [ -n ] -ppath -llimit
 
 
-       htcacheclean -b [ -n ] [ -t ] [ -i ] -dinterval -ppath -llimit
+       htcacheclean [ -n ] [ -t ] [ -i ] -dinterval -ppath -llimit
 
 
 

@@ -1,0 +1,133 @@
+MYSQL_TABLEINFO              MySQL Database System             MYSQL_TABLEINFO
+
+
+
+NAME
+       mysql_tableinfo - generate database metadata
+
+SYNOPSIS
+       mysql_tableinfo [options] db_name [db_like [tbl_like]]
+
+DESCRIPTION
+       mysql_tableinfo creates tables and populates them with database
+       metadata. It uses SHOW DATABASES, SHOW TABLES, SHOW TABLE STATUS, SHOW
+       COLUMNS, and SHOW INDEX to obtain the metadata.
+
+       In MySQL 5.0 and up, the INFORMATION_SCHEMA database contains the same
+       kind of information in the SCHEMATA, TABLES, COLUMNS, and STATISTICS
+       tables. See Chapter 24, INFORMATION_SCHEMA Tables.
+
+       Invoke mysql_tableinfo like this:
+
+          shell> mysql_tableinfo [options] db_name [db_like [tbl_like]]
+
+       The db_name argument indicates which database mysql_tableinfo should
+       use as the location for the metadata tables. The database will be
+       created if it does not exist. The tables will be named db, tbl (or
+       tbl_status), col, and idx.
+
+       If the db_like or tbl_like arguments are given, they are used as
+       patterns and metadata is generated only for databases or tables that
+       match the patterns. These arguments default to % if not given.
+
+       Examples:
+
+          mysql_tableinfo info
+          mysql_tableinfo info world
+          mysql_tableinfo info mydb tmp%
+
+       Each of the commands stores information into tables in the info
+       database. The first stores information for all databases and tables.
+       The second stores information for all tables in the world database. The
+       third stores information for tables in the mydb database that have
+       names matching the pattern tmp%.
+
+       mysql_tableinfo supports the following options:
+
+       o  --help
+
+          Display a help message and exit.
+
+       o  --clear
+
+          Before populating each metadata table, drop it if it exists.
+
+       o  --clear-only
+
+          Similar to --clear, but exits after dropping the metadata tables to
+          be populated.
+
+       o  --col
+
+          Generate column metadata into the col table.
+
+       o  --host=host_name, -h host_name
+
+          Connect to the MySQL server on the given host.
+
+       o  --idx
+
+          Generate index metadata into the idx table.
+
+       o  --password=password, -ppassword
+
+          The password to use when connecting to the server. Note that the
+          password value is not optional for this option, unlike for other
+          MySQL programs. You can use an option file to avoid giving the
+          password on the command line.
+
+          Specifying a password on the command line should be considered
+          insecure. See Section 5.6, "Keeping Your Password Secure".
+
+       o  --port=port_num, -P port_num
+
+          The TCP/IP port number to use for the connection.
+
+       o  --prefix=prefix_str
+
+          Add prefix_str at the beginning of each metadata table name.
+
+       o  --quiet, -q
+
+          Be silent except for errors.
+
+       o  --socket=path, -S path
+
+          The Unix socket file to use for the connection.
+
+       o  --tbl-status
+
+          Use SHOW TABLE STATUS instead of SHOW TABLES. This provides more
+          complete information, but is slower.
+
+       o  --user=user_name, -u user_name
+
+          The MySQL username to use when connecting to the server.
+
+COPYRIGHT
+       Copyright 2007-2008 MySQL AB
+
+       This documentation is free software; you can redistribute it and/or
+       modify it under the terms of the GNU General Public License as
+       published by the Free Software Foundation; version 2 of the License.
+
+       This documentation is distributed in the hope that it will be useful,
+       but WITHOUT ANY WARRANTY; without even the implied warranty of
+       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+       General Public License for more details.
+
+       You should have received a copy of the GNU General Public License along
+       with the program; if not, write to the Free Software Foundation, Inc.,
+       51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
+       http://www.gnu.org/licenses/.
+
+SEE ALSO
+       For more information, please refer to the MySQL Reference Manual, which
+       may already be installed locally and which is also available online at
+       http://dev.mysql.com/doc/.
+
+AUTHOR
+       MySQL AB (http://www.mysql.com/).
+
+
+

@@ -4,9 +4,9 @@ NAME
      syslogd -- Apple System Log server
 
 SYNOPSIS
-     syslogd [-d] [-D] [-m mark_interval] [-c log_cutoff] [-l lib_path] [-a]
-             [-ttl time] [-sweep time] [-db_max size] [-utmp_ttl time]
-             [-fs_ttl time] [-dup_delay time] [-module_name {0|1}]
+     syslogd [-d] [-D] [-m mark_interval] [-c log_cutoff] [-l lib_path]
+             [-db_max size] [-utmp_ttl time] [-fs_ttl time] [-dup_delay time]
+             [-module_name {0|1}]
 
 DESCRIPTION
      The syslogd server receives and processes log messages.  Several modules
@@ -15,17 +15,17 @@ DESCRIPTION
      and optionally on a UDP socket from network clients.
 
      The Apple System Log facility comprises the asl(3) API, a new syslogd
-     server, and the syslog(1) command-line utility.  The system supports
-     structured and extensible messages, permitting advanced message browsing
-     and management through search APIs and other components of the Apple sys-
-     tem log facility.
+     server, the syslog(1) command-line utility, and a data store file man-
+     ager, aslmanager(8).  The system supports structured and extensible mes-
+     sages, permitting advanced message browsing and management through search
+     APIs and other components of the Apple system log facility.
 
-     Log messages are retained in a data store, subject to pruning, automatic
-     archival, and input filtering as described below, to simplify the task of
-     locating log messages and to facilitate browsing and searching.  The data
-     store is intended to become a replacement for the numerous log files that
-     are currently found in various locations on the system.  Those files will
-     be phased out in future versions of Mac OS.
+     Log messages are retained in a data store, subject to automatic archival,
+     and input filtering as described below, to simplify the task of locating
+     log messages and to facilitate browsing and searching.  The data store is
+     intended to become a replacement for the numerous log files that are cur-
+     rently found in various locations on the system.  Those files will be
+     phased out in future versions of Mac OS.
 
      The following options are recognized:
 
@@ -36,9 +36,11 @@ DESCRIPTION
                 have the child process become a daemon.  Since syslogd is
                 started by launchd, this is not normally required.
 
-     -m         Set the number of minutes between ``mark'' messages.  The
-                default is 20 minutes.  The ``mark'' facility is disabled if
-                the setting is zero minutes.
+     -m         Set the number of minutes between ``mark'' messages.  Mark
+                messages are normally disabled.  If -m is specified with no
+                arguments, mark messages will be written every 20 minutes.
+                The ``mark'' facility is disabled if the setting is zero min-
+                utes.
 
      -c         Sets a cutoff filter for log priorities for messages to be
                 retained in the log message data store.  The value of
@@ -64,42 +66,25 @@ DESCRIPTION
                 default, syslogd checks for plug-in modules in the directory
                 /usr/lib/asl.
 
-     -a         Enables message archival.  Messages older than 24 hours (or as
-                otherwise set using -ttl) will be copied to an archive data-
-                base when they expire from the active database.  Archive data-
-                bases are named /var/log/asl.yyyy.mm.dd.archive, and may be
-                read or searched using the syslog(1) command.
-
-     -ttl       Sets the time-to-live in seconds for messages in the active
-                database.  Expired messages are removed or copied to an ar-
-                chive database if archival is enabled.
-
-     -sweep     Sets the interval (in seconds) for a periodic database opera-
-                tion that removes and (optionally) archives expired messages.
-
-     -db_max    Sets a size limit in bytes for the active database.  The size
-                of the database is reduced by deleting oldest messages.
-                Deleted messages will be archived if archival is enabled.
-                When the database reaches its size limit, it is reduced to
-                approximately 90% of the allowed maximum size.  This allows
-                the database to grow for some time before the next size-reduc-
-                tion.  The default value for -db_max is 25600000 bytes.
+     -db_max    Sets the size limit in bytes for files in the data store.  The
+                default value for -db_max is 25600000 bytes.  Files are closed
+                upon reaching the maximum size, and a new file is opened for
+                subsequent messages.
 
      -utmp_ttl  Sets the time-to-live in seconds for messages used by the
                 utmp, wtmp, and lastlog subsystems.  The default is 31622400
                 seconds (approximately 1 year).  Note that if archival is
-                enabled, these messages will be copied to an archive file
-                after the regular time-to-live interval (24 hours, or as set
-                using -ttl) but will persist in the active database until
-                their own expiry time.
+                enabled (see the aslmanager(8) manual), these messages will be
+                copied to an archive after the regular time-to-live interval,
+                but will persist in the data store until their own expiry
+                time.
 
      -fs_ttl    Sets the time-to-live in seconds for filesystem error messages
                 generated by the kernel.  The default is 31622400 seconds
-                (approximately 1 year).  As in the case of -utmp_tt, if
+                (approximately 1 year).  As in the case of -utmp_ttl, if
                 archival is enabled, these messages will be copied to an ar-
-                chive file after the regular time-to-live interval (24 hours,
-                or as set using -ttl) but will persist in the active database
-                until their own expiry time.
+                chive after the regular time-to-live interval but will persist
+                in the data store until their own expiry time.
 
      -dup_delay
                 Sets the time to delay for coalescing duplicate message in log
@@ -162,44 +147,24 @@ DESCRIPTION
                   The module may be specifically disabled using the -udp_in 0
                   option.
 
-     syslogd initializes its built-in modules and loads plug-ins during its
-     start-up.  The data store is pruned approximately 5 minutes after
-     startup.
-
      syslogd reinitializes in response to a HUP signal.
 
 MESSAGE EXPIRY AND ARCHIVAL
-     syslogd periodically removes messages from the active database, option-
-     ally copying them to an archival database.  Archival is enabled if the -a
-     flag is supplied.  By default, messages are removed or archived after
-     they are 24 hours old.  The maximum age of messages in the active data-
-     base may be set as the value for the -ttl flag.  The message expiry oper-
-     ation runs once an hour by default, but the interval may be changed as
-     the value for the -sweep flag.
+     syslogd periodically invokes the aslmanager utility, which manages files
+     in the ASL data store.  Files are removed or optionally copied to an
+     archival directory after a (default) 2 day time-to-live.  See the
+     aslmanager(8) manual for details.  syslogd invokes aslmanager shortly
+     after it starts up, at midnight local time if it is running, and any time
+     that a data store file reaches the -db_max size limit.
 
-     After the database sweep operation, syslogd optionally can check the size
-     of the database, and may be configured to remove additional messages to
-     limit the size of the database.  The maximum size of the database (in
-     bytes) may be specified using the -db_max option.  If messages must be
-     removed to limit the database size, oldest messages are removed first.
-     By default there is no database size limit.
-
-     Log messages from the utmp, wtmp, and lastlog subsystems record login,
-     logout, shutdowns, and reboots.  These log messages are given a longer
-     time-to-live in the active database.  The default time-to-live for these
-     messages is 31622400 seconds (approximately one year).  This value may be
-     changed using the -utmp_ttl flag.  If archival is enabled, a copy of
-     these messages will be archived at the end of the regular time-to-live
-     interval (24 hours, or as specified using -ttl -). The messages will per-
-     sist in the active database until their own time-to-live has expired.
-
-DATABASE SECURITY
-     The data store file /var/log/asl.db is only readable by processes with
-     UID 0.  Messages in the data store may have a read UID and GID, so that
-     only processes with the specified UID or GID can fetch those messages
-     when using asl_search.  Read access UID and GID settings may be attached
-     to messages using the asl(3) library by setting a value for the "ReadUID"
-     and/or "ReadGID" message keys.
+DATA STORE SECURITY
+     Messages saved in the ASL message store are written to files in
+     /var/log/asl.  The message files are given read access controls corre-
+     sponding to the read UID and GID specified in the messages themselves.
+     Read access UID and GID settings may be attached to messages using the
+     asl(3) library by setting a value for the "ReadUID" and/or "ReadGID" mes-
+     sage keys.  The file permissions prevent access-controlled messages from
+     being read by unauthorized users.
 
      Although clients are generally free to use any value for the "Facility"
      message key, only processes running with UID 0 may log messages with a
@@ -209,11 +174,13 @@ DATABASE SECURITY
      with the facility value "user".
 
 FILES
-     /etc/syslog.conf     bsd_out module configuration file
-     /etc/asl.conf        asl_action module configuration file
-     /var/run/syslog.pid  process ID file
-     /var/run/log         name of the UNIX domain datagram log socket
-     /dev/klog            kernel log device
+     /etc/syslog.conf      bsd_out module configuration file
+     /etc/asl.conf         asl_action module configuration file
+     /var/run/syslog.pid   process ID file
+     /var/run/log          name of the UNIX domain datagram log socket
+     /dev/klog             kernel log device
+     /var/log/asl          data store directory
+     /var/log/asl.archive  default archive directory
 
 SEE ALSO
      syslog(1), logger(1), asl(3), syslog(3), asl.conf(5) syslog.conf(5)

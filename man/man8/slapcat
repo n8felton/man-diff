@@ -6,7 +6,7 @@ NAME
        slapcat - SLAPD database to LDIF utility
 
 SYNOPSIS
-       /BinaryCache/OpenLDAP/OpenLDAP-110~5/Root/usr/sbin/slapcat   [-v]  [-c]
+       /BinaryCache/OpenLDAP/OpenLDAP-110~8/Root/usr/sbin/slapcat   [-v]  [-c]
        [-g] [-d level] [-b suffix] [-n dbnum] [-a filter] [-s subtree-dn]  [-f
        slapd.conf] [-F confdir] [-l ldif-file]
 
@@ -80,7 +80,7 @@ EXAMPLES
        To make a text backup of your SLAPD database  and  put  it  in  a  file
        called ldif, give the command:
 
-            /BinaryCache/OpenLDAP/OpenLDAP-110~5/Root/usr/sbin/slapcat -l ldif
+            /BinaryCache/OpenLDAP/OpenLDAP-110~8/Root/usr/sbin/slapcat -l ldif
 
 SEE ALSO
        ldap(3), ldif(5), slapadd(8), ldapadd(1), slapd(8)

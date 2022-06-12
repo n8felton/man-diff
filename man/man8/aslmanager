@@ -1,0 +1,43 @@
+ASLMANAGER(8)             BSD System Manager's Manual            ASLMANAGER(8)
+
+NAME
+     aslmanager -- Apple System Log data store file manager
+
+SYNOPSIS
+     aslmanager [-s store_dir] [-a [archive_dir]] [-ttl days] [-size max_size]
+
+DESCRIPTION
+     aslmanager manages files in the ASL data store written by the syslogd
+     server.
+
+     aslmanager is started automatically at various times.  It runs shortly
+     after the syslogd server starts, at midnight (local time) if the system
+     is running, and any time a file in the ASL data store directory
+     (/var/log/asl) reaches a maximum size limit as specified to the syslogd
+     server.
+
+     aslmanager scans through the files in the ASL data store directory
+     /var/log/asl, or some other directory specified following the -s flag.
+     Files that contain only messages that are older than the default 2 day
+     time-to-live are either archived or removed.  The default 2 day time-to-
+     live value may be overridden by supplying a value following the -ttl
+     flag.  A value of zero allows files to remain in the store with no time
+     limit.
+
+     A maximum size may be provided as a value following the -size flag.  This
+     will cause aslmanager to archive (if -a is specified) and remove files
+     until the total size of the data store is max_size bytes or less.  Files
+     are removed in order starting from oldest to newest.  Files with the same
+     date are removed in standard lexigraphic sort order by file name.
+
+     Files are either removed entirely or copied to an archive directory.  If
+     the -a flag is specified with no argument, files are copied to the
+     /var/log/asl.archive directory.  An alternate directory path may be spec-
+     ified following the -a flag.
+
+SEE ALSO
+     syslogd(8), syslog(1), asl(3), syslog(3),
+
+HISTORY
+     The aslmanager utility appeared in Mac OS X 10.5.6.
+

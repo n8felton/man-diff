@@ -32,7 +32,7 @@ OPTIONS
        See vim(1).
 
 FILES
-       /usr/share/vim/evim.vim
+       /usr/share/vim/vim72/evim.vim
                       The script loaded to initialize eVim.
 
 AKA

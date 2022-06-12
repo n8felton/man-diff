@@ -1,0 +1,278 @@
+MYSQLCHECK(1)                MySQL Database System               MYSQLCHECK(1)
+
+
+
+NAME
+       mysqlcheck - a table maintenance and repair program
+
+SYNOPSIS
+       mysqlcheck [options] [db_name [tbl_name ...]]
+
+DESCRIPTION
+       The mysqlcheck client checks, repairs, optimizes, and analyzes tables.
+
+       mysqlcheck is similar in function to myisamchk, but works differently.
+       The main operational difference is that mysqlcheck must be used when
+       the mysqld server is running, whereas myisamchk should be used when it
+       is not. The benefit of using mysqlcheck is that you do not have to stop
+       the server to check or repair your tables.
+
+       mysqlcheck uses the SQL statements CHECK TABLE, REPAIR TABLE, ANALYZE
+       TABLE, and OPTIMIZE TABLE in a convenient way for the user. It
+       determines which statements to use for the operation you want to
+       perform, and then sends the statements to the server to be executed.
+       For details about which storage engines each statement works with, see
+       the descriptions for those statements in Chapter 12, SQL Statement
+       Syntax.
+
+       The MyISAM storage engine supports all four statements, so mysqlcheck
+       can be used to perform all four operations on MyISAM tables. Other
+       storage engines do not necessarily support all operations. In such
+       cases, an error message is displayed. For example, if test.t is a
+       MEMORY table, an attempt to check it produces this result:
+
+          shell> mysqlcheck test t
+          test.t
+          note     : The storage engine for the table doesn't support check
+
+       Caution
+       It is best to make a backup of a table before performing a table repair
+       operation; under some circumstances the operation might cause data
+       loss. Possible causes include but are not limited to filesystem errors.
+
+       There are three general ways to invoke mysqlcheck:
+
+          shell> mysqlcheck [options] db_name [tables]
+          shell> mysqlcheck [options] --databases db_name1 [db_name2 db_name3...]
+          shell> mysqlcheck [options] --all-databases
+
+       If you do not name any tables following db_name or if you use the
+       --databases or --all-databases option, entire databases are checked.
+
+       mysqlcheck has a special feature compared to other client programs. The
+       default behavior of checking tables (--check) can be changed by
+       renaming the binary. If you want to have a tool that repairs tables by
+       default, you should just make a copy of mysqlcheck named mysqlrepair,
+       or make a symbolic link to mysqlcheck named mysqlrepair. If you invoke
+       mysqlrepair, it repairs tables.
+
+       The following names can be used to change mysqlcheck default behavior:
+
+       +--------------+-----------------------+
+       |mysqlrepair   | The default option is |
+       |              | --repair              |
+       +--------------+-----------------------+
+       |mysqlanalyze  | The default option is |
+       |              | --analyze             |
+       +--------------+-----------------------+
+       |mysqloptimize | The default option is |
+       |              | --optimize            |
+       +--------------+-----------------------+
+
+       mysqlcheck supports the following options:
+
+       o  --help, -?
+
+          Display a help message and exit.
+
+       o  --all-databases, -A
+
+          Check all tables in all databases. This is the same as using the
+          --databases option and naming all the databases on the command line.
+
+       o  --all-in-1, -1
+
+          Instead of issuing a statement for each table, execute a single
+          statement for each database that names all the tables from that
+          database to be processed.
+
+       o  --analyze, -a
+
+          Analyze the tables.
+
+       o  --auto-repair
+
+          If a checked table is corrupted, automatically fix it. Any necessary
+          repairs are done after all tables have been checked.
+
+       o  --character-sets-dir=path
+
+          The directory where character sets are installed. See Section 2,
+          "The Character Set Used for Data and Sorting".
+
+       o  --check, -c
+
+          Check the tables for errors. This is the default operation.
+
+       o  --check-only-changed, -C
+
+          Check only tables that have changed since the last check or that
+          have not been closed properly.
+
+       o  --check-upgrade, -g
+
+          Invoke CHECK TABLE with the FOR UPGRADE option to check tables for
+          incompatibilities with the current version of the server. This
+          option was added in MySQL 5.0.19.
+
+       o  --compress
+
+          Compress all information sent between the client and the server if
+          both support compression.
+
+       o  --databases, -B
+
+          Process all tables in the named databases. Normally, mysqlcheck
+          treats the first name argument on the command line as a database
+          name and following names as table names. With this option, it treats
+          all name arguments as database names.
+
+       o  --debug[=debug_options], -# [debug_options]
+
+          Write a debugging log. A typical debug_options string is often
+          'd:t:o,file_name'.
+
+       o  --default-character-set=charset_name
+
+          Use charset_name as the default character set. See Section 2, "The
+          Character Set Used for Data and Sorting".
+
+       o  --extended, -e
+
+          If you are using this option to check tables, it ensures that they
+          are 100% consistent but takes a long time.
+
+          If you are using this option to repair tables, it runs an extended
+          repair that may not only take a long time to execute, but may
+          produce a lot of garbage rows also!
+
+       o  --fast, -F
+
+          Check only tables that have not been closed properly.
+
+       o  --force, -f
+
+          Continue even if an SQL error occurs.
+
+       o  --host=host_name, -h host_name
+
+          Connect to the MySQL server on the given host.
+
+       o  --medium-check, -m
+
+          Do a check that is faster than an --extended operation. This finds
+          only 99.99% of all errors, which should be good enough in most
+          cases.
+
+       o  --optimize, -o
+
+          Optimize the tables.
+
+       o  --password[=password], -p[password]
+
+          The password to use when connecting to the server. If you use the
+          short option form (-p), you cannot have a space between the option
+          and the password. If you omit the password value following the
+          --password or -p option on the command line, you are prompted for
+          one.
+
+          Specifying a password on the command line should be considered
+          insecure. See Section 5.6, "Keeping Your Password Secure".
+
+       o  --pipe, -W
+
+          On Windows, connect to the server via a named pipe. This option
+          applies only for connections to a local server, and only if the
+          server supports named-pipe connections.
+
+       o  --port=port_num, -P port_num
+
+          The TCP/IP port number to use for the connection.
+
+       o  --protocol={TCP|SOCKET|PIPE|MEMORY}
+
+          The connection protocol to use for connecting to the server. It is
+          useful when the other connection parameters normally would cause a
+          protocol to be used other than the one you want. For details on the
+          allowable values, see Section 2.2, "Connecting to the MySQL Server".
+
+       o  --quick, -q
+
+          If you are using this option to check tables, it prevents the check
+          from scanning the rows to check for incorrect links. This is the
+          fastest check method.
+
+          If you are using this option to repair tables, it tries to repair
+          only the index tree. This is the fastest repair method.
+
+       o  --repair, -r
+
+          Perform a repair that can fix almost anything except unique keys
+          that are not unique.
+
+       o  --silent, -s
+
+          Silent mode. Print only error messages.
+
+       o  --socket=path, -S path
+
+          For connections to localhost, the Unix socket file to use, or, on
+          Windows, the name of the named pipe to use.
+
+       o  --ssl*
+
+          Options that begin with --ssl specify whether to connect to the
+          server via SSL and indicate where to find SSL keys and certificates.
+          See Section 5.7.3, "SSL Command Options".
+
+       o  --tables
+
+          Overrides the --databases or -B option. All name arguments following
+          the option are regarded as table names.
+
+       o  --use-frm
+
+          For repair operations on MyISAM tables, get the table structure from
+          the .frm file so that the table can be repaired even if the .MYI
+          header is corrupted.
+
+       o  --user=user_name, -u user_name
+
+          The MySQL username to use when connecting to the server.
+
+       o  --verbose, -v
+
+          Verbose mode. Print information about the various stages of program
+          operation.
+
+       o  --version, -V
+
+          Display version information and exit.
+
+COPYRIGHT
+       Copyright 2007-2008 MySQL AB
+
+       This documentation is free software; you can redistribute it and/or
+       modify it under the terms of the GNU General Public License as
+       published by the Free Software Foundation; version 2 of the License.
+
+       This documentation is distributed in the hope that it will be useful,
+       but WITHOUT ANY WARRANTY; without even the implied warranty of
+       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+       General Public License for more details.
+
+       You should have received a copy of the GNU General Public License along
+       with the program; if not, write to the Free Software Foundation, Inc.,
+       51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
+       http://www.gnu.org/licenses/.
+
+SEE ALSO
+       For more information, please refer to the MySQL Reference Manual, which
+       may already be installed locally and which is also available online at
+       http://dev.mysql.com/doc/.
+
+AUTHOR
+       MySQL AB (http://www.mysql.com/).
+
+
+

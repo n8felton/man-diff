@@ -6,7 +6,7 @@ NAME
        slappasswd - OpenLDAP password utility
 
 SYNOPSIS
-       /BinaryCache/OpenLDAP/OpenLDAP-110~5/Root/usr/sbin/slappasswd [-v] [-u]
+       /BinaryCache/OpenLDAP/OpenLDAP-110~8/Root/usr/sbin/slappasswd [-v] [-u]
        [-s secret|-T file] [-h hash] [-c salt-format]
 
 

@@ -1,0 +1,830 @@
+MYSQLDUMP(1)                 MySQL Database System                MYSQLDUMP(1)
+
+
+
+NAME
+       mysqldump - a database backup program
+
+SYNOPSIS
+       mysqldump [options] [db_name [tbl_name ...]]
+
+DESCRIPTION
+       The mysqldump client is a backup program originally written by Igor
+       Romanenko. It can be used to dump a database or a collection of
+       databases for backup or transfer to another SQL server (not necessarily
+       a MySQL server). The dump typically contains SQL statements to create
+       the table, populate it, or both. However, mysqldump can also be used to
+       generate files in CSV, other delimited text, or XML format.
+
+       If you are doing a backup on the server and your tables all are MyISAM
+       tables, consider using the mysqlhotcopy instead because it can
+       accomplish faster backups and faster restores. See mysqlhotcopy(1).
+
+       There are three general ways to invoke mysqldump:
+
+          shell> mysqldump [options] db_name [tables]
+          shell> mysqldump [options] --databases db_name1 [db_name2 db_name3...]
+          shell> mysqldump [options] --all-databases
+
+       If you do not name any tables following db_name or if you use the
+       --databases or --all-databases option, entire databases are dumped.
+
+       mysqldump does not dump the INFORMATION_SCHEMA database. If you name
+       that database explicitly on the command line, mysqldump silently
+       ignores it.
+
+       To get a list of the options your version of mysqldump supports,
+       execute mysqldump --help.
+
+       Some mysqldump options are shorthand for groups of other options.
+       --opt and --compact fall into this category. For example, use of --opt
+       is the same as specifying --add-drop-table --add-locks --create-options
+       --disable-keys --extended-insert --lock-tables --quick --set-charset.
+       Note that all of the options that --opt stands for also are on by
+       default because --opt is on by default.
+
+       To reverse the effect of a group option, uses its --skip-xxx form
+       (--skip-opt or --skip-compact). It is also possible to select only part
+       of the effect of a group option by following it with options that
+       enable or disable specific features. Here are some examples:
+
+       o  To select the effect of --opt except for some features, use the
+          --skip option for each feature. For example, to disable extended
+          inserts and memory buffering, use --opt --skip-extended-insert
+          --skip-quick. (As of MySQL 5.0, --skip-extended-insert --skip-quick
+          is sufficient because --opt is on by default.)
+
+       o  To reverse --opt for all features except index disabling and table
+          locking, use --skip-opt --disable-keys --lock-tables.
+
+
+       When you selectively enable or disable the effect of a group option,
+       order is important because options are processed first to last. For
+       example, --disable-keys --lock-tables --skip-opt would not have the
+       intended effect; it is the same as --skip-opt by itself.
+
+       mysqldump can retrieve and dump table contents row by row, or it can
+       retrieve the entire content from a table and buffer it in memory before
+       dumping it. Buffering in memory can be a problem if you are dumping
+       large tables. To dump tables row by row, use the --quick option (or
+       --opt, which enables --quick). The --opt option (and hence --quick) is
+       enabled by default in MySQL 5.0; to enable memory buffering, use
+       --skip-quick.
+
+       If you are using a recent version of mysqldump to generate a dump to be
+       reloaded into a very old MySQL server, you should not use the --opt or
+       --extended-insert option. Use --skip-opt instead.
+
+       Before MySQL 4.1.2, out-of-range numeric values such as -inf and inf,
+       as well as NaN (not-a-number) values are dumped by mysqldump as NULL.
+       You can see this using the following sample table:
+
+          mysql> CREATE TABLE t (f DOUBLE);
+          mysql> INSERT INTO t VALUES(1e+111111111111111111111);
+          mysql> INSERT INTO t VALUES(-1e111111111111111111111);
+          mysql> SELECT f FROM t;
+          +------+
+          | f    |
+          +------+
+          |  inf |
+          | -inf |
+          +------+
+
+       For this table, mysqldump produces the following data output:
+
+          --
+          -- Dumping data for table `t`
+          --
+          INSERT INTO t VALUES (NULL);
+          INSERT INTO t VALUES (NULL);
+
+       The significance of this behavior is that if you dump and restore the
+       table, the new table has contents that differ from the original
+       contents. This problem is fixed as of MySQL 4.1.2; you cannot insert
+       inf in the table, so this mysqldump behavior is only relevant when you
+       deal with old servers.
+
+       mysqldump supports the following options:
+
+       o  --help, -?
+
+          Display a help message and exit.
+
+       o  --add-drop-database
+
+          Add a DROP DATABASE statement before each CREATE DATABASE statement.
+
+       o  --add-drop-table
+
+          Add a DROP TABLE statement before each CREATE TABLE statement.
+
+       o  --add-locks
+
+          Surround each table dump with LOCK TABLES and UNLOCK TABLES
+          statements. This results in faster inserts when the dump file is
+          reloaded. See Section 2.18, "Speed of INSERT Statements".
+
+       o  --all-databases, -A
+
+          Dump all tables in all databases. This is the same as using the
+          --databases option and naming all the databases on the command line.
+
+       o  --allow-keywords
+
+          Allow creation of column names that are keywords. This works by
+          prefixing each column name with the table name.
+
+       o  --character-sets-dir=path
+
+          The directory where character sets are installed. See Section 2,
+          "The Character Set Used for Data and Sorting".
+
+       o  --comments, -i
+
+          Write additional information in the dump file such as program
+          version, server version, and host. This option is enabled by
+          default. To suppress this additional information, use
+          --skip-comments.
+
+       o  --compact
+
+          Produce less verbose output. This option enables the
+          --skip-add-drop-table, --skip-add-locks, --skip-comments,
+          --skip-disable-keys, and --skip-set-charset options.
+
+          Note
+          Prior to release 5.0.48, this option did not create valid SQL if the
+          database dump contained views. The recreation of views requires the
+          creation and removal of temporary tables and this option suppressed
+          the removal of those temporary tables. As a workaround, use
+          --compact with the --add-drop-table option and then manually adjust
+          the dump file.
+
+       o  --compatible=name
+
+          Produce output that is more compatible with other database systems
+          or with older MySQL servers. The value of name can be ansi,
+          mysql323, mysql40, postgresql, oracle, mssql, db2, maxdb,
+          no_key_options, no_table_options, or no_field_options. To use
+          several values, separate them by commas. These values have the same
+          meaning as the corresponding options for setting the server SQL
+          mode. See Section 1.7, "SQL Modes".
+
+          This option does not guarantee compatibility with other servers. It
+          only enables those SQL mode values that are currently available for
+          making dump output more compatible. For example, --compatible=oracle
+          does not map data types to Oracle types or use Oracle comment
+          syntax.
+
+          This option requires a server version of 4.1.0 or higher. With older
+          servers, it does nothing.
+
+       o  --complete-insert, -c
+
+          Use complete INSERT statements that include column names.
+
+       o  --compress, -C
+
+          Compress all information sent between the client and the server if
+          both support compression.
+
+       o  --create-options
+
+          Include all MySQL-specific table options in the CREATE TABLE
+          statements.
+
+       o  --databases, -B
+
+          Dump several databases. Normally, mysqldump treats the first name
+          argument on the command line as a database name and following names
+          as table names. With this option, it treats all name arguments as
+          database names.  CREATE DATABASE and USE statements are included in
+          the output before each new database.
+
+       o  --debug[=debug_options], -# [debug_options]
+
+          Write a debugging log. The debug_options string is often
+          'd:t:o,file_name'. The default value is
+          'd:t:o,/tmp/mysqldump.trace'.
+
+       o  --debug-info
+
+          Print debugging information and memory and CPU usage statistics when
+          the program exits. This option was added in MySQL 5.0.32.
+
+       o  --default-character-set=charset_name
+
+          Use charset_name as the default character set. See Section 2, "The
+          Character Set Used for Data and Sorting". If no character set is
+          specified, mysqldump uses utf8, and earlier versions use latin1.
+
+       o  --delayed-insert
+
+          Write INSERT DELAYED statements rather than INSERT statements.
+
+       o  --delete-master-logs
+
+          On a master replication server, delete the binary logs after
+          performing the dump operation. This option automatically enables
+          --master-data.
+
+       o  --disable-keys, -K
+
+          For each table, surround the INSERT statements with /*!40000 ALTER
+          TABLE tbl_name DISABLE KEYS */; and /*!40000 ALTER TABLE tbl_name
+          ENABLE KEYS */; statements. This makes loading the dump file faster
+          because the indexes are created after all rows are inserted. This
+          option is effective only for non-unique indexes of MyISAM tables.
+
+       o  --dump-date
+
+          mysqldump produces a -- Dump completed on DATE comment at the end of
+          the dump if the --comments option is given. However, the date causes
+          dump files for identical data take at different times to appear to
+          be different.  --dump-date and --skip-dump-date control whether the
+          date is added to the comment. The default is --dump-date (include
+          the date in the comment).  --skip-dump-date suppresses date
+          printing. This option was added in MySQL 5.0.52.
+
+       o  --extended-insert, -e
+
+          Use multiple-row INSERT syntax that include several VALUES lists.
+          This results in a smaller dump file and speeds up inserts when the
+          file is reloaded.
+
+       o  --fields-terminated-by=..., --fields-enclosed-by=...,
+          --fields-optionally-enclosed-by=..., --fields-escaped-by=...
+
+          These options are used with the -T option and have the same meaning
+          as the corresponding clauses for LOAD DATA INFILE. See Section 2.5,
+          "LOAD DATA INFILE Syntax".
+
+       o  --first-slave, -x
+
+          Deprecated. Now renamed to --lock-all-tables.
+
+       o  --flush-logs, -F
+
+          Flush the MySQL server log files before starting the dump. This
+          option requires the RELOAD privilege. Note that if you use this
+          option in combination with the --all-databases (or -A) option, the
+          logs are flushed for each database dumped. The exception is when
+          using --lock-all-tables or --master-data: In this case, the logs are
+          flushed only once, corresponding to the moment that all tables are
+          locked. If you want your dump and the log flush to happen at exactly
+          the same moment, you should use --flush-logs together with either
+          --lock-all-tables or --master-data.
+
+       o  --flush-privileges
+
+          Emit a FLUSH PRIVILEGES statement after dumping the mysql database.
+          This option should be used any time the dump contains the mysql
+          database and any other database that depends on the data in the
+          mysql database for proper restoration. This option was added in
+          MySQL 5.0.26.
+
+       o  --force, -f
+
+          Continue even if an SQL error occurs during a table dump.
+
+          One use for this option is to cause mysqldump to continue executing
+          even when it encounters a view that has become invalid because the
+          defintion refers to a table that has been dropped. Without --force,
+          mysqldump exits with an error message. With --force, mysqldump
+          prints the error message, but it also writes a SQL comment
+          containing the view definition to the dump output and continues
+          executing.
+
+       o  --host=host_name, -h host_name
+
+          Dump data from the MySQL server on the given host. The default host
+          is localhost.
+
+       o  --hex-blob
+
+          Dump binary columns using hexadecimal notation (for example, 'abc'
+          becomes 0x616263). The affected data types are BINARY, VARBINARY,
+          and BLOB. As of MySQL 5.0.13, BIT columns are affected as well.
+
+       o  --ignore-table=db_name.tbl_name
+
+          Do not dump the given table, which must be specified using both the
+          database and table names. To ignore multiple tables, use this option
+          multiple times.
+
+       o  --insert-ignore
+
+          Write INSERT statements with the IGNORE option.
+
+       o  --lines-terminated-by=...
+
+          This option is used with the -T option and has the same meaning as
+          the corresponding clause for LOAD DATA INFILE. See Section 2.5,
+          "LOAD DATA INFILE Syntax".
+
+       o  --lock-all-tables, -x
+
+          Lock all tables across all databases. This is achieved by acquiring
+          a global read lock for the duration of the whole dump. This option
+          automatically turns off --single-transaction and --lock-tables.
+
+       o  --lock-tables, -l
+
+          Lock all tables before dumping them. The tables are locked with READ
+          LOCAL to allow concurrent inserts in the case of MyISAM tables. For
+          transactional tables such as InnoDB and BDB, --single-transaction is
+          a much better option, because it does not need to lock the tables at
+          all.
+
+          Please note that when dumping multiple databases, --lock-tables
+          locks tables for each database separately. Therefore, this option
+          does not guarantee that the tables in the dump file are logically
+          consistent between databases. Tables in different databases may be
+          dumped in completely different states.
+
+       o  --log-error=file_name
+
+          Append warnings and errors to the named file. This option was added
+          in MySQL 5.0.42.
+
+       o  --master-data[=value]
+
+          Use this option to dump a master replication server to produce a
+          dump file that can be used to set up another server as a slave of
+          the master. It causes the dump output to include a CHANGE MASTER TO
+          statement that indicates the binary log coordinates (filename and
+          position) of the dumped server. These are the master server
+          coordinates from which the slave should start replicating.
+
+          If the option value is 2, the CHANGE MASTER TO statement is written
+          as an SQL comment, and thus is informative only; it has no effect
+          when the dump file is reloaded. If the option value is 1, the
+          statement takes effect when the dump file is reloaded. If the option
+          value is not specified, the default value is 1.
+
+          This option requires the RELOAD privilege and the binary log must be
+          enabled.
+
+          The --master-data option automatically turns off --lock-tables. It
+          also turns on --lock-all-tables, unless --single-transaction also is
+          specified, in which case, a global read lock is acquired only for a
+          short time at the beginning of the dump (see the description for
+          --single-transaction). In all cases, any action on logs happens at
+          the exact moment of the dump.
+
+          It is also possible to set up a slave by dumping an existing slave
+          of the master. To do this, use the following procedure on the
+          existing slave:
+
+          1. Stop the slave's SQL thread and get its current status:
+
+             mysql> STOP SLAVE SQL_THREAD;
+             mysql> SHOW SLAVE STATUS;
+
+          2. From the output of the SHOW SLAVE STATUS statement, get the
+             binary log coordinates of the master server from which the new
+             slave should start replicating. These coordinates are the values
+             of the Relay_Master_Log_File and Exec_Master_Log_Pos values.
+             Denote those values as file_name and file_pos.
+
+          3. Dump the slave server:
+
+             shell> mysqldump --master-data=2 --all-databases > dumpfile
+
+          4. Restart the slave:
+
+             mysql> START SLAVE;
+
+          5. On the new slave, reload the dump file:
+
+             shell> mysql < dumpfile
+
+          6. On the new slave, set the replication coordinates to those of the
+             master server obtained earlier:
+
+             mysql> CHANGE MASTER TO
+                 -> MASTER_LOG_FILE = 'file_name', MASTER_LOG_POS = file_pos;
+          The CHANGE MASTER TO statement might also need other parameters,
+          such as MASTER_HOST to point the slave to the correct master server
+          host. Add any such parameters as necessary.
+
+       o  --no-autocommit
+
+          Enclose the INSERT statements for each dumped table within SET
+          AUTOCOMMIT=0 and COMMIT statements.
+
+       o  --no-create-db, -n
+
+          This option suppresses the CREATE DATABASE statements that are
+          otherwise included in the output if the --databases or
+          --all-databases option is given.
+
+       o  --no-create-info, -t
+
+          Do not write CREATE TABLE statements that re-create each dumped
+          table.
+
+       o  --no-data, -d
+
+          Do not write any table row information (that is, do not dump table
+          contents). This is very useful if you want to dump only the CREATE
+          TABLE statement for the table.
+
+       o  --opt
+
+          This option is shorthand; it is the same as specifying
+          --add-drop-table --add-locks --create-options --disable-keys
+          --extended-insert --lock-tables --quick --set-charset. It should
+          give you a fast dump operation and produce a dump file that can be
+          reloaded into a MySQL server quickly.
+
+          The --opt option is enabled by default. Use --skip-opt to disable
+          it.  See the discussion at the beginning of this section for
+          information about selectively enabling or disabling certain of the
+          options affected by --opt.
+
+       o  --order-by-primary
+
+          Sorts each table's rows by its primary key, or by its first unique
+          index, if such an index exists. This is useful when dumping a MyISAM
+          table to be loaded into an InnoDB table, but will make the dump
+          itself take considerably longer.
+
+       o  --password[=password], -p[password]
+
+          The password to use when connecting to the server. If you use the
+          short option form (-p), you cannot have a space between the option
+          and the password. If you omit the password value following the
+          --password or -p option on the command line, you are prompted for
+          one.
+
+          Specifying a password on the command line should be considered
+          insecure. See Section 5.6, "Keeping Your Password Secure".
+
+       o  --pipe, -W
+
+          On Windows, connect to the server via a named pipe. This option
+          applies only for connections to a local server, and only if the
+          server supports named-pipe connections.
+
+       o  --port=port_num, -P port_num
+
+          The TCP/IP port number to use for the connection.
+
+       o  --protocol={TCP|SOCKET|PIPE|MEMORY}
+
+          The connection protocol to use for connecting to the server. It is
+          useful when the other connection parameters normally would cause a
+          protocol to be used other than the one you want. For details on the
+          allowable values, see Section 2.2, "Connecting to the MySQL Server".
+
+       o  --quick, -q
+
+          This option is useful for dumping large tables. It forces mysqldump
+          to retrieve rows for a table from the server a row at a time rather
+          than retrieving the entire row set and buffering it in memory before
+          writing it out.
+
+       o  --quote-names, -Q
+
+          Quote database, table, and column names within "`" characters. If
+          the ANSI_QUOTES SQL mode is enabled, names are quoted within """
+          characters. This option is enabled by default. It can be disabled
+          with --skip-quote-names, but this option should be given after any
+          option such as --compatible that may enable --quote-names.
+
+       o  --result-file=file_name, -r file_name
+
+          Direct output to a given file. This option should be used on Windows
+          to prevent newline "\n" characters from being converted to "\r\n"
+          carriage return/newline sequences. The result file is created and
+          its contents overwritten, even if an error occurs while generating
+          the dump. The previous contents are lost.
+
+       o  --routines, -R
+
+          Dump stored routines (functions and procedures) from the dumped
+          databases. Use of this option requires the SELECT privilege for the
+          mysql.proc table. The output generated by using --routines contains
+          CREATE PROCEDURE and CREATE FUNCTION statements to re-create the
+          routines. However, these statements do not include attributes such
+          as the routine creation and modification timestamps. This means that
+          when the routines are reloaded, they will be created with the
+          timestamps equal to the reload time.
+
+          If you require routines to be re-created with their original
+          timestamp attributes, do not use --routines. Instead, dump and
+          reload the contents of the mysql.proc table directly, using a MySQL
+          account that has appropriate privileges for the mysql database.
+
+          This option was added in MySQL 5.0.13. Before that, stored routines
+          are not dumped. Routine DEFINER values are not dumped until MySQL
+          5.0.20. This means that before 5.0.20, when routines are reloaded,
+          they will be created with the definer set to the reloading user. If
+          you require routines to be re-created with their original definer,
+          dump and load the contents of the mysql.proc table directly as
+          described earlier.
+
+       o  --set-charset
+
+          Add SET NAMES default_character_set to the output. This option is
+          enabled by default. To suppress the SET NAMES statement, use
+          --skip-set-charset.
+
+       o  --single-transaction
+
+          This option issues a BEGIN SQL statement before dumping data from
+          the server. It is useful only with transactional tables such as
+          InnoDB and BDB, because then it dumps the consistent state of the
+          database at the time when BEGIN was issued without blocking any
+          applications.
+
+          When using this option, you should keep in mind that only InnoDB
+          tables are dumped in a consistent state. For example, any MyISAM or
+          MEMORY tables dumped while using this option may still change state.
+
+          The --single-transaction option and the --lock-tables option are
+          mutually exclusive, because LOCK TABLES causes any pending
+          transactions to be committed implicitly.
+
+          While a --single-transaction dump is in process, to ensure a valid
+          dump file (correct table contents and binary log position), no other
+          connection should use the following statements: ALTER TABLE, DROP
+          TABLE, RENAME TABLE, TRUNCATE TABLE. A consistent read is not
+          isolated from those statements, so use of them on a table to be
+          dumped can cause the SELECT performed by mysqldump to retrieve the
+          table contents to obtain incorrect contents or fail.
+
+          This option is not supported for MySQL Cluster tables; the results
+          cannot be guaranteed to be consistent due to the fact that the
+          NDBCLUSTER storage engine supports only the READ_COMMITTED
+          transaction isolation level. You should always use NDB backup and
+          restore instead.
+
+          To dump large tables, you should combine this option with --quick.
+
+       o  --skip-comments
+
+          See the description for the --comments option.
+
+       o  --skip-opt
+
+          See the description for the --opt option.
+
+       o  --socket=path, -S path
+
+          For connections to localhost, the Unix socket file to use, or, on
+          Windows, the name of the named pipe to use.
+
+       o  --ssl*
+
+          Options that begin with --ssl specify whether to connect to the
+          server via SSL and indicate where to find SSL keys and certificates.
+          See Section 5.7.3, "SSL Command Options".
+
+       o  --tab=path, -T path
+
+          Produce tab-separated data files. For each dumped table, mysqldump
+          creates a tbl_name.sql file that contains the CREATE TABLE statement
+          that creates the table, and a tbl_name.txt file that contains its
+          data. The option value is the directory in which to write the files.
+
+          By default, the .txt data files are formatted using tab characters
+          between column values and a newline at the end of each line. The
+          format can be specified explicitly using the --fields-xxx and
+          --lines-terminated-by options.
+
+          Note
+          This option should be used only when mysqldump is run on the same
+          machine as the mysqld server. You must have the FILE privilege, and
+          the server must have permission to write files in the directory that
+          you specify.
+
+       o  --tables
+
+          Override the --databases or -B option.  mysqldump regards all name
+          arguments following the option as table names.
+
+       o  --triggers
+
+          Dump triggers for each dumped table. This option is enabled by
+          default; disable it with --skip-triggers. This option was added in
+          MySQL 5.0.11. Before that, triggers are not dumped.
+
+       o  --tz-utc
+
+          This option enables TIMESTAMP columns to be dumped and reloaded
+          between servers in different time zones.  mysqldump sets its
+          connection time zone to UTC and adds SET TIME_ZONE='+00:00' to the
+          dump file. Without this option, TIMESTAMP columns are dumped and
+          reloaded in the time zones local to the source and destination
+          servers, which can cause the values to change.  --tz-utc also
+          protects against changes due to daylight saving time.  --tz-utc is
+          enabled by default. To disable it, use --skip-tz-utc. This option
+          was added in MySQL 5.0.15.
+
+       o  --user=user_name, -u user_name
+
+          The MySQL username to use when connecting to the server.
+
+       o  --verbose, -v
+
+          Verbose mode. Print more information about what the program does.
+
+       o  --version, -V
+
+          Display version information and exit.
+
+       o  --where='where_condition', -w 'where_condition'
+
+          Dump only rows selected by the given WHERE condition. Quotes around
+          the condition are mandatory if it contains spaces or other
+          characters that are special to your command interpreter.
+
+          Examples:
+
+          --where="user='jimf'"
+          -w"userid>1"
+          -w"userid<1"
+
+       o  --xml, -X
+
+          Write dump output as well-formed XML.
+
+          NULL, 'NULL', and Empty Values: For some column named column_name,
+          the NULL value, an empty string, and the string value 'NULL' are
+          distinguished from one another in the output generated by this
+          option as follows:
+
+          +----------------------+-----------------------------------------------------+
+          |Value:                | XML Representation:                                 |
+          +----------------------+-----------------------------------------------------+
+          |NULL (unknown value)  | <field name="column_name"                           |
+          |                      |                     xsi:nil="true"                  |
+          |                      | />                                                  |
+          +----------------------+-----------------------------------------------------+
+          |'' (empty string)     | <field                                              |
+          |                      |                     name="column_name"></field>     |
+          +----------------------+-----------------------------------------------------+
+          |'NULL' (string value) | <field                                              |
+          |                      |                     name="column_name">NULL</field> |
+          +----------------------+-----------------------------------------------------+
+          Beginning with MySQL 5.0.26, the output from the mysql client when
+          run using the --xml option also follows these rules. (See the
+          section called "MYSQL OPTIONS".)
+
+          Beginning with MySQL 5.0.40, XML output from mysqldump includes the
+          XML namespace, as shown here:
+
+          shell> mysqldump --xml -u root world City
+          <?xml version="1.0"?>
+          <mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <database name="world">
+          <table_structure name="City">
+          <field Field="ID" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" />
+          <field Field="Name" Type="char(35)" Null="NO" Key="" Default="" Extra="" />
+          <field Field="CountryCode" Type="char(3)" Null="NO" Key="" Default="" Extra="" />
+          <field Field="District" Type="char(20)" Null="NO" Key="" Default="" Extra="" />
+          <field Field="Population" Type="int(11)" Null="NO" Key="" Default="0" Extra="" />
+          <key Table="City" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="ID" Collation="A" Cardinality="4079"
+          Null="" Index_type="BTREE" Comment="" />
+          <options Name="City" Engine="MyISAM" Version="10" Row_format="Fixed" Rows="4079" Avg_row_length="67" Data_length="27329
+          3" Max_data_length="18858823439613951" Index_length="43008" Data_free="0" Auto_increment="4080" Create_time="2007-03-31 01:47:01" Updat
+          e_time="2007-03-31 01:47:02" Collation="latin1_swedish_ci" Create_options="" Comment="" />
+          </table_structure>
+          <table_data name="City">
+          <row>
+          <field name="ID">1</field>
+          <field name="Name">Kabul</field>
+          <field name="CountryCode">AFG</field>
+          <field name="District">Kabol</field>
+          <field name="Population">1780000</field>
+          </row>
+          ...
+          <row>
+          <field name="ID">4079</field>
+          <field name="Name">Rafah</field>
+          <field name="CountryCode">PSE</field>
+          <field name="District">Rafah</field>
+          <field name="Population">92020</field>
+          </row>
+          </table_data>
+          </database>
+          </mysqldump>
+
+
+
+       You can also set the following variables by using --var_name=value
+       syntax:
+
+       o  max_allowed_packet
+
+          The maximum size of the buffer for client/server communication. The
+          maximum is 1GB.
+
+       o  net_buffer_length
+
+          The initial size of the buffer for client/server communication. When
+          creating multiple-row-insert statements (as with option
+          --extended-insert or --opt), mysqldump creates rows up to
+          net_buffer_length length. If you increase this variable, you should
+          also ensure that the net_buffer_length variable in the MySQL server
+          is at least this large.
+
+
+       It is also possible to set variables by using --var_name=value. The
+       --set-variable format is deprecated.
+
+       The most common use of mysqldump is probably for making a backup of an
+       entire database:
+
+          shell> mysqldump db_name > backup-file.sql
+
+       You can read the dump file back into the server like this:
+
+          shell> mysql db_name < backup-file.sql
+
+       Or like this:
+
+          shell> mysql -e "source /path-to-backup/backup-file.sql" db_name
+
+       mysqldump is also very useful for populating databases by copying data
+       from one MySQL server to another:
+
+          shell> mysqldump --opt db_name | mysql --host=remote_host -C db_name
+
+       It is possible to dump several databases with one command:
+
+          shell> mysqldump --databases db_name1 [db_name2 ...] > my_databases.sql
+
+       To dump all databases, use the --all-databases option:
+
+          shell> mysqldump --all-databases > all_databases.sql
+
+       For InnoDB tables, mysqldump provides a way of making an online backup:
+
+          shell> mysqldump --all-databases --single-transaction > all_databases.sql
+
+       This backup just needs to acquire a global read lock on all tables
+       (using FLUSH TABLES WITH READ LOCK) at the beginning of the dump. As
+       soon as this lock has been acquired, the binary log coordinates are
+       read and the lock is released. If and only if one long updating
+       statement is running when the FLUSH statement is issued, the MySQL
+       server may get stalled until that long statement finishes, and then the
+       dump becomes lock-free. If the update statements that the MySQL server
+       receives are short (in terms of execution time), the initial lock
+       period should not be noticeable, even with many updates.
+
+       For point-in-time recovery (also known as "roll-forward," when you need
+       to restore an old backup and replay the changes that happened since
+       that backup), it is often useful to rotate the binary log (see
+       Section 2.3, "The Binary Log") or at least know the binary log
+       coordinates to which the dump corresponds:
+
+          shell> mysqldump --all-databases --master-data=2 > all_databases.sql
+
+       Or:
+
+          shell> mysqldump --all-databases --flush-logs --master-data=2
+                        > all_databases.sql
+
+       The --master-data and --single-transaction options can be used
+       simultaneously, which provides a convenient way to make an online
+       backup suitable for point-in-time recovery if tables are stored using
+       the InnoDB storage engine.
+
+       For more information on making backups, see Section 1, "Database
+       Backups", and Section 2, "Example Backup and Recovery Strategy".
+
+       If you encounter problems backing up views, please read the section
+       that covers restrictions on views which describes a workaround for
+       backing up views when this fails due to insufficient privileges. See
+       Section 4, "Restrictions on Views".
+
+COPYRIGHT
+       Copyright 2007-2008 MySQL AB
+
+       This documentation is free software; you can redistribute it and/or
+       modify it under the terms of the GNU General Public License as
+       published by the Free Software Foundation; version 2 of the License.
+
+       This documentation is distributed in the hope that it will be useful,
+       but WITHOUT ANY WARRANTY; without even the implied warranty of
+       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+       General Public License for more details.
+
+       You should have received a copy of the GNU General Public License along
+       with the program; if not, write to the Free Software Foundation, Inc.,
+       51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
+       http://www.gnu.org/licenses/.
+
+SEE ALSO
+       For more information, please refer to the MySQL Reference Manual, which
+       may already be installed locally and which is also available online at
+       http://dev.mysql.com/doc/.
+
+AUTHOR
+       MySQL AB (http://www.mysql.com/).
+
+
+

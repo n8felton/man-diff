@@ -4,7 +4,7 @@ NAME
      df -- display free disk space
 
 SYNOPSIS
-     df [-b | -h | -H | -k | -m | -P] [-ailn] [-t] [-T type]
+     df [-b | -h | -H | -k | -m | -g | -P] [-ailn] [-t] [-T type]
         [file | filesystem ...]
 
 LEGACY SYNOPSIS

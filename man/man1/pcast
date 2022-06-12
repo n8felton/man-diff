@@ -6,9 +6,12 @@ NAME
 SYNOPSIS
      podcast [--server serverhost] [--pass password] [--user username]
              [--checksslcert] [--timeout network_timeout]
+             [--auth (Password | Kerberos)]
 
      podcast --listcameras
      podcast --listworkflows
+     podcast --listservers
+     podcast --listinfo --server serverhost
 
      podcast --submit --file file_path [--file file_path] --workflow
              workflow_name [--metadata metadata_file_path]
@@ -41,7 +44,7 @@ CONNECTIVITY OPTIONS
                                          server.  Format: 'myserver.exam-
                                          ple.com' or 'https://myserver.exam-
                                          ple.com:8170/podcastproducer'.  If
-                                         omitted, podcast will use `hostname`
+                                         omitted, podcast will use 'hostname'
 
      [--user username]                   The username for authentication.  If
                                          omitted, podcast will use $USER
@@ -54,10 +57,21 @@ CONNECTIVITY OPTIONS
      [--timeout network_timeout]         Specify a network timeout in seconds
                                          (default is 60 seconds)
 
+     [--auth (Password | Kerberos)]      Specify an authentication mechanism
+                                         to use when connecting to the Podcast
+                                         Producer server.  If omitted, podcast
+                                         will use 'Password'
+
 QUERY OPERATIONS
      --listcameras                       List available cameras
 
-     --listworkflows                     List available workflws
+     --listworkflows                     List available workflows
+
+     --listservers                       List available servers (Bonjour dis-
+                                         covery)
+
+     --listinfo --server serverhost      List information about a specific
+                                         server (unauthenticated request)
 
 SUBMISSION OPERATIONS
      --submit                            Submit a recording or a file

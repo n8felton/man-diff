@@ -79,6 +79,33 @@ OPTIONS
        --detect-pua
               Detect Possibly Unwanted Applications.
 
+       --exclude-pua=CATEGORY
+              Exclude  a specific PUA category. This option can be used multi-
+              ple times. See http://www.clamav.net/support/pua  for  the  com-
+              plete list of PUA
+
+       --include-pua=CATEGORY
+              Only  include  a  specific PUA category. This option can be used
+              multiple times. See  http://www.clamav.net/support/pua  for  the
+              complete list of PUA
+
+       --detect-structured
+              Enable  the  DLP  (Data  Loss  Prevention) module which provides
+              detection of SSN and Credit Card numbers.
+
+       --structured-ssn-format=X
+              X=0: search for valid SSNs formatted  as  xxx-yy-zzzz  (normal);
+              X=1:  search  for  valid SSNs formatted as xxxyyzzzz (stripped);
+              X=2: search for both formats. Default is 0.
+
+       --structured-ssn-count=#n
+              This option sets the lowest number of  Social  Security  Numbers
+              found in a file to generate a detect (default: 3).
+
+       --structured-cc-count=#n
+              This  option sets the lowest number of Credit Card numbers found
+              in a file to generate a detect (default: 3).
+
        --no-mail
               Disable scanning of mail files.
 
@@ -86,12 +113,21 @@ OPTIONS
               Disable signature-based phishing detection.
 
        --no-phishing-scan-urls
-              Disable  url-based  heuristic  phishing detection. This disables
+              Disable url-based heuristic phishing  detection.  This  disables
               Phishing.Heuristics.Email.*
 
-       --no-phishing-restrictedscan
-              Enable url-based heuristic phishing detection  for  all  domains
-              (might lead to false positives!).
+       --heuristic-scan-precedence
+              Allow  heuristic  match  to  take precedence. When enabled, if a
+              heuristic  scan  (such  as  phishingScan)  detects  a   possible
+              virus/phish  it  will  stop scan immediately. Recommended, saves
+              CPU scan-time. When disabled, virus/phish detected by  heuristic
+              scans  will be reported only at the end of a scan. If an archive
+              contains both a heuristically detected  virus/phish, and a  real
+              malware, the real malware will be reported Keep this disabled if
+              you intend to handle "*.Heuristics.*" viruses  differently  from
+              "real"  malware.  If  a non-heuristically-detected virus (signa-
+              ture-based) is found first,  the  scan  is  interrupted  immedi-
+              ately, regardless of this config option.
 
        --phishing-ssl
               Always  block  SSL mismatches in URLs (might lead to false posi-
@@ -165,47 +201,6 @@ OPTIONS
        --max-dir-recursion=#n
               Maximum depth directories are scanned at (default: 15).
 
-       --unzip[=FULLPATH]
-              In  most  cases  you don't need this option - the built-in unar-
-              chiver will extract Zip archives. Howvere, this  option  may  be
-              used as a backup for internal unpacker - see the full documenta-
-              tion for more information. When  enabled  without  an  argument,
-              unzip  program  will  be  searched  in $PATH. If unzip cannot be
-              found in $PATH, you must force it with =pathname. Remember about
-              '=' between the option and the argument.
-
-       --unrar[=FULLPATH]
-              Scan .rar files. In most cases the unpacker built into libclamav
-              is enough.
-
-       --arj[=FULLPATH]
-              Scan .arj files.
-
-       --unzoo[=FULLPATH]
-              Scan .zoo files.
-
-       --lha[=FULLPATH]
-              Scan .lzh files.
-
-       --jar[=FULLPATH]
-              clamscan uses unzip for .jar files, so in  some  cases  you  may
-              need  to  pass  a full path to unzip. In most cases the unpacker
-              built into libclamav is enough.
-
-       --deb[=FULLPATH]
-              This option supports debian binary packages. Implies --tgz,  but
-              doesn't conflict with --tgz=FULLPATH. It requires ar utility.
-
-       --tar[=FULLPATH]
-              This  option supports non-compressed tar archives. In most cases
-              the unpacker built into libclamav is enough.
-
-       --tgz[=FULLPATH]
-              This option supports tar.gz and .tgz files. You need GNU tar, on
-              non-Linux system you probably have it installed as gtar. If it's
-              in $PATH, please use --tgz=gtar in other case please pass a full
-              path. In most cases the unpacker built into libclamav is enough.
-
 EXAMPLES
        (0) Scan a single file:
 
@@ -232,8 +227,8 @@ EXAMPLES
               clamscan -r /var/spool/mail
 
 RETURN CODES
-       Note: some return codes may only appear in a  single  file  mode  (when
-       clamscan  is  started  with  a  single argument). Those are marked with
+       Note:  some  return  codes  may only appear in a single file mode (when
+       clamscan is started with a single  argument).  Those  are  marked  with
        (ofm).
 
        0 : No virus found.
@@ -257,12 +252,6 @@ RETURN CODES
        57: Can't get absolute path name of current working directory.
 
        58: I/O error, please check your file system.
-
-       59: Can't get information about current user from /etc/passwd.
-
-       60: Can't get information about user '_clamav' from /etc/passwd.
-
-       61: Can't fork.
 
        62: Can't initialize logger.
 

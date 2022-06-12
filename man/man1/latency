@@ -4,7 +4,7 @@ NAME
      latency -- monitors scheduling and interrupt latency
 
 SYNOPSIS
-     latency [-rt] [-c code_file] [-l log_file] [-st threshold]
+     latency [-rt] [-h] [-c code_file] [-l log_file] [-st threshold]
              [-it threshold] [-s sleep_in_usecs] [-d decrementer_in_usecs]
              [-n kernel]
 
@@ -40,6 +40,9 @@ DESCRIPTION
 
      -rt     Sets the real-time scheduling policy.  Default policy is time-
              share.
+
+     -h      Display high resolution interrupt latencies and write them to
+             latencies.csv (truncate existing file) upon exit.
 
      -s sleep_in_usecs
              Sets the timer, taking an argument expressed in microseconds.

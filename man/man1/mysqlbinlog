@@ -1,0 +1,519 @@
+MYSQLBINLOG(1)               MySQL Database System              MYSQLBINLOG(1)
+
+
+
+NAME
+       mysqlbinlog - utility for processing binary log files
+
+SYNOPSIS
+       mysqlbinlog [options] log_file ...
+
+DESCRIPTION
+       The server's binary log consists of files that contain "events" that
+       describe modifications to database contents. The server writes binary
+       log files in binary format. To display these files in text format, use
+       the mysqlbinlog utility. You can also use mysqlbinlog to display relay
+       log files written by a slave server in a replication setup. Relay logs
+       have the same format as binary log files. The binary log and relay log
+       are discussed further in Section 2.3, "The Binary Log", and
+       Section 4.2, "Replication Relay and Status Files".
+
+       Invoke mysqlbinlog like this:
+
+          shell> mysqlbinlog [options] log_file ...
+
+       For example, to display the contents of the binary log file named
+       binlog.000003, use this command:
+
+          shell> mysqlbinlog binlog.0000003
+
+       The output includes all events contained in binlog.000003. Event
+       information includes the statement executed, the time the statement
+       took, the thread ID of the client that issued it, the timestamp when it
+       was executed, and so forth.
+
+       The output from mysqlbinlog can be re-executed (for example, by using
+       it as input to mysql) to reapply the statements in the log. This is
+       useful for recovery operations after a server crash. For other usage
+       examples, see the discussion later in this section.
+
+       Normally, you use mysqlbinlog to read binary log files directly and
+       apply them to the local MySQL server. It is also possible to read
+       binary logs from a remote server by using the --read-from-remote-server
+       option. When you read remote binary logs, the connection parameter
+       options can be given to indicate how to connect to the server. These
+       options are --host, --password, --port, --protocol, --socket, and
+       --user; they are ignored except when you also use the
+       --read-from-remote-server option.
+
+       mysqlbinlog supports the following options:
+
+       o  --help, -?
+
+          Display a help message and exit.
+
+       o  --character-sets-dir=path
+
+          The directory where character sets are installed. See Section 2,
+          "The Character Set Used for Data and Sorting".
+
+       o  --database=db_name, -d db_name
+
+          List entries for just this database (local log only). You can only
+          specify one database with this option - if you specify multiple
+          --database options, only the last one is used. This option forces
+          mysqlbinlog to output entries from the binary log where the default
+          database (that is, the one selected by USE) is db_name. Note that
+          this does not replicate cross-database statements such as UPDATE
+          some_db.some_table SET foo='bar' while having selected a different
+          database or no database.
+
+       o  --debug[=debug_options], -# [debug_options]
+
+          Write a debugging log. A typical debug_options string is often
+          'd:t:o,file_name'.
+
+       o  --disable-log-bin, -D
+
+          Disable binary logging. This is useful for avoiding an endless loop
+          if you use the --to-last-log option and are sending the output to
+          the same MySQL server. This option also is useful when restoring
+          after a crash to avoid duplication of the statements you have
+          logged.
+
+          This option requires that you have the SUPER privilege. It causes
+          mysqlbinlog to include a SET SQL_LOG_BIN=0 statement in its output
+          to disable binary logging of the remaining output. The SET statement
+          is ineffective unless you have the SUPER privilege.
+
+       o  --force-read, -f
+
+          With this option, if mysqlbinlog reads a binary log event that it
+          does not recognize, it prints a warning, ignores the event, and
+          continues. Without this option, mysqlbinlog stops if it reads such
+          an event.
+
+       o  --hexdump, -H
+
+          Display a hex dump of the log in comments. This output can be
+          helpful for replication debugging. Hex dump format is discussed
+          later in this section. This option was added in MySQL 5.0.16.
+
+       o  --host=host_name, -h host_name
+
+          Get the binary log from the MySQL server on the given host.
+
+       o  --local-load=path, -l path
+
+          Prepare local temporary files for LOAD DATA INFILE in the specified
+          directory.
+
+       o  --offset=N, -o N
+
+          Skip the first N entries in the log.
+
+       o  --password[=password], -p[password]
+
+          The password to use when connecting to the server. If you use the
+          short option form (-p), you cannot have a space between the option
+          and the password. If you omit the password value following the
+          --password or -p option on the command line, you are prompted for
+          one.
+
+          Specifying a password on the command line should be considered
+          insecure. See Section 5.6, "Keeping Your Password Secure".
+
+       o  --port=port_num, -P port_num
+
+          The TCP/IP port number to use for connecting to a remote server.
+
+       o  --position=N, -j N
+
+          Deprecated. Use --start-position instead.
+
+       o  --protocol={TCP|SOCKET|PIPE|MEMORY}
+
+          The connection protocol to use for connecting to the server. It is
+          useful when the other connection parameters normally would cause a
+          protocol to be used other than the one you want. For details on the
+          allowable values, see Section 2.2, "Connecting to the MySQL Server".
+
+       o  --read-from-remote-server, -R
+
+          Read the binary log from a MySQL server rather than reading a local
+          log file. Any connection parameter options are ignored unless this
+          option is given as well. These options are --host, --password,
+          --port, --protocol, --socket, and --user.
+
+          This option requires that the remote server be running. It works
+          only for binary log files on the remote server, not relay log files.
+
+       o  --result-file=name, -r name
+
+          Direct output to the given file.
+
+       o  --set-charset=charset_name
+
+          Add a SET NAMES charset_name statement to the output to specify the
+          character set to be used for processing log files. This option was
+          added in MySQL 5.0.23.
+
+       o  --short-form, -s
+
+          Display only the statements contained in the log, without any extra
+          information.
+
+       o  --socket=path, -S path
+
+          For connections to localhost, the Unix socket file to use, or, on
+          Windows, the name of the named pipe to use.
+
+       o  --start-datetime=datetime
+
+          Start reading the binary log at the first event having a timestamp
+          equal to or later than the datetime argument. The datetime value is
+          relative to the local time zone on the machine where you run
+          mysqlbinlog. The value should be in a format accepted for the
+          DATETIME or TIMESTAMP data types. For example:
+
+          shell> mysqlbinlog --start-datetime="2005-12-25 11:25:56" binlog.000003
+       This option is useful for point-in-time recovery. See Section 2,
+       "Example Backup and Recovery Strategy".
+
+       o  --stop-datetime=datetime
+
+          Stop reading the binary log at the first event having a timestamp
+          equal or posterior to the datetime argument. This option is useful
+          for point-in-time recovery. See the description of the
+          --start-datetime option for information about the datetime value.
+
+       o  --start-position=N
+
+          Start reading the binary log at the first event having a position
+          equal to the N argument. This option applies to the first log file
+          named on the command line.
+
+       o  --stop-position=N
+
+          Stop reading the binary log at the first event having a position
+          equal or greater than the N argument. This option applies to the
+          last log file named on the command line.
+
+       o  --to-last-log, -t
+
+          Do not stop at the end of the requested binary log from a MySQL
+          server, but rather continue printing until the end of the last
+          binary log. If you send the output to the same MySQL server, this
+          may lead to an endless loop. This option requires
+          --read-from-remote-server.
+
+       o  --user=user_name, -u user_name
+
+          The MySQL username to use when connecting to a remote server.
+
+       o  --version, -V
+
+          Display version information and exit.
+
+
+       You can also set the following variable by using --var_name=value
+       syntax:
+
+       o  open_files_limit
+
+          Specify the number of open file descriptors to reserve.
+
+
+       It is also possible to set variables by using
+       --set-variable=var_name=value or -O var_name=value syntax.  This syntax
+       is deprecated.
+
+       You can pipe the output of mysqlbinlog into the mysql client to execute
+       the statements contained in the binary log. This is used to recover
+       from a crash when you have an old backup (see Section 1, "Database
+       Backups"). For example:
+
+          shell> mysqlbinlog binlog.000001 | mysql
+
+       Or:
+
+          shell> mysqlbinlog binlog.[0-9]* | mysql
+
+       You can also redirect the output of mysqlbinlog to a text file instead,
+       if you need to modify the statement log first (for example, to remove
+       statements that you do not want to execute for some reason). After
+       editing the file, execute the statements that it contains by using it
+       as input to the mysql program.
+
+       mysqlbinlog has the --start-position option, which prints only those
+       statements with an offset in the binary log greater than or equal to a
+       given position (the given position must match the start of one event).
+       It also has options to stop and start when it sees an event with a
+       given date and time. This enables you to perform point-in-time recovery
+       using the --stop-datetime option (to be able to say, for example, "roll
+       forward my databases to how they were today at 10:30 a.m.").
+
+       If you have more than one binary log to execute on the MySQL server,
+       the safe method is to process them all using a single connection to the
+       server. Here is an example that demonstrates what may be unsafe:
+
+          shell> mysqlbinlog binlog.000001 | mysql # DANGER!!
+          shell> mysqlbinlog binlog.000002 | mysql # DANGER!!
+
+       Processing binary logs this way using different connections to the
+       server causes problems if the first log file contains a CREATE
+       TEMPORARY TABLE statement and the second log contains a statement that
+       uses the temporary table. When the first mysql process terminates, the
+       server drops the temporary table. When the second mysql process
+       attempts to use the table, the server reports "unknown table."
+
+       To avoid problems like this, use a single connection to execute the
+       contents of all binary logs that you want to process. Here is one way
+       to do so:
+
+          shell> mysqlbinlog binlog.000001 binlog.000002 | mysql
+
+       Another approach is to write all the logs to a single file and then
+       process the file:
+
+          shell> mysqlbinlog binlog.000001 >  /tmp/statements.sql
+          shell> mysqlbinlog binlog.000002 >> /tmp/statements.sql
+          shell> mysql -e "source /tmp/statements.sql"
+
+       mysqlbinlog can produce output that reproduces a LOAD DATA INFILE
+       operation without the original data file.  mysqlbinlog copies the data
+       to a temporary file and writes a LOAD DATA LOCAL INFILE statement that
+       refers to the file. The default location of the directory where these
+       files are written is system-specific. To specify a directory
+       explicitly, use the --local-load option.
+
+       Because mysqlbinlog converts LOAD DATA INFILE statements to LOAD DATA
+       LOCAL INFILE statements (that is, it adds LOCAL), both the client and
+       the server that you use to process the statements must be configured to
+       allow LOCAL capability. See Section 3.4, "Security Issues with LOAD
+       DATA LOCAL".
+
+       Warning
+       The temporary files created for LOAD DATA LOCAL statements are not
+       automatically deleted because they are needed until you actually
+       execute those statements. You should delete the temporary files
+       yourself after you no longer need the statement log. The files can be
+       found in the temporary file directory and have names like
+       original_file_name-#-#.
+
+       The --hexdump option produces a hex dump of the log contents in
+       #-format comments:
+
+          shell> mysqlbinlog --hexdump master-bin.000001
+
+       With the preceding command, the output might look like this:
+
+          /*!40019 SET @@session.max_insert_delayed_threads=0*/;
+          /*!50003 SET @OLD_COMPLETION_TYPE=@@COMPLETION_TYPE,COMPLETION_TYPE=0*/;
+          # at 4
+          #051024 17:24:13 server id 1  end_log_pos 98
+          # Position  Timestamp   Type   Master ID        Size      Master Pos    Flags
+          # 00000004 9d fc 5c 43   0f   01 00 00 00   5e 00 00 00   62 00 00 00   00 00
+          # 00000017 04 00 35 2e 30 2e 31 35  2d 64 65 62 75 67 2d 6c |..5.0.15.debug.l|
+          # 00000027 6f 67 00 00 00 00 00 00  00 00 00 00 00 00 00 00 |og..............|
+          # 00000037 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00 |................|
+          # 00000047 00 00 00 00 9d fc 5c 43  13 38 0d 00 08 00 12 00 |.......C.8......|
+          # 00000057 04 04 04 04 12 00 00 4b  00 04 1a                |.......K...|
+          #       Start: binlog v 4, server v 5.0.15-debug-log created 051024 17:24:13
+          #       at startup
+          ROLLBACK;
+
+       Hex dump output currently contains the following elements. This format
+       might change in the future.
+
+       o  Position: The byte position within the log file.
+
+       o  Timestamp: The event timestamp. In the example shown, '9d fc 5c 43'
+          is the representation of '051024 17:24:13' in hexadecimal.
+
+       o  Type: The type of the log event. In the example shown, '0f' means
+          that the example event is a FORMAT_DESCRIPTION_EVENT. The following
+          table lists the possible types.
+
+          +-----+--------------------------+--------------------------------------+
+          |Type | Name                     | Meaning                              |
+          +-----+--------------------------+--------------------------------------+
+          |08   | CREATE_FILE_EVENT        | Used for LOAD DATA                   |
+          |     |                          | INFILE statements.                   |
+          |     |                          | This indicates                       |
+          |     |                          |                     the              |
+          |     |                          | start of execution                   |
+          |     |                          | of such a                            |
+          |     |                          | statement. A                         |
+          |     |                          |                     temporary        |
+          |     |                          | file is created on                   |
+          |     |                          | the slave. Used in                   |
+          |     |                          |                     MySQL            |
+          |     |                          | 4 only.                              |
+          +-----+--------------------------+--------------------------------------+
+          |09   | APPEND_BLOCK_EVENT       | Contains data for use in a           |
+          |     |                          | LOAD DATA INFILE                     |
+          |     |                          |                     statement.       |
+          |     |                          | The data is stored in the            |
+          |     |                          | temporary file                       |
+          |     |                          |                     on the           |
+          |     |                          | slave.                               |
+          +-----+--------------------------+--------------------------------------+
+          |0a   | EXEC_LOAD_EVENT          | Used for LOAD DATA INFILE            |
+          |     |                          | statements. The contents of          |
+          |     |                          |                     the              |
+          |     |                          | temporary file is stored in          |
+          |     |                          | the table on the                     |
+          |     |                          |                     slave.           |
+          |     |                          | Used in MySQL 4 only.                |
+          +-----+--------------------------+--------------------------------------+
+          |0b   | DELETE_FILE_EVENT        | Rollback of a LOAD DATA INFILE       |
+          |     |                          | statement. The                       |
+          |     |                          |                     temporary        |
+          |     |                          | file should be deleted on            |
+          |     |                          | slave.                               |
+          +-----+--------------------------+--------------------------------------+
+          |0c   | NEW_LOAD_EVENT           | Used for LOAD DATA INFILE in         |
+          |     |                          | MySQL 4 and earlier.                 |
+          +-----+--------------------------+--------------------------------------+
+          |0d   | RAND_EVENT               | Used to send information about       |
+          |     |                          | random values if the                 |
+          |     |                          |                     RAND()           |
+          |     |                          | function is                          |
+          |     |                          |                     used in          |
+          |     |                          | the statement.                       |
+          +-----+--------------------------+--------------------------------------+
+          |0e   | USER_VAR_EVENT           | Used to replicate user               |
+          |     |                          | variables.                           |
+          +-----+--------------------------+--------------------------------------+
+          |0f   | FORMAT_DESCRIPTION_EVENT | This indicates the start of a        |
+          |     |                          | log file written by MySQL 5 or       |
+          |     |                          | later.                               |
+          +-----+--------------------------+--------------------------------------+
+          |10   | XID_EVENT                | Event indicating commit of an        |
+          |     |                          | XA transaction.                      |
+          +-----+--------------------------+--------------------------------------+
+          |11   | BEGIN_LOAD_QUERY_EVENT   | Used for LOAD DATA INFILE            |
+          |     |                          | statements in MySQL 5 and            |
+          |     |                          |                     later.           |
+          +-----+--------------------------+--------------------------------------+
+          |00   | UNKNOWN_EVENT            | This event should never be           |
+          |     |                          | present in the log.                  |
+          +-----+--------------------------+--------------------------------------+
+          |12   | EXECUTE_LOAD_QUERY_EVENT | Used for LOAD DATA INFILE            |
+          |     |                          | statements in MySQL 5 and            |
+          |     |                          |                     later.           |
+          +-----+--------------------------+--------------------------------------+
+          |13   | TABLE_MAP_EVENT          | Reserved for future use.             |
+          +-----+--------------------------+--------------------------------------+
+          |14   | WRITE_ROWS_EVENT         | Reserved for future use.             |
+          +-----+--------------------------+--------------------------------------+
+          |15   | UPDATE_ROWS_EVENT        | Reserved for future use.             |
+          +-----+--------------------------+--------------------------------------+
+          |16   | DELETE_ROWS_EVENT        | Reserved for future use.             |
+          +-----+--------------------------+--------------------------------------+
+          |01   | START_EVENT_V3           | This indicates the start of a        |
+          |     |                          | log file written by MySQL 4 or       |
+          |     |                          | earlier.                             |
+          +-----+--------------------------+--------------------------------------+
+          |02   | QUERY_EVENT              | The most common type of              |
+          |     |                          | events. These contain                |
+          |     |                          | statements executed on the           |
+          |     |                          |                     master.          |
+          +-----+--------------------------+--------------------------------------+
+          |03   | STOP_EVENT               | Indicates that master has            |
+          |     |                          | stopped.                             |
+          +-----+--------------------------+--------------------------------------+
+          |04   | ROTATE_EVENT             | Written when the master              |
+          |     |                          | switches to a new log file.          |
+          +-----+--------------------------+--------------------------------------+
+          |05   | INTVAR_EVENT             | Used mainly for AUTO_INCREMENT       |
+          |     |                          | values and when the                  |
+          |     |                          |                     LAST_INSERT_ID() |
+          |     |                          |                     function         |
+          |     |                          | is used in the statement.            |
+          +-----+--------------------------+--------------------------------------+
+          |06   | LOAD_EVENT               | Used for LOAD DATA INFILE in MySQL   |
+          |     |                          | 3.23.                                |
+          +-----+--------------------------+--------------------------------------+
+          |07   | SLAVE_EVENT              | Reserved for future use.             |
+          +-----+--------------------------+--------------------------------------+
+
+       o  Master ID: The server id of the master that created the event.
+
+       o  Size: The size in bytes of the event.
+
+       o  Master Pos: The position of the event in the original master log
+          file.
+
+       o  Flags: 16 flags. Currently, the following flags are used. The others
+          are reserved for future use.
+
+          +-----+-----------------------------+------------------------------------------------+
+          |Flag | Name                        | Meaning                                        |
+          +-----+-----------------------------+------------------------------------------------+
+          |01   | LOG_EVENT_BINLOG_IN_USE_F   | Log file correctly                             |
+          |     |                             | closed. (Used only                             |
+          |     |                             | in                                             |
+          |     |                             |                     FORMAT_DESCRIPTION_EVENT.) |
+          |     |                             | If                                             |
+          |     |                             |                     this                       |
+          |     |                             | flag is set (if the                            |
+          |     |                             | flags are, for                                 |
+          |     |                             | example,                                       |
+          |     |                             |                     '01                        |
+          |     |                             | 00') in a                                      |
+          |     |                             |                     FORMAT_DESCRIPTION_EVENT,  |
+          |     |                             | the log                                        |
+          |     |                             |                     file                       |
+          |     |                             | has not been                                   |
+          |     |                             | properly closed.                               |
+          |     |                             | Most probably                                  |
+          |     |                             |                     this                       |
+          |     |                             | is because of a                                |
+          |     |                             | master crash (for                              |
+          |     |                             | example, due                                   |
+          |     |                             |                     to                         |
+          |     |                             | power failure).                                |
+          +-----+-----------------------------+------------------------------------------------+
+          |02   |                             | Reserved for future use.                       |
+          +-----+-----------------------------+------------------------------------------------+
+          |04   | LOG_EVENT_THREAD_SPECIFIC_F | Set if the event is dependent on the           |
+          |     |                             | connection it was executed in (for             |
+          |     |                             |                     example, '04 00'), for     |
+          |     |                             | example,                                       |
+          |     |                             |                     if the event uses          |
+          |     |                             | temporary tables.                              |
+          +-----+-----------------------------+------------------------------------------------+
+          |08   | LOG_EVENT_SUPPRESS_USE_F    | Set in some circumstances when the event is    |
+          |     |                             | not dependent on the default                   |
+          |     |                             |                     database.                  |
+          +-----+-----------------------------+------------------------------------------------+
+
+COPYRIGHT
+       Copyright 2007-2008 MySQL AB
+
+       This documentation is free software; you can redistribute it and/or
+       modify it under the terms of the GNU General Public License as
+       published by the Free Software Foundation; version 2 of the License.
+
+       This documentation is distributed in the hope that it will be useful,
+       but WITHOUT ANY WARRANTY; without even the implied warranty of
+       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+       General Public License for more details.
+
+       You should have received a copy of the GNU General Public License along
+       with the program; if not, write to the Free Software Foundation, Inc.,
+       51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
+       http://www.gnu.org/licenses/.
+
+SEE ALSO
+       For more information, please refer to the MySQL Reference Manual, which
+       may already be installed locally and which is also available online at
+       http://dev.mysql.com/doc/.
+
+AUTHOR
+       MySQL AB (http://www.mysql.com/).
+
+
+

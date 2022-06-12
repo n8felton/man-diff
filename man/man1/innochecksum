@@ -1,0 +1,71 @@
+INNOCHECKSUM(1)              MySQL Database System             INNOCHECKSUM(1)
+
+
+
+NAME
+       innochecksum - offline InnoDB file checksum utility
+
+SYNOPSIS
+       innochecksum [options] file_name
+
+DESCRIPTION
+       innochecksum prints checksums for InnoDB files.
+
+       Invoke innochecksum like this:
+
+          shell> innochecksum [options] file_name
+
+       innodchecksum understands the options described in the following list.
+       For options that refer to page numbers, the numbers are zero-based.
+
+       o  -c
+
+          Print a count of the number of pages in the file.
+
+       o  -d
+
+          Debug mode; prints checksums for each page.
+
+       o  -e num
+
+          End at this page number.
+
+       o  -p num
+
+          Check only this page number.
+
+       o  -s num
+
+          Start at this page number.
+
+       o  -v
+
+          Verbose mode; print a progress indicator every five seconds.
+
+COPYRIGHT
+       Copyright 2007-2008 MySQL AB
+
+       This documentation is free software; you can redistribute it and/or
+       modify it under the terms of the GNU General Public License as
+       published by the Free Software Foundation; version 2 of the License.
+
+       This documentation is distributed in the hope that it will be useful,
+       but WITHOUT ANY WARRANTY; without even the implied warranty of
+       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+       General Public License for more details.
+
+       You should have received a copy of the GNU General Public License along
+       with the program; if not, write to the Free Software Foundation, Inc.,
+       51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
+       http://www.gnu.org/licenses/.
+
+SEE ALSO
+       For more information, please refer to the MySQL Reference Manual, which
+       may already be installed locally and which is also available online at
+       http://dev.mysql.com/doc/.
+
+AUTHOR
+       MySQL AB (http://www.mysql.com/).
+
+
+

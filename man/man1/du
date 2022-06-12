@@ -4,8 +4,8 @@ NAME
      du -- display disk usage statistics
 
 SYNOPSIS
-     du [-H | -L | -P] [-a | -s | -d depth] [-c] [-h | -k | -m] [-x] [-I mask]
-        [file ...]
+     du [-H | -L | -P] [-a | -s | -d depth] [-c] [-h | -k | -m | -g] [-x]
+        [-I mask] [file ...]
 
 DESCRIPTION
      The du utility displays the file system block usage for each file argu-
@@ -31,6 +31,8 @@ DESCRIPTION
 
      -I mask
              Ignore files and directories matching the specified mask.
+
+     -g      Display block counts in 1073741824-byte (1-Gbyte) blocks.
 
      -k      Display block counts in 1024-byte (1-Kbyte) blocks.
 

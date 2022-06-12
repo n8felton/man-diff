@@ -81,10 +81,12 @@ DESCRIPTION
                        changes in the Kerberos database
 
               -p password
-                       Password for the above administrator
+                       Password for the above administrator. The password can
+                       also be stored in file and the path to the file can be
+                       passed as an environment variable - SSO_PASSWD_PATH.
 
               service  Service can be any number of afp, ftp, imap, pop, smtp,
-                       ssh, or all
+                       ssh, fcsvr, or all
 
      generateconfig [-u] -r REALM -R record_name -f dir_node_path -U user_list
               -a admin_name [-p password] service
@@ -115,10 +117,12 @@ DESCRIPTION
                        make changes in the directory node specified by -f
 
               -p password
-                       Password for the above administrator
+                       Password for the above administrator. The password can
+                       also be stored in file and the path to the file can be
+                       passed as an environment variable - SSO_PASSWD_PATH.
 
               service  Service can be any number of afp, ftp, imap, pop, smtp,
-                       ssh, or all
+                       ssh, fcsvr, or all
 
      useconfig [-u] [-R record_name] [-f dir_node_path] -a admin_name [-p
               password]
@@ -142,7 +146,9 @@ DESCRIPTION
                        config record (see generateconfig)
 
               -p password
-                       Password for the above user
+                       Password for the above user. The password can also be
+                       stored in file and the path to the file can be passed
+                       as an environment variable - SSO_PASSWD_PATH.
 
 EXAMPLES
      To configure a server in realm FOO.COM when you have the Kerberos admin-

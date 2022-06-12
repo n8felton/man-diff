@@ -22,8 +22,8 @@ OPTIONS
               Print version number and exit.
 
        -v, --verbose
-              Be verbose. This option causes freshclam  to  print  many  addi-
-              tional informations.
+              Be verbose. This option causes freshclam  to  print  much  addi-
+              tional information.
 
        --quiet
               Be quiet - output only error messages.
@@ -82,7 +82,7 @@ OPTIONS
               command string %v will be replaced by the new version number.
 
        --list-mirrors
-              Pring mirror details from mirrors.dat (cache file for the mirror
+              Print mirror details from mirrors.dat (cache file for the mirror
               manager).
 
 EXAMPLES

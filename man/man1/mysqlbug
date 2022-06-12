@@ -1,0 +1,62 @@
+MYSQLBUG(1)                  MySQL Database System                 MYSQLBUG(1)
+
+
+
+NAME
+       mysqlbug - generate bug report
+
+SYNOPSIS
+       mysqlbug
+
+DESCRIPTION
+       This program enables you to generate a bug report and send it to MySQL
+       AB. It is a shell script and runs on Unix.
+
+       The normal way to report bugs is to visit http://bugs.mysql.com/, which
+       is the address for our bugs database. This database is public and can
+       be browsed and searched by anyone. If you log in to the system, you can
+       enter new reports. If you have no Web access, you can generate a bug
+       report by using the mysqlbug script.
+
+       mysqlbug helps you generate a report by determining much of the
+       following information automatically, but if something important is
+       missing, please include it with your message.  mysqlbug can be found in
+       the scripts directory (source distribution) and in the bin directory
+       under your MySQL installation directory (binary distribution).
+
+       Invoke mysqlbug without arguments:
+
+          shell> mysqlbug
+
+       The script will place you in an editor with a copy of the report to be
+       sent. Edit the lines near the beginning that indicate the nature of the
+       problem. Then write the file to save your changes, quit the editor, and
+       mysqlbug will send the report by email. perform.
+
+COPYRIGHT
+       Copyright 2007-2008 MySQL AB
+
+       This documentation is free software; you can redistribute it and/or
+       modify it under the terms of the GNU General Public License as
+       published by the Free Software Foundation; version 2 of the License.
+
+       This documentation is distributed in the hope that it will be useful,
+       but WITHOUT ANY WARRANTY; without even the implied warranty of
+       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+       General Public License for more details.
+
+       You should have received a copy of the GNU General Public License along
+       with the program; if not, write to the Free Software Foundation, Inc.,
+       51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
+       http://www.gnu.org/licenses/.
+
+SEE ALSO
+       For more information, please refer to the MySQL Reference Manual, which
+       may already be installed locally and which is also available online at
+       http://dev.mysql.com/doc/.
+
+AUTHOR
+       MySQL AB (http://www.mysql.com/).
+
+
+

@@ -1,0 +1,552 @@
+MYISAMCHK(1)                 MySQL Database System                MYISAMCHK(1)
+
+
+
+NAME
+       myisamchk - MyISAM table-maintenance utility
+
+SYNOPSIS
+       myisamchk [options] tbl_name ...
+
+DESCRIPTION
+       The myisamchk utility gets information about your database tables or
+       checks, repairs, or optimizes them.  myisamchk works with MyISAM tables
+       (tables that have .MYD and .MYI files for storing data and indexes).
+
+       Caution
+       It is best to make a backup of a table before performing a table repair
+       operation; under some circumstances the operation might cause data
+       loss. Possible causes include but are not limited to filesystem errors.
+
+       Invoke myisamchk like this:
+
+          shell> myisamchk [options] tbl_name ...
+
+       The options specify what you want myisamchk to do. They are described
+       in the following sections. You can also get a list of options by
+       invoking myisamchk --help.
+
+       With no options, myisamchk simply checks your table as the default
+       operation. To get more information or to tell myisamchk to take
+       corrective action, specify options as described in the following
+       discussion.
+
+       tbl_name is the database table you want to check or repair. If you run
+       myisamchk somewhere other than in the database directory, you must
+       specify the path to the database directory, because myisamchk has no
+       idea where the database is located. In fact, myisamchk doesn't actually
+       care whether the files you are working on are located in a database
+       directory. You can copy the files that correspond to a database table
+       into some other location and perform recovery operations on them there.
+
+       You can name several tables on the myisamchk command line if you wish.
+       You can also specify a table by naming its index file (the file with
+       the .MYI suffix). This allows you to specify all tables in a directory
+       by using the pattern *.MYI. For example, if you are in a database
+       directory, you can check all the MyISAM tables in that directory like
+       this:
+
+          shell> myisamchk *.MYI
+
+       If you are not in the database directory, you can check all the tables
+       there by specifying the path to the directory:
+
+          shell> myisamchk /path/to/database_dir/*.MYI
+
+       You can even check all tables in all databases by specifying a wildcard
+       with the path to the MySQL data directory:
+
+          shell> myisamchk /path/to/datadir/*/*.MYI
+
+       The recommended way to quickly check all MyISAM tables is:
+
+          shell> myisamchk --silent --fast /path/to/datadir/*/*.MYI
+
+       If you want to check all MyISAM tables and repair any that are
+       corrupted, you can use the following command:
+
+          shell> myisamchk --silent --force --fast --update-state \
+                    --key_buffer_size=64M --sort_buffer_size=64M \
+                    --read_buffer_size=1M --write_buffer_size=1M \
+                    /path/to/datadir/*/*.MYI
+
+       This command assumes that you have more than 64MB free. For more
+       information about memory allocation with myisamchk, see the section
+       called "MYISAMCHK MEMORY USAGE".
+
+       Important
+       You must ensure that no other program is using the tables while you are
+       running myisamchk. The most effective means of doing so is to shut down
+       the MySQL server while running myisamchk, or to lock all tables that
+       myisamchk is being used on.
+
+       Otherwise, when you run myisamchk, it may display the following error
+       message:
+
+          warning: clients are using or haven't closed the table properly
+
+       This means that you are trying to check a table that has been updated
+       by another program (such as the mysqld server) that hasn't yet closed
+       the file or that has died without closing the file properly, which can
+       sometimes lead to the corruption of one or more MyISAM tables.
+
+       If mysqld is running, you must force it to flush any table
+       modifications that are still buffered in memory by using FLUSH TABLES.
+       You should then ensure that no one is using the tables while you are
+       running myisamchk
+
+       However, the easiest way to avoid this problem is to use CHECK TABLE
+       instead of myisamchk to check tables. See Section 5.2.3, "CHECK TABLE
+       Syntax".
+
+       A complete listing of all the myisamchk options follows.
+
+MYISAMCHK GENERAL OPTIONS
+       The options described in this section can be used for any type of table
+       maintenance operation performed by myisamchk. The sections following
+       this one describe options that pertain only to specific operations,
+       such as table checking or repairing.
+
+       o  --help, -?
+
+          Display a help message and exit.
+
+       o  --debug=debug_options, -# debug_options
+
+          Write a debugging log. The debug_options string often is
+          'd:t:o,file_name'.
+
+       o  --silent, -s
+
+          Silent mode. Write output only when errors occur. You can use -s
+          twice (-ss) to make myisamchk very silent.
+
+       o  --verbose, -v
+
+          Verbose mode. Print more information about what the program does.
+          This can be used with -d and -e. Use -v multiple times (-vv, -vvv)
+          for even more output.
+
+       o  --version, -V
+
+          Display version information and exit.
+
+       o  --wait, -w
+
+          Instead of terminating with an error if the table is locked, wait
+          until the table is unlocked before continuing. If you are running
+          mysqld with external locking disabled, the table can be locked only
+          by another myisamchk command.
+
+
+       You can also set the following variables by using --var_name=value
+       syntax:
+
+       +------------------+-------------------+
+       |Variable          | Default Value     |
+       +------------------+-------------------+
+       |sort_key_blocks   | 16                |
+       +------------------+-------------------+
+       |stats_method      | nulls_unequal     |
+       +------------------+-------------------+
+       |write_buffer_size | 262136            |
+       +------------------+-------------------+
+       |decode_bits       | 9                 |
+       +------------------+-------------------+
+       |ft_max_word_len   | version-dependent |
+       +------------------+-------------------+
+       |ft_min_word_len   | 4                 |
+       +------------------+-------------------+
+       |ft_stopword_file  | built-in list     |
+       +------------------+-------------------+
+       |key_buffer_size   | 523264            |
+       +------------------+-------------------+
+       |myisam_block_size | 1024              |
+       +------------------+-------------------+
+       |read_buffer_size  | 262136            |
+       +------------------+-------------------+
+       |sort_buffer_size  | 2097144           |
+       +------------------+-------------------+
+
+       It is also possible to set variables by using
+       --set-variable=var_name=value or -O var_name=value syntax. However,
+       this syntax is deprecated as of MySQL 4.0.
+
+       The possible myisamchk variables and their default values can be
+       examined with myisamchk --help:
+
+       sort_buffer_size is used when the keys are repaired by sorting keys,
+       which is the normal case when you use --recover.
+
+       key_buffer_size is used when you are checking the table with
+       --extend-check or when the keys are repaired by inserting keys row by
+       row into the table (like when doing normal inserts). Repairing through
+       the key buffer is used in the following cases:
+
+       o  You use --safe-recover.
+
+       o  The temporary files needed to sort the keys would be more than twice
+          as big as when creating the key file directly. This is often the
+          case when you have large key values for CHAR, VARCHAR, or TEXT
+          columns, because the sort operation needs to store the complete key
+          values as it proceeds. If you have lots of temporary space and you
+          can force myisamchk to repair by sorting, you can use the
+          --sort-recover option.
+
+
+       Repairing through the key buffer takes much less disk space than using
+       sorting, but is also much slower.
+
+       If you want a faster repair, set the key_buffer_size and
+       sort_buffer_size variables to about 25% of your available memory. You
+       can set both variables to large values, because only one of them is
+       used at a time.
+
+       myisam_block_size is the size used for index blocks.
+
+       stats_method influences how NULL values are treated for index
+       statistics collection when the --analyze option is given. It acts like
+       the myisam_stats_method system variable. For more information, see the
+       description of myisam_stats_method in Section 1.3, "System Variables",
+       and Section 4.7, "MyISAM Index Statistics Collection". For MySQL 5.0,
+       stats_method was added in MySQL 5.0.14. For older versions, the
+       statistics collection method is equivalent to nulls_equal.
+
+       The ft_min_word_len and ft_max_word_len variables are available as of
+       MySQL 4.0.0.  ft_stopword_file is available as of MySQL 4.0.19.
+
+       ft_min_word_len and ft_max_word_len indicate the minimum and maximum
+       word length for FULLTEXT indexes.  ft_stopword_file names the stopword
+       file. These need to be set under the following circumstances.
+
+       If you use myisamchk to perform an operation that modifies table
+       indexes (such as repair or analyze), the FULLTEXT indexes are rebuilt
+       using the default full-text parameter values for minimum and maximum
+       word length and the stopword file unless you specify otherwise. This
+       can result in queries failing.
+
+       The problem occurs because these parameters are known only by the
+       server. They are not stored in MyISAM index files. To avoid the problem
+       if you have modified the minimum or maximum word length or the stopword
+       file in the server, specify the same ft_min_word_len, ft_max_word_len,
+       and ft_stopword_file values to myisamchk that you use for mysqld. For
+       example, if you have set the minimum word length to 3, you can repair a
+       table with myisamchk like this:
+
+          shell> myisamchk --recover --ft_min_word_len=3 tbl_name.MYI
+
+       To ensure that myisamchk and the server use the same values for
+       full-text parameters, you can place each one in both the [mysqld] and
+       [myisamchk] sections of an option file:
+
+          [mysqld]
+          ft_min_word_len=3
+          [myisamchk]
+          ft_min_word_len=3
+
+       An alternative to using myisamchk is to use the REPAIR TABLE, ANALYZE
+       TABLE, OPTIMIZE TABLE, or ALTER TABLE. These statements are performed
+       by the server, which knows the proper full-text parameter values to
+       use.
+
+MYISAMCHK CHECK OPTIONS
+       myisamchk supports the following options for table checking operations:
+
+       o  --check, -c
+
+          Check the table for errors. This is the default operation if you
+          specify no option that selects an operation type explicitly.
+
+       o  --check-only-changed, -C
+
+          Check only tables that have changed since the last check.
+
+       o  --extend-check, -e
+
+          Check the table very thoroughly. This is quite slow if the table has
+          many indexes. This option should only be used in extreme cases.
+          Normally, myisamchk or myisamchk --medium-check should be able to
+          determine whether there are any errors in the table.
+
+          If you are using --extend-check and have plenty of memory, setting
+          the key_buffer_size variable to a large value helps the repair
+          operation run faster.
+
+       o  --fast, -F
+
+          Check only tables that haven't been closed properly.
+
+       o  --force, -f
+
+          Do a repair operation automatically if myisamchk finds any errors in
+          the table. The repair type is the same as that specified with the
+          --recover or -r option.
+
+       o  --information, -i
+
+          Print informational statistics about the table that is checked.
+
+       o  --medium-check, -m
+
+          Do a check that is faster than an --extend-check operation. This
+          finds only 99.99% of all errors, which should be good enough in most
+          cases.
+
+       o  --read-only, -T
+
+          Don't mark the table as checked. This is useful if you use myisamchk
+          to check a table that is in use by some other application that
+          doesn't use locking, such as mysqld when run with external locking
+          disabled.
+
+       o  --update-state, -U
+
+          Store information in the .MYI file to indicate when the table was
+          checked and whether the table crashed. This should be used to get
+          full benefit of the --check-only-changed option, but you shouldn't
+          use this option if the mysqld server is using the table and you are
+          running it with external locking disabled.
+
+MYISAMCHK REPAIR OPTIONS
+       myisamchk supports the following options for table repair operations:
+
+       o  --backup, -B
+
+          Make a backup of the .MYD file as file_name-time.BAK
+
+       o  --character-sets-dir=path
+
+          The directory where character sets are installed. See Section 2,
+          "The Character Set Used for Data and Sorting".
+
+       o  --correct-checksum
+
+          Correct the checksum information for the table.
+
+       o  --data-file-length=len, -D len
+
+          Maximum length of the data file (when re-creating data file when it
+          is "full").
+
+       o  --extend-check, -e
+
+          Do a repair that tries to recover every possible row from the data
+          file. Normally, this also finds a lot of garbage rows. Don't use
+          this option unless you are desperate.
+
+       o  --force, -f
+
+          Overwrite old intermediate files (files with names like
+          tbl_name.TMD) instead of aborting.
+
+       o  --keys-used=val, -k val
+
+          For myisamchk, the option value is a bit-value that indicates which
+          indexes to update. Each binary bit of the option value corresponds
+          to a table index, where the first index is bit 0. An option value of
+          0 disables updates to all indexes, which can be used to get faster
+          inserts. Deactivated indexes can be reactivated by using myisamchk
+          -r.
+
+       o  --no-symlinks, -l
+
+          Do not follow symbolic links. Normally myisamchk repairs the table
+          that a symlink points to. This option does not exist as of MySQL 4.0
+          because versions from 4.0 on do not remove symlinks during repair
+          operations.
+
+       o  --max-record-length=len
+
+          Skip rows larger than the given length if myisamchk cannot allocate
+          memory to hold them.
+
+       o  --parallel-recover, -p
+
+          Uses the same technique as -r and -n, but creates all the keys in
+          parallel, using different threads.  This is beta-quality code. Use
+          at your own risk!
+
+       o  --quick, -q
+
+          Achieve a faster repair by not modifying the data file. You can
+          specify this option twice to force myisamchk to modify the original
+          data file in case of duplicate keys.
+
+       o  --recover, -r
+
+          Do a repair that can fix almost any problem except unique keys that
+          aren't unique (which is an extremely unlikely error with MyISAM
+          tables). If you want to recover a table, this is the option to try
+          first. You should try --safe-recover only if myisamchk reports that
+          the table can't be recovered using --recover. (In the unlikely case
+          that --recover fails, the data file remains intact.)
+
+          If you have lots of memory, you should increase the value of
+          sort_buffer_size.
+
+       o  --safe-recover, -o
+
+          Do a repair using an old recovery method that reads through all rows
+          in order and updates all index trees based on the rows found. This
+          is an order of magnitude slower than --recover, but can handle a
+          couple of very unlikely cases that --recover cannot. This recovery
+          method also uses much less disk space than --recover. Normally, you
+          should repair first with --recover, and then with --safe-recover
+          only if --recover fails.
+
+          If you have lots of memory, you should increase the value of
+          key_buffer_size.
+
+       o  --set-character-set=name
+
+          Change the character set used by the table indexes. This option was
+          replaced by --set-collation in MySQL 5.0.3.
+
+       o  --set-collation=name
+
+          Specify the collation to use for sorting table indexes. The
+          character set name is implied by the first part of the collation
+          name. This option was added in MySQL 5.0.3.
+
+       o  --sort-recover, -n
+
+          Force myisamchk to use sorting to resolve the keys even if the
+          temporary files would be very large.
+
+       o  --tmpdir=path, -t path
+
+          Path of the directory to be used for storing temporary files. If
+          this is not set, myisamchk uses the value of the TMPDIR environment
+          variable.  tmpdir can be set to a list of directory paths that are
+          used successively in round-robin fashion for creating temporary
+          files. The separator character between directory names is the colon
+          (":") on Unix and the semicolon (";") on Windows, NetWare, and OS/2.
+
+       o  --unpack, -u
+
+          Unpack a table that was packed with myisampack.
+
+OTHER MYISAMCHK OPTIONS
+       myisamchk supports the following options for actions other than table
+       checks and repairs:
+
+       o  --analyze, -a
+
+          Analyze the distribution of key values. This improves join
+          performance by enabling the join optimizer to better choose the
+          order in which to join the tables and which indexes it should use.
+          To obtain information about the key distribution, use a myisamchk
+          --description --verbose tbl_name command or the SHOW INDEX FROM
+          tbl_name statement.
+
+       o  --block-search=offset, -b offset
+
+          Find the record that a block at the given offset belongs to.
+
+       o  --description, -d
+
+          Print some descriptive information about the table.
+
+       o  --set-auto-increment[=value], -A[value]
+
+          Force AUTO_INCREMENT numbering for new records to start at the given
+          value (or higher, if there are existing records with AUTO_INCREMENT
+          values this large). If value is not specified, AUTO_INCREMENT
+          numbers for new records begin with the largest value currently in
+          the table, plus one.
+
+       o  --sort-index, -S
+
+          Sort the index tree blocks in high-low order. This optimizes seeks
+          and makes table scans that use indexes faster.
+
+       o  --sort-records=N, -R N
+
+          Sort records according to a particular index. This makes your data
+          much more localized and may speed up range-based SELECT and ORDER BY
+          operations that use this index. (The first time you use this option
+          to sort a table, it may be very slow.) To determine a table's index
+          numbers, use SHOW INDEX, which displays a table's indexes in the
+          same order that myisamchk sees them. Indexes are numbered beginning
+          with 1.
+
+          If keys are not packed (PACK_KEYS=0), they have the same length, so
+          when myisamchk sorts and moves records, it just overwrites record
+          offsets in the index. If keys are packed (PACK_KEYS=1), myisamchk
+          must unpack key blocks first, then re-create indexes and pack the
+          key blocks again. (In this case, re-creating indexes is faster than
+          updating offsets for each index.)
+
+MYISAMCHK MEMORY USAGE
+       Memory allocation is important when you run myisamchk.  myisamchk uses
+       no more memory than its memory-related variables are set to. If you are
+       going to use myisamchk on very large tables, you should first decide
+       how much memory you want it to use. The default is to use only about
+       3MB to perform repairs. By using larger values, you can get myisamchk
+       to operate faster. For example, if you have more than 32MB RAM, you
+       could use options such as these (in addition to any other options you
+       might specify):
+
+          shell> myisamchk --sort_buffer_size=16M --key_buffer_size=16M \
+                     --read_buffer_size=1M --write_buffer_size=1M ...
+
+       Using --sort_buffer_size=16M should probably be enough for most cases.
+
+       Be aware that myisamchk uses temporary files in TMPDIR. If TMPDIR
+       points to a memory filesystem, you may easily get out of memory errors.
+       If this happens, run myisamchk with the --tmpdir=path option to specify
+       some directory located on a filesystem that has more space.
+
+       When repairing, myisamchk also needs a lot of disk space:
+
+       o  Double the size of the data file (the original file and a copy).
+          This space is not needed if you do a repair with --quick; in this
+          case, only the index file is re-created. This space is needed on the
+          same filesystem as the original data file! (The copy is created in
+          the same directory as the original.)
+
+       o  Space for the new index file that replaces the old one. The old
+          index file is truncated at the start of the repair operation, so you
+          usually ignore this space. This space is needed on the same
+          filesystem as the original index file!
+
+       o  When using --recover or --sort-recover (but not when using
+          --safe-recover), you need space for a sort buffer. The following
+          formula yields the amount of space required:
+
+          (largest_key + row_pointer_length) x number_of_rows x 2
+       You can check the length of the keys and the row_pointer_length with
+       myisamchk -dv tbl_name. This space is allocated in the temporary
+       directory (specified by TMPDIR or --tmpdir=path).
+
+
+       If you have a problem with disk space during repair, you can try
+       --safe-recover instead of --recover.
+
+COPYRIGHT
+       Copyright 2007-2008 MySQL AB
+
+       This documentation is free software; you can redistribute it and/or
+       modify it under the terms of the GNU General Public License as
+       published by the Free Software Foundation; version 2 of the License.
+
+       This documentation is distributed in the hope that it will be useful,
+       but WITHOUT ANY WARRANTY; without even the implied warranty of
+       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+       General Public License for more details.
+
+       You should have received a copy of the GNU General Public License along
+       with the program; if not, write to the Free Software Foundation, Inc.,
+       51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
+       http://www.gnu.org/licenses/.
+
+SEE ALSO
+       For more information, please refer to the MySQL Reference Manual, which
+       may already be installed locally and which is also available online at
+       http://dev.mysql.com/doc/.
+
+AUTHOR
+       MySQL AB (http://www.mysql.com/).
+
+
+

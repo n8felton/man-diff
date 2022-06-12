@@ -1,0 +1,176 @@
+MYSQLSHOW(1)                 MySQL Database System                MYSQLSHOW(1)
+
+
+
+NAME
+       mysqlshow - display database, table, and column information
+
+SYNOPSIS
+       mysqlshow [options] [db_name [tbl_name [col_name]]]
+
+DESCRIPTION
+       The mysqlshow client can be used to quickly see which databases exist,
+       their tables, or a table's columns or indexes.
+
+       mysqlshow provides a command-line interface to several SQL SHOW
+       statements. See Section 5.5, "SHOW Syntax". The same information can be
+       obtained by using those statements directly. For example, you can issue
+       them from the mysql client program.
+
+       Invoke mysqlshow like this:
+
+          shell> mysqlshow [options] [db_name [tbl_name [col_name]]]
+
+       o  If no database is given, a list of database names is shown.
+
+       o  If no table is given, all matching tables in the database are shown.
+
+       o  If no column is given, all matching columns and column types in the
+          table are shown.
+
+
+       The output displays only the names of those databases, tables, or
+       columns for which you have some privileges.
+
+       If the last argument contains shell or SQL wildcard characters ("*",
+       "?", "%", or "_"), only those names that are matched by the wildcard
+       are shown. If a database name contains any underscores, those should be
+       escaped with a backslash (some Unix shells require two) to get a list
+       of the proper tables or columns.  "*" and "?"  characters are converted
+       into SQL "%" and "_" wildcard characters. This might cause some
+       confusion when you try to display the columns for a table with a "_" in
+       the name, because in this case, mysqlshow shows you only the table
+       names that match the pattern. This is easily fixed by adding an extra
+       "%" last on the command line as a separate argument.
+
+       mysqlshow supports the following options:
+
+       o  --help, -?
+
+          Display a help message and exit.
+
+       o  --character-sets-dir=path
+
+          The directory where character sets are installed. See Section 2,
+          "The Character Set Used for Data and Sorting".
+
+       o  --compress, -C
+
+          Compress all information sent between the client and the server if
+          both support compression.
+
+       o  --count
+
+          Show the number of rows per table. This can be slow for non-MyISAM
+          tables. This option was added in MySQL 5.0.6.
+
+       o  --debug[=debug_options], -# [debug_options]
+
+          Write a debugging log. The debug_options string often is
+          'd:t:o,file_name'.
+
+       o  --default-character-set=charset_name
+
+          Use charset_name as the default character set. See Section 2, "The
+          Character Set Used for Data and Sorting".
+
+       o  --host=host_name, -h host_name
+
+          Connect to the MySQL server on the given host.
+
+       o  --keys, -k
+
+          Show table indexes.
+
+       o  --password[=password], -p[password]
+
+          The password to use when connecting to the server. If you use the
+          short option form (-p), you cannot have a space between the option
+          and the password. If you omit the password value following the
+          --password or -p option on the command line, you are prompted for
+          one.
+
+          Specifying a password on the command line should be considered
+          insecure. See Section 5.6, "Keeping Your Password Secure".
+
+          Specifying a password on the command line should be considered
+          insecure. See Section 5.6, "Keeping Your Password Secure".
+
+       o  --pipe, -W
+
+          On Windows, connect to the server via a named pipe. This option
+          applies only for connections to a local server, and only if the
+          server supports named-pipe connections.
+
+       o  --port=port_num, -P port_num
+
+          The TCP/IP port number to use for the connection.
+
+       o  --protocol={TCP|SOCKET|PIPE|MEMORY}
+
+          The connection protocol to use for connecting to the server. It is
+          useful when the other connection parameters normally would cause a
+          protocol to be used other than the one you want. For details on the
+          allowable values, see Section 2.2, "Connecting to the MySQL Server".
+
+       o  --show-table-type, -t
+
+          Show a column indicating the table type, as in SHOW FULL TABLES. The
+          type is BASE TABLE or VIEW. This option was added in MySQL 5.0.4.
+
+       o  --socket=path, -S path
+
+          For connections to localhost, the Unix socket file to use, or, on
+          Windows, the name of the named pipe to use.
+
+       o  --ssl*
+
+          Options that begin with --ssl specify whether to connect to the
+          server via SSL and indicate where to find SSL keys and certificates.
+          See Section 5.7.3, "SSL Command Options".
+
+       o  --status, -i
+
+          Display extra information about each table.
+
+       o  --user=user_name, -u user_name
+
+          The MySQL username to use when connecting to the server.
+
+       o  --verbose, -v
+
+          Verbose mode. Print more information about what the program does.
+          This option can be used multiple times to increase the amount of
+          information.
+
+       o  --version, -V
+
+          Display version information and exit.
+
+COPYRIGHT
+       Copyright 2007-2008 MySQL AB
+
+       This documentation is free software; you can redistribute it and/or
+       modify it under the terms of the GNU General Public License as
+       published by the Free Software Foundation; version 2 of the License.
+
+       This documentation is distributed in the hope that it will be useful,
+       but WITHOUT ANY WARRANTY; without even the implied warranty of
+       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+       General Public License for more details.
+
+       You should have received a copy of the GNU General Public License along
+       with the program; if not, write to the Free Software Foundation, Inc.,
+       51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
+       http://www.gnu.org/licenses/.
+
+SEE ALSO
+       For more information, please refer to the MySQL Reference Manual, which
+       may already be installed locally and which is also available online at
+       http://dev.mysql.com/doc/.
+
+AUTHOR
+       MySQL AB (http://www.mysql.com/).
+
+
+
