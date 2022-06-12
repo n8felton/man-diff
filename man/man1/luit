@@ -33,7 +33,7 @@ OPTIONS
        -c     Function  as  a simple converter from standard input to standard
               output.
 
-       -x     Exit as soon as the child dies.  This may cause  luit  to  loose
+       -x     Exit as soon as the child dies.  This may  cause  luit  to  lose
               data at the end of the child's output.
 
        -argv0 name
@@ -127,7 +127,7 @@ FILES
        /usr/X11/lib/X11/fonts/encodings/encodings.dir
               The system-wide encodings directory.
 
-       /usr/X11/lib/X11/locale/locale.alias
+       /usr/X11/share/X11/locale/locale.alias
               The file mapping locales to locale encodings.
 
 SECURITY
@@ -160,8 +160,8 @@ SEE ALSO
        Coded Character Sets (ISO 6429, ECMA-48).
 
 AUTHOR
-       The  version  of  Luit  included  in this X.org Foundataion release was
-       originally written by Juliusz Chroboczek <jch@freedesktop.org> for  the
+       The version of Luit included in this X.Org Foundation release was orig-
+       inally written by  Juliusz  Chroboczek  <jch@freedesktop.org>  for  the
        XFree86 Project.
 
 

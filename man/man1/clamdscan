@@ -50,6 +50,9 @@ OPTIONS
        --no-summary
               Do not display summary at the end of scanning.
 
+       --reload
+              Request clamd to reload virus database.
+
        --fdpass
               Pass the file descriptor permissions clamd. This  is  useful  if
               clamd  is  running  as  a  different  user  as it is faster than

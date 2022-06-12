@@ -468,6 +468,9 @@ DIRECTIVES
        ServerAdmin user@domain.com
             Specifies the email address of the server administrator.
 
+       ServerAlias hostname
+            Specifies an alternate name that the server is known by.
+
        ServerBin directory
             Specifies the directory where backends, CGIs, daemons, and filters
             may be found.
@@ -531,7 +534,7 @@ SEE ALSO
        http://localhost:631/help
 
 COPYRIGHT
-       Copyright 2007-2008 by Apple Inc.
+       Copyright 2007-2009 by Apple Inc.
 
 
 

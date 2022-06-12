@@ -476,6 +476,18 @@ OPTIONS
                does  write a /etc/wtmp entry (if configured to do so), whereas
                xterm -e does not.
 
+       -maximized
+               This option indicates that xterm should ask the window  manager
+               to  maximize  its  layout  on startup.  This corresponds to the
+               maximized resource.
+
+               Maximizing is not the reverse of iconifying; it is possible  to
+               do both with certain window managers.
+
+       +maximized
+               This  option indicates that xterm should ask the window manager
+               to maximize its layout on startup.
+
        +ls     This option indicates that the shell that is started should not
                be a login shell (i.e., it will be a normal ``subshell'').
 
@@ -681,6 +693,10 @@ OPTIONS
                not support locale.
 
        +u8     This option resets the utf8 resource.
+
+       -uc     This option makes the cursor underlined instead of a box.
+
+       +uc     This option makes the cursor a box instead of underlined.
 
        -ulc    This  option  disables the display of characters with underline
                attribute as color rather than with underlining.
@@ -910,101 +926,105 @@ RESOURCES
                performance  if  the  operating  system  prefers  larger buffer
                sizes.
 
+       maximized (class Maximized)
+               Specifies whether or not xterm should ask the window manager to
+               maximize its layout on startup.  The default is ``false.''
+
        messages (class Messages)
-               Specifies whether write access to the terminal is allowed  ini-
+               Specifies  whether write access to the terminal is allowed ini-
                tially.  See mesg(1).  The default is ``true''.
 
        menuLocale (class MenuLocale)
-                Specify  the  locale  used for character-set computations when
-                loading the popup menus.  Use this to  improve  initialization
+                Specify the locale used for  character-set  computations  when
+                loading  the  popup menus.  Use this to improve initialization
                 performance of the Athena popup menus, which may load unneces-
-                sary (and very large) fonts, e.g., in a  locale  having  UTF-8
+                sary  (and  very  large) fonts, e.g., in a locale having UTF-8
                 encoding.  The default is an empty string, which uses the cur-
                 rent locale setting.
 
-                Set it to ``C'' to achieve  the  best  performance  using  the
-                default  menu  resource  settings.   If you happen to be using
+                Set  it  to  ``C''  to  achieve the best performance using the
+                default menu resource settings.  If you  happen  to  be  using
                 localized menu resources, set the resource accordingly.
 
        minBufSize (class MinBufSize)
-               Specify the minimum size of the input buffer, i.e., the  amount
+               Specify  the minimum size of the input buffer, i.e., the amount
                of data that xterm requests on each read.  The default is 4096.
                You cannot set this to a value less than 64.
 
        ptyHandshake (class PtyHandshake)
-               If ``true'', xterm will perform handshaking during  initializa-
-               tion  to  ensure that the parent and child processes update the
-               utmp and stty state.  See also waitForMap which waits  for  the
-               pseudo-terminal's  notion  of  the screen size, and ptySttySize
-               which resets the screen size after other  terminal  initializa-
+               If  ``true'', xterm will perform handshaking during initializa-
+               tion to ensure that the parent and child processes  update  the
+               utmp  and  stty state.  See also waitForMap which waits for the
+               pseudo-terminal's notion of the screen  size,  and  ptySttySize
+               which  resets  the screen size after other terminal initializa-
                tion is complete.  The default is ``true''.
 
        ptyInitialErase (class PtyInitialErase)
-               If  ``true'', xterm will use the pseudo-terminal's sense of the
-               stty erase value.  If ``false'', xterm will set the stty  erase
-               value  to match its own configuration, using the kb string from
-               the termcap entry as a  reference,  if  available.   In  either
+               If ``true'', xterm will use the pseudo-terminal's sense of  the
+               stty  erase value.  If ``false'', xterm will set the stty erase
+               value to match its own configuration, using the kb string  from
+               the  termcap  entry  as  a  reference, if available.  In either
                case, the result is applied to the TERMCAP variable which xterm
-               sets.  See also the ttyModes resource, which may  modify  this.
+               sets.   See  also the ttyModes resource, which may modify this.
                The default is ``false''.
 
        ptySttySize (class PtySttySize)
-               If  ``true'',  xterm  will reset the screen size after terminal
-               initialization is complete.  This is needed  for  some  systems
-               whose  pseudo-terminals  cannot propagate terminal characteris-
-               tics.  Where it is not needed,  it  can  interfere  with  other
-               methods  for  setting  the intial screen size, e.g., via window
-               manager interaction.  See also waitForMap  which  waits  for  a
-               handshake-message  giving  the  pseudo-terminal's notion of the
-               screen size.  The default is ``false'' on Linux and OS  X  sys-
+               If ``true'', xterm will reset the screen  size  after  terminal
+               initialization  is  complete.   This is needed for some systems
+               whose pseudo-terminals cannot propagate  terminal  characteris-
+               tics.   Where  it  is  not  needed, it can interfere with other
+               methods for setting the intial screen size,  e.g.,  via  window
+               manager  interaction.   See  also  waitForMap which waits for a
+               handshake-message giving the pseudo-terminal's  notion  of  the
+               screen  size.   The default is ``false'' on Linux and OS X sys-
                tems, ``true'' otherwise.
 
        sameName (class SameName)
-               If  the value of this resource is ``true'', xterm does not send
+               If the value of this resource is ``true'', xterm does not  send
                title and icon name change requests when the request would have
-               no  effect: the name is not changed.  This has the advantage of
-               preventing flicker and the disadvantage of requiring  an  extra
-               round  trip  to  the server to find out the previous value.  In
-               practice this should  never  be  a  problem.   The  default  is
+               no effect: the name is not changed.  This has the advantage  of
+               preventing  flicker  and the disadvantage of requiring an extra
+               round trip to the server to find out the  previous  value.   In
+               practice  this  should  never  be  a  problem.   The default is
                ``true''.
 
        scoFunctionKeys (class ScoFunctionKeys)
-               Specifies  whether  or not SCP Function Key escape codes should
-               be generated for  function  keys  instead  of  standard  escape
+               Specifies whether or not SCP Function Key escape  codes  should
+               be  generated  for  function  keys  instead  of standard escape
                sequences.  See also the keyboardType resource.
 
        sessionMgt (class SessionMgt)
-               If  the  value of this resource is ``true'', xterm sets up ses-
-               sion manager callbacks for XtNdieCallback and  XtNsaveCallback.
+               If the value of this resource is ``true'', xterm sets  up  ses-
+               sion  manager callbacks for XtNdieCallback and XtNsaveCallback.
                The default is ``true''.
 
        sunFunctionKeys (class SunFunctionKeys)
-               Specifies  whether  or not Sun Function Key escape codes should
-               be generated for  function  keys  instead  of  standard  escape
+               Specifies whether or not Sun Function Key escape  codes  should
+               be  generated  for  function  keys  instead  of standard escape
                sequences.  See also the keyboardType resource.
 
        sunKeyboard (class SunKeyboard)
-               Specifies  whether  or  not  Sun/PC  keyboard  layout should be
-               assumed rather than DEC VT220.  This causes the keypad  `+'  to
+               Specifies whether or  not  Sun/PC  keyboard  layout  should  be
+               assumed  rather  than DEC VT220.  This causes the keypad `+' to
                be mapped to `,'.  and CTRL F1-F12 to F11-F20, depending on the
-               setting of the ctrlFKeys resource.  so  xterm  emulates  a  DEC
-               VT220  more  accurately.   Otherwise (the default, with sunKey-
-               board set to ``false''), xterm uses PC-style bindings  for  the
+               setting  of  the  ctrlFKeys  resource.  so xterm emulates a DEC
+               VT220 more accurately.  Otherwise (the  default,  with  sunKey-
+               board  set  to ``false''), xterm uses PC-style bindings for the
                function keys and keypad.
 
-               PC-style  bindings use the Shift, Alt, Control and Meta keys as
-               modifiers for function-keys and keypad (see the document  Xterm
-               Control  Sequences  for  details).   The  PC-style bindings are
-               analogous to PCTerm, but not the same  thing.   Normally  these
-               bindings  do  not  conflict  with  the  use  of the Meta key as
-               described for the eightBitInput resource.   If  they  do,  note
-               that  the  PC-style bindings are evaluated first.  See also the
+               PC-style bindings use the Shift, Alt, Control and Meta keys  as
+               modifiers  for function-keys and keypad (see the document Xterm
+               Control Sequences for  details).   The  PC-style  bindings  are
+               analogous  to  PCTerm,  but not the same thing.  Normally these
+               bindings do not conflict with  the  use  of  the  Meta  key  as
+               described  for  the  eightBitInput  resource.  If they do, note
+               that the PC-style bindings are evaluated first.  See  also  the
                keyboardType resource.
 
        tcapFunctionKeys (class TcapFunctionKeys)
-               Specifies whether or not function key escape  codes  read  from
-               the  termcap/terminfo  entry  should  be generated for function
-               keys instead of standard escape sequences.  See also  the  key-
+               Specifies  whether  or  not function key escape codes read from
+               the termcap/terminfo entry should  be  generated  for  function
+               keys  instead  of standard escape sequences.  See also the key-
                boardType resource.
 
        termName (class TermName)
@@ -1012,86 +1032,96 @@ RESOURCES
                ment variable.
 
        title (class Title)
-               Specifies a string that may be used by the window manager  when
+               Specifies  a string that may be used by the window manager when
                displaying this application.
 
        toolBar (class ToolBar)
-               Specifies  whether or not the toolbar should be displayed.  The
+               Specifies whether or not the toolbar should be displayed.   The
                default is ``true.''
 
        ttyModes (class TtyModes)
                Specifies a string containing terminal setting keywords and the
-               characters  to  which  they  may  be bound.  Allowable keywords
-               include: brk, dsusp, eof,  eol,  eol2,  erase,  erase2,  flush,
-               intr,  kill,  lnext,  quit,  rprnt,  start, status, stop, susp,
-               swtch and weras.  Control characters may be specified as  ^char
-               (e.g.,  ^c  or ^u) and ^? may be used to indicate delete (127).
+               characters to which they  may  be  bound.   Allowable  keywords
+               include:  brk,  dsusp,  eof,  eol,  eol2, erase, erase2, flush,
+               intr, kill, lnext, quit,  rprnt,  start,  status,  stop,  susp,
+               swtch  and weras.  Control characters may be specified as ^char
+               (e.g., ^c or ^u) and ^? may be used to indicate  delete  (127).
                Use ^- to denote undef.  Use \034 to represent ^\, since a lit-
                eral backslash in an X resource escapes the next character.
 
-               This  is  very  useful for overriding the default terminal set-
-               tings without having to do an  stty  every  time  an  xterm  is
-               started.   Note, however, that the stty program on a given host
+               This is very useful for overriding the  default  terminal  set-
+               tings  without  having  to  do  an  stty every time an xterm is
+               started.  Note, however, that the stty program on a given  host
                may use different keywords; xterm's table is built-in.
 
-               If the ttyModes resource specifies  a  value  for  erase,  that
-               overrides  the  ptyInitialErase  resource  setting, i.e., xterm
+               If  the  ttyModes  resource  specifies  a value for erase, that
+               overrides the ptyInitialErase  resource  setting,  i.e.,  xterm
                initializes the terminal to match that value.
 
        useInsertMode (class UseInsertMode)
-               Force use of insert mode by adding appropriate entries  to  the
-               TERMCAP  environment  variable.   This  is useful if the system
+               Force  use  of insert mode by adding appropriate entries to the
+               TERMCAP environment variable.  This is  useful  if  the  system
                termcap is broken.  The default is ``false.''
 
        utmpDisplayId (class UtmpDisplayId)
                Specifies whether or not xterm should try to record the display
-               identifier  (display  number  and screen number) as well as the
+               identifier (display number and screen number) as  well  as  the
                hostname in the system utmp log file.  The default is ``true.''
 
        utmpInhibit (class UtmpInhibit)
-               Specifies  whether or not xterm should try to record the user's
-               terminal in the system utmp log file.  If true, xterm will  not
+               Specifies whether or not xterm should try to record the  user's
+               terminal  in the system utmp log file.  If true, xterm will not
                try.  The default is ``false.''
 
        waitForMap (class WaitForMap)
                Specifies whether or not xterm should wait for the initial win-
-               dow map before starting the subprocess.  This is  part  of  the
-               ptyHandshake  logic.   When  xterm  is directed to wait in this
-               fashion, it passes the terminal size from the  display  end  of
-               the  pseudo-terminal  to  the  terminal  I/O  connection, e.g.,
-               according to the window manager.  Otherwise, it uses  the  size
-               as  given in resource values or command-line option -geom.  The
+               dow  map  before  starting the subprocess.  This is part of the
+               ptyHandshake logic.  When xterm is directed  to  wait  in  this
+               fashion,  it  passes  the terminal size from the display end of
+               the pseudo-terminal  to  the  terminal  I/O  connection,  e.g.,
+               according  to  the window manager.  Otherwise, it uses the size
+               as given in resource values or command-line option -geom.   The
                default is ``false.''
 
        zIconBeep (class ZIconBeep)
                Same as -ziconbeep command line argument.  If the value of this
-               resource  is  non-zero, xterms that produce output while iconi-
-               fied will cause an XBell sound at the  given  volume  and  have
-               "***"  prepended  to  their  icon titles.  Most window managers
-               will detect this change immediately, showing you  which  window
-               has  the  output.   (A  similar feature was in x10 xterm.)  The
+               resource is non-zero, xterms that produce output  while  iconi-
+               fied  will  cause  an  XBell sound at the given volume and have
+               "***" prepended to their icon  titles.   Most  window  managers
+               will  detect  this change immediately, showing you which window
+               has the output.  (A similar feature was  in  x10  xterm.)   The
                default is ``false.''
 
    VT100 Widget Resources
-       The following resources are specified  as  part  of  the  vt100  widget
-       (class    VT100):   These   are   specified   by   patterns   such   as
-       "XTerm.vt100.NAME":
+       The  following  resources  are  specified  as  part of the vt100 widget
+       (class   VT100).    They   are   specified   by   patterns   such    as
+       "XTerm.vt100.NAME".
+
+       If  your  xterm is configured to support the "toolbar", then those pat-
+       terns need an extra level for the form-widget which holds  the  toolbar
+       and  vt100  widget.   A  wildcard between the top-level "XTerm" and the
+       "vt100" widget makes the  resource  settings  work  for  either,  e.g.,
+       "XTerm*vt100.NAME".
 
        activeIcon (class ActiveIcon)
-               Specifies whether or not active icon windows  are  to  be  used
+               Specifies  whether  or  not  active icon windows are to be used
                when the xterm window is iconified, if this feature is compiled
-               into xterm.  The active icon is a miniature  representation  of
-               the  content  of  the  window  and  will  update as the content
-               changes.  Not all window managers necessarily support  applica-
-               tion  icon  windows.   Some  window  managers will allow you to
-               enter keystrokes into the active icon window.  The  default  is
+               into  xterm.   The active icon is a miniature representation of
+               the content of the  window  and  will  update  as  the  content
+               changes.   Not all window managers necessarily support applica-
+               tion icon windows.  Some window  managers  will  allow  you  to
+               enter  keystrokes  into the active icon window.  The default is
                ``false.''
 
        allowC1Printable (class AllowC1Printable)
-               If  true,  overrides the mapping of C1 controls (codes 128-159)
-               to make them be treated as if they were  printable  characters.
+               If true, overrides the mapping of C1 controls  (codes  128-159)
+               to  make  them be treated as if they were printable characters.
                Although this corresponds to no particular standard, some users
                insist it is a VT100.  The default is ``false.''
+
+       allowFontOps (class AllowFontOps)
+               Specifies  whether  control  sequences  that set/query the font
+               should be allowed.  The default is ``true.''
 
        allowSendEvents (class AllowSendEvents)
                Specifies whether or not synthetic key and button events  (gen-
@@ -1099,6 +1129,25 @@ RESOURCES
                preted or discarded.  The default is ``false'' meaning they are
                discarded.  Note that allowing such events creates a very large
                security hole.  The default is ``false.''
+
+       allowTcapOps (class AllowTcapOps)
+               Specifies whether control sequences that query  the  terminal's
+               notion  of  its  function-key  strings,  as termcap or terminfo
+               capabilities should be allowed.  The default is ``false.''
+
+               A few programs, e.g,. vim, use this feature to get an  accurate
+               description  of the terminal's capabilities, independent of the
+               termcap/terminfo setting:
+
+               -  xterm can tell the querying program how many colors it  sup-
+                  ports.  This is a constant, depending on how it is compiled,
+                  typically 16.  It does not change if you alter resource set-
+                  tings, e.g., the boldColors resource.
+
+               -  xterm can tell the querying program what strings are sent by
+                  modified (shift-, control-, alt-) function- and keypad-keys.
+                  Reporting  control-  and  alt-modifiers  is  a  feature that
+                  relies on the ncurses extended naming.
 
        allowTitleOps (class AllowTitleOps)
                Specifies whether control  sequences  that  modify  the  window
@@ -1456,24 +1505,28 @@ RESOURCES
                the  Newline  at the end of the line.  If ``true'', the Newline
                is selected.  The default is ``true.''
 
+       cursorUnderLine (class CursorUnderLine)
+               Specifies whether to make the cursor underlined or a box.   The
+               default is ``false.''
+
        cutToBeginningOfLine (class CutToBeginningOfLine)
-               If ``false'', triple clicking to select  a  line  selects  only
+               If  ``false'',  triple  clicking  to select a line selects only
                from the current word forward.  If ``true'', the entire line is
                selected.  The default is ``true.''
 
        decTerminalID (class DecTerminalID)
-               Specifies the emulation  level  (100=VT100,  220=VT220,  etc.),
-               used  to  determine  the  type  of  response  to  a  DA control
-               sequence.  Leading  non-digit  characters  are  ignored,  e.g.,
+               Specifies  the  emulation  level  (100=VT100, 220=VT220, etc.),
+               used to  determine  the  type  of  response  to  a  DA  control
+               sequence.   Leading  non-digit  characters  are  ignored, e.g.,
                "vt100" and "100" are the same.  The default is 100.
 
        deleteIsDEL (class DeleteIsDEL)
-               Specifies  whether  the Delete key on the editing keypad should
-               send DEL (127) or the VT220-style Remove escape sequence.   The
+               Specifies whether the Delete key on the editing  keypad  should
+               send  DEL (127) or the VT220-style Remove escape sequence.  The
                default is ``false,'' for the latter.
 
        dynamicColors (class DynamicColors)
-               Specifies  whether  or  not  escape  sequences to change colors
+               Specifies whether or not  escape  sequences  to  change  colors
                assigned to different attributes are recognized.
 
        eightBitControl (class EightBitControl)
@@ -1482,66 +1535,74 @@ RESOURCES
                default is ``false.''
 
        eightBitInput (class EightBitInput)
-               If ``true'', Meta characters (a single-byte character  combined
-               with  the  Meta  modifier key) input from the keyboard are pre-
-               sented as a single character with the  eighth  bit  turned  on.
-               The  terminal is put into 8-bit mode.  If ``false'', Meta char-
-               acters are converted into a  two-character  sequence  with  the
-               character  itself  preceded by ESC.  On startup, xterm tries to
+               If  ``true'', Meta characters (a single-byte character combined
+               with the Meta modifier key) input from the  keyboard  are  pre-
+               sented  as  a  single  character with the eighth bit turned on.
+               The terminal is put into 8-bit mode.  If ``false'', Meta  char-
+               acters  are  converted  into  a two-character sequence with the
+               character itself preceded by ESC.  On startup, xterm  tries  to
                put the terminal into 7-bit mode.  The metaSendsEscape and alt-
                SendsEscape  resources  may  override  this.   The  default  is
                ``true.''
 
                Generally keyboards do not have a key labeled "Meta", but "Alt"
-               keys  are  common, and they are conventionally used for "Meta".
-               If they were synonymous, it would have been reasonable to  name
-               this  resource "altSendsEscape", reversing its sense.  For more
+               keys are common, and they are conventionally used  for  "Meta".
+               If  they were synonymous, it would have been reasonable to name
+               this resource "altSendsEscape", reversing its sense.  For  more
                background on this, see the meta function in curses.
 
-               Note that the Alt key is not necessarily the same as  the  Meta
-               modifier.   xmodmap  lists your key modifiers.  X defines modi-
-               fiers for shift, (caps) lock and control, as well  as  5  addi-
+               Note  that  the Alt key is not necessarily the same as the Meta
+               modifier.  xmodmap lists your key modifiers.  X  defines  modi-
+               fiers  for  shift,  (caps) lock and control, as well as 5 addi-
                tional modifiers which are generally used to configure key mod-
-               ifiers.  xterm inspects the same information to find the  modi-
-               fier  associated with either Meta key (left or right), and uses
-               that key as the Meta modifier.  It also looks for  the  NumLock
+               ifiers.   xterm inspects the same information to find the modi-
+               fier associated with either Meta key (left or right), and  uses
+               that  key  as the Meta modifier.  It also looks for the NumLock
                key, to recognize the modifier which is associated with that.
 
-               If  your  xmodmap configuration uses the same keycodes for Alt-
-               and Meta-keys, xterm will only  see  the  Alt-key  definitions,
-               since  those  are  tested  before Meta-keys.  NumLock is tested
-               first.  It is important to keep these keys distinct;  otherwise
+               If your xmodmap configuration uses the same keycodes  for  Alt-
+               and  Meta-keys,  xterm  will  only see the Alt-key definitions,
+               since those are tested before  Meta-keys.   NumLock  is  tested
+               first.   It is important to keep these keys distinct; otherwise
                some of xterm's functionality is not available.
 
        eightBitOutput (class EightBitOutput)
-               Specifies  whether  or  not  eight-bit characters sent from the
-               host should be accepted as is or stripped  when  printed.   The
-               default  is ``true,'' which means that they are accepted as is.
+               Specifies whether or not eight-bit  characters  sent  from  the
+               host  should  be  accepted as is or stripped when printed.  The
+               default is ``true,'' which means that they are accepted as  is.
 
        faceName (class FaceName)
-               Specify the  pattern  for  fonts  selected  from  the  FreeType
-               library  if  support  for that library was compiled into xterm.
+               Specify  the  pattern  for  fonts  selected  from  the FreeType
+               library if support for that library was  compiled  into  xterm.
                There is no default.  If not specified, or if there is no match
                for both normal and bold fonts, xterm uses the font and related
                resources.
 
        faceNameDoublesize (class FaceNameDoublesize)
-               Specify an double-width font for  cases  where  an  application
+               Specify  an  double-width  font  for cases where an application
                requires this, e.g., in CJK applications.  There is no default.
-               If  the  application  uses  double-wide  characters  and   this
-               resource  is not given, xterm  will use a scaled version of the
+               If   the  application  uses  double-wide  characters  and  this
+               resource is not given, xterm  will use a scaled version of  the
                font given by faceName.
 
        faceSize (class FaceSize)
-               Specify the pointsize for  fonts  selected  from  the  FreeType
-               library  if  support  for that library was compiled into xterm.
-               The default is ``14.''  On the VT Fonts menu, this  corresponds
-               to  the Default entry.  You can specify the pointsize for True-
-               Type fonts selected with the other  size-related  menu  entries
-               such  as  Medium,  Huge,  etc.,  by  using one of the following
-               resource values.  If you do not specify a value,  they  default
-               to  ``0.0'',  which causes xterm to use the ratio of font sizes
-               from the bitmap font resources to obtain a TrueType  pointsize.
+               Specify  the  pointsize  for  fonts  selected from the FreeType
+               library if support for that library was  compiled  into  xterm.
+               The  default is ``14.''  On the VT Fonts menu, this corresponds
+               to the Default entry.
+
+               You can specify the pointsize for TrueType fonts selected  with
+               the other size-related menu entries such as Medium, Huge, etc.,
+               by using one of the following resource values.  If you  do  not
+               specify a value, they default to ``0.0'', which causes xterm to
+               use the ratio of font sizes from the corresponding bitmap  font
+               resources to obtain a TrueType pointsize.
+
+               If  all  of the faceSize resources are set, then xterm will use
+               this information to determine the next smaller/larger  TrueType
+               font  for  the  larger-vt-font() and smaller-vt-font() actions.
+               If any are not set, xterm will use only the areas of the bitmap
+               fonts.
 
        faceSize1 (class FaceSize1)
                Specifies the pointsize of the first alternative font.
@@ -1771,130 +1832,138 @@ RESOURCES
                are the same as for the set-vt-font  action.   The  default  is
                ``d'', i.e., "default".
 
+       inputMethod (class XtCInputMethod)
+               Tells  xterm  which  type  of input method to use.  There is no
+               default method.
+
        internalBorder (class BorderWidth)
-               Specifies  the  number of pixels between the characters and the
+               Specifies the number of pixels between the characters  and  the
                window border.  The default is 2.
 
        italicULMode (class ColorAttrMode)
                Specifies  whether  characters  with  the  underline  attribute
-               should  be displayed in an italic font or as underlined charac-
+               should be displayed in an italic font or as underlined  charac-
                ters.  It is implemented only for TrueType fonts.
 
        jumpScroll (class JumpScroll)
                Specifies whether or not jump scroll should be used.  This cor-
-               responds  to  the  VT102  DECSCLM private mode.  The default is
+               responds to the VT102 DECSCLM private  mode.   The  default  is
                ``true.''
 
        keepSelection (class KeepSelection)
-               Specifies whether xterm will keep the selection even after  the
-               selected  area was touched by some output to the terminal.  The
+               Specifies  whether xterm will keep the selection even after the
+               selected area was touched by some output to the terminal.   The
                default is ``false''.
 
        keyboardDialect (class KeyboardDialect)
-               Specifies the initial keyboard dialect, as well as the  default
-               value  when the terminal is reset.  The value given is the same
-               as the final character in the control  sequences  which  change
-               character  sets.  The default is ``B'', which corresponds to US
+               Specifies  the initial keyboard dialect, as well as the default
+               value when the terminal is reset.  The value given is the  same
+               as  the  final  character in the control sequences which change
+               character sets.  The default is ``B'', which corresponds to  US
                ASCII.
 
        nameKeymap (class NameKeymap)
                See the discussion of the keymap() action.
 
        limitResize (class LimitResize)
-               Limits resizing of the screen via control sequence to  a  given
+               Limits  resizing  of the screen via control sequence to a given
                multiple of the display dimensions.  The default is ``1''.
 
        locale (class Locale)
-               Specifies  how to use luit, an encoding converter between UTF-8
-               and locale encodings.  The resource value (ignoring  case)  may
+               Specifies how to use luit, an encoding converter between  UTF-8
+               and  locale  encodings.  The resource value (ignoring case) may
                be:
 
                true
                    xterm  will  use  the  encoding  specified  by  the  users'
                    LC_CTYPE locale (i.e., LC_ALL, LC_CTYPE, or LANG variables)
-                   as  far  as  possible.  This is realized by always enabling
+                   as far as possible.  This is realized  by  always  enabling
                    UTF-8 mode and invoking luit in non-UTF-8 locales.
 
                medium
-                   xterm will follow users' LC_CTYPE locale  only  for  UTF-8,
-                   east  Asian, and Thai locales, where the encodings were not
-                   supported by conventional 8bit mode  with  changing  fonts.
+                   xterm  will  follow  users' LC_CTYPE locale only for UTF-8,
+                   east Asian, and Thai locales, where the encodings were  not
+                   supported  by  conventional  8bit mode with changing fonts.
                    For other locales, xterm will use conventional 8bit mode.
 
                checkfont
-                   If  mini-luit is compiled-in, xterm will check if a Unicode
+                   If mini-luit is compiled-in, xterm will check if a  Unicode
                    font has been specified.  If so, it checks if the character
-                   encoding  for  the  current  locale  is  POSIX,  Latin-1 or
+                   encoding for  the  current  locale  is  POSIX,  Latin-1  or
                    Latin-9, uses the appropriate mapping to support those with
-                   the  Unicode font.  For other encodings, xterm assumes that
+                   the Unicode font.  For other encodings, xterm assumes  that
                    UTF-8 encoding is required.
 
                false
                    xterm will use conventional 8bit mode or UTF-8 mode accord-
                    ing to utf8 resource or -u8 option.
 
-               Any  other  value, e.g., ``UTF-8'' or ``ISO8859-2'', is assumed
-               to be an encoding name; luit will be  invoked  to  support  the
-               encoding.   The  actual  list of supported encodings depends on
+               Any other value, e.g., ``UTF-8'' or ``ISO8859-2'',  is  assumed
+               to  be  an  encoding  name; luit will be invoked to support the
+               encoding.  The actual list of supported  encodings  depends  on
                luit.  The default is ``medium''.
 
                Regardless of your locale and encoding, you need an ISO-10646-1
                font to display the result.  Your configuration may not include
-               this font, or locale-support by xterm may not  be  needed.   At
-               startup,  xterm  uses  a  mechanism  equivalent to the load-vt-
-               fonts(utf8Fonts, Utf8Fonts) action to  load  font  name  subre-
-               sources  of  the VT100 widget.  That is, resource patterns such
-               as  "*vt100.utf8Fonts.font"  will  be  loaded,  and  (if   this
-               resource  is enabled), override the normal fonts.  If no subre-
-               sources are found, the  normal  fonts  such  as  "*vt100.font",
-               etc.,  are used.  The resource files distributed with xterm use
+               this  font,  or  locale-support by xterm may not be needed.  At
+               startup, xterm uses a  mechanism  equivalent  to  the  load-vt-
+               fonts(utf8Fonts, Utf8Fonts)  action  to  load  font name subre-
+               sources of the VT100 widget.  That is, resource  patterns  such
+               as   "*vt100.utf8Fonts.font"  will  be  loaded,  and  (if  this
+               resource is enabled), override the normal fonts.  If no  subre-
+               sources  are  found,  the  normal  fonts such as "*vt100.font",
+               etc., are used.  The resource files distributed with xterm  use
                ISO-10646-1 fonts, but do not rely on them unless you are using
                the locale mechanism.
 
        localeFilter (class LocaleFilter)
-               Specifies  the  file  name  for  the encoding converter from/to
+               Specifies the file name  for  the  encoding  converter  from/to
                locale encodings and UTF-8 which is used with the -lc option or
-               locale  resource.   The  help  message shown by ``xterm -help''
-               lists the default value, which depends on your system  configu-
+               locale resource.  The help message  shown  by  ``xterm  -help''
+               lists  the default value, which depends on your system configu-
                ration.
 
+               If the encoding converter requires command-line parameters, you
+               should  put  those  within  a  shell script to execute the con-
+               verter, and set this resource to point to the shell script.
+
        loginShell (class LoginShell)
-               Specifies  whether  or  not  the  shell to be run in the window
-               should be started as a login shell.  The default is  ``false.''
+               Specifies whether or not the shell to  be  run  in  the  window
+               should  be started as a login shell.  The default is ``false.''
 
        marginBell (class MarginBell)
-               Specifies  whether or not the bell should be rung when the user
+               Specifies whether or not the bell should be rung when the  user
                types near the right margin.  The default is ``false.''
 
        metaSendsEscape (class MetaSendsEscape)
-               If ``true'', Meta characters (a  character  combined  with  the
-               Meta  modifier key) are converted into a two-character sequence
-               with the character itself preceded by  ESC.   This  applies  as
-               well  to function key control sequences, unless xterm sees that
-               Meta is used in your  key  translations.   If  ``false'',  Meta
+               If  ``true'',  Meta  characters  (a character combined with the
+               Meta modifier key) are converted into a two-character  sequence
+               with  the  character  itself  preceded by ESC.  This applies as
+               well to function key control sequences, unless xterm sees  that
+               Meta  is  used  in  your  key translations.  If ``false'', Meta
                characters input from the keyboard are handled according to the
                eightBitInput resource.  The default is ``false.''
 
        mkSamplePass (class MkSamplePass)
-               If mkSampleSize is nonzero,  and  mkWidth  (and  cjkWidth)  are
-               false,  on  startup  xterm  compares its built-in tables to the
+               If  mkSampleSize  is  nonzero,  and  mkWidth (and cjkWidth) are
+               false, on startup xterm compares its  built-in  tables  to  the
                system's wide character width data to decide if it will use the
-               system's  data.  It tests the first mkSampleSize character val-
-               ues, and allows up to mkSamplePass mismatches before  the  test
-               fails.   The  default (for the allowed number of mismatches) is
+               system's data.  It tests the first mkSampleSize character  val-
+               ues,  and  allows up to mkSamplePass mismatches before the test
+               fails.  The default (for the allowed number of  mismatches)  is
                256.
 
        mkSampleSize (class MkSampleSize)
-               With mkSamplePass, this specifies a startup test used for  ini-
+               With  mkSamplePass, this specifies a startup test used for ini-
                tializing wide character width calculations.  The default (num-
                ber of characters to check) is 1024.
 
        mkWidth (class MkWidth)
-               Specifies whether xterm should use a built-in  version  of  the
+               Specifies  whether  xterm  should use a built-in version of the
                wide  character  width  calculation.   See  also  the  cjkWidth
                resource which can override this.  The default is ``false.''
 
-               Here is a summary of the resources which control the choice  of
+               Here  is a summary of the resources which control the choice of
                wide character width calculation:
 
                cjkWidth   mkWidth   Action
@@ -1905,9 +1974,9 @@ RESOURCES
                true       true      use built-in CJK tables
 
        modifyCursorKeys (class ModifyCursorKeys)
-               Tells  how  to  handle the special case where Control-, Shift-,
-               Alt- or Meta-modifiers are used  to  add  a  parameter  to  the
-               escape  sequence  returned  by  a  cursor-key.   The default is
+               Tells how to handle the special case  where  Control-,  Shift-,
+               Alt-  or  Meta-modifiers  are  used  to  add a parameter to the
+               escape sequence returned  by  a  cursor-key.   The  default  is
                ``2'':
 
                Set it to -1 to disable it.
@@ -1915,14 +1984,14 @@ RESOURCES
                Set it to 1 to prefix modified sequences with CSI.
                Set it to 2 to force the modifier to be the second parameter if
                it would otherwise be the first.
-               Set  it to 3 to mark the sequence with a '>' to hint that it is
+               Set it to 3 to mark the sequence with a '>' to hint that it  is
                private.
 
        modifyFunctionKeys (class ModifyFunctionKeys)
-               Tells how to handle the special case  where  Control-,  Shift-,
-               Alt-  or  Meta-modifiers  are  used  to  add a parameter to the
-               escape sequence returned by  a  (numbered)  function-key.   The
-               default  is  ``2''.  The resource values are similar to modify-
+               Tells  how  to  handle the special case where Control-, Shift-,
+               Alt- or Meta-modifiers are used  to  add  a  parameter  to  the
+               escape  sequence  returned  by  a (numbered) function-key.  The
+               default is ``2''.  The resource values are similar  to  modify-
                CursorKeys:
 
                Set it to -1 to permit the user to use shift- and control-modi-
@@ -1932,10 +2001,10 @@ RESOURCES
                Set it to 1 to prefix modified sequences with CSI.
                Set it to 2 to force the modifier to be the second parameter if
                it would otherwise be the first.
-               Set  it to 3 to mark the sequence with a '>' to hint that it is
+               Set it to 3 to mark the sequence with a '>' to hint that it  is
                private.
 
-               If modifyFunctionKeys is zero, xterm uses Control-  and  Shift-
+               If  modifyFunctionKeys  is zero, xterm uses Control- and Shift-
                modifiers to allow the user to construct numbered function-keys
                beyond the set provided by the keyboard:
 
@@ -1946,33 +2015,33 @@ RESOURCES
                     adds twice the value given by the ctrlFKeys resource.
 
                Control/Shift
-                    adds  three  times  the  value  given  by  the   ctrlFKeys
+                    adds   three  times  the  value  given  by  the  ctrlFKeys
                     resource.
 
-               As  a  special  case,  legacy (when oldFunctionKeys is true) or
-               vt220 (when sunKeyboard is true) keyboards interpret  only  the
-               Control-modifier   when  constructing  numbered  function-keys.
-               This is done to provide compatible keyboards for DEC VT220  and
+               As a special case, legacy (when  oldFunctionKeys  is  true)  or
+               vt220  (when  sunKeyboard is true) keyboards interpret only the
+               Control-modifier  when  constructing  numbered   function-keys.
+               This  is done to provide compatible keyboards for DEC VT220 and
                related terminals that implement user-defined keys (UDK).
 
        modifyOtherKeys (class ModifyOtherKeys)
-               Like  modifyCursorKeys,  tells  xterm  to  construct  an escape
-               sequence for other keys (such as "2")  when  modified  by  Con-
-               trol-,  Alt- or Meta-modifiers.  This feature does not apply to
-               function keys and well-defined keys such as ESC or the  control
+               Like modifyCursorKeys,  tells  xterm  to  construct  an  escape
+               sequence  for  other  keys  (such as "2") when modified by Con-
+               trol-, Alt- or Meta-modifiers.  This feature does not apply  to
+               function  keys and well-defined keys such as ESC or the control
                keys.  The default is ``0'':
 
                0    disables this feature.
 
-               1    enables  this feature for keys except for those with well-
+               1    enables this feature for keys except for those with  well-
                     known behavior, e.g., Tab, Backarrow and some special con-
                     trol character cases, e.g., Control-Space to make a NUL.
 
-               2    enables  this  feature  for  keys including the exceptions
+               2    enables this feature for  keys  including  the  exceptions
                     listed.
 
        multiClickTime (class MultiClickTime)
-               Specifies the maximum time in milliseconds between  multi-click
+               Specifies  the maximum time in milliseconds between multi-click
                select events.  The default is 250 milliseconds.
 
        multiScroll (class MultiScroll)
@@ -1980,22 +2049,22 @@ RESOURCES
                chronously.  The default is ``false.''
 
        nMarginBell (class Column)
-               Specifies the number of characters from  the  right  margin  at
-               which  the  margin  bell  should  be  rung, when enabled by the
+               Specifies  the  number  of  characters from the right margin at
+               which the margin bell should  be  rung,  when  enabled  by  the
                marginBell resource.  The default is 10.
 
        numLock (class NumLock)
                If ``true'', xterm checks if NumLock is used as a modifier (see
-               xmodmap(1)).   If  so,  this  modifier  is used to simplify the
-               logic when implementing special  NumLock  for  the  sunKeyboard
-               resource.   Also  (when sunKeyboard is false), similar logic is
-               used to find the modifier associated with the  left  and  right
+               xmodmap(1)).  If so, this modifier  is  used  to  simplify  the
+               logic  when  implementing  special  NumLock for the sunKeyboard
+               resource.  Also (when sunKeyboard is false), similar  logic  is
+               used  to  find  the modifier associated with the left and right
                Alt keys.  The default is ``true.''
 
        oldXtermFKeys (class OldXtermFKeys)
-               If  ``true'',  xterm  will  use old-style control sequences for
-               function keys F1 to F4, for  compatibility  with  X  Consortium
-               xterm.   Otherwise,  it  uses  the VT100-style codes for PF1 to
+               If ``true'', xterm will use  old-style  control  sequences  for
+               function  keys  F1  to  F4, for compatibility with X Consortium
+               xterm.  Otherwise, it uses the VT100-style  codes  for  PF1  to
                PF4.  The default is ``false.''
 
        on2Clicks (class On2Clicks)
@@ -2006,21 +2075,21 @@ RESOURCES
 
        on5Clicks (class On5Clicks)
                Specify  selection  behavior  in  response  to  multiple  mouse
-               clicks.    A  single  mouse  click  is  always  interpreted  as
+               clicks.   A  single  mouse  click  is  always  interpreted   as
                described in the SELECTION section (see POINTER USAGE).  Multi-
-               ple  mouse clicks (using the button which activates the select-
-               start action) are interpreted according to the resource  values
+               ple mouse clicks (using the button which activates the  select-
+               start  action) are interpreted according to the resource values
                of on2Clicks, etc.  The resource value can be one of these:
 
                word
-                  Select  a  ``word'' as determined by the charClass resource.
+                  Select a ``word'' as determined by the  charClass  resource.
                   See the CHARACTER CLASSES section.
 
                line
                   Select a line (counting wrapping).
 
                group
-                  Select a group of adjacent lines (counting  wrapping).   The
+                  Select  a  group of adjacent lines (counting wrapping).  The
                   selection stops on a blank line.
 
                page
@@ -2030,20 +2099,24 @@ RESOURCES
                   Select all lines, i.e., including the saved lines.
 
                regex
-                  Select  a  ``word''  as determined by the regular expression
+                  Select a ``word'' as determined by  the  regular  expression
                   which follows in the resource value.
 
                none
                   No selection action is associated with this resource.  xterm
-                  interprets  it as the end of the list.  For example, you may
-                  use it to disable triple (and higher)  clicking  by  setting
+                  interprets it as the end of the list.  For example, you  may
+                  use  it  to  disable triple (and higher) clicking by setting
                   on3Clicks to ``none''.
 
                The default values for on2Clicks and on3Clicks are ``word'' and
-               ``line'',  respectively.   There  is  no  default   value   for
-               on4Clicks  or  on5Clicks,  making  those inactive.  On startup,
-               xterm determines the maximum number of clicks by the  onXClicks
+               ``line'',   respectively.    There  is  no  default  value  for
+               on4Clicks or on5Clicks, making  those  inactive.   On  startup,
+               xterm  determines the maximum number of clicks by the onXClicks
                resource values which are set.
+
+       openIm (class XtCOpenIm)
+               Tells xterm whether to open the input method at  startup.   The
+               default is ``true''.
 
        pointerColor (class PointerColor)
                Specifies  the foreground color of the pointer.  The default is
@@ -2073,85 +2146,89 @@ RESOURCES
                Specifies  whether the window would be raised when Control-G is
                received.  The default is ``false.''
 
+       preeditType (class XtCPreeditType)
+               Tells xterm which types of preedit  (preconversion)  string  to
+               display.  The default is ``OverTheSpot,Root''.
+
        printAttributes (class PrintAttributes)
-               Specifies whether to print graphic attributes  along  with  the
-               text.   A  real  DEC  VTxxx  terminal will print the underline,
-               highlighting codes but your printer may not  handle  these.   A
-               ``0''  disables  the attributes.  A ``1'' prints the normal set
-               of  attributes  (bold,  underline,  inverse   and   blink)   as
-               VT100-style  control  sequences.   A  ``2''  prints  ANSI color
+               Specifies  whether  to  print graphic attributes along with the
+               text.  A real DEC VTxxx  terminal  will  print  the  underline,
+               highlighting  codes  but  your printer may not handle these.  A
+               ``0'' disables the attributes.  A ``1'' prints the  normal  set
+               of   attributes   (bold,   underline,  inverse  and  blink)  as
+               VT100-style control  sequences.   A  ``2''  prints  ANSI  color
                attributes as well.  The default is ``1.''
 
        printerAutoClose (class PrinterAutoClose)
-               If ``true'', xterm will close the printer  (a  pipe)  when  the
+               If  ``true'',  xterm  will  close the printer (a pipe) when the
                application switches the printer offline with a Media Copy com-
                mand.  The default is ``false.''
 
        printerCommand (class PrinterCommand)
-               Specifies a shell command to which xterm will open a pipe  when
+               Specifies  a shell command to which xterm will open a pipe when
                the first MC (Media Copy) command is initiated.  The default is
-               a blank string.  If the resource value  is  given  as  a  blank
+               a  blank  string.   If  the  resource value is given as a blank
                string, the printer is disabled.
 
        printerControlMode (class PrinterControlMode)
-               Specifies  the printer control mode.  A ``1'' selects autoprint
-               mode, which causes xterm to print a line from the  screen  when
-               you  move  the cursor off that line with a line feed, form feed
-               or vertical tab character, or an  autowrap  occurs.   Autoprint
-               mode  is overridden by printer controller mode (a ``2''), which
-               causes all of the output to be directed to  the  printer.   The
+               Specifies the printer control mode.  A ``1'' selects  autoprint
+               mode,  which  causes xterm to print a line from the screen when
+               you move the cursor off that line with a line feed,  form  feed
+               or  vertical  tab  character, or an autowrap occurs.  Autoprint
+               mode is overridden by printer controller mode (a ``2''),  which
+               causes  all  of  the output to be directed to the printer.  The
                default is ``0.''
 
        printerExtent (class PrinterExtent)
-               Controls  whether  a  print page function will print the entire
-               page (true), or only the the portion within the scrolling  mar-
+               Controls whether a print page function will  print  the  entire
+               page  (true), or only the the portion within the scrolling mar-
                gins (false).  The default is ``false.''
 
        printerFormFeed (class PrinterFormFeed)
-               Controls  whether a form feed is sent to the printer at the end
+               Controls whether a form feed is sent to the printer at the  end
                of a print page function.  The default is ``false.''
 
        quietGrab (class QuietGrab)
-               Controls whether the cursor is repainted  when  NotifyGrab  and
-               NotifyUngrab  event  types are received during change of focus.
+               Controls  whether  the  cursor is repainted when NotifyGrab and
+               NotifyUngrab event types are received during change  of  focus.
                The default is ``false.''
 
        renderFont (class RenderFont)
-               If xterm is built with the Xft library, this  controls  whether
+               If  xterm  is built with the Xft library, this controls whether
                the faceName resource is used.  The default is ``true.''
 
        resizeGravity (class ResizeGravity)
                Affects the behavior when the window is resized to be taller or
-               shorter.  NorthWest specifies that the top line of text on  the
-               screen  stay  fixed.   If the window is made shorter, lines are
-               dropped from the bottom; if the window is  made  taller,  blank
-               lines  are  added  at  the bottom.  This is compatible with the
-               behavior in R4.  SouthWest (the  default)  specifies  that  the
+               shorter.   NorthWest specifies that the top line of text on the
+               screen stay fixed.  If the window is made  shorter,  lines  are
+               dropped  from  the  bottom; if the window is made taller, blank
+               lines are added at the bottom.  This  is  compatible  with  the
+               behavior  in  R4.   SouthWest  (the default) specifies that the
                bottom line of text on the screen stay fixed.  If the window is
-               made taller, additional saved lines will be scrolled down  onto
-               the  screen;  if  the  window  is  made  shorter, lines will be
-               scrolled off the top of the screen, and  the  top  saved  lines
+               made  taller, additional saved lines will be scrolled down onto
+               the screen; if the  window  is  made  shorter,  lines  will  be
+               scrolled  off  the  top  of the screen, and the top saved lines
                will be dropped.
 
        reverseVideo (class ReverseVideo)
-               Specifies  whether  or  not  reverse video should be simulated.
+               Specifies whether or not reverse  video  should  be  simulated.
                The default is ``false.''
 
        reverseWrap (class ReverseWrap)
-               Specifies whether or not reverse-wraparound should be  enabled.
-               This  corresponds  to  xterm's private mode 45.  The default is
+               Specifies  whether or not reverse-wraparound should be enabled.
+               This corresponds to xterm's private mode 45.   The  default  is
                ``false.''
 
        rightScrollBar (class RightScrollBar)
-               Specifies whether or not the scrollbar should be  displayed  on
+               Specifies  whether  or not the scrollbar should be displayed on
                the right rather than the left.  The default is ``false.''
 
        saveLines (class SaveLines)
-               Specifies  the  number  of  lines to save beyond the top of the
+               Specifies the number of lines to save beyond  the  top  of  the
                screen when a scrollbar is turned on.  The default is 64.
 
        scrollBar (class ScrollBar)
-               Specifies whether or not the  scrollbar  should  be  displayed.
+               Specifies  whether  or  not  the scrollbar should be displayed.
                The default is ``false.''
 
        scrollBarBorder (class ScrollBarBorder)
@@ -2161,14 +2238,14 @@ RESOURCES
                get and the scrollbar.  The default value is 1.
 
        scrollKey (class ScrollCond)
-               Specifies whether or not pressing a  key  should  automatically
-               cause  the  scrollbar  to  go  to  the  bottom of the scrolling
-               region.  This corresponds to xterm's private  mode  1011.   The
+               Specifies  whether  or  not pressing a key should automatically
+               cause the scrollbar to  go  to  the  bottom  of  the  scrolling
+               region.   This  corresponds  to xterm's private mode 1011.  The
                default is ``false.''
 
        scrollLines (class ScrollLines)
-               Specifies  the number of lines that the scroll-back and scroll-
-               forw actions should use as a default.  The default value is  1.
+               Specifies the number of lines that the scroll-back and  scroll-
+               forw  actions should use as a default.  The default value is 1.
 
        scrollTtyOutput (class ScrollCond)
                Specifies whether or not output to the terminal should automat-
@@ -2176,31 +2253,31 @@ RESOURCES
                region.  The default is ``true.''
 
        selectToClipboard (class SelectToClipboard)
-               Tells  xterm whether to use the PRIMARY or CLIPBOARD for SELECT
-               tokens in the selection mechanism.  The set-select  action  can
+               Tells xterm whether to use the PRIMARY or CLIPBOARD for  SELECT
+               tokens  in  the selection mechanism.  The set-select action can
                change this at runtime, allowing the user to work with programs
-               that handle only one  of  these  mechanisms.   The  default  is
+               that  handle  only  one  of  these  mechanisms.  The default is
                ``false'', which tells it to use PRIMARY.
 
        shiftFonts (class ShiftFonts)
-               Specifies  whether  to  enable the actions larger-vt-font() and
-               smaller-vt-font(), which are  normally  bound  to  the  shifted
+               Specifies whether to enable the  actions  larger-vt-font()  and
+               smaller-vt-font(),  which  are  normally  bound  to the shifted
                KP_Add and KP_Subtract.  The default is ``true.''
 
        showBlinkAsBold (class ShowBlinkAsBold)
-               Tells  xterm  whether  to display text with blink-attribute the
-               same as bold.  If xterm has  not  been  configured  to  support
-               blinking  text,  the default is ``true.'', which corresponds to
+               Tells xterm whether to display text  with  blink-attribute  the
+               same  as  bold.   If  xterm  has not been configured to support
+               blinking text, the default is ``true.'', which  corresponds  to
                older versions of xterm, otherwise the default is ``false.''
 
        showMissingGlyphs (class ShowMissingGlyphs)
-               Tells xterm whether to display a box outlining places  where  a
-               character  has been used that the font does not represent.  The
+               Tells  xterm  whether to display a box outlining places where a
+               character has been used that the font does not represent.   The
                default is ``false.''
 
        signalInhibit (class SignalInhibit)
-               Specifies whether or not the entries in  the  ``Main  Options''
-               menu  for  sending  signals to xterm should be disallowed.  The
+               Specifies  whether  or  not the entries in the ``Main Options''
+               menu for sending signals to xterm should  be  disallowed.   The
                default is ``false.''
 
        tekGeometry (class Geometry)
@@ -2214,87 +2291,87 @@ RESOURCES
        tekSmall (class TekSmall)
                Specifies whether or not the Tektronix mode window should start
                in its smallest size if no explicit geometry is given.  This is
-               useful when running xterm on displays with small screens.   The
+               useful  when running xterm on displays with small screens.  The
                default is ``false.''
 
        tekStartup (class TekStartup)
-               Specifies  whether  or  not  xterm should start up in Tektronix
+               Specifies whether or not xterm should  start  up  in  Tektronix
                mode.  The default is ``false.''
 
        tiXtraScroll (class TiXtraScroll)
-               Specifies whether xterm should scroll to a new page  when  pro-
-               cessing  the ti termcap entry, i.e., the private modes 47, 1047
-               or 1049.  This is only in effect if  titeInhibit  is  ``true'',
-               because  the  intent  of this option is to provide a picture of
+               Specifies  whether  xterm should scroll to a new page when pro-
+               cessing the ti termcap entry, i.e., the private modes 47,  1047
+               or  1049.   This  is only in effect if titeInhibit is ``true'',
+               because the intent of this option is to provide  a  picture  of
                the full-screen application's display on the scrollback without
-               wiping  out the text that would be shown before the application
+               wiping out the text that would be shown before the  application
                was initialized.  The default for this resource is ``false.''
 
        titeInhibit (class TiteInhibit)
-               Specifies whether or not xterm should remove ti and te  termcap
+               Specifies  whether or not xterm should remove ti and te termcap
                entries (used to switch between alternate screens on startup of
-               many screen-oriented programs) from  the  TERMCAP  string.   If
-               set,  xterm  also  ignores the escape sequence to switch to the
-               alternate screen.  Xterm supports terminfo in a different  way,
-               supporting  composite  control sequences (also known as private
-               modes) 1047, 1048 and 1049 which have the same  effect  as  the
+               many  screen-oriented  programs)  from  the TERMCAP string.  If
+               set, xterm also ignores the escape sequence to  switch  to  the
+               alternate  screen.  Xterm supports terminfo in a different way,
+               supporting composite control sequences (also known  as  private
+               modes)  1047,  1048  and 1049 which have the same effect as the
                original 47 control sequence.  The default for this resource is
                ``false.''
 
        translations (class Translations)
-               Specifies the key and button bindings  for  menus,  selections,
-               ``programmed  strings,'' etc.  The translations resource, which
+               Specifies  the  key  and button bindings for menus, selections,
+               ``programmed strings,'' etc.  The translations resource,  which
                provides much of xterm's configurability, is a feature of the X
                Toolkit Intrinsics library (Xt).  See the ACTIONS section.
 
        trimSelection (class TrimSelection)
-               If  you  set  highlightSelection, you can see the text which is
-               selected, including any trailing spaces.  Clearing  the  screen
-               (or  a  line)  resets it to a state containing no spaces.  Some
-               lines may contain trailing spaces when  an  application  writes
-               them  to  the screen.  However, you may not wish to paste lines
-               with trailing spaces.  If this resource  is  true,  xterm  will
-               trim  trailing spaces from text which is selected.  It does not
-               affect spaces which result in a wrapped line, nor will it  trim
-               the  trailing  newline  from  your  selection.   The default is
+               If you set highlightSelection, you can see the  text  which  is
+               selected,  including  any trailing spaces.  Clearing the screen
+               (or a line) resets it to a state containing  no  spaces.   Some
+               lines  may  contain  trailing spaces when an application writes
+               them to the screen.  However, you may not wish to  paste  lines
+               with  trailing  spaces.   If  this resource is true, xterm will
+               trim trailing spaces from text which is selected.  It does  not
+               affect  spaces which result in a wrapped line, nor will it trim
+               the trailing newline  from  your  selection.   The  default  is
                ``false.''
 
        underLine (class UnderLine)
                This specifies whether or not text with the underline attribute
                should be underlined.  It may be desirable to disable underlin-
-               ing when color is being used for the underline attribute.   The
+               ing  when color is being used for the underline attribute.  The
                default is ``true.''
 
        useClipping (class UseClipping)
-               Tell  xterm whether to use clipping to keep from producing dots
-               outside the text drawing area.  Originally used to work  around
+               Tell xterm whether to use clipping to keep from producing  dots
+               outside  the text drawing area.  Originally used to work around
                for overstriking effects, this is also needed to work with some
                incorrectly-sized fonts.  The default is ``true.''
 
        utf8 (class Utf8)
-               This specifies whether xterm will run in UTF-8  mode.   If  you
-               set  this resource, xterm also sets the wideChars resource as a
-               side-effect.  The resource is an  integer,  expected  to  range
+               This  specifies  whether  xterm will run in UTF-8 mode.  If you
+               set this resource, xterm also sets the wideChars resource as  a
+               side-effect.   The  resource  is  an integer, expected to range
                from 0 to 3:
 
-               0  UTF-8  mode  is  initially off.  The command-line option +u8
+               0  UTF-8 mode is initially off.  The  command-line  option  +u8
                   sets the resource to this value.  Escape sequences for turn-
                   ing UTF-8 mode on/off are allowed.
 
-               1  UTF-8  mode  is  initially on.  Escape sequences for turning
+               1  UTF-8 mode is initially on.  Escape  sequences  for  turning
                   UTF-8 mode on/off are allowed.
 
                2  The command-line option -u8 sets the resource to this value.
-                  Escape  sequences for turning UTF-8 mode on/off are ignored.
+                  Escape sequences for turning UTF-8 mode on/off are  ignored.
 
-               3  This is the default value of the resource.   It  is  changed
-                  during   initialization  depending  on  whether  the  locale
-                  resource was set, to 0 or 2.  See the  locale  resource  for
+               3  This  is  the  default value of the resource.  It is changed
+                  during  initialization  depending  on  whether  the   locale
+                  resource  was  set,  to 0 or 2.  See the locale resource for
                   additional discussion of non-UTF-8 locales.
 
-               If  you  want  to  set  the value of utf8, it should be in this
-               range.  Other nonzero values are treated  the  same  as  ``1'',
-               i.e.,  UTF-8  mode  is  initially  on, and escape sequences for
+               If you want to set the value of utf8,  it  should  be  in  this
+               range.   Other  nonzero  values  are treated the same as ``1'',
+               i.e., UTF-8 mode is initially  on,  and  escape  sequences  for
                turning UTF-8 mode on/off are allowed.
 
        utf8Fonts (class Utf8Fonts)
@@ -2307,14 +2384,14 @@ RESOURCES
 
        utf8Title (class Utf8Title)
                Applications  can  set  xterm's  title  by  writing  a  control
-               sequence.   Normally  this  control  sequence follows the VT220
-               convention, which encodes the string in ISO-8859-1  and  allows
+               sequence.  Normally this control  sequence  follows  the  VT220
+               convention,  which  encodes the string in ISO-8859-1 and allows
                for an 8-bit string terminator.  If xterm is started in a UTF-8
-               locale, it translates the ISO-8859-1 string to  UTF-8  to  work
+               locale,  it  translates  the ISO-8859-1 string to UTF-8 to work
                with the X libraries which assume the string is UTF-8.
 
                However, some users may wish to write a title string encoded in
-               UTF-8.  Set this resource to ``true'' to  allow  UTF-8  encoded
+               UTF-8.   Set  this  resource to ``true'' to allow UTF-8 encoded
                title strings.  That cancels the translation to UTF-8, allowing
                UTF-8 strings to be displayed as is.
 
@@ -2322,7 +2399,7 @@ RESOURCES
 
        veryBoldColors (class VeryBoldColors)
                Specifies whether to combine video attributes with colors spec-
-               ified  by  colorBD, colorBL, colorRV and colorUL.  The resource
+               ified by colorBD, colorBL, colorRV and colorUL.   The  resource
                value is the sum of values for each attribute:
                  1 for reverse,
                  2 for underline,
@@ -2333,56 +2410,56 @@ RESOURCES
 
        visualBell (class VisualBell)
                Specifies whether or not a visible bell (i.e., flashing) should
-               be  used instead of an audible bell when Control-G is received.
+               be used instead of an audible bell when Control-G is  received.
                The default is ``false.''
 
        visualBellDelay (class VisualBellDelay)
-               Number of milliseconds to delay when displaying a visual  bell.
-               Default  is  100.  If set to zero, no visual bell is displayed.
-               This is useful for very slow displays, e.g., an LCD display  on
+               Number  of milliseconds to delay when displaying a visual bell.
+               Default is 100.  If set to zero, no visual bell  is  displayed.
+               This  is useful for very slow displays, e.g., an LCD display on
                a laptop.
 
        vt100Graphics (class VT100Graphics)
                This specifies whether xterm will interpret VT100 graphic char-
-               acter escape sequences while in UTF-8  mode.   The  default  is
+               acter  escape  sequences  while  in UTF-8 mode.  The default is
                ``true'', to provide support for various legacy applications.
 
        wideBoldFont (class WideBoldFont)
-               This  option  specifies the font to be used for displaying bold
-               wide text.  By default, it will attempt to use a font twice  as
-               wide  as  the  font that will be used to draw bold text.  If no
+               This option specifies the font to be used for  displaying  bold
+               wide  text.  By default, it will attempt to use a font twice as
+               wide as the font that will be used to draw bold  text.   If  no
                doublewidth font is found, it will improvise, by stretching the
                bold font.
 
        wideChars (class WideChars)
-               Specifies  if  xterm  should  respond to control sequences that
+               Specifies if xterm should respond  to  control  sequences  that
                process 16-bit characters.  The default is ``false.''
 
        wideFont (class WideFont)
-               This option specifies the font to be used for  displaying  wide
-               text.   By default, it will attempt to use a font twice as wide
-               as the font that will be used to draw normal text.  If no  dou-
-               blewidth  font  is  found, it will improvise, by stretching the
+               This  option  specifies the font to be used for displaying wide
+               text.  By default, it will attempt to use a font twice as  wide
+               as  the font that will be used to draw normal text.  If no dou-
+               blewidth font is found, it will improvise,  by  stretching  the
                normal font.
 
        ximFont (class XimFont)
-               This option specifies the font to be used  for  displaying  the
+               This  option  specifies  the font to be used for displaying the
                preedit string in the "OverTheSpot" input method.
 
-               In  "OverTheSpot"  preedit  type,  the  preedit (preconversion)
-               string is displayed at the position of the cursor.  It  is  the
+               In "OverTheSpot"  preedit  type,  the  preedit  (preconversion)
+               string  is  displayed at the position of the cursor.  It is the
                XIM server's responsibility to display the preedit string.  The
-               XIM client must inform the XIM server of the  cursor  position.
-               For  best  results, the preedit string must be displayed with a
-               proper font.  Therefore, xterm informs the XIM  server  of  the
-               proper  font.   The  font  is be supplied by a "fontset", whose
-               default value is "*".  This matches every font, the  X  library
-               automatically  chooses fonts with proper charsets.  The ximFont
+               XIM  client  must inform the XIM server of the cursor position.
+               For best results, the preedit string must be displayed  with  a
+               proper  font.   Therefore,  xterm informs the XIM server of the
+               proper font.  The font is be supplied  by  a  "fontset",  whose
+               default  value  is "*".  This matches every font, the X library
+               automatically chooses fonts with proper charsets.  The  ximFont
                resource is provided to override this default font setting.
 
    Tek4014 Widget Resources
-       The following resources are specified as part  of  the  tek4014  widget
-       (class   Tek4014).    These   are   specified   by   patterns  such  as
+       The  following  resources  are  specified as part of the tek4014 widget
+       (class  Tek4014).   These   are   specified   by   patterns   such   as
        "XTerm.tek4014.NAME":
 
        font2 (class Font)
@@ -2398,18 +2475,18 @@ RESOURCES
                Specifies the small font to use in the Tektronix window.
 
        ginTerminator (class GinTerminator)
-               Specifies what character(s) should follow a GIN report or  sta-
-               tus  report.   The  possibilities  are ``none,'' which sends no
-               terminating  characters,  ``CRonly,''  which  sends   CR,   and
-               ``CR&EOT,''  which  sends  both  CR  and  EOT.   The default is
+               Specifies  what character(s) should follow a GIN report or sta-
+               tus report.  The possibilities are  ``none,''  which  sends  no
+               terminating   characters,   ``CRonly,''  which  sends  CR,  and
+               ``CR&EOT,'' which sends  both  CR  and  EOT.   The  default  is
                ``none.''
 
        height (class Height)
                Specifies the height of the Tektronix window in pixels.
 
        initialFont (class InitialFont)
-               Specifies which of the four Tektronix fonts to  use  initially.
-               Values  are  the  same  as  for  the  set-tek-text action.  The
+               Specifies  which  of the four Tektronix fonts to use initially.
+               Values are the  same  as  for  the  set-tek-text  action.   The
                default is ``large.''
 
        width (class Width)
@@ -2417,9 +2494,9 @@ RESOURCES
 
    Menu Resources
        The resources that may be specified for the various menus are described
-       in  the  documentation  for the Athena SimpleMenu widget.  The name and
-       classes of  the  entries  in  each  of  the  menus  are  listed  below.
-       Resources  named  "lineN" where N is a number are separators with class
+       in the documentation for the Athena SimpleMenu widget.   The  name  and
+       classes  of  the  entries  in  each  of  the  menus  are  listed below.
+       Resources named "lineN" where N is a number are separators  with  class
        SmeLine.
 
        The mainMenu has the following entries:
@@ -2555,9 +2632,9 @@ RESOURCES
                This entry invokes the set-titeInhibit(toggle) action.
 
        activeicon (class SmeBSB)
-               This  entry toggles active icons on and off if this feature was
-               compiled into xterm.  It is enabled only if xterm  was  started
-               with  the command line option +ai or the activeIcon resource is
+               This entry toggles active icons on and off if this feature  was
+               compiled  into  xterm.  It is enabled only if xterm was started
+               with the command line option +ai or the activeIcon resource  is
                set to ``true.''
 
        softreset (class SmeBSB)
@@ -2658,7 +2735,7 @@ RESOURCES
                This entry invokes the set-visibility(tek,toggle) action.
 
    Scrollbar Resources
-       The following resources  are  useful  when  specified  for  the  Athena
+       The  following  resources  are  useful  when  specified  for the Athena
        Scrollbar widget:
 
        thickness (class Thickness)
@@ -2673,18 +2750,18 @@ RESOURCES
                alternating pixels for foreground and background color.
 
 POINTER USAGE
-       Once the VT102 window is created, xterm allows you to select  text  and
+       Once  the  VT102 window is created, xterm allows you to select text and
        copy it within the same or other windows.
 
    SELECTION
-       The  selection  functions are invoked when the pointer buttons are used
-       with no modifiers, and when they are used with the ``shift'' key.   The
-       assignment  of the functions described below to keys and buttons may be
+       The selection functions are invoked when the pointer buttons  are  used
+       with  no modifiers, and when they are used with the ``shift'' key.  The
+       assignment of the functions described below to keys and buttons may  be
        changed through the resource database; see ACTIONS below.
 
-       Pointer button one (usually left) is used to save  text  into  the  cut
-       buffer.   Move  the  cursor to beginning of the text, and then hold the
-       button down while moving the cursor  to  the  end  of  the  region  and
+       Pointer  button  one  (usually  left) is used to save text into the cut
+       buffer.  Move the cursor to beginning of the text, and  then  hold  the
+       button  down  while  moving  the  cursor  to  the end of the region and
        releasing the button.  The selected text is highlighted and is saved in
        the global cut buffer and made the PRIMARY selection when the button is
        released.  Normally (but see the discussion of on2Clicks, etc):
@@ -2696,80 +2773,80 @@ POINTER USAGE
               -  Quadruple-clicking goes back to characters, etc.
 
        Multiple-click is determined by the time from button up to button down,
-       so you can change the selection unit in  the  middle  of  a  selection.
+       so  you  can  change  the  selection unit in the middle of a selection.
        Logical words and lines selected by double- or triple-clicking may wrap
-       across more than one screen line if lines were wrapped by xterm  itself
-       rather  than by the application running in the window.  If the key/but-
-       ton bindings specify that an X selection is  to  be  made,  xterm  will
-       leave  the selected text highlighted for as long as it is the selection
+       across  more than one screen line if lines were wrapped by xterm itself
+       rather than by the application running in the window.  If the  key/but-
+       ton  bindings  specify  that  an  X selection is to be made, xterm will
+       leave the selected text highlighted for as long as it is the  selection
        owner.
 
-       Pointer button two (usually middle) `types' (pastes) the text from  the
-       PRIMARY  selection, if any, otherwise from the cut buffer, inserting it
+       Pointer  button two (usually middle) `types' (pastes) the text from the
+       PRIMARY selection, if any, otherwise from the cut buffer, inserting  it
        as keyboard input.
 
-       Pointer button three (usually right)  extends  the  current  selection.
+       Pointer  button  three  (usually  right) extends the current selection.
        (Without loss of generality, you can swap ``right'' and ``left'' every-
-       where in the rest of this paragraph.)  If pressed while closer  to  the
-       right  edge  of  the  selection than the left, it extends/contracts the
-       right edge of the selection.  If you contract the  selection  past  the
-       left  edge  of  the  selection, xterm assumes you really meant the left
-       edge, restores the original selection, then extends/contracts the  left
-       edge  of  the  selection.   Extension starts in the selection unit mode
-       that the last selection or extension was performed in; you  can  multi-
+       where  in  the rest of this paragraph.)  If pressed while closer to the
+       right edge of the selection than the  left,  it  extends/contracts  the
+       right  edge  of  the selection.  If you contract the selection past the
+       left edge of the selection, xterm assumes you  really  meant  the  left
+       edge,  restores the original selection, then extends/contracts the left
+       edge of the selection.  Extension starts in  the  selection  unit  mode
+       that  the  last selection or extension was performed in; you can multi-
        ple-click to cycle through them.
 
-       By  cutting  and pasting pieces of text without trailing new lines, you
-       can take text from several places in different windows and form a  com-
-       mand  to  the  shell,  for  example,  or take output from a program and
-       insert it into your favorite editor.  Since cut  buffers  are  globally
-       shared  among  different  applications, you may regard each as a `file'
+       By cutting and pasting pieces of text without trailing new  lines,  you
+       can  take text from several places in different windows and form a com-
+       mand to the shell, for example, or  take  output  from  a  program  and
+       insert  it  into  your favorite editor.  Since cut buffers are globally
+       shared among different applications, you may regard each  as  a  `file'
        whose contents you know.  The terminal emulator and other text programs
-       should  be  treating  it  as  if it were a text file, i.e., the text is
+       should be treating it as if it were a text  file,  i.e.,  the  text  is
        delimited by new lines.
 
    SCROLLING
-       The scroll region displays the position and amount  of  text  currently
-       showing  in  the  window  (highlighted)  relative to the amount of text
+       The  scroll  region  displays the position and amount of text currently
+       showing in the window (highlighted) relative  to  the  amount  of  text
        actually saved.  As more text is saved (up to the maximum), the size of
        the highlighted area decreases.
 
-       Clicking  button  one  with  the pointer in the scroll region moves the
+       Clicking button one with the pointer in the  scroll  region  moves  the
        adjacent line to the top of the display window.
 
-       Clicking button three moves the top line of the display window down  to
+       Clicking  button three moves the top line of the display window down to
        the pointer position.
 
-       Clicking  button  two moves the display to a position in the saved text
+       Clicking button two moves the display to a position in the  saved  text
        that corresponds to the pointer's position in the scrollbar.
 
    TEKTRONIX POINTER
-       Unlike the VT102 window, the Tektronix window does not allow the  copy-
-       ing  of  text.   It does allow Tektronix GIN mode, and in this mode the
-       cursor will change from an arrow to a cross.   Pressing  any  key  will
+       Unlike  the VT102 window, the Tektronix window does not allow the copy-
+       ing of text.  It does allow Tektronix GIN mode, and in  this  mode  the
+       cursor  will  change  from  an arrow to a cross.  Pressing any key will
        send that key and the current coordinate of the cross cursor.  Pressing
-       button one, two, or three will return the letters `l',  `m',  and  `r',
-       respectively.   If  the `shift' key is pressed when a pointer button is
+       button  one,  two,  or three will return the letters `l', `m', and `r',
+       respectively.  If the `shift' key is pressed when a pointer  button  is
        pressed, the corresponding upper case letter is sent.  To distinguish a
-       pointer  button  from  a key, the high bit of the character is set (but
-       this is bit is normally stripped unless the terminal mode is  RAW;  see
+       pointer button from a key, the high bit of the character  is  set  (but
+       this  is  bit is normally stripped unless the terminal mode is RAW; see
        tty(4) for details).
 
 MENUS
-       Xterm  has  four  menus, named mainMenu, vtMenu, fontMenu, and tekMenu.
-       Each menu pops up under the correct  combinations  of  key  and  button
+       Xterm has four menus, named mainMenu, vtMenu,  fontMenu,  and  tekMenu.
+       Each  menu  pops  up  under  the correct combinations of key and button
        presses.  Each menu is divided into sections, separated by a horizontal
-       line.  Some menu entries correspond to modes that can  be  altered.   A
-       check  mark appears next to a mode that is currently active.  Selecting
+       line.   Some  menu  entries correspond to modes that can be altered.  A
+       check mark appears next to a mode that is currently active.   Selecting
        one of these modes toggles its state.  Other menu entries are commands;
        selecting one of these performs the indicated function.
 
-       All  of  the  menu entries correspond to X actions.  In the list below,
+       All of the menu entries correspond to X actions.  In  the  list  below,
        the menu label is shown followed by the action's name in parenthesis.
 
    Main Options
-       The xterm mainMenu pops up when the ``control'' key and pointer  button
-       one  are  pressed  in a window.  This menu contains items that apply to
+       The  xterm mainMenu pops up when the ``control'' key and pointer button
+       one are pressed in a window.  This menu contains items  that  apply  to
        both the VT102 and Tektronix windows.  There are several sections:
 
        Commands for managing X events:
@@ -2779,24 +2856,24 @@ MENUS
                      it is visible, and shows it if it is not.
 
               Secure Keyboard (securekbd)
-                     The  Secure Keyboard mode is helpful when typing in pass-
+                     The Secure Keyboard mode is helpful when typing in  pass-
                      words or other sensitive data in an unsecure environment;
-                     see  SECURITY below (but read the limitations carefully).
+                     see SECURITY below (but read the limitations  carefully).
 
               Allow SendEvents (allowsends )
-                     Specifies whether or not synthetic key and button  events
-                     generated  using  the X protocol SendEvent request should
-                     be interpreted or discarded.   This  corresponds  to  the
+                     Specifies  whether or not synthetic key and button events
+                     generated using the X protocol SendEvent  request  should
+                     be  interpreted  or  discarded.   This corresponds to the
                      allowSendEvents resource.
 
               Redraw Window (redraw)
-                     Forces  the X display to repaint; useful in some environ-
+                     Forces the X display to repaint; useful in some  environ-
                      ments.
 
        Commands for capturing output:
 
               Log to File (logging)
-                     Captures text sent to the screen in a logfile, as in  the
+                     Captures  text sent to the screen in a logfile, as in the
                      -l logging option.
 
               Print Window (print)
@@ -2804,27 +2881,27 @@ MENUS
                      in the printerCommand resource.
 
               Redirect to Printer (print-redir)
-                     This sets the printerControlMode to 0 or 2.  You can  use
+                     This  sets the printerControlMode to 0 or 2.  You can use
                      this to turn the printer on as if an application had sent
-                     the appropriate control sequence.  It is also useful  for
-                     switching  the  printer off if an application turns it on
+                     the  appropriate control sequence.  It is also useful for
+                     switching the printer off if an application turns  it  on
                      without resetting the print control mode.
 
        Modes for setting keyboard style:
 
               8-Bit Controls (8-bit-control)
-                     Enabled for VT220 emulation, this controls whether  xterm
+                     Enabled  for VT220 emulation, this controls whether xterm
                      will send 8-bit control sequences rather than using 7-bit
-                     (ASCII) controls, e.g.,  sending  a  byte  in  the  range
-                     128-159  rather  than  the escape character followed by a
-                     second byte.  Xterm  always  interprets  both  8-bit  and
-                     7-bit  control  sequences (see the document Xterm Control
+                     (ASCII)  controls,  e.g.,  sending  a  byte  in the range
+                     128-159 rather than the escape character  followed  by  a
+                     second  byte.   Xterm  always  interprets  both 8-bit and
+                     7-bit control sequences (see the document  Xterm  Control
                      Sequences).   This  corresponds  to  the  eightBitControl
                      resource.
 
               Backarrow Key (BS/DEL) (backarrow key)
-                     Modifies  the  behavior  of  the backarrow key, making it
-                     transmit either a backspace (8) or delete  (127)  charac-
+                     Modifies the behavior of the  backarrow  key,  making  it
+                     transmit  either  a backspace (8) or delete (127) charac-
                      ter.  This corresponds to the backarrowKey resource.
 
               Alt/NumLock Modifiers (num-lock)
@@ -2837,9 +2914,9 @@ MENUS
                      This corresponds to the metaSendsEscape resource.
 
               Delete is DEL (delete-is-del)
-                     Controls whether the Delete key  on  the  editing  keypad
-                     should  send  DEL  (127) or the VT220-style Remove escape
-                     sequence.  This corresponds to the deleteIsDEL  resource.
+                     Controls  whether  the  Delete  key on the editing keypad
+                     should send DEL (127) or the  VT220-style  Remove  escape
+                     sequence.   This corresponds to the deleteIsDEL resource.
 
               Old Function-Keys (oldFunctionKeys)
 
@@ -2850,9 +2927,9 @@ MENUS
               Sun Function-Keys (sunFunctionKeys)
 
               VT220 Keyboard (sunKeyboard)
-                     These  act as a radio-button, selecting one style for the
-                     keyboard  layout.   It  corresponds  to  more  than   one
-                     resource  setting: sunKeyboard, sunFunctionKeys, scoFunc-
+                     These act as a radio-button, selecting one style for  the
+                     keyboard   layout.   It  corresponds  to  more  than  one
+                     resource setting: sunKeyboard, sunFunctionKeys,  scoFunc-
                      tionKeys and hpFunctionKeys ."
 
        Commands for process signalling:
@@ -2868,36 +2945,36 @@ MENUS
               Send TERM Signal (terminate)
 
               Send KILL Signal (kill)
-                     These send the SIGTSTP, SIGCONT, SIGINT, SIGHUP,  SIGTERM
+                     These  send the SIGTSTP, SIGCONT, SIGINT, SIGHUP, SIGTERM
                      and SIGKILL signals respectively, to the process group of
                      the process running under xterm (usually the shell).  The
-                     SIGCONT  function  is  especially  useful if the user has
+                     SIGCONT function is especially useful  if  the  user  has
                      accidentally typed CTRL-Z, suspending the process.
 
               Quit (quit)
-                     Stop processing X events  except  to  support  the  -hold
-                     option,  and then send a SIGHUP signal to the the process
-                     group of the process running  under  xterm  (usually  the
+                     Stop  processing  X  events  except  to support the -hold
+                     option, and then send a SIGHUP signal to the the  process
+                     group  of  the  process  running under xterm (usually the
                      shell).
 
 
    VT Options
-       The  vtMenu sets various modes in the VT102 emulation, and is popped up
-       when the ``control'' key and pointer button  two  are  pressed  in  the
+       The vtMenu sets various modes in the VT102 emulation, and is popped  up
+       when  the  ``control''  key  and  pointer button two are pressed in the
        VT102 window.
 
        VT102/VT220 Modes:
 
               Enable Scrollbar (scrollbar)
-                     Enable  (or  disable) the scrollbar.  This corresponds to
+                     Enable (or disable) the scrollbar.  This  corresponds  to
                      the -sb option and the scrollBar resource.
 
               Enable Jump Scroll (jumpscroll)
-                     Enable (or disable) jump scrolling.  This corresponds  to
+                     Enable  (or disable) jump scrolling.  This corresponds to
                      the -j option and the jumpScroll resource.
 
               Enable Reverse Video (reversevideo)
-                     Enable  (or  disable) reverse-video.  This corresponds to
+                     Enable (or disable) reverse-video.  This  corresponds  to
                      the -rv option and the reverseVideo resource.
 
               Enable Auto Wraparound (autowrap)
@@ -2910,56 +2987,56 @@ MENUS
 
               Enable Auto Linefeed (autolinefeed)
                      Enable (or disable) auto-linefeed.  This is the VT102 NEL
-                     function,  which  causes  the emulator to emit a linefeed
-                     after each carriage return.  There  is  no  corresponding
+                     function, which causes the emulator to  emit  a  linefeed
+                     after  each  carriage  return.  There is no corresponding
                      command-line option or resource setting.
 
               Enable Application Cursor Keys (appcursor)
                      Enable (or disable) application cursor keys.  This corre-
-                     sponds to the appcursorDefault  resource.   There  is  no
+                     sponds  to  the  appcursorDefault  resource.  There is no
                      corresponding command-line option.
 
               Enable Application Keypad (appkeypad)
                      Enable (or disable) application keypad keys.  This corre-
-                     sponds to the appkeypadDefault  resource.   There  is  no
+                     sponds  to  the  appkeypadDefault  resource.  There is no
                      corresponding command-line option.
 
               Scroll to Bottom on Key Press (scrollkey)
-                     Enable  (or  disable)  scrolling  to  the  bottom  of the
-                     scrolling region on a keypress.  This corresponds to  the
+                     Enable (or  disable)  scrolling  to  the  bottom  of  the
+                     scrolling  region on a keypress.  This corresponds to the
                      -sk option and the scrollKey resource.
 
               Scroll to Bottom on Tty Output (scrollttyoutput)
-                     Enable  (or  disable)  scrolling  to  the  bottom  of the
-                     scrolling region on output to the terminal.  This  corre-
-                     sponds   to   the  -si  option  and  the  scrollTtyOutput
+                     Enable (or  disable)  scrolling  to  the  bottom  of  the
+                     scrolling  region on output to the terminal.  This corre-
+                     sponds  to  the  -si  option  and   the   scrollTtyOutput
                      resource.
 
               Allow 80/132 Column Switching (allow132)
                      Enable (or disable) switching between 80 and 132 columns.
-                     This   corresponds  to  the  -132  option  and  the  c132
+                     This  corresponds  to  the  -132  option  and  the   c132
                      resource.
 
               Keep Selection (keepSelection)
-                     Tell xterm whether to disown the selection when it  stops
-                     highlighting  it,  e.g., when an application modifies the
-                     display so that it no longer matches the text  which  has
-                     been  highlighted.  As long as xterm continues to own the
+                     Tell  xterm whether to disown the selection when it stops
+                     highlighting it, e.g., when an application  modifies  the
+                     display  so  that it no longer matches the text which has
+                     been highlighted.  As long as xterm continues to own  the
                      selection, it can provide the corresponding text to other
-                     clients  via  cut/paste.  This corresponds to the keepSe-
+                     clients via cut/paste.  This corresponds to  the  keepSe-
                      lection resource.  There is no corresponding command-line
                      option.
 
               Select to Clipboard (selectToClipboard)
-                     Tell  xterm  whether  to use the PRIMARY or CLIPBOARD for
-                     SELECT tokens in the  translations  resource  which  maps
+                     Tell xterm whether to use the PRIMARY  or  CLIPBOARD  for
+                     SELECT  tokens  in  the  translations resource which maps
                      keyboard and mouse actions to select/paste actions.  This
-                     corresponds to the selectToClipboard resource.  There  is
+                     corresponds  to the selectToClipboard resource.  There is
                      no corresponding command-line option.
 
               Enable Visual Bell (visualbell)
                      Enable (or disable) visible bell (i.e., flashing) instead
-                     of an audible bell.  This corresponds to the  -vb  option
+                     of  an  audible bell.  This corresponds to the -vb option
                      and the visualBell resource.
 
               Enable Bell Urgency (bellIsUrgent)
@@ -2968,22 +3045,22 @@ MENUS
                      resource.
 
               Enable Pop on Bell (poponbell)
-                     Enable  (or disable) raising of the window when Control-G
+                     Enable (or disable) raising of the window when  Control-G
                      is received.  This corresponds to the -pop option and the
                      popOnBell resource.
 
               Enable Blinking Cursor (cursorblink)
-                     Enable  (or  disable)  the blinking-cursor feature.  This
-                     corresponds  to  the  -bc  option  and  the   cursorBlink
+                     Enable (or disable) the  blinking-cursor  feature.   This
+                     corresponds   to  the  -bc  option  and  the  cursorBlink
                      resource.  There is also an escape sequence (see the doc-
-                     ument Xterm Control Sequences).  The menu entry  and  the
-                     escape  sequence  states  are XOR'd: if both are enabled,
-                     the cursor will not blink, if only one  is  enabled,  the
+                     ument  Xterm  Control Sequences).  The menu entry and the
+                     escape sequence states are XOR'd: if  both  are  enabled,
+                     the  cursor  will  not blink, if only one is enabled, the
                      cursor will blink.
 
               Enable Alternate Screen Switching (titeInhibit)
-                     Enable  (or  disable)  switching  between  the normal and
-                     alternate screens.  This corresponds to  the  titeInhibit
+                     Enable (or disable)  switching  between  the  normal  and
+                     alternate  screens.   This corresponds to the titeInhibit
                      resource.  There is no corresponding command-line option.
 
               Enable Active Icon (activeicon)
@@ -2993,19 +3070,19 @@ MENUS
        VT102/VT220 Commands:
 
               Do Soft Reset (softreset)
-                     Reset  scroll  regions.  This can be convenient when some
-                     program has  left  the  scroll  regions  set  incorrectly
+                     Reset scroll regions.  This can be convenient  when  some
+                     program  has  left  the  scroll  regions  set incorrectly
                      (often a problem when using VMS or TOPS-20).  This corre-
                      sponds to the VT220 DECSTR control sequence.
 
               Do Full Reset (hardreset)
                      The full reset entry will clear the screen, reset tabs to
-                     every  eight  columns, and reset the terminal modes (such
-                     as wrap and smooth scroll) to their initial  states  just
-                     after  xterm  has  finished  processing  the command line
-                     options.  This  corresponds  to  the  VT102  RIS  control
-                     sequence,  with  a few obvious differences.  For example,
-                     your session is not disconnected as a  real  VT102  would
+                     every eight columns, and reset the terminal  modes  (such
+                     as  wrap  and smooth scroll) to their initial states just
+                     after xterm has  finished  processing  the  command  line
+                     options.   This  corresponds  to  the  VT102  RIS control
+                     sequence, with a few obvious differences.   For  example,
+                     your  session  is  not disconnected as a real VT102 would
                      do.
 
               Reset and Clear Saved Lines (clearsavedlines)
@@ -3015,20 +3092,20 @@ MENUS
 
               Show Tek Window (tekshow)
                      When enabled, pops the Tektronix 4014 window up (makes it
-                     visible).  When disabled, hides the Tektronix  4014  win-
+                     visible).   When  disabled, hides the Tektronix 4014 win-
                      dow.
 
               Switch to Tek Mode (tekmode)
-                     When  enabled, pops the Tektronix 4014 window up if it is
-                     not already visible, and switches  the  input  stream  to
-                     that  window.   When  disabled,  hides the Tektronix 4014
+                     When enabled, pops the Tektronix 4014 window up if it  is
+                     not  already  visible,  and  switches the input stream to
+                     that window.  When disabled,  hides  the  Tektronix  4014
                      window and switches input back to the VTxxx window.
 
               Hide VT Window (vthide)
                      When enabled, hides the VTxxx window, shows the Tektronix
-                     4014  window  if  it was not already visible and switches
-                     the input stream to that window.   When  disabled,  shows
-                     the  VTxxx  window, and switches the input stream to that
+                     4014 window if it was not already  visible  and  switches
+                     the  input  stream  to that window.  When disabled, shows
+                     the VTxxx window, and switches the input stream  to  that
                      window.
 
               Show Alternate Screen (altscreen)
@@ -3038,74 +3115,74 @@ MENUS
 
 
    VT Fonts
-       The fontMenu pops up when when the ``control'' key and  pointer  button
+       The  fontMenu  pops up when when the ``control'' key and pointer button
        three are pressed in a window.  It sets the font used in the VT102 win-
        dow, or modifies the way the font is specified or displayed.  There are
        three sections.
 
-       The  first section allows you to select the font from a set of alterna-
+       The first section allows you to select the font from a set of  alterna-
        tives:
 
               Default (fontdefault)
-                     Set the font to the default,  i.e.,  that  given  by  the
+                     Set  the  font  to  the  default, i.e., that given by the
                      *VT100.font resource.
 
               Unreadable (font1)
-                     Set  the font to that given by the *VT100.font1 resource.
+                     Set the font to that given by the *VT100.font1  resource.
 
               Tiny (font2)
-                     Set the font to that given by the *VT100.font2  resource.
+                     Set  the font to that given by the *VT100.font2 resource.
 
               Small (font3)
-                     Set  the font to that given by the *VT100.font3 resource.
+                     Set the font to that given by the *VT100.font3  resource.
 
               Medium (font4)
-                     Set the font to that given by the *VT100.font4  resource.
+                     Set  the font to that given by the *VT100.font4 resource.
 
               Large (font5)
-                     Set  the font to that given by the *VT100.font5 resource.
+                     Set the font to that given by the *VT100.font5  resource.
 
               Huge (font6)
-                     Set the font to that given by the *VT100.font6  resource.
+                     Set  the font to that given by the *VT100.font6 resource.
 
               Escape Sequence
                      This allows you to set the font last specified by the Set
-                     Font escape sequence  (see  the  document  Xterm  Control
+                     Font  escape  sequence  (see  the  document Xterm Control
                      Sequences).
 
               Selection (fontsel)
-                     This  allows  you  to  set the font specified the current
-                     selection as a font name (if  the  PRIMARY  selection  is
+                     This allows you to set the  font  specified  the  current
+                     selection  as  a  font  name (if the PRIMARY selection is
                      owned).
 
        The second section allows you to modify the way it is displayed:
 
               Line-Drawing Characters (font-linedrawing)
-                     When  set, tells xterm to draw its own line-drawing char-
-                     acters.  Otherwise  it  relies  on  the  font  containing
+                     When set, tells xterm to draw its own line-drawing  char-
+                     acters.   Otherwise  it  relies  on  the  font containing
                      these.  Compare to the forceBoxChars resource.
 
               Doublesized Characters (font-doublesize)
                      When set, xterm may ask the font server to produce scaled
-                     versions of the normal font, for VT102 double-size  char-
+                     versions  of the normal font, for VT102 double-size char-
                      acters.
 
        The third section allows you to modify the way it is specified:
 
               TrueType Fonts (render-font)
-                     If  the  renderFont and corresponding resources were set,
+                     If the renderFont and corresponding resources  were  set,
                      this is a further control whether xterm will actually use
                      the Xft library calls to obtain a font.
 
               UTF-8 (utf8-mode)
                      This  controls  whether  xterm  uses  UTF-8  encoding  of
-                     input/output.  It is  useful  for  temporarily  switching
-                     xterm  to display text from an application which does not
+                     input/output.   It  is  useful  for temporarily switching
+                     xterm to display text from an application which does  not
                      follow the locale settings.
 
    TEK Options
-       The tekMenu sets various modes  in  the  Tektronix  emulation,  and  is
-       popped  up  when the ``control'' key and pointer button two are pressed
+       The  tekMenu  sets  various  modes  in  the Tektronix emulation, and is
+       popped up when the ``control'' key and pointer button two  are  pressed
        in the Tektronix window.  The current font size is checked in the modes
        section of the menu.
 
@@ -3135,73 +3212,73 @@ MENUS
               Hide Tek Window (tekhide)
 
 SECURITY
-       X  environments  differ in their security consciousness.  Most servers,
-       run under xdm, are capable of using a  ``magic  cookie''  authorization
+       X environments differ in their security consciousness.   Most  servers,
+       run  under  xdm,  are capable of using a ``magic cookie'' authorization
        scheme that can provide a reasonable level of security for many people.
-       If your server is only using a host-based mechanism to  control  access
-       to  the server (see xhost(1)), then if you enable access for a host and
-       other users are also permitted to run clients on that same host, it  is
-       possible  that someone can run an application which uses the basic ser-
-       vices of the X protocol to snoop on your activities,  potentially  cap-
-       turing  a  transcript  of  everything  you  type  at the keyboard.  Any
-       process which has access to your X display can manipulate  it  in  ways
+       If  your  server is only using a host-based mechanism to control access
+       to the server (see xhost(1)), then if you enable access for a host  and
+       other  users are also permitted to run clients on that same host, it is
+       possible that someone can run an application which uses the basic  ser-
+       vices  of  the X protocol to snoop on your activities, potentially cap-
+       turing a transcript of  everything  you  type  at  the  keyboard.   Any
+       process  which  has  access to your X display can manipulate it in ways
        that you might not anticipate, even redirecting your keyboard to itself
-       and sending events to your application's windows.  This  is  true  even
-       with  the ``magic cookie'' authorization scheme.  While the allowSendE-
-       vents provides some protection  against  rogue  applications  tampering
+       and  sending  events  to your application's windows.  This is true even
+       with the ``magic cookie'' authorization scheme.  While the  allowSendE-
+       vents  provides  some  protection  against rogue applications tampering
        with your programs, guarding against a snooper is harder.
 
-       The  possibility of an application spying on your keystrokes is of par-
-       ticular concern when you want to type in a password or other  sensitive
-       data.   The best solution to this problem is to use a better authoriza-
-       tion mechanism than is provided by X.  Given all of  these  caveats,  a
+       The possibility of an application spying on your keystrokes is of  par-
+       ticular  concern when you want to type in a password or other sensitive
+       data.  The best solution to this problem is to use a better  authoriza-
+       tion  mechanism  than  is provided by X.  Given all of these caveats, a
        simple mechanism exists for protecting keyboard input in xterm.
 
-       The  xterm  menu  (see  MENUS  above)  contains a Secure Keyboard entry
-       which, when enabled, attempts to ensure  that  all  keyboard  input  is
+       The xterm menu (see MENUS  above)  contains  a  Secure  Keyboard  entry
+       which,  when  enabled,  attempts  to  ensure that all keyboard input is
        directed only to xterm (using the GrabKeyboard protocol request).  When
-       an application prompts you for a password (or  other  sensitive  data),
-       you  can  enable  Secure Keyboard using the menu, type in the data, and
-       then disable Secure Keyboard using the menu again.  This  ensures  that
-       you  know  which window is accepting your keystrokes.  It cannot ensure
-       that there are no processes which have access to your  X  display  that
+       an  application  prompts  you for a password (or other sensitive data),
+       you can enable Secure Keyboard using the menu, type in  the  data,  and
+       then  disable  Secure Keyboard using the menu again.  This ensures that
+       you know which window is accepting your keystrokes.  It  cannot  ensure
+       that  there  are  no processes which have access to your X display that
        might be observing the keystrokes as well.
 
-       Only  one X client at a time can grab the keyboard, so when you attempt
-       to enable Secure Keyboard it may fail.  In this  case,  the  bell  will
-       sound.   If the Secure Keyboard succeeds, the foreground and background
+       Only one X client at a time can grab the keyboard, so when you  attempt
+       to  enable  Secure  Keyboard  it may fail.  In this case, the bell will
+       sound.  If the Secure Keyboard succeeds, the foreground and  background
        colors will be exchanged (as if you selected the Reverse Video entry in
-       the  Modes  menu);  they  will  be exchanged again when you exit secure
-       mode.  If the colors do not switch, then you should be very  suspicious
-       that  you  are  being spoofed.  If the application you are running dis-
-       plays a prompt before asking for the password, it is  safest  to  enter
+       the Modes menu); they will be exchanged  again  when  you  exit  secure
+       mode.   If the colors do not switch, then you should be very suspicious
+       that you are being spoofed.  If the application you  are  running  dis-
+       plays  a  prompt  before asking for the password, it is safest to enter
        secure mode before the prompt gets displayed, and to make sure that the
-       prompt gets displayed correctly (in the new colors),  to  minimize  the
+       prompt  gets  displayed  correctly (in the new colors), to minimize the
        probability of spoofing.  You can also bring up the menu again and make
        sure that a check mark appears next to the entry.
 
-       Secure Keyboard mode will be disabled automatically if your xterm  win-
-       dow  becomes  iconified  (or  otherwise unmapped), or if you start up a
+       Secure  Keyboard mode will be disabled automatically if your xterm win-
+       dow becomes iconified (or otherwise unmapped), or if  you  start  up  a
        reparenting window manager (that places a title bar or other decoration
-       around  the  window) while in Secure Keyboard mode.  (This is a feature
-       of the X protocol not easily overcome.)  When this happens,  the  fore-
-       ground  and  background  colors will be switched back and the bell will
+       around the window) while in Secure Keyboard mode.  (This is  a  feature
+       of  the  X protocol not easily overcome.)  When this happens, the fore-
+       ground and background colors will be switched back and  the  bell  will
        sound in warning.
 
 CHARACTER CLASSES
-       Clicking the left pointer button twice  in  rapid  succession  (double-
+       Clicking  the  left  pointer  button twice in rapid succession (double-
        clicking) causes all characters of the same class (e.g., letters, white
        space, punctuation) to be selected as a ``word''.  Since different peo-
-       ple  have  different preferences for what should be selected (for exam-
-       ple, should filenames be selected as a whole or only the separate  sub-
-       names),  the  default  mapping can be overridden through the use of the
+       ple have different preferences for what should be selected  (for  exam-
+       ple,  should filenames be selected as a whole or only the separate sub-
+       names), the default mapping can be overridden through the  use  of  the
        charClass (class CharClass) resource.
 
        This resource is a series of comma-separated of range:value pairs.  The
        range is either a single number or low-high in the range of 0 to 65535,
-       corresponding to the code for the character or characters  to  be  set.
-       The  value  is arbitrary, although the default table uses the character
-       number of the first character occurring in the set.  When not in  UTF-8
+       corresponding  to  the  code for the character or characters to be set.
+       The value is arbitrary, although the default table uses  the  character
+       number  of the first character occurring in the set.  When not in UTF-8
        mode, only the first 256 bytes of this table will be used.
 
        The default table starts as follows -
@@ -3272,22 +3349,22 @@ CHARACTER CLASSES
            /*  o/   u`   u'   u^   u:   y'    P   y: */
                48,  48,  48,  48,  48,  48,  48,  48};
 
-       For  example,  the string ``33:48,37:48,45-47:48,38:48'' indicates that
-       the exclamation mark, percent sign, dash, period, slash, and  ampersand
-       characters  should  be  treated the same way as characters and numbers.
+       For example, the string ``33:48,37:48,45-47:48,38:48''  indicates  that
+       the  exclamation mark, percent sign, dash, period, slash, and ampersand
+       characters should be treated the same way as  characters  and  numbers.
        This is useful for cutting and pasting electronic mailing addresses and
        filenames.
 
 ACTIONS
-       It  is  possible  to  rebind  keys  (or sequences of keys) to arbitrary
+       It is possible to rebind keys  (or  sequences  of  keys)  to  arbitrary
        strings for input, by changing the translations resources for the vt100
-       or  tek4014  widgets.   Changing  the  translations resource for events
+       or tek4014 widgets.  Changing  the  translations  resource  for  events
        other than key and button events is not expected, and will cause unpre-
-       dictable  behavior.   The following actions are provided for use within
+       dictable behavior.  The following actions are provided for  use  within
        the vt100 or tek4014 translations resources:
 
        allow-send-events(on/off/toggle)
-               This action set or toggles the allowSendEvents resource and  is
+               This  action set or toggles the allowSendEvents resource and is
                also invoked by the allowsends entry in mainMenu.
 
        alt-sends-escape()
@@ -3298,28 +3375,28 @@ ACTIONS
                above or below the base volume.
 
        clear-saved-lines()
-               This action does hard-reset() (see below) and also  clears  the
-               history  of  lines saved off the top of the screen.  It is also
-               invoked from the clearsavedlines entry in vtMenu.   The  effect
+               This  action  does hard-reset() (see below) and also clears the
+               history of lines saved off the top of the screen.  It  is  also
+               invoked  from  the clearsavedlines entry in vtMenu.  The effect
                is identical to a hardware reset (RIS) control sequence.
 
        create-menu(m/v/f/t)
-               This  action  creates one of the menus used by xterm, if it has
+               This action creates one of the menus used by xterm, if  it  has
                not been previously created.  The parameter values are the menu
                names: mainMenu, vtMenu, fontMenu, tekMenu, respectively.
 
        dabbrev-expand()
-               Expands  the  word  before cursor by searching in the preceding
-               text on the screen and  in  the  scrollback  buffer  for  words
-               starting  with  that  abbreviation.  Repeating dabbrev-expand()
+               Expands the word before cursor by searching  in  the  preceding
+               text  on  the  screen  and  in  the scrollback buffer for words
+               starting with that  abbreviation.   Repeating  dabbrev-expand()
                several times in sequence searches for an alternative expansion
                by looking farther back.  Lack of more matches is signaled by a
                beep().  Attempts to expand an empty word (i.e., when cursor is
-               preceded  by  a  space)  yield successively all previous words.
+               preceded by a space) yield  successively  all  previous  words.
                Consecutive identical expansions are ignored.  The word here is
-               defined  as a sequence of non-whitespace characters.  This fea-
-               ture partially emulates the behavior of `dynamic  abbreviation'
-               expansion  in  Emacs  (bound there to M-/).  Here is a resource
+               defined as a sequence of non-whitespace characters.  This  fea-
+               ture  partially emulates the behavior of `dynamic abbreviation'
+               expansion in Emacs (bound there to M-/).  Here  is  a  resource
                setting for xterm which will do the same thing:
 
                    *VT100*translations:    #override \n\
@@ -3333,8 +3410,8 @@ ACTIONS
                This action toggles the state of the deleteIsDEL resource.
 
        dired-button()
-               Handles a button event (other than press and release) by  echo-
-               ing  the  event's position (i.e., character line and column) in
+               Handles  a button event (other than press and release) by echo-
+               ing the event's position (i.e., character line and  column)  in
                the following format:
 
                        ^X ESC G <line+' '> <col+' '>
@@ -3348,7 +3425,7 @@ ACTIONS
                hardreset entry in vtMenu.
 
        ignore()
-               This action ignores the event but checks  for  special  pointer
+               This  action  ignores  the event but checks for special pointer
                position escape sequences.
 
        insert()
@@ -3356,45 +3433,45 @@ ACTIONS
                key that was pressed.
 
        insert-eight-bit()
-               This action inserts an eight-bit (Meta) version of the  charac-
-               ter  or  string associated with the key that was pressed.  This
-               only applies to single-byte values.  The exact  action  depends
-               on  the  value  of  the  metaSendsEscape  and the eightBitInput
+               This  action inserts an eight-bit (Meta) version of the charac-
+               ter or string associated with the key that was  pressed.   This
+               only  applies  to single-byte values.  The exact action depends
+               on the value  of  the  metaSendsEscape  and  the  eightBitInput
                resources.  The metaSendsEscape resource is tested first.
 
-               The term "eight-bit" is misleading: xterm checks if  the  key's
-               value  is  less  than 128.  If so, xterm adds 128 to the value,
-               setting its eighth bit.  Otherwise  xterm  sends  an  ESC  byte
-               before  the key.  In other applications' documentation, that is
+               The  term  "eight-bit" is misleading: xterm checks if the key's
+               value is less than 128.  If so, xterm adds 128  to  the  value,
+               setting  its  eighth  bit.   Otherwise  xterm sends an ESC byte
+               before the key.  In other applications' documentation, that  is
                referred to as a "meta key".
 
        insert-selection(sourcename [, ...])
-               This action inserts the string found in the selection  or  cut-
-               buffer  indicated  by  sourcename.   Sources are checked in the
-               order given (case is significant) until  one  is  found.   Com-
-               monly-used  selections  include:  PRIMARY, SECONDARY, and CLIP-
-               BOARD.  Cut buffers are  typically  named  CUT_BUFFER0  through
+               This  action  inserts the string found in the selection or cut-
+               buffer indicated by sourcename.  Sources  are  checked  in  the
+               order  given  (case  is  significant) until one is found.  Com-
+               monly-used selections include: PRIMARY,  SECONDARY,  and  CLIP-
+               BOARD.   Cut  buffers  are  typically named CUT_BUFFER0 through
                CUT_BUFFER7.
 
        insert-seven-bit()
-               This  action  is a synonym for insert() The term "seven-bit" is
-               misleading: it only implies that xterm does not try to add  128
+               This action is a synonym for insert() The term  "seven-bit"  is
+               misleading:  it only implies that xterm does not try to add 128
                to the key's value as in insert-eight-bit().
 
        interpret(control-sequence)
-               Interpret  the  given  control  sequence locally, i.e., without
-               passing it to the host.  This works by  inserting  the  control
-               sequence  at  the front of the input buffer.  Use "\" to escape
-               octal digits in the string.  Xt does not allow  you  to  put  a
+               Interpret the given control  sequence  locally,  i.e.,  without
+               passing  it  to  the host.  This works by inserting the control
+               sequence at the front of the input buffer.  Use "\"  to  escape
+               octal  digits  in  the  string.  Xt does not allow you to put a
                null character (i.e., "\000") in the string.
 
        keymap(name)
-               This  action  dynamically defines a new translation table whose
-               resource name is name with the suffix Keymap (case is  signifi-
-               cant).   The name None restores the original translation table.
+               This action dynamically defines a new translation  table  whose
+               resource  name is name with the suffix Keymap (case is signifi-
+               cant).  The name None restores the original translation  table.
 
        larger-vt-font()
-               Set the font to the next larger one, based on the  font  dimen-
+               Set  the  font to the next larger one, based on the font dimen-
                sions.  See also set-vt-font().
 
        load-vt-fonts(name[,class])
@@ -3402,54 +3479,54 @@ ACTIONS
                is, load the "*VT100.name.font", resource as "*VT100.font" etc.
                If no name is given, the original set of fontnames is restored.
 
-               Unlike set-vt-font(), this does  not  affect  the  escape-  and
+               Unlike  set-vt-font(),  this  does  not  affect the escape- and
                select-fonts, since those are not based on resource values.  It
-               does affect the fonts loosely organized under  the  ``Default''
+               does  affect  the fonts loosely organized under the ``Default''
                menu entry: font, boldFont, wideFont and wideBoldFont.
 
        maximize()
                Resizes the window to fill the screen.
 
        meta-sends-escape()
-               This  action toggles the state of the metaSendsEscape resource.
+               This action toggles the state of the metaSendsEscape  resource.
 
        popup-menu(menuname)
-               This action displays the specified  popup  menu.   Valid  names
+               This  action  displays  the  specified popup menu.  Valid names
                (case is significant) include:  mainMenu, vtMenu, fontMenu, and
                tekMenu.
 
-       print() This action prints the window and is also invoked by the  print
+       print() This  action prints the window and is also invoked by the print
                entry in mainMenu.
 
        print-redir()
-               This  action  toggles  the  printerControlMode between 0 and 2.
-               The corresponding popup menu entry is useful for switching  the
+               This action toggles the printerControlMode  between  0  and  2.
+               The  corresponding popup menu entry is useful for switching the
                printer off if you happen to change your mind after deciding to
                print random binary files on the terminal.
 
-       quit()  This action sends a SIGHUP to the subprogram and exits.  It  is
+       quit()  This  action sends a SIGHUP to the subprogram and exits.  It is
                also invoked by the quit entry in mainMenu.
 
        redraw()
-               This  action  redraws  the  window  and  is also invoked by the
+               This action redraws the window  and  is  also  invoked  by  the
                redraw entry in mainMenu.
 
        restore()
                Restores the window to the size before it was last maximized.
 
        scroll-back(count [,units [,mouse] ])
-               This action scrolls the text window backward so that text  that
-               had  previously scrolled off the top of the screen is now visi-
+               This  action scrolls the text window backward so that text that
+               had previously scrolled off the top of the screen is now  visi-
                ble.
 
-               The count argument indicates the number of units (which may  be
+               The  count argument indicates the number of units (which may be
                page, halfpage, pixel, or line) by which to scroll.
 
-               An  adjustment can be specified for these values by appending a
+               An adjustment can be specified for these values by appending  a
                "+" or "-" sign followed by a number, e.g., page-2 to specify 2
                lines less than a page.
 
-               If  the  third  parameter mouse is given, the action is ignored
+               If the third parameter mouse is given, the  action  is  ignored
                when mouse reporting is enabled.
 
        scroll-forw(count [,units [,mouse] ])
@@ -3457,58 +3534,58 @@ ACTIONS
                the other direction.
 
        secure()
-               This  action  toggles the Secure Keyboard mode described in the
+               This action toggles the Secure Keyboard mode described  in  the
                section named SECURITY, and is invoked from the securekbd entry
                in mainMenu.
 
        select-cursor-end(destname [, ...])
-               This  action  is similar to select-end except that it should be
+               This action is similar to select-end except that it  should  be
                used with select-cursor-start.
 
        select-cursor-extend()
-               This action is similar to select-extend except that  it  should
+               This  action  is similar to select-extend except that it should
                be used with select-cursor-start.
 
        select-cursor-start()
-               This  action  is  similar to select-start except that it begins
+               This action is similar to select-start except  that  it  begins
                the selection at the current text cursor position.
 
        select-end(destname [, ...])
-               This action puts the currently selected text into  all  of  the
+               This  action  puts  the currently selected text into all of the
                selections or cutbuffers specified by destname.
 
        select-extend()
-               This  action  tracks the pointer and extends the selection.  It
+               This action tracks the pointer and extends the  selection.   It
                should only be bound to Motion events.
 
        select-set()
-               This action stores text that corresponds to the current  selec-
+               This  action stores text that corresponds to the current selec-
                tion, without affecting the selection mode.
 
        select-start()
-               This  action begins text selection at the current pointer loca-
+               This action begins text selection at the current pointer  loca-
                tion.  See the section on POINTER USAGE for information on mak-
                ing selections.
 
        send-signal(signame)
                This action sends the signal named by signame to the xterm sub-
-               process (the shell or program specified  with  the  -e  command
-               line  option)  and  is  also  invoked by the suspend, continue,
-               interrupt, hangup, terminate, and  kill  entries  in  mainMenu.
-               Allowable  signal names are (case is not significant): tstp (if
-               supported by the operating system),  suspend  (same  as  tstp),
-               cont  (if  supported  by the operating system), int, hup, term,
+               process  (the  shell  or  program specified with the -e command
+               line option) and is also  invoked  by  the  suspend,  continue,
+               interrupt,  hangup,  terminate,  and  kill entries in mainMenu.
+               Allowable signal names are (case is not significant): tstp  (if
+               supported  by  the  operating  system), suspend (same as tstp),
+               cont (if supported by the operating system),  int,  hup,  term,
                quit, alrm, alarm (same as alrm) and kill.
 
        set-allow132(on/off/toggle)
-               This action toggles the c132 resource and is also invoked  from
+               This  action toggles the c132 resource and is also invoked from
                the allow132 entry in vtMenu.
 
        set-altscreen(on/off/toggle)
-               This  action toggles between the alternate and current screens.
+               This action toggles between the alternate and current  screens.
 
        set-appcursor(on/off/toggle)
-               This action toggles the handling Application  Cursor  Key  mode
+               This  action  toggles  the handling Application Cursor Key mode
                and is also invoked by the appcursor entry in vtMenu.
 
        set-appkeypad(on/off/toggle)
@@ -3516,35 +3593,35 @@ ACTIONS
                is also invoked by the appkeypad entry in vtMenu.
 
        set-autolinefeed(on/off/toggle)
-               This action toggles automatic insertion  of  linefeeds  and  is
+               This  action  toggles  automatic  insertion of linefeeds and is
                also invoked by the autolinefeed entry in vtMenu.
 
        set-autowrap(on/off/toggle)
-               This  action  toggles  automatic  wrapping of long lines and is
+               This action toggles automatic wrapping of  long  lines  and  is
                also invoked by the autowrap entry in vtMenu.
 
        set-backarrow(on/off/toggle)
-               This action toggles  the  backarrowKey  resource  and  is  also
+               This  action  toggles  the  backarrowKey  resource  and is also
                invoked from the backarrow key entry in vtMenu.
 
        set-bellIsUrgent(on/off/toggle)
-               This  action  toggles  the  bellIsUrgent  resource  and is also
+               This action toggles  the  bellIsUrgent  resource  and  is  also
                invoked by the bellIsUrgent entry in vtMenu.
 
        set-cursorblink(on/off/toggle)
-               This action  toggles  the  cursorBlink  resource  and  is  also
+               This  action  toggles  the  cursorBlink  resource  and  is also
                invoked from the cursorblink entry in vtMenu.
 
        set-cursesemul(on/off/toggle)
-               This  action  toggles  the  curses resource and is also invoked
+               This action toggles the curses resource  and  is  also  invoked
                from the cursesemul entry in vtMenu.
 
        set-font-doublesize(on/off/toggle)
-               This action toggles the fontDoublesize  resource  and  is  also
+               This  action  toggles  the  fontDoublesize resource and is also
                invoked by the font-doublesize entry in fontMenu.
 
        set-hp-function-keys(on/off/toggle)
-               This  action  toggles  the  hpFunctionKeys resource and is also
+               This action toggles the hpFunctionKeys  resource  and  is  also
                invoked by the hpFunctionKeys entry in mainMenu.
 
        set-jumpscroll(on/off/toggle)
@@ -3552,20 +3629,20 @@ ACTIONS
                by the jumpscroll entry in vtMenu.
 
        set-font-linedrawing(on/off/toggle)
-               This  action  toggles  the  xterm's state regarding whether the
-               current font has line-drawing characters and whether it  should
+               This action toggles the xterm's  state  regarding  whether  the
+               current  font has line-drawing characters and whether it should
                draw them directly.  It is also invoked by the font-linedrawing
                entry in fontMenu.
 
        set-keep-selection(on/off/toggle)
-               This action toggles the  keepSelection  resource  and  is  also
+               This  action  toggles  the  keepSelection  resource and is also
                invoked by the keepSelection entry in vtMenu.
 
        set-logging()
                This action toggles the state of the logging option.
 
        set-old-function-keys(on/off/toggle)
-               This  action  toggles  the state of legacy function keys and is
+               This action toggles the state of legacy function  keys  and  is
                also invoked by the oldFunctionKeys entry in mainMenu.
 
        set-marginbell(on/off/toggle)
@@ -3575,7 +3652,7 @@ ACTIONS
                This action toggles the state of the numLock resource.
 
        set-pop-on-bell(on/off/toggle)
-               This action toggles the popOnBell resource and is also  invoked
+               This  action toggles the popOnBell resource and is also invoked
                by the poponbell entry in vtMenu.
 
        set-render-font(on/off/toggle)
@@ -3583,72 +3660,72 @@ ACTIONS
                by the render-font entry in fontMenu.
 
        set-reverse-video(on/off/toggle)
-               This action toggles  the  reverseVideo  resource  and  is  also
+               This  action  toggles  the  reverseVideo  resource  and is also
                invoked by the reversevideo entry in vtMenu.
 
        set-reversewrap(on/off/toggle)
-               This  action  toggles  the  reverseWrap  resource  and  is also
+               This action  toggles  the  reverseWrap  resource  and  is  also
                invoked by the reversewrap entry in vtMenu.
 
        set-scroll-on-key(on/off/toggle)
-               This action toggles the scrollKey resource and is also  invoked
+               This  action toggles the scrollKey resource and is also invoked
                from the scrollkey entry in vtMenu.
 
        set-scroll-on-tty-output(on/off/toggle)
-               This  action  toggles  the scrollTtyOutput resource and is also
+               This action toggles the scrollTtyOutput resource  and  is  also
                invoked from the scrollttyoutput entry in vtMenu.
 
        set-scrollbar(on/off/toggle)
-               This action toggles the scrollbar resource and is also  invoked
+               This  action toggles the scrollbar resource and is also invoked
                by the scrollbar entry in vtMenu.
 
        set-select(on/off/toggle)
-               This  action toggles the selectToClipboard resource and is also
+               This action toggles the selectToClipboard resource and is  also
                invoked by the selectToClipboard entry in vtMenu.
 
        set-sco-function-keys(on/off/toggle)
-               This action toggles the scoFunctionKeys resource  and  is  also
+               This  action  toggles  the scoFunctionKeys resource and is also
                invoked by the scoFunctionKeys entry in mainMenu.
 
        set-sun-function-keys(on/off/toggle)
-               This  action  toggles  the sunFunctionKeys resource and is also
+               This action toggles the sunFunctionKeys resource  and  is  also
                invoked by the sunFunctionKeys entry in mainMenu.
 
        set-sun-keyboard(on/off/toggle)
-               This action  toggles  the  sunKeyboard  resource  and  is  also
+               This  action  toggles  the  sunKeyboard  resource  and  is also
                invoked by the sunKeyboard entry in mainMenu.
 
        set-tek-text(large/2/3/small)
                This action sets font used in the Tektronix window to the value
-               of the resources tektextlarge,  tektext2,  tektext3,  and  tek-
+               of  the  resources  tektextlarge,  tektext2, tektext3, and tek-
                textsmall according to the argument.  It is also invoked by the
                entries of the same names as the resources in tekMenu.
 
        set-terminal-type(type)
-               This action directs output to either the  vt  or  tek  windows,
-               according  to  the type string.  It is also invoked by the tek-
+               This  action  directs  output  to either the vt or tek windows,
+               according to the type string.  It is also invoked by  the  tek-
                mode entry in vtMenu and the vtmode entry in tekMenu.
 
        set-titeInhibit(on/off/toggle)
-               This action toggles the titeInhibit  resource,  which  controls
+               This  action  toggles  the titeInhibit resource, which controls
                switching between the alternate and current screens.
 
        set-toolbar(on/off/toggle)
-               This  action toggles the toolbar feature and is also invoked by
+               This action toggles the toolbar feature and is also invoked  by
                the toolbar entry in mainMenu.
 
        set-utf8-mode(on/off/toggle)
-               This action toggles the utf8 resource and is  also  invoked  by
+               This  action  toggles  the utf8 resource and is also invoked by
                the utf8-mode entry in fontMenu.
 
        set-utf8-title(on/off/toggle)
-               This  action toggles the utf8Title resource and is also invoked
+               This action toggles the utf8Title resource and is also  invoked
                by the utf8-title entry in fontMenu.
 
        set-visibility(vt/tek,on/off/toggle)
-               This action controls whether or not the vt or tek  windows  are
-               visible.   It  is  also  invoked  from  the  tekshow and vthide
-               entries in vtMenu and the vtshow and tekhide  entries  in  tek-
+               This  action  controls whether or not the vt or tek windows are
+               visible.  It is  also  invoked  from  the  tekshow  and  vthide
+               entries  in  vtMenu  and the vtshow and tekhide entries in tek-
                Menu.
 
        set-visual-bell(on/off/toggle)
@@ -3656,83 +3733,83 @@ ACTIONS
                by the visualbell entry in vtMenu.
 
        set-vt-font(d/1/2/3/4/5/6/e/s [,normalfont [, boldfont]])
-               This action sets the font or fonts currently being used in  the
-               VT102  window.   The  first argument is a single character that
+               This  action sets the font or fonts currently being used in the
+               VT102 window.  The first argument is a  single  character  that
                specifies the font to be used:
 
-               d or D indicate the default font (the font initially used  when
+               d  or D indicate the default font (the font initially used when
                       xterm was started),
 
-               1  through  6 indicate the fonts specified by the font1 through
+               1 through 6 indicate the fonts specified by the  font1  through
                       font6 resources,
 
-               e or E indicate the normal and bold fonts that  have  been  set
-                      through  escape  codes  (or  specified as the second and
+               e  or  E  indicate the normal and bold fonts that have been set
+                      through escape codes (or specified  as  the  second  and
                       third action arguments, respectively), and
 
                s or S indicate the font selection (as made by programs such as
                       xfontsel(1)) indicated by the second action argument.
 
-               If  xterm  is  configured  to support wide characters, an addi-
-               tional two optional parameters are recognized for the  e  argu-
+               If xterm is configured to support  wide  characters,  an  addi-
+               tional  two  optional parameters are recognized for the e argu-
                ment: wide font and wide bold font.
 
        smaller-vt-font()
-               Set  the font to the next smaller one, based on the font dimen-
+               Set the font to the next smaller one, based on the font  dimen-
                sions.  See also set-vt-font().
 
        soft-reset()
-               This action resets the scrolling region  and  is  also  invoked
+               This  action  resets  the  scrolling region and is also invoked
                from the softreset entry in vtMenu.  The effect is identical to
                a soft reset (DECSTR) control sequence.
 
        spawn-new-terminal(params)
-               Spawn a new xterm process.  This is available on systems  which
+               Spawn  a new xterm process.  This is available on systems which
                have a modern version of the process filesystem, e.g., "/proc",
                which xterm can read.
 
-               Use the "cwd" process entry, e.g.,  /proc/12345/cwd  to  obtain
-               the  working  directory  of the process which is running in the
+               Use  the  "cwd"  process entry, e.g., /proc/12345/cwd to obtain
+               the working directory of the process which is  running  in  the
                current xterm.
 
-               On  systems  which  have  the  "exe"   process   entry,   e.g.,
-               /proc/12345/exe,  use  this  to  obtain  the actual executable.
+               On   systems   which   have  the  "exe"  process  entry,  e.g.,
+               /proc/12345/exe, use this  to  obtain  the  actual  executable.
                Otherwise, use the $PATH variable to find xterm.
 
-               If parameters are given in the action, pass  them  to  the  new
+               If  parameters  are  given  in the action, pass them to the new
                xterm process.
 
        start-extend()
-               This  action  is similar to select-start except that the selec-
+               This action is similar to select-start except that  the  selec-
                tion is extended to the current pointer location.
 
        start-cursor-extend()
-               This action is similar to select-extend except that the  selec-
+               This  action is similar to select-extend except that the selec-
                tion is extended to the current text cursor position.
 
        string(string)
                This action inserts the specified text string as if it had been
-               typed.  Quotation is necessary if the  string  contains  white-
-               space  or  non-alphanumeric characters.  If the string argument
-               begins with the characters ``0x'', it is interpreted as  a  hex
+               typed.   Quotation  is  necessary if the string contains white-
+               space or non-alphanumeric characters.  If the  string  argument
+               begins  with  the characters ``0x'', it is interpreted as a hex
                character constant.
 
        tek-copy()
-               This  action  copies the escape codes used to generate the cur-
-               rent window contents to a file in the current directory  begin-
-               ning  with  the name COPY.  It is also invoked from the tekcopy
+               This action copies the escape codes used to generate  the  cur-
+               rent  window contents to a file in the current directory begin-
+               ning with the name COPY.  It is also invoked from  the  tekcopy
                entry in tekMenu.
 
        tek-page()
-               This action clears the Tektronix window and is also invoked  by
+               This  action clears the Tektronix window and is also invoked by
                the tekpage entry in tekMenu.
 
        tek-reset()
-               This  action resets the Tektronix window and is also invoked by
+               This action resets the Tektronix window and is also invoked  by
                the tekreset entry in tekMenu.
 
        vi-button()
-               Handles a button event (other than press and release) by  echo-
+               Handles  a button event (other than press and release) by echo-
                ing a control sequence computed from the event's line number in
                the screen relative to the current line:
 
@@ -3740,10 +3817,10 @@ ACTIONS
                or
                        ESC ^N
 
-               according to whether the event is before, or after the  current
-               line,  respectively.   The ^N (or ^P) is repeated once for each
+               according  to whether the event is before, or after the current
+               line, respectively.  The ^N (or ^P) is repeated once  for  each
                line that the event differs from the current line.  The control
-               sequence  is  omitted  altogether if the button event is on the
+               sequence is omitted altogether if the button event  is  on  the
                current line.
 
        visual-bell()
@@ -3802,7 +3879,7 @@ ACTIONS
                                   <BtnDown>:ignore()
 
 
-       The  default  bindings  for  the scrollbar widget are separate from the
+       The default bindings for the scrollbar widget  are  separate  from  the
        VT100 widget:
 
                                  <Btn5Down>: StartScroll(Forward) \n\
@@ -3835,13 +3912,13 @@ ACTIONS
 
 
        Here is an example which uses shifted select/paste to copy to the clip-
-       board,  and  unshifted select/paste for the primary selection.  In each
-       case, a (different) cut buffer is  also  a  target  or  source  of  the
-       select/paste  operation.  It is important to remember however, that cut
-       buffers store data in ISO-8859-1 encoding, while selections  can  store
-       data  in  a  variety  of  formats  and encodings.  While xterm owns the
-       selection, it highlights it.  When it loses the selection,  it  removes
-       the  corresponding  highlight.  But you can still paste from the corre-
+       board, and unshifted select/paste for the primary selection.   In  each
+       case,  a  (different)  cut  buffer  is  also  a target or source of the
+       select/paste operation.  It is important to remember however, that  cut
+       buffers  store  data in ISO-8859-1 encoding, while selections can store
+       data in a variety of formats  and  encodings.   While  xterm  owns  the
+       selection,  it  highlights it.  When it loses the selection, it removes
+       the corresponding highlight.  But you can still paste from  the  corre-
        sponding cut buffer.
 
            *VT100*translations:    #override \n\
@@ -3851,7 +3928,7 @@ ACTIONS
                Shift<BtnUp>:        select-end(CLIPBOARD, CUT_BUFFER1)
 
 
-       Below is a sample how of the keymap() action is  used  to  add  special
+       Below  is  a  sample  how of the keymap() action is used to add special
        keys for entering commonly-typed works:
 
            *VT100.Translations: #override <Key>F13: keymap(dbx)
@@ -3863,8 +3940,8 @@ ACTIONS
                 <Key>F20: string("print ") insert-selection(PRIMARY, CUT_BUFFER0)
 
 
-       Some  people  prefer  using  the  left  pointer button for dragging the
-       scrollbar thumb.  That  can  be  setup  by  altering  the  translations
+       Some people prefer using the  left  pointer  button  for  dragging  the
+       scrollbar  thumb.   That  can  be  setup  by  altering the translations
        resource, e.g.,
 
            *VT100.scrollbar.translations:#override \n\
@@ -3876,41 +3953,41 @@ ACTIONS
 
 
 CONTROL SEQUENCES AND KEYBOARD
-       The  Xterm Control Sequences document lists the control sequences which
-       an application can send xterm to make it  perform  various  operations.
-       Most  of these operations are standardized, from either the DEC or Tek-
-       tronix terminals, or from more widely used standards such as  ISO-6429.
+       The Xterm Control Sequences document lists the control sequences  which
+       an  application  can  send xterm to make it perform various operations.
+       Most of these operations are standardized, from either the DEC or  Tek-
+       tronix  terminals, or from more widely used standards such as ISO-6429.
 
 ENVIRONMENT
        Xterm sets several environment variables:
 
        DISPLAY
-            is  the  display name, pointing to the X server (see DISPLAY NAMES
+            is the display name, pointing to the X server (see  DISPLAY  NAMES
             in X()).
 
-       TERM is set according to the termcap (or terminfo) entry  which  it  is
+       TERM is  set  according  to the termcap (or terminfo) entry which it is
             using as a reference.
 
        WINDOWID
             is set to the X window id number of the xterm window.
 
        XTERM_LOCALE
-            shows  the  locale which was used by xterm on startup.  Some shell
+            shows the locale which was used by xterm on startup.   Some  shell
             initialization scripts may set a different locale.
 
        XTERM_SHELL
-            is set to the pathname of the program which is  invoked.   Usually
+            is  set  to the pathname of the program which is invoked.  Usually
             that is a shell program, e.g., /bin/sh.  Since it is not necessar-
             ily a shell program however, it is distinct from ``SHELL''.
 
        XTERM_VERSION
-            is set to the string displayed by the -version  option.   That  is
-            normally  an  identifier  for the X Window libraries used to build
+            is  set  to  the string displayed by the -version option.  That is
+            normally an identifier for the X Window libraries  used  to  build
             xterm, followed by xterm's patch number in parenthesis.  The patch
-            number  is  also  part  of  the  response  to  a  Secondary Device
+            number is  also  part  of  the  response  to  a  Secondary  Device
             Attributes (DA) control sequence (see Xterm Control Sequences).
 
-       Depending on your system configuration, xterm may also set the  follow-
+       Depending  on your system configuration, xterm may also set the follow-
        ing:
 
        COLUMNS
@@ -3925,16 +4002,16 @@ ENVIRONMENT
             when xterm is configured to update utmp.
 
        SHELL
-            when  xterm  is  configured to update utmp.  It is also set if you
+            when xterm is configured to update utmp.  It is also  set  if  you
             provide the shell name as the optional parameter.
 
        TERMCAP
-            the contents of the termcap entry  corresponding  to  $TERM,  with
-            lines  and  columns  values substituted for the actual size window
+            the  contents  of  the  termcap entry corresponding to $TERM, with
+            lines and columns values substituted for the  actual  size  window
             you have created.
 
        TERMINFO
-            may be defined to a nonstandard location in the configure  script.
+            may  be defined to a nonstandard location in the configure script.
 
 FILES
        The actual pathnames given may differ on your system.
@@ -3949,21 +4026,21 @@ FILES
             the xterm default application resources.
 
        /usr/X11/lib/X11/app-defaults/XTerm-color
-            the  xterm  color application resources.  If your display supports
+            the xterm color application resources.  If your  display  supports
             color, use this
                       *customization: -color
-            in your .Xdefaults file to automatically use  this  resource  file
+            in  your  .Xdefaults  file to automatically use this resource file
             rather than /usr/X11/lib/X11/app-defaults/XTerm.  If you do not do
-            this, xterm uses its compiled-in  default  resource  settings  for
+            this,  xterm  uses  its  compiled-in default resource settings for
             colors.
 
 ERROR MESSAGES
        Most of the fatal error messages from xterm use the following format:
               xterm: Error XXX, errno YYY: ZZZ
-       The  XXX  codes  (which  are used by xterm as its exit-code) are listed
+       The XXX codes (which are used by xterm as  its  exit-code)  are  listed
        below, with a brief explanation.
 
-       1    is used for miscellaneous errors, usually accompanied  by  a  spe-
+       1    is  used  for  miscellaneous errors, usually accompanied by a spe-
             cific message,
 
        11   ERROR_FIONBIO
@@ -4099,21 +4176,21 @@ ERROR MESSAGES
             my_memmove: malloc/realloc failed
 
 BUGS
-       Large  pastes do not work on some systems.  This is not a bug in xterm;
-       it is a bug in the pseudo terminal  driver  of  those  systems.   xterm
+       Large pastes do not work on some systems.  This is not a bug in  xterm;
+       it  is  a  bug  in  the pseudo terminal driver of those systems.  xterm
        feeds large pastes to the pty only as fast as the pty will accept data,
-       but some pty drivers do not return enough information to  know  if  the
+       but  some  pty  drivers do not return enough information to know if the
        write has succeeded.
 
        Many of the options are not resettable after xterm starts.
 
        This program still needs to be rewritten.  It should be split into very
-       modular sections, with the various emulators being completely  separate
-       widgets  that  do not know about each other.  Ideally, you'd like to be
-       able to pick and choose emulator widgets and stick them into  a  single
+       modular  sections, with the various emulators being completely separate
+       widgets that do not know about each other.  Ideally, you'd like  to  be
+       able  to  pick and choose emulator widgets and stick them into a single
        control widget.
 
-       There  needs  to  be  a  dialog box to allow entry of the Tek COPY file
+       There needs to be a dialog box to allow entry  of  the  Tek  COPY  file
        name.
 
 SEE ALSO
@@ -4127,12 +4204,12 @@ AUTHORS
        Far too many people, including:
 
        Loretta Guarino Reid (DEC-UEG-WSL), Joel McCormack (DEC-UEG-WSL), Terry
-       Weissman  (DEC-UEG-WSL),  Edward  Moy  (Berkeley), Ralph R. Swick (MIT-
-       Athena), Mark Vandevoorde (MIT-Athena),  Bob  McNamara  (DEC-MAD),  Jim
+       Weissman (DEC-UEG-WSL), Edward Moy (Berkeley),  Ralph  R.  Swick  (MIT-
+       Athena),  Mark  Vandevoorde  (MIT-Athena),  Bob McNamara (DEC-MAD), Jim
        Gettys (MIT-Athena), Bob Scheifler (MIT X Consortium), Doug Mink (SAO),
-       Steve Pitschke (Stellar), Ron Newman (MIT-Athena), Jim  Fulton  (MIT  X
-       Consortium),  Dave  Serisky  (HP),  Jonathan Kamens (MIT-Athena), Jason
-       Bacon, Stephen P. Wall, David Wexelblat, and Thomas Dickey  (invisible-
+       Steve  Pitschke  (Stellar),  Ron Newman (MIT-Athena), Jim Fulton (MIT X
+       Consortium), Dave Serisky (HP),  Jonathan  Kamens  (MIT-Athena),  Jason
+       Bacon,  Stephen P. Wall, David Wexelblat, and Thomas Dickey (invisible-
        island.net).
 
 

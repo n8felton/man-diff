@@ -30,7 +30,7 @@ DESCRIPTION
      where mountpoint is the directory on which the map is to be mounted, map
      is the name of the map to be mounted, and options is an optional, comma-
      separated list of default mount options to be used by any entries in the
-     map that do not have their own mount options.  The -nobrowse option is
+     map that do not have their own mount options.  The nobrowse option is
      used on maps that have the potential to produce entries too numerous for
      browsing to be practical. This option as used in the master map is dis-
      tinct from nobrowse used as a Mac OS X mount option, which affects the
@@ -38,7 +38,12 @@ DESCRIPTION
 
      A map name beginning with / is the pathname of a file containing the map,
      otherwise the name represents a map to be found as a file in /etc or to
-     be read from Directory Services.
+     be read from Directory Service (and thus from whatever sources Directory
+     Service uses, such as NIS or LDAP servers).
+
+     Note that, in order to get automounter maps from NIS, the "BSD Flat File
+     and NIS" plugin must, in the Directory Utility application, be enabled
+     and configured to "Use NIS domain for authentication".
 
      If more than one entry in the master map has the same mountpoint then all
      but the first are ignored.  For instance, in the following master map:
@@ -108,19 +113,61 @@ Executable Map
      automounter executes the program or script passing the key as an argument
      and receiving the location string on stdout.  If the automounter needs to
      enumerate map keys for a directory listing, it invokes the map with no
-     arguments and expects a newline-separated list of keys on stdout.  For
-     example:
-
-             #!/bin/sh
-             if [ $# = 0 ]; then # List keys
-                     ypcat -k auto_entries | awk '{print $1}'
-                     exit
-             fi
-             # Return location
-             ypmatch $1 auto_entries
+     arguments and expects a newline-separated list of keys on stdout.
 
      If an error occurs, the executable map must return a non-zero exit status
      and no output.
+
+     For example, a map that, when bound to an Open Directory server, has one
+     entry for every user, with the key being the user's login name and the
+     entry being the URL of the user's home directory, could be implemented as
+
+           #!/bin/sh
+           if [ $# = 0 ]; then # List keys
+                   dscl /Search -list Users
+                   exit
+           fi
+           # Return location
+           homedirloc=`dscl /Search -read Users/$1 HomeDirectory`
+           case "$homedirloc" in
+
+           "No such key: HomeDirectory"*)
+                   homedirloc=`dscl /Search -read Users/$1 NFSHomeDirectory`
+                   case "$homedirloc" in
+
+                   "NFSHomeDirectory: /Network/Servers/"*)
+                           #
+                           # NFS home directory
+                           #
+                           echo "$homedirloc" | sed 's;NFSHomeDirectory: /Network/Servers//]*/;1:/2;'
+                           ;;
+
+                   *)
+                           #
+                           # Unknown
+                           #
+                           exit 1
+                           ;;
+                   esac
+                   ;;
+
+           "HomeDirectory: <home_dir><url>smb://"*)
+                   #
+                   # SMB home directory
+                   #
+                   echo "$homedirloc" | sed -e 's;HomeDirectory: <home_dir><url>;;' -e 's;</url><path>;/;' -e 's;</path></home_dir>;;'
+                   ;;
+
+           *)
+                   #
+                   # Unknown
+                   #
+                   exit 1
+                   ;;
+           esac
+
+     (this is a simplified example; it does not handle users who do not have a
+     network home directory, but includes them in the directory listing).
 
 Special Maps
      The special maps have reserved names and are built into the automounter.
@@ -176,5 +223,6 @@ FILES
      /etc/auto_master  The master map file.
 
 SEE ALSO
-     automount(8), automountd(8), autofsd(8), autofs.conf(5)
+     automount(8), automountd(8), autofsd(8), autofs.conf(5), fstab(5),
+     getfsent(3), DirectoryService(8)
 

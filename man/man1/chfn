@@ -92,7 +92,7 @@ ENVIRONMENT
      or the super-user, may edit the information associated with the user.
 
 FILES
-     /tmp/chpass.XXXXXX  temporary copy of the data to edit
+     /etc/chpass.XXXXXX  temporary copy of the data to edit
      /etc/shells         the list of approved shells
 
 SEE ALSO

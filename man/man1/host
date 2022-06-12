@@ -79,12 +79,12 @@ DESCRIPTION
        The -t option is used to select the query type.  type can be any
        recognized query type: CNAME, NS, SOA, SIG, KEY, AXFR, etc. When no
        query type is specified, host automatically selects an appropriate
-       query type. By default it looks for A records, but if the -C option was
-       given, queries will be made for SOA records, and if name is a
-       dotted-decimal IPv4 address or colon-delimited IPv6 address, host will
-       query for PTR records. If a query type of IXFR is chosen the starting
-       serial number can be specified by appending an equal followed by the
-       starting serial number (e.g. -t IXFR=12345678).
+       query type. By default it looks for A, AAAA, and MX records, but if the
+       -C option was given, queries will be made for SOA records, and if name
+       is a dotted-decimal IPv4 address or colon-delimited IPv6 address, host
+       will query for PTR records. If a query type of IXFR is chosen the
+       starting serial number can be specified by appending an equal followed
+       by the starting serial number (e.g. -t IXFR=12345678).
 
        The time to wait for a reply can be controlled through the -W and -w
        options. The -W option makes host wait for wait seconds. If wait is
@@ -116,7 +116,7 @@ SEE ALSO
        dig(1), named(8).
 
 COPYRIGHT
-       Copyright (C) 2004, 2005, 2007 Internet Systems Consortium, Inc.
+       Copyright (C) 2004, 2005, 2007, 2008 Internet Systems Consortium, Inc.
        ("ISC")
        Copyright (C) 2000-2002 Internet Software Consortium.
 

@@ -7,8 +7,8 @@ NAME
 
 SYNOPSIS
        named [-4] [-6] [-c config-file] [-d debug-level] [-f] [-g] [-m flag]
-             [-n #cpus] [-p port] [-s] [-t directory] [-u user] [-v]
-             [-x cache-file]
+             [-n #cpus] [-p port] [-s] [-S #max-socks] [-t directory]
+             [-u user] [-v] [-x cache-file]
 
 DESCRIPTION
        named is a Domain Name System (DNS) server, part of the BIND 9
@@ -64,6 +64,19 @@ OPTIONS
            Write memory usage statistics to stdout on exit.
                   Note: This option is mainly of interest to BIND 9 developers
                   and may be removed or changed in a future release.
+
+       -S #max-socks
+           Allow named to use up to #max-socks sockets.
+                  Warning: This option should be unnecessary for the vast
+                  majority of users. The use of this option could even be
+                  harmful because the specified value may exceed the
+                  limitation of the underlying system API. It is therefore set
+                  only when the default configuration causes exhaustion of
+                  file descriptors and the operational environment is known to
+                  support the specified number of sockets. Note also that the
+                  actual maximum number is normally a little fewer than the
+                  specified value because named reserves some file descriptors
+                  for its internal use.
 
        -t directory
            Chroot to directory after processing the command line arguments,
@@ -127,7 +140,7 @@ AUTHOR
        Internet Systems Consortium
 
 COPYRIGHT
-       Copyright (C) 2004-2007 Internet Systems Consortium, Inc. ("ISC")
+       Copyright (C) 2004-2008 Internet Systems Consortium, Inc. ("ISC")
        Copyright (C) 2000, 2001, 2003 Internet Software Consortium.
 
 

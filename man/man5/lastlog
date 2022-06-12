@@ -7,7 +7,7 @@ SYNOPSIS
      #include <utmp.h>
 
 DESCRIPTION
-     The interfaces in file <utmp.h> are all DEPRECIATED and are only provided
+     The interfaces in file <utmp.h> are all DEPRECATED and are only provided
      for compatibility with previous releases of Mac OS X.  See pututxline(3)
      and utmpx(5) for the supported interfaces.
 

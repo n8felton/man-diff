@@ -79,8 +79,8 @@ LIMITATIONS
        Several error messages could be clearer.
 
 SEE ALSO
-       rndc.conf(5), named(8), named.conf(5), ndc(8), BIND 9 Administrator
-       Reference Manual.
+       rndc.conf(5), rndc-confgen(8), named(8), named.conf(5), ndc(8), BIND 9
+       Administrator Reference Manual.
 
 AUTHOR
        Internet Systems Consortium

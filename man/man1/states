@@ -7,8 +7,8 @@ NAME
 
 
 SYNOPSIS
-       states [-hV] [-D var=val] [-f file] [-o outputfile] [-s startstate] [-W
-       level] [filename ...]
+       states  [-hvV]  [-D  var=val]  [-f  file] [-o outputfile] [-p path] [-s
+       startstate] [-W level] [filename ...]
 
 
 DESCRIPTION
@@ -48,9 +48,16 @@ OPTIONS
        -o file, --output=file
                Save output to file file instead of printing it to stdout.
 
+       -p path, --path=path
+               Set the load path to path.   The  load  path  defaults  to  the
+               directory, from which the state definitions file is loaded.
+
        -s state, --state=state
-               Start execution from state state.  This  definition  overwrites
+               Start  execution  from state state.  This definition overwrites
                start state resolved from the start block.
+
+       -v, --verbose
+               Increase the program verbosity.
 
        -V, --version
                Print states version and exit.
@@ -64,15 +71,15 @@ OPTIONS
 
 
 STATES PROGRAM FILES
-       States program  files  can  contain  on  start  block,  startrules  and
-       namerules  blocks  to  specify the initial state, state definitions and
+       States  program  files  can  contain  on  start  block,  startrules and
+       namerules blocks to specify the initial state,  state  definitions  and
        expressions.
 
-       The start block is the main() of the states program, it is executed  on
-       script  startup  for each input file and it can perform any initializa-
-       tion the script needs.  It normally also calls  the  check_startrules()
-       and  check_namerules()  primitives which resolve the initial state from
-       the input file name or the data found from the begining  of  the  input
+       The  start block is the main() of the states program, it is executed on
+       script startup for each input file and it can perform  any  initializa-
+       tion  the  script needs.  It normally also calls the check_startrules()
+       and check_namerules() primitives which resolve the initial  state  from
+       the  input  file  name or the data found from the begining of the input
        file.  Here is a sample start block which initializes two variables and
        does the standard start state resolving:
 
@@ -84,14 +91,14 @@ STATES PROGRAM FILES
                 check_namerules ();
               }
 
-       Once the start block is processed, the input  processing  is  continued
+       Once  the  start  block is processed, the input processing is continued
        from the initial state.
 
-       The  initial  state  is  resolved  by  the  information  found from the
-       startrules and namerules blocks.  Both blocks contain  regular  expres-
-       sion  -  symbol  pairs, when the regular expression is matched from the
-       name of from the beginning of the input  file,  the  initial  state  is
-       named  by  the  corresponding symbol.  For example, the following start
+       The initial state  is  resolved  by  the  information  found  from  the
+       startrules  and  namerules blocks.  Both blocks contain regular expres-
+       sion - symbol pairs, when the regular expression is  matched  from  the
+       name  of  from  the  beginning  of the input file, the initial state is
+       named by the corresponding symbol.  For example,  the  following  start
        and name rules can distinguish C and Fortran files:
 
               namerules
@@ -106,16 +113,16 @@ STATES PROGRAM FILES
                 /- fortran -/   fortran;
               }
 
-       If these rules are used with the previously shown start  block,  states
-       first  check  the beginning of input file.  If it has string -*- c -*-,
-       the file is assumed to contain C code and  the  processing  is  started
+       If  these  rules are used with the previously shown start block, states
+       first check the beginning of input file.  If it has string -*-  c  -*-,
+       the  file  is  assumed  to contain C code and the processing is started
        from state called c.  If the beginning of the input file has string -*-
-       fortran -*-, the initial state is fortran.  If none of the start  rules
-       matched,  the name of the input file is matched with the namerules.  If
-       the name ends to suffix c or C, we go to state c.  If the suffix  is  f
+       fortran  -*-, the initial state is fortran.  If none of the start rules
+       matched, the name of the input file is matched with the namerules.   If
+       the  name  ends to suffix c or C, we go to state c.  If the suffix is f
        or F, the initial state is fortran.
 
-       If  both start and name rules failed to resolve the start state, states
+       If both start and name rules failed to resolve the start state,  states
        just copies its input to output unmodified.
 
        The start state can also be specified from the command line with option
@@ -125,40 +132,45 @@ STATES PROGRAM FILES
 
        state { expr {statements} ... }
 
-       where  expr  is: a regular expression, special expression or symbol and
-       statements is a list  of  statements.   When  the  expression  expr  is
+       where expr is: a regular expression, special expression or  symbol  and
+       statements  is  a  list  of  statements.   When  the expression expr is
        matched from the input, the statement block is executed.  The statement
        block can call states' primitives, user-defined subroutines, call other
-       states,  etc.  Once the block is executed, the input processing is con-
-       tinued from the current intput position (which might have been  changed
+       states, etc.  Once the block is executed, the input processing is  con-
+       tinued  from the current intput position (which might have been changed
        if the statement block called other states).
 
-       Special  expressions  BEGIN  and  END can be used in the place of expr.
-       Expression BEGIN matches the beginning  of  the  state,  its  block  is
-       called  when  the  state is entered.  Expression END matches the end of
+       Special expressions BEGIN and END can be used in  the  place  of  expr.
+       Expression  BEGIN  matches  the  beginning  of  the state, its block is
+       called when the state is entered.  Expression END matches  the  end  of
        the state, its block is executed when states leaves the state.
 
        If expr is a symbol, its value is looked up from the global environment
-       and  if  it is a regular expression, it is matched to the input, other-
+       and if it is a regular expression, it is matched to the  input,  other-
        wise that rule is ignored.
 
-       The states program file can also have top-level expressions,  they  are
-       evaluated  after  the program file is parsed but before any input files
+       The  states  program file can also have top-level expressions, they are
+       evaluated after the program file is parsed but before any  input  files
        are processed or the start block is evaluated.
 
 
 PRIMITIVE FUNCTIONS
        call (symbol)
-               Move to state symbol and continue input  file  processing  from
-               that  state.  Function returns whatever the symbol state's ter-
+               Move  to  state  symbol and continue input file processing from
+               that state.  Function returns whatever the symbol state's  ter-
                minating return statement returned.
 
+       calln (name)
+               Like call but the argument name is evaluated and its value must
+               be string.  For example, this function can be used  to  call  a
+               state which name is stored to a variable.
+
        check_namerules ()
-               Try to resolve start  state  from  namerules  rules.   Function
+               Try  to  resolve  start  state  from namerules rules.  Function
                returns 1 if start state was resolved or 0 otherwise.
 
        check_startrules ()
-               Try  to  resolve  start  state from startrules rules.  Function
+               Try to resolve start state  from  startrules  rules.   Function
                returns 1 if start state was resolved or 0 otherwise.
 
        concat (str, ...)
@@ -181,23 +193,23 @@ PRIMITIVE FUNCTIONS
                Create a new list which contains items any, ...
 
        panic (any, ...)
-               Report  a  non-recoverable error and exit with status 1.  Func-
+               Report a non-recoverable error and exit with status  1.   Func-
                tion never returns.
 
        print (any, ...)
                Convert arguments to strings and print them to the output.
 
        range (source, start, end)
-               Return a sub-range  of  source  starting  from  position  start
-               (inclusively)  to  end  (exclusively).   Argument source can be
+               Return  a  sub-range  of  source  starting  from position start
+               (inclusively) to end (exclusively).   Argument  source  can  be
                string or list.
 
        regexp (string)
                Convert string string to a new regular expression.
 
        regexp_syntax (char, syntax)
-               Modify regular expression character syntaxes by  assigning  new
-               syntax  syntax  for character char.  Possible values for syntax
+               Modify  regular  expression character syntaxes by assigning new
+               syntax syntax for character char.  Possible values  for  syntax
                are:
 
                'w'     character is a word constituent
@@ -205,26 +217,31 @@ PRIMITIVE FUNCTIONS
                ' '     character isn't a word constituent
 
        regmatch (string, regexp)
-               Check if  string  string  matches  regular  expression  regexp.
+               Check  if  string  string  matches  regular  expression regexp.
                Functions returns a boolean success status and sets sub-expres-
                sion registers $n.
 
        regsub (string, regexp, subst)
                Search regular expression regexp from string string and replace
-               the  matching substring with string subst.  Returns the result-
-               ing string.  The substitution string subst can contain $n  ref-
+               the matching substring with string subst.  Returns the  result-
+               ing  string.  The substitution string subst can contain $n ref-
                erences to the n:th parenthesized sup-expression.
 
        regsuball (string, regexp, subst)
-               Like  regsub but replace all matches of regular expression reg-
+               Like regsub but replace all matches of regular expression  reg-
                exp from string string with string subst.
+
+       require_state (symbol)
+               Check  that the state symbol is defined.  If the required state
+               is undefined, the function tries to autoload it.  If the  load-
+               ing fails, the program will terminate with an error message.
 
        split (regexp, string)
                Split string string to list considering matches of regular rex-
                pression regexp as item separator.
 
        sprintf (fmt, ...)
-               Format  arguments  according  to  fmt  and  return  result as a
+               Format arguments according  to  fmt  and  return  result  as  a
                string.
 
        strcmp (str1, str2)
@@ -241,24 +258,24 @@ PRIMITIVE FUNCTIONS
                Convert argument to string.
 
        strncmp (str1, str2, num)
-               Perform  a case-sensitive comparision for strings str1 and str2
+               Perform a case-sensitive comparision for strings str1 and  str2
                comparing at maximum num characters.
 
        substring (str, start, end)
-               Return a substring of string str starting from  position  start
+               Return  a  substring of string str starting from position start
                (inclusively) to end (exclusively).
 
 
 BUILTIN VARIABLES
        $.      current input line number
 
-       $n      the  nth  parenthesized  regular expression sub-expression from
+       $n      the n:th parenthesized regular expression  sub-expression  from
                the latest state regular expression or from the regmatch primi-
                tive
 
-       $`      everything  before  the  matched  regular rexpression.  This is
-               usable when used with the regmatch primitive; the  contents  of
-               this  variable is undefined when used in action blocks to refer
+       $`      everything before the matched  regular  rexpression.   This  is
+               usable  when  used with the regmatch primitive; the contents of
+               this variable is undefined when used in action blocks to  refer
                the data before the block's regular expression.
 
        $B      an alias for $`
@@ -274,7 +291,7 @@ BUILTIN VARIABLES
 
 
 FILES
-       /usr/share/enscript/enscript.st         enscript's states definitions
+       /usr/share/enscript/hl/*.st             enscript's states definitions
 
 
 SEE ALSO

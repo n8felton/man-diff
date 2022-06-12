@@ -85,6 +85,7 @@ FUNCTIONAL OVERVIEW
          dpi             Double  Target dots per inch
          rgba            Int     unknown, rgb, bgr, vrgb, vbgr,
                                  none - subpixel geometry
+         lcdfilter       Int     Type of LCD filter
          minspace        Bool    Eliminate leading from line spacing
          charset         CharSet Unicode chars encoded by the font
          lang            String  List of RFC-3066-style languages this
@@ -435,6 +436,10 @@ CONFIGURATION FILE FORMAT
          vrgb            rgba            3
          vbgr            rgba            4
          none            rgba            5
+         lcdnone         lcdfilter       0
+         lcddefault      lcdfilter       1
+         lcdlight        lcdfilter       2
+         lcdlegacy       lcdfilter       3
          hintnone        hintstyle       0
          hintslight      hintstyle       1
          hintmedium      hintstyle       2
@@ -611,7 +616,7 @@ SEE ALSO
        fc-cache(1), fc-match(1), fc-list(1)
 
 VERSION
-       Fontconfig version 2.5.0
+       Fontconfig version 2.6.0
 
 
 

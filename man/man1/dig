@@ -6,7 +6,7 @@ NAME
        dig - DNS lookup utility
 
 SYNOPSIS
-       dig [@server] [-b address] [-c class] [-f filename] [-k filename]
+       dig [@server] [-b address] [-c class] [-f filename] [-k filename] [-m]
            [-p port#] [-q name] [-t type] [-x addr] [-y [hmac:]name:key] [-4]
            [-6] [name] [type] [class] [queryopt...]
 
@@ -32,16 +32,16 @@ DESCRIPTION
        Unless it is told to query a specific name server, dig will try each of
        the servers listed in /etc/resolv.conf.
 
-       When no command line arguments or options are given, will perform an NS
-       query for "." (the root).
+       When no command line arguments or options are given, dig will perform
+       an NS query for "." (the root).
 
        It is possible to set per-user defaults for dig via ${HOME}/.digrc.
        This file is read and any options in it are applied before the command
        line arguments.
 
        The IN and CH class names overlap with the IN and CH top level domains
-       names. Either use the -t and -c options to specify the type and class
-       or use the -q the specify the domain name or use "IN." and "CH." when
+       names. Either use the -t and -c options to specify the type and class,
+       use the -q the specify the domain name, or use "IN." and "CH." when
        looking up these top level domains.
 
 SIMPLE USAGE
@@ -83,6 +83,8 @@ OPTIONS
        number of queries, one per line. Each entry in the file should be
        organized in the same way they would be presented as queries to dig
        using the command-line interface.
+
+       The -m option enables memory usage debugging.
 
        If a non-standard port number is to be queried, the -p option is used.
        port# is the port number that dig will send its queries instead of the
@@ -380,7 +382,7 @@ BUGS
        There are probably too many query options.
 
 COPYRIGHT
-       Copyright (C) 2004-2007 Internet Systems Consortium, Inc. ("ISC")
+       Copyright (C) 2004-2008 Internet Systems Consortium, Inc. ("ISC")
        Copyright (C) 2000-2003 Internet Software Consortium.
 
 

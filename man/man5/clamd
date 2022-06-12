@@ -230,7 +230,7 @@ DIRECTIVES
 
        ScanPDF BOOL
               This option enables scanning within PDF files.
-              Default: no
+              Default: yes
 
        ScanHTML BOOL
               Enables HTML detection and normalisation.

@@ -6,7 +6,7 @@ NAME
        slapauth - Check a list of string-represented IDs for authc/authz.
 
 SYNOPSIS
-       /BinaryCache/OpenLDAP/OpenLDAP-110~8/Root/usr/sbin/slapauth   [-v]  [-d
+       /BinaryCache/OpenLDAP/OpenLDAP-110~17/Root/usr/sbin/slapauth  [-v]  [-d
        level] [-f slapd.conf] [-F confdir] [-M mech] [-R realm]  [-U  authcID]
        [-X authzID] ID [...]
 
@@ -57,7 +57,7 @@ OPTIONS
 EXAMPLES
        The command
 
-            /BinaryCache/OpenLDAP/OpenLDAP-110~8/Root/usr/sbin/slapauth -f //etc/openldap/slapd.conf -v \
+            /BinaryCache/OpenLDAP/OpenLDAP-110~17/Root/usr/sbin/slapauth -f //etc/openldap/slapd.conf -v \
                    -U bjorn -X u:bjensen
 
        tests whether the user bjorn  can  assume  the  identity  of  the  user

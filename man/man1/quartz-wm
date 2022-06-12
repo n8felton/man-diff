@@ -24,25 +24,36 @@ OPTIONS
                ent window manager may be used, but cut and paste will work  as
                if quartz-wm were running.
 
+       --no-pasteboard
+               This  option  indicates  that the program should not manage the
+               cut and paste proxying.  This option is  defaulted  to  on  for
+               newer  X11  servers that support this functionality and off for
+               older servers that do not.
+
+       --prefs-domain <domain>
+               This option can be used to override the  domain  used  to  read
+               preferences  from.  This is useful if you want to have multiple
+               X11.apps running at the same time.
+
 CUSTOMIZATION
-       quartz-wm  can  be customized using the defaults(1) command.  quartz-wm
+       quartz-wm can be customized using the defaults(1)  command.   quartz-wm
        can be forced to re-read these preferences by sending it a SIGHUP using
        kill(1).  The available options are:
 
        defaults write org.x.X11 wm_ffm -bool true
-               Enables  focus-follows-mouse  mode.  Windows belonging to the X
-               server may then be focused by moving the pointer over them,  as
+               Enables focus-follows-mouse mode. Windows belonging  to  the  X
+               server  may then be focused by moving the pointer over them, as
                well as the default mode of clicking in them.
 
        defaults write org.x.X11 wm_click_through -bool true
-               Disables  the  default behavior of swallowing window-activating
+               Disables the default behavior of  swallowing  window-activating
                mouse events.
 
        defaults write org.x.X11 wm_limit_size -bool true
-               Limit the size of each window to the size of the current  head.
+               Limit  the size of each window to the size of the current head.
 
        defaults write org.x.x11 wm_focus_on_new_window -bool false
-               Don't  tell X11.app to take focus when a new X11 window is cre-
+               Don't tell X11.app to take focus when a new X11 window is  cre-
                ated.
 
        defaults write org.x.X11 wm_window_shading -bool true

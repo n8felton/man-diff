@@ -85,6 +85,12 @@ OPTIONS
               Print mirror details from mirrors.dat (cache file for the mirror
               manager).
 
+       --submit-stats[=/path/to/clamd.conf]
+              Upload detection statistics to the ClamAV  Project  (see  fresh-
+              clam.conf(5):SubmitDetectionStats for more details). No database
+              update will be performed. This option only works in the interac-
+              tive mode.
+
 EXAMPLES
        (0) Download database to default directory:
 

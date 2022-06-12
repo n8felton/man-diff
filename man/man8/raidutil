@@ -82,6 +82,10 @@ VERBS, DIRECT OBJECTS, AND SPECIFIC ARGUMENTS
               Lists relevant information about any RAIDSet associated with the
               targeted RAID device.
 
+     list taskinfo
+              Lists relevant information about any tasks associated with the
+              targeted RAID device.
+
      list volumeinfo
               Lists relevant information about any volumes associated with the
               targeted RAID device.
@@ -89,12 +93,18 @@ VERBS, DIRECT OBJECTS, AND SPECIFIC ARGUMENTS
      list versioninfo
               List version information about the targeted RAID device.
 
+     modify controller [arguments listed below]
+              This will allow the user to modify specific attributes of the
+              targeted controller.
+              --writeCacheBattery
+              --WriteCacheEnable
+
      modify drive [arguments listed below]
               This will allow the user to modify specific attributes of the
               targeted drive.
-              --addglobalspare -d <DriveBayNumber>
+              --addglobalspare -d <DriveBayNumber> [-Y | -N]
               --removeglobalspare -d <DriveBayNumber>
-              --addlocalspare -d <DriveBayNumber> -r <RAIDSet>
+              --addlocalspare -d <DriveBayNumber> -r <RAIDSet> [-Y | -N]
               --removelocalspare -d <DriveBayNumber>
               --adopt -d <DriveBayNumber>
 
@@ -109,6 +119,7 @@ VERBS, DIRECT OBJECTS, AND SPECIFIC ARGUMENTS
      modify volume [arguments listed below]
               This will allow the user to modify specific attributes of the
               targeted volume.
+              --expand -n <VolumeName> [-r <RAIDSet>] -s <SizeToAdd> [-W]
               --move -n <ListOfVolumes> [-r <SourceRAIDSet>] -t <TargetRAID-
               Set> [-W]
               --rewrite -n <VolumeName>  [-r <RAIDSet>] -p <ServicePriority>

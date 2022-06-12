@@ -114,6 +114,7 @@ OPTIONS
                 port integer;
                 querylog boolean;
                 recursing-file quoted_string;
+                reserved-sockets integer;
                 random-device quoted_string;
                 recursive-clients integer;
                 serial-query-rate integer;
@@ -445,7 +446,7 @@ SEE ALSO
        Manual.
 
 COPYRIGHT
-       Copyright (C) 2004-2007 Internet Systems Consortium, Inc. ("ISC")
+       Copyright (C) 2004-2008 Internet Systems Consortium, Inc. ("ISC")
 
 
 

@@ -44,13 +44,11 @@ OPTIONS
 
        -c config-file
            Use config-file as the configuration file instead of the default,
-           /etc/lwresd.conf.  <term>-c</term> can not be used with
-           <term>-C</term>.
+           /etc/lwresd.conf.  -c can not be used with -C.
 
        -C config-file
            Use config-file as the configuration file instead of the default,
-           /etc/resolv.conf.  <term>-C</term> can not be used with
-           <term>-c</term>.
+           /etc/resolv.conf.  -C can not be used with -c.
 
        -d debug-level
            Set the daemon's debug level to debug-level. Debugging traces from
@@ -122,7 +120,7 @@ AUTHOR
        Internet Systems Consortium
 
 COPYRIGHT
-       Copyright (C) 2004, 2005, 2007 Internet Systems Consortium, Inc.
+       Copyright (C) 2004, 2005, 2007, 2008 Internet Systems Consortium, Inc.
        ("ISC")
        Copyright (C) 2000, 2001 Internet Software Consortium.
 

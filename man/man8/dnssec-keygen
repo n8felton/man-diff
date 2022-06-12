@@ -128,14 +128,14 @@ EXAMPLE
        Kexample.com.+003+26160.key and Kexample.com.+003+26160.private.
 
 SEE ALSO
-       dnssec-signzone(8), BIND 9 Administrator Reference Manual, RFC 2535,
-       RFC 2845, RFC 2539.
+       dnssec-signzone(8), BIND 9 Administrator Reference Manual, RFC 2539,
+       RFC 2845, RFC 4033.
 
 AUTHOR
        Internet Systems Consortium
 
 COPYRIGHT
-       Copyright (C) 2004, 2005, 2007 Internet Systems Consortium, Inc.
+       Copyright (C) 2004, 2005, 2007, 2008 Internet Systems Consortium, Inc.
        ("ISC")
        Copyright (C) 2000-2003 Internet Software Consortium.
 

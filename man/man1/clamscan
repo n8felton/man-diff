@@ -214,9 +214,9 @@ EXAMPLES
 
               clamscan -r /home
 
-       (3) Load database from a file and limit disk usage to 50 MB:
+       (3) Load database from a file:
 
-              clamscan -d /tmp/newclamdb --max-space=50m -r /tmp
+              clamscan -d /tmp/newclamdb -r /tmp
 
        (4) Scan a data stream:
 
