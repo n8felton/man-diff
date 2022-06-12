@@ -1,0 +1,37 @@
+RegisterSeRV(8)           BSD System Manager's Manual          RegisterSeRV(8)
+
+NAME
+     RegisterSeRV -- Mac OS X serial number registration tool
+
+SYNOPSIS
+     RegisterSeRV [-d] [-s]
+     RegisterSeRV [-h | -v]
+
+DESCRIPTION
+     RegisterSeRV communicates with serialnumberd(8) to register saved serial
+     numbers during the boot process.
+
+     RegisterSeRV is not intended to be invoked manually, but it may be exe-
+     cuted by the super-user if there was an issue with serial number regis-
+     trations.
+
+OPTIONS
+     The following options are available:
+     -d, --debug    Print some potentially helpful log strings to the termi-
+                    nal.
+
+     -h, --help     Print usage summary and exit.
+
+     -s, --sleep    Sleep for one second between registrations.
+
+     -v, --version  Print build version and exit.
+
+DIAGNOSTICS
+     The RegisterSeRV utility exits 0 on success, and >0 if an error occurs.
+
+     RegisterSeRV must be executed as root.  Because RegisterSeRV controls
+     system-wide resources, it must be executed by the root user.
+
+SEE ALSO
+     serialnumberd(8)
+
