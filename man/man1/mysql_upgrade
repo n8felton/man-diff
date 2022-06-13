@@ -18,9 +18,9 @@ DESCRIPTION
        supersedes the older mysql_fix_privilege_tables script, which should no
        longer be used.
 
-       If a table is found to have a possible incompatibility, mysql_upgrade
-       performs a table check. If any problems are found, a table repair is
-       attempted. If the table cannot be repaired, see Section 2.18.4,
+       If mysql_upgrade finds that a table has a possible incompatibility, it
+       performs a table check and, if problems are found, attempts a table
+       repair. If the table cannot be repaired, see Section 2.19.4,
        "Rebuilding or Repairing Tables or Indexes" for manual table repair
        strategies.
 
@@ -30,7 +30,7 @@ DESCRIPTION
 
            Some upgrade incompatibilities may require special handling before
            you upgrade your MySQL installation and run mysql_upgrade. See
-           Section 2.18.1, "Upgrading MySQL", for instructions on determining
+           Section 2.19.1, "Upgrading MySQL", for instructions on determining
            whether any such incompatibilities apply to your installation and
            how to handle them.
 
@@ -79,11 +79,14 @@ DESCRIPTION
        If you install MySQL from RPM packages on Linux, you must install the
        server and client RPMs.  mysql_upgrade is included in the server RPM
        but requires the client RPM because the latter includes mysqlcheck.
-       (See Section 2.10, "Installing MySQL from RPM Packages on Linux".)
+       (See Section 2.12, "Installing MySQL from RPM Packages on Linux".)
 
        In MySQL 5.0.19, mysql_upgrade was added as a shell script and worked
        only for Unix systems. As of MySQL 5.0.25, mysql_upgrade is an
        executable binary and is available on all systems.
+
+       mysql_upgrade does not upgrade the contents of the help tables. For
+       upgrade instructions, see Section 5.1.7, "Server-Side Help".
 
        mysql_upgrade supports the following options, which can be specified on
        the command line or in the [mysql_upgrade] and [client] option file
@@ -128,7 +131,7 @@ DESCRIPTION
            Verbose mode. Print more information about what the program does.
 
 COPYRIGHT
-       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       Copyright (C) 1997, 2011, Oracle and/or its affiliates. All rights
        reserved.
 
        This documentation is free software; you can redistribute it and/or

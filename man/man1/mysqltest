@@ -15,7 +15,7 @@ DESCRIPTION
        The mysqltest program runs a test case against a MySQL server and
        optionally compares the output with a result file. This program reads
        input written in a special test language. Typically, you invoke
-       mysqltest via mysql-test-run.pl rather than invoking it directly.
+       mysqltest using mysql-test-run.pl rather than invoking it directly.
 
        mysqltest_embedded is similar but is built with support for the
        libmysqld embedded server.
@@ -245,7 +245,7 @@ DESCRIPTION
            added in MySQL 5.0.19.
 
 COPYRIGHT
-       Copyright (C) 2007, 2010, Oracle and/or its affiliates. All rights
+       Copyright (C) 2007, 2011, Oracle and/or its affiliates. All rights
        reserved.
 
        This documentation is free software; you can redistribute it and/or

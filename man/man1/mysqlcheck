@@ -47,7 +47,7 @@ DESCRIPTION
            test.t
            note     : The storage engine for the table doesn't support check
 
-       If mysqlcheck is unable to repair a table, see Section 2.18.4,
+       If mysqlcheck is unable to repair a table, see Section 2.19.4,
        "Rebuilding or Repairing Tables or Indexes" for manual table repair
        strategies. This will be the case, for example, for InnoDB tables,
        which can be checked with CHECK TABLE, but not repaired with REPAIR
@@ -75,8 +75,11 @@ DESCRIPTION
        or make a symbolic link to mysqlcheck named mysqlrepair. If you invoke
        mysqlrepair, it repairs tables.
 
-       The following names can be used to change mysqlcheck default behavior.
+       The names shown in the following table can be used to change mysqlcheck
+       default behavior.
 
+       +--------------+-----------------------+
+       |Command       | Meaning               |
        +--------------+-----------------------+
        |mysqlrepair   | The default option is |
        |              | --repair              |
@@ -207,7 +210,7 @@ DESCRIPTION
 
        o   --pipe, -W
 
-           On Windows, connect to the server via a named pipe. This option
+           On Windows, connect to the server using a named pipe. This option
            applies only if the server supports named-pipe connections.
 
        o   --port=port_num, -P port_num
@@ -219,7 +222,7 @@ DESCRIPTION
            The connection protocol to use for connecting to the server. It is
            useful when the other connection parameters normally would cause a
            protocol to be used other than the one you want. For details on the
-           allowable values, see Section 4.2.2, "Connecting to the MySQL
+           permissible values, see Section 4.2.2, "Connecting to the MySQL
            Server".
 
        o   --quick, -q
@@ -248,7 +251,7 @@ DESCRIPTION
        o   --ssl*
 
            Options that begin with --ssl specify whether to connect to the
-           server via SSL and indicate where to find SSL keys and
+           server using SSL and indicate where to find SSL keys and
            certificates. See Section 5.5.6.3, "SSL Command Options".
 
        o   --tables
@@ -276,7 +279,7 @@ DESCRIPTION
            Display version information and exit.
 
 COPYRIGHT
-       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       Copyright (C) 1997, 2011, Oracle and/or its affiliates. All rights
        reserved.
 
        This documentation is free software; you can redistribute it and/or

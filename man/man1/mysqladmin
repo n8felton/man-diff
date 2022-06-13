@@ -83,9 +83,10 @@ DESCRIPTION
 
            If the new-password value contains spaces or other characters that
            are special to your command interpreter, you need to enclose it
-           within quotes. On Windows, be sure to use double quotes rather than
-           single quotes; single quotes are not stripped from the password,
-           but rather are interpreted as part of the password. For example:
+           within quotation marks. On Windows, be sure to use double quotation
+           marks rather than single quotation marks; single quotation marks
+           are not stripped from the password, but rather are interpreted as
+           part of the password. For example:
 
                shell> mysqladmin password "my new password"
 
@@ -101,7 +102,7 @@ DESCRIPTION
 
        o   ping
 
-           Check whether the server is alive. The return status from
+           Check whether the server is available. The return status from
            mysqladmin is 0 if the server is running, 1 if it is not. This is 0
            even in case of an error such as Access denied, because this means
            that the server is running but refused the connection, which is
@@ -267,7 +268,7 @@ DESCRIPTION
 
        o   --pipe, -W
 
-           On Windows, connect to the server via a named pipe. This option
+           On Windows, connect to the server using a named pipe. This option
            applies only if the server supports named-pipe connections.
 
        o   --port=port_num, -P port_num
@@ -279,14 +280,14 @@ DESCRIPTION
            The connection protocol to use for connecting to the server. It is
            useful when the other connection parameters normally would cause a
            protocol to be used other than the one you want. For details on the
-           allowable values, see Section 4.2.2, "Connecting to the MySQL
+           permissible values, see Section 4.2.2, "Connecting to the MySQL
            Server".
 
        o   --relative, -r
 
            Show the difference between the current and previous values when
-           used with the --sleep option. Currently, this option works only
-           with the extended-status command.
+           used with the --sleep option. This option works only with the
+           extended-status command.
 
        o   --silent, -s
 
@@ -307,7 +308,7 @@ DESCRIPTION
        o   --ssl*
 
            Options that begin with --ssl specify whether to connect to the
-           server via SSL and indicate where to find SSL keys and
+           server using SSL and indicate where to find SSL keys and
            certificates. See Section 5.5.6.3, "SSL Command Options".
 
        o   --user=user_name, -u user_name
@@ -350,7 +351,7 @@ DESCRIPTION
        --set-variable format is deprecated.
 
 COPYRIGHT
-       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       Copyright (C) 1997, 2011, Oracle and/or its affiliates. All rights
        reserved.
 
        This documentation is free software; you can redistribute it and/or

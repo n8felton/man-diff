@@ -24,10 +24,10 @@ DESCRIPTION
        files named patient.txt, patient.text, and patient all would be
        imported into a table named patient.
 
-       mysqldump supports the following options, which can be specified on the
-       command line or in the [mysqldump] and [client] option file groups.
-       mysqldump also supports the options for processing option files
-       described at Section 4.2.3.3.1, "Command-Line Options that Affect
+       mysqlimport supports the following options, which can be specified on
+       the command line or in the [mysqlimport] and [client] option file
+       groups.  mysqlimport also supports the options for processing option
+       files described at Section 4.2.3.3.1, "Command-Line Options that Affect
        Option-File Handling".
 
        o   --help, -?
@@ -129,7 +129,7 @@ DESCRIPTION
 
        o   --pipe, -W
 
-           On Windows, connect to the server via a named pipe. This option
+           On Windows, connect to the server using a named pipe. This option
            applies only if the server supports named-pipe connections.
 
        o   --port=port_num, -P port_num
@@ -141,7 +141,7 @@ DESCRIPTION
            The connection protocol to use for connecting to the server. It is
            useful when the other connection parameters normally would cause a
            protocol to be used other than the one you want. For details on the
-           allowable values, see Section 4.2.2, "Connecting to the MySQL
+           permissible values, see Section 4.2.2, "Connecting to the MySQL
            Server".
 
        o   --replace, -r
@@ -166,7 +166,7 @@ DESCRIPTION
        o   --ssl*
 
            Options that begin with --ssl specify whether to connect to the
-           server via SSL and indicate where to find SSL keys and
+           server using SSL and indicate where to find SSL keys and
            certificates. See Section 5.5.6.3, "SSL Command Options".
 
        o   --user=user_name, -u user_name
@@ -207,7 +207,7 @@ DESCRIPTION
            +------+---------------+
 
 COPYRIGHT
-       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       Copyright (C) 1997, 2011, Oracle and/or its affiliates. All rights
        reserved.
 
        This documentation is free software; you can redistribute it and/or

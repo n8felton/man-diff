@@ -11,7 +11,7 @@ SYNOPSIS
 DESCRIPTION
        The myisampack utility compresses MyISAM tables.  myisampack works by
        compressing each column in the table separately. Usually, myisampack
-       packs the data file 40%-70%.
+       packs the data file 40% to 70%.
 
        When the table is used later, the server reads into memory the
        information needed to decompress columns. This results in much better
@@ -30,9 +30,7 @@ DESCRIPTION
            compress tables with the server stopped.
 
        o   After packing a table, it becomes read only. This is generally
-           intended (such as when accessing packed tables on a CD). Allowing
-           writes to a packed table is on our TODO list, but with low
-           priority.
+           intended (such as when accessing packed tables on a CD).
 
        Invoke myisampack like this:
 
@@ -407,7 +405,7 @@ DESCRIPTION
        To unpack a packed table, use the --unpack option to myisamchk.
 
 COPYRIGHT
-       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       Copyright (C) 1997, 2011, Oracle and/or its affiliates. All rights
        reserved.
 
        This documentation is free software; you can redistribute it and/or

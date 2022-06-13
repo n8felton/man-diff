@@ -19,8 +19,13 @@ DESCRIPTION
 
        o   You can remove anonymous-user accounts.
 
-       o   You can remove the test database, which by default can be accessed
-           by anonymous users.
+       o   You can remove the test database (which by default can be accessed
+           by all users, even anonymous users), and privileges that permit
+           anyone to access databases with names that start with test_.
+
+       mysql_secure_installation helps you implement security recommendations
+       similar to those described at Section 2.18.2, "Securing the Initial
+       MySQL Accounts".
 
        Invoke mysql_secure_installation without arguments:
 
@@ -28,8 +33,10 @@ DESCRIPTION
 
        The script will prompt you to determine which actions to perform.
 
+       mysql_secure_installation is not available on Windows.
+
 COPYRIGHT
-       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       Copyright (C) 1997, 2011, Oracle and/or its affiliates. All rights
        reserved.
 
        This documentation is free software; you can redistribute it and/or

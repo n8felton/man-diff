@@ -67,13 +67,12 @@ DESCRIPTION
        it also matches names such as xmainytestz.
 
        To perform setup prior to running tests, mysql-test-run.pl needs to
-       invoke mysqld with the --bootstrap and --skip-grant-tables options (see
-       Typical configure Options[1]). If MySQL was configured with the
-       --disable-grant-options option, --bootstrap, --skip-grant-tables, and
-       --init-file will be disabled. To handle this, set the MYSQLD_BOOTSTRAP
-       environment variable to the full path name of a server that has all
-       options enabled.  mysql-test-run.pl will use that server to perform
-       setup; it is not used to run the tests.
+       invoke mysqld with the --bootstrap and --skip-grant-tables options If
+       MySQL was configured with the --disable-grant-options option,
+       --bootstrap, --skip-grant-tables, and --init-file will be disabled. To
+       handle this, set the MYSQLD_BOOTSTRAP environment variable to the full
+       path name of a server that has all options enabled.  mysql-test-run.pl
+       will use that server to perform setup; it is not used to run the tests.
 
        The init_file test will fail if --init-file is disabled. This is an
        expected failure that can be handled as follows:
@@ -271,7 +270,7 @@ DESCRIPTION
            displayed with the [ exp-fail ] code rather than [ fail ] if they
            fail. This option was added in MySQL 5.1.33/6.0.11.
 
-           For an example of a file that might be specified via this option,
+           For an example of a file that might be specified using this option,
            see mysql-test/collections/default.experimental.
 
        o   --extern
@@ -728,7 +727,7 @@ DESCRIPTION
            --vardir, --view-protocol.
 
 COPYRIGHT
-       Copyright (C) 2007, 2010, Oracle and/or its affiliates. All rights
+       Copyright (C) 2007, 2011, Oracle and/or its affiliates. All rights
        reserved.
 
        This documentation is free software; you can redistribute it and/or
@@ -745,10 +744,6 @@ COPYRIGHT
        51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
        http://www.gnu.org/licenses/.
 
-
-NOTES
-        1. Typical configure Options
-           http://dev.mysql.com/doc/refman/5.1/en/configure-options.html
 
 SEE ALSO
        For more information, please refer to the MySQL Reference Manual, which

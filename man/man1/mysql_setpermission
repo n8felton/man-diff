@@ -13,7 +13,7 @@ DESCRIPTION
        contributed by Luuk de Boer. It interactively sets permissions in the
        MySQL grant tables.  mysql_setpermission is written in Perl and
        requires that the DBI and DBD::mysql Perl modules be installed (see
-       Section 2.21, "Perl Installation Notes").
+       Section 2.22, "Perl Installation Notes").
 
        Invoke mysql_setpermission like this:
 
@@ -61,7 +61,7 @@ DESCRIPTION
            The MySQL user name to use when connecting to the server.
 
 COPYRIGHT
-       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       Copyright (C) 1997, 2011, Oracle and/or its affiliates. All rights
        reserved.
 
        This documentation is free software; you can redistribute it and/or

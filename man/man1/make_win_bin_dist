@@ -27,9 +27,8 @@ DESCRIPTION
        from unpacking the archive.
 
        Because you might want to include files of directories from other
-       builds, you can instruct this script do copy them in for you, via
-       copy_def arguments, which of which is of the form
-       relative_dest_name=source_name.
+       builds, you can instruct this script to copy them in for you, using
+       copy_def arguments, which have the form relative_dest_name=source_name.
 
        Example:
 
@@ -69,7 +68,7 @@ DESCRIPTION
            is, do not use separate debug directories).
 
 COPYRIGHT
-       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       Copyright (C) 1997, 2011, Oracle and/or its affiliates. All rights
        reserved.
 
        This documentation is free software; you can redistribute it and/or

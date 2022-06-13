@@ -135,7 +135,7 @@ DESCRIPTION
 
            Surround each table dump with LOCK TABLES and UNLOCK TABLES
            statements. This results in faster inserts when the dump file is
-           reloaded. See Section 7.2.19, "Speed of INSERT Statements".
+           reloaded. See Section 7.3.2.1, "Speed of INSERT Statements".
 
        o   --all-databases, -A
 
@@ -145,7 +145,7 @@ DESCRIPTION
 
        o   --allow-keywords
 
-           Allow creation of column names that are keywords. This works by
+           Permit creation of column names that are keywords. This works by
            prefixing each column name with the table name.
 
        o   --character-sets-dir=path
@@ -355,7 +355,7 @@ DESCRIPTION
        o   --lock-tables, -l
 
            For each dumped database, lock all tables to be dumped before
-           dumping them. The tables are locked with READ LOCAL to allow
+           dumping them. The tables are locked with READ LOCAL to permit
            concurrent inserts in the case of MyISAM tables. For transactional
            tables such as InnoDB and BDB, --single-transaction is a much
            better option than --lock-tables because it does not need to lock
@@ -498,7 +498,7 @@ DESCRIPTION
 
        o   --pipe, -W
 
-           On Windows, connect to the server via a named pipe. This option
+           On Windows, connect to the server using a named pipe. This option
            applies only if the server supports named-pipe connections.
 
        o   --port=port_num, -P port_num
@@ -510,7 +510,7 @@ DESCRIPTION
            The connection protocol to use for connecting to the server. It is
            useful when the other connection parameters normally would cause a
            protocol to be used other than the one you want. For details on the
-           allowable values, see Section 4.2.2, "Connecting to the MySQL
+           permissible values, see Section 4.2.2, "Connecting to the MySQL
            Server".
 
        o   --quick, -q
@@ -618,7 +618,7 @@ DESCRIPTION
        o   --ssl*
 
            Options that begin with --ssl specify whether to connect to the
-           server via SSL and indicate where to find SSL keys and
+           server using SSL and indicate where to find SSL keys and
            certificates. See Section 5.5.6.3, "SSL Command Options".
 
        o   --tab=path, -T path
@@ -844,10 +844,10 @@ DESCRIPTION
        If you encounter problems backing up views, please read the section
        that covers restrictions on views which describes a workaround for
        backing up views when this fails due to insufficient privileges. See
-       Section D.4, "Restrictions on Views".
+       Section E.4, "Restrictions on Views".
 
 COPYRIGHT
-       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       Copyright (C) 1997, 2011, Oracle and/or its affiliates. All rights
        reserved.
 
        This documentation is free software; you can redistribute it and/or

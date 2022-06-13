@@ -39,7 +39,7 @@ DESCRIPTION
              txt  TEXT NOT NULL,
              PRIMARY KEY (id),
              FULLTEXT (txt)
-           );
+           ) ENGINE=MyISAM;
 
        The index on id is index 0 and the FULLTEXT index on txt is index 1. If
        your working directory is the test database directory, invoke
@@ -87,7 +87,7 @@ DESCRIPTION
            Verbose mode. Print more output about what the program does.
 
 COPYRIGHT
-       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       Copyright (C) 1997, 2011, Oracle and/or its affiliates. All rights
        reserved.
 
        This documentation is free software; you can redistribute it and/or

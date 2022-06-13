@@ -44,7 +44,7 @@ DESCRIPTION
        o   -h host_name
 
            Host name of MySQL server for *-slow.log file name. The value can
-           contain a wildcare. The default is * (match all).
+           contain a wildcard. The default is * (match all).
 
        o   -i name
 
@@ -71,31 +71,34 @@ DESCRIPTION
 
            o   l, al: Sort by lock time or average lock time
 
-           o   s, as: Sort by rows sent or average rows sent
+           o   r, ar: Sort by rows sent or average rows sent
 
            o   c: Sort by count
+               By default, mysqldumpslow sorts by average query time
+               (equivalent to -s at).
 
-       o   -t N
+           o   -t N
 
-           Display only the first N queries in the output.
+               Display only the first N queries in the output.
 
-       o   --verbose, -v
+           o   --verbose, -v
 
-           Verbose mode. Print more information about what the program does.
+               Verbose mode. Print more information about what the program
+               does.
 
-       Example of usage:
+           Example of usage:
 
-           shell> mysqldumpslow
-           Reading mysql slow query log from /usr/local/mysql/data/mysqld51-apple-slow.log
-           Count: 1  Time=4.32s (4s)  Lock=0.00s (0s)  Rows=0.0 (0), root[root]@localhost
-            insert into t2 select * from t1
-           Count: 3  Time=2.53s (7s)  Lock=0.00s (0s)  Rows=0.0 (0), root[root]@localhost
-            insert into t2 select * from t1 limit N
-           Count: 3  Time=2.13s (6s)  Lock=0.00s (0s)  Rows=0.0 (0), root[root]@localhost
-            insert into t1 select * from t1
+               shell> mysqldumpslow
+               Reading mysql slow query log from /usr/local/mysql/data/mysqld51-apple-slow.log
+               Count: 1  Time=4.32s (4s)  Lock=0.00s (0s)  Rows=0.0 (0), root[root]@localhost
+                insert into t2 select * from t1
+               Count: 3  Time=2.53s (7s)  Lock=0.00s (0s)  Rows=0.0 (0), root[root]@localhost
+                insert into t2 select * from t1 limit N
+               Count: 3  Time=2.13s (6s)  Lock=0.00s (0s)  Rows=0.0 (0), root[root]@localhost
+                insert into t1 select * from t1
 
 COPYRIGHT
-       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       Copyright (C) 1997, 2011, Oracle and/or its affiliates. All rights
        reserved.
 
        This documentation is free software; you can redistribute it and/or

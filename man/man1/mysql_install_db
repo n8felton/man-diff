@@ -29,12 +29,12 @@ DESCRIPTION
                     --datadir=/opt/mysql/mysql/data
 
        mysql_install_db needs to invoke mysqld with the --bootstrap and
-       --skip-grant-tables options (see Section 2.16.2, "Typical configure
-       Options"). If MySQL was configured with the --disable-grant-options
-       option, --bootstrap and --skip-grant-tables will be disabled. To handle
-       this, set the MYSQLD_BOOTSTRAP environment variable to the full path
-       name of a server that has all options enabled.  mysql_install_db will
-       use that server.
+       --skip-grant-tables options. If MySQL was configured with the
+       DISABLE_GRANT_OPTIONS compiler flag, --bootstrap and
+       --skip-grant-tables will be disabled (see Section 2.17.3, "MySQL
+       Source-Configuration Options"). To handle this, set the
+       MYSQLD_BOOTSTRAP environment variable to the full path name of a server
+       that has all options enabled.  mysql_install_db will use that server.
 
        mysql_install_db supports the following options, which can be specified
        on the command line or in the [mysql_install_db] and (if they are
@@ -88,7 +88,7 @@ DESCRIPTION
            distributions.
 
 COPYRIGHT
-       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       Copyright (C) 1997, 2011, Oracle and/or its affiliates. All rights
        reserved.
 
        This documentation is free software; you can redistribute it and/or

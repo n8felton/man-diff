@@ -102,7 +102,7 @@ DESCRIPTION
 
        o   --pipe, -W
 
-           On Windows, connect to the server via a named pipe. This option
+           On Windows, connect to the server using a named pipe. This option
            applies only if the server supports named-pipe connections.
 
        o   --port=port_num, -P port_num
@@ -114,7 +114,7 @@ DESCRIPTION
            The connection protocol to use for connecting to the server. It is
            useful when the other connection parameters normally would cause a
            protocol to be used other than the one you want. For details on the
-           allowable values, see Section 4.2.2, "Connecting to the MySQL
+           permissible values, see Section 4.2.2, "Connecting to the MySQL
            Server".
 
        o   --show-table-type, -t
@@ -131,7 +131,7 @@ DESCRIPTION
        o   --ssl*
 
            Options that begin with --ssl specify whether to connect to the
-           server via SSL and indicate where to find SSL keys and
+           server using SSL and indicate where to find SSL keys and
            certificates. See Section 5.5.6.3, "SSL Command Options".
 
        o   --status, -i
@@ -153,7 +153,7 @@ DESCRIPTION
            Display version information and exit.
 
 COPYRIGHT
-       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       Copyright (C) 1997, 2011, Oracle and/or its affiliates. All rights
        reserved.
 
        This documentation is free software; you can redistribute it and/or

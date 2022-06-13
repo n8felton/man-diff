@@ -13,6 +13,10 @@ DESCRIPTION
        checks, repairs, or optimizes them.  myisamchk works with MyISAM tables
        (tables that have .MYD and .MYI files for storing data and indexes).
 
+       You can also use the CHECK TABLE and REPAIR TABLE statements to check
+       and repair MyISAM tables. See Section 12.4.2.3, "CHECK TABLE Syntax",
+       and Section 12.4.2.6, "REPAIR TABLE Syntax".
+
            Caution
            It is best to make a backup of a table before performing a table
            repair operation; under some circumstances the operation might
@@ -43,7 +47,7 @@ DESCRIPTION
 
        You can name several tables on the myisamchk command line if you wish.
        You can also specify a table by naming its index file (the file with
-       the .MYI suffix). This allows you to specify all tables in a directory
+       the .MYI suffix). This enables you to specify all tables in a directory
        by using the pattern *.MYI. For example, if you are in a database
        directory, you can check all the MyISAM tables in that directory like
        this:
@@ -75,6 +79,9 @@ DESCRIPTION
        This command assumes that you have more than 64MB free. For more
        information about memory allocation with myisamchk, see the section
        called "MYISAMCHK MEMORY USAGE".
+
+       For additional information about using myisamchk, see Section 6.6,
+       "MyISAM Table Maintenance and Crash Recovery".
 
            Important
            You must ensure that no other program is using the tables while you
@@ -219,7 +226,7 @@ MYISAMCHK GENERAL OPTIONS
        statistics collection when the --analyze option is given. It acts like
        the myisam_stats_method system variable. For more information, see the
        description of myisam_stats_method in Section 5.1.3, "Server System
-       Variables", and Section 7.4.7, "MyISAM Index Statistics Collection".
+       Variables", and Section 7.5.4, "MyISAM Index Statistics Collection".
        For MySQL 5.0, stats_method was added in MySQL 5.0.14. For older
        versions, the statistics collection method is equivalent to
        nulls_equal.
@@ -282,7 +289,7 @@ MYISAMCHK CHECK OPTIONS
            operation run faster.
 
            For a description of the output format, see the section called
-           "MYISAMCHK TABLE INFORMATION".
+           "OBTAINING TABLE INFORMATION WITH MYISAMCHK".
 
        o   --fast, -F
 
@@ -349,7 +356,7 @@ MYISAMCHK REPAIR OPTIONS
            this option unless you are desperate.
 
            For a description of the output format, see the section called
-           "MYISAMCHK TABLE INFORMATION".
+           "OBTAINING TABLE INFORMATION WITH MYISAMCHK".
 
        o   --force, -f
 
@@ -465,7 +472,7 @@ OTHER MYISAMCHK OPTIONS
 
            Print some descriptive information about the table. Specifying the
            --verbose option once or twice produces additional information. See
-           the section called "MYISAMCHK TABLE INFORMATION".
+           the section called "OBTAINING TABLE INFORMATION WITH MYISAMCHK".
 
        o   --set-auto-increment[=value], -A[value]
 
@@ -497,7 +504,7 @@ OTHER MYISAMCHK OPTIONS
            key blocks again. (In this case, re-creating indexes is faster than
            updating offsets for each index.)
 
-MYISAMCHK TABLE INFORMATION
+OBTAINING TABLE INFORMATION WITH MYISAMCHK
        To obtain a description of a MyISAM table or statistics about it, use
        the commands shown here. The output from these commands is explained
        later in this section.
@@ -931,16 +938,16 @@ MYISAMCHK MEMORY USAGE
        going to use myisamchk on very large tables, you should first decide
        how much memory you want it to use. The default is to use only about
        3MB to perform repairs. By using larger values, you can get myisamchk
-       to operate faster. For example, if you have more than 32MB RAM, you
-       could use options such as these (in addition to any other options you
-       might specify):
+       to operate faster. For example, if you have more than 512MB RAM
+       available, you could use options such as these (in addition to any
+       other options you might specify):
 
-           shell> myisamchk --sort_buffer_size=16M \
-                      --key_buffer_size=16M \
-                      --read_buffer_size=1M \
-                      --write_buffer_size=1M ...
+           shell> myisamchk --sort_buffer_size=256M \
+                      --key_buffer_size=512M \
+                      --read_buffer_size=64M \
+                      --write_buffer_size=64M ...
 
-       Using --sort_buffer_size=16M should probably be enough for most cases.
+       Using --sort_buffer_size=16M is probably enough for most cases.
 
        Be aware that myisamchk uses temporary files in TMPDIR. If TMPDIR
        points to a memory file system, out of memory errors can easily occur.
@@ -967,22 +974,23 @@ MYISAMCHK MEMORY USAGE
            --tmpdir=path). The following formula yields the amount of space
            required:
 
-               (largest_key + row_pointer_length) x number_of_rows x 2
+               (largest_key + row_pointer_length) * number_of_rows * 2
 
            You can check the length of the keys and the row_pointer_length
-           with myisamchk -dv tbl_name (see the section called "MYISAMCHK
-           TABLE INFORMATION"). The row_pointer_length and number_of_rows
-           values are the Datafile pointer and Data records values in the
-           table description. To determine the largest_key value, check the
-           Key lines in the table description. The Len column indicates the
-           number of bytes for each key part. For a multiple-column index, the
-           key size is the sum of the Len values for all key parts.
+           with myisamchk -dv tbl_name (see the section called "OBTAINING
+           TABLE INFORMATION WITH MYISAMCHK"). The row_pointer_length and
+           number_of_rows values are the Datafile pointer and Data records
+           values in the table description. To determine the largest_key
+           value, check the Key lines in the table description. The Len column
+           indicates the number of bytes for each key part. For a
+           multiple-column index, the key size is the sum of the Len values
+           for all key parts.
 
        If you have a problem with disk space during repair, you can try
        --safe-recover instead of --recover.
 
 COPYRIGHT
-       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       Copyright (C) 1997, 2011, Oracle and/or its affiliates. All rights
        reserved.
 
        This documentation is free software; you can redistribute it and/or

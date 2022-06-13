@@ -146,7 +146,7 @@ MYSQL INSTANCE MANAGER COMMAND OPTIONS
            default value is 20 seconds. Instance Manager tries to connect to
            each monitored (guarded) instance using the nonexisting
            MySQL_Instance_Manager user account to check whether it is
-           alive/not hanging. If the result of the connection attempt
+           available/not hanging. If the result of the connection attempt
            indicates that the instance is unavailable, Instance Manager
            performs several attempts to restart the instance.
 
@@ -389,7 +389,7 @@ STARTING THE MYSQL SERVER WITH MYSQL INSTANCE MANAGER
        Instance Manager also stops all guarded server instances when it shuts
        down.
 
-       The allowable options for [mysqldN] server instance sections are
+       The permissible options for [mysqldN] server instance sections are
        described in the section called "MYSQL INSTANCE MANAGER CONFIGURATION
        FILES". In these sections, you can use a special
        mysqld-path=path-to-mysqld-binary option that is recognized only by
@@ -530,13 +530,13 @@ CONNECTING TO MYSQL INSTANCE MANAGER
 
        After you set up a password file for the MySQL Instance Manager and
        Instance Manager is running, you can connect to it. The MySQL
-       client-server protocol is used to communicate with the Instance
+       client/server protocol is used to communicate with the Instance
        Manager. For example, you can connect to it using the standard mysql
        client program:
 
            shell> mysql --port=2273 --host=im.example.org --user=mysql --password
 
-       Instance Manager supports the version of the MySQL client-server
+       Instance Manager supports the version of the MySQL client/server
        protocol used by the client tools and libraries distributed with MySQL
        4.1 or later, so other programs that use the MySQL C API also can
        connect to it.
@@ -716,7 +716,7 @@ MYSQL INSTANCE MANAGER COMMANDS
            FLUSH INSTANCES is deprecated and will be removed in MySQL 5.2.
 
 COPYRIGHT
-       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       Copyright (C) 1997, 2011, Oracle and/or its affiliates. All rights
        reserved.
 
        This documentation is free software; you can redistribute it and/or

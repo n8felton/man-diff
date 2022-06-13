@@ -19,7 +19,7 @@ DESCRIPTION
 
        If you use the Linux server RPM package (MySQL-server-VERSION.rpm), the
        mysql.server script will be installed in the /etc/init.d directory with
-       the name mysql. You need not install it manually. See Section 2.10,
+       the name mysql. You need not install it manually. See Section 2.12,
        "Installing MySQL from RPM Packages on Linux", for more information on
        the Linux RPM packages.
 
@@ -29,7 +29,7 @@ DESCRIPTION
        If you install MySQL from a source distribution or using a binary
        distribution format that does not install mysql.server automatically,
        you can install it manually. Instructions are provided in
-       Section 2.17.2.2, "Starting and Stopping MySQL Automatically".
+       Section 2.18.1.2, "Starting and Stopping MySQL Automatically".
 
        mysql.server reads options from the [mysql.server] and [mysqld]
        sections of option files. For backward compatibility, it also reads
@@ -76,7 +76,7 @@ DESCRIPTION
            added in MySQL 5.0.4.
 
 COPYRIGHT
-       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       Copyright (C) 1997, 2011, Oracle and/or its affiliates. All rights
        reserved.
 
        This documentation is free software; you can redistribute it and/or

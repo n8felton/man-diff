@@ -23,7 +23,7 @@ DESCRIPTION
        which servers you want to start, stop, or obtain a status report for.
        Options listed in these groups are the same that you would use in the
        [mysqld] group used for starting mysqld. (See, for example,
-       Section 2.17.2.2, "Starting and Stopping MySQL Automatically".)
+       Section 2.18.1.2, "Starting and Stopping MySQL Automatically".)
        However, when using multiple servers, it is necessary that each one use
        its own value for options such as the Unix socket file and TCP/IP port
        number. For more information on which options must be unique per server
@@ -158,9 +158,9 @@ DESCRIPTION
 
        o   --tcp-ip
 
-           Connect to each MySQL server via the TCP/IP port instead of the
+           Connect to each MySQL server through the TCP/IP port instead of the
            Unix socket file. (If a socket file is missing, the server might
-           still be running, but accessible only via the TCP/IP port.) By
+           still be running, but accessible only through the TCP/IP port.) By
            default, connections are made using the Unix socket file. This
            option affects stop and report operations.
 
@@ -215,7 +215,7 @@ DESCRIPTION
            See Section 5.4, "The MySQL Access Privilege System". You have to
            do this for each mysqld server. Change the connection parameters
            appropriately when connecting to each one. Note that the host name
-           part of the account name must allow you to connect as multi_admin
+           part of the account name must permit you to connect as multi_admin
            from the host where you want to run mysqld_multi.
 
        o   The Unix socket file and the TCP/IP port number must be different
@@ -246,10 +246,10 @@ DESCRIPTION
            might encounter problems. See mysqld_safe(1).
 
        o   You might want to use the --user option for mysqld, but to do this
-           you need to run the mysqld_multi script as the Unix root user.
-           Having the option in the option file doesn't matter; you just get a
-           warning if you are not the superuser and the mysqld processes are
-           started under your own Unix account.
+           you need to run the mysqld_multi script as the Unix superuser
+           (root). Having the option in the option file doesn't matter; you
+           just get a warning if you are not the superuser and the mysqld
+           processes are started under your own Unix account.
 
        The following example shows how you might set up an option file for use
        with mysqld_multi. The order in which the mysqld programs are started
@@ -299,7 +299,7 @@ DESCRIPTION
        See Section 4.2.3.3, "Using Option Files".
 
 COPYRIGHT
-       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       Copyright (C) 1997, 2011, Oracle and/or its affiliates. All rights
        reserved.
 
        This documentation is free software; you can redistribute it and/or
