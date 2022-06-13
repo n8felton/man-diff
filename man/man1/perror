@@ -12,8 +12,8 @@ DESCRIPTION
        For most system errors, MySQL displays, in addition to an internal text
        message, the system error code in one of the following styles:
 
-          message ... (errno: #)
-          message ... (Errcode: #)
+           message ... (errno: #)
+           message ... (Errcode: #)
 
        You can find out what the error code means by examining the
        documentation for your system or by using the perror utility.
@@ -23,48 +23,49 @@ DESCRIPTION
 
        Invoke perror like this:
 
-          shell> perror [options] errorcode ...
+           shell> perror [options] errorcode ...
 
        Example:
 
-          shell> perror 13 64
-          OS error code  13:  Permission denied
-          OS error code  64:  Machine is not on the network
+           shell> perror 13 64
+           OS error code  13:  Permission denied
+           OS error code  64:  Machine is not on the network
 
        To obtain the error message for a MySQL Cluster error code, invoke
        perror with the --ndb option:
 
-          shell> perror --ndb errorcode
+           shell> perror --ndb errorcode
 
        Note that the meaning of system error messages may be dependent on your
        operating system. A given error code may mean different things on
        different operating systems.
 
-       perror supports the following options:
+       perror supports the following options.
 
-       o  --help, --info, -I, -?
+       o   --help, --info, -I, -?
 
-          Display a help message and exit.
+           Display a help message and exit.
 
-       o  --ndb
+       o   --ndb
 
-          Print the error message for a MySQL Cluster error code.
+           Print the error message for a MySQL Cluster error code.
 
-       o  --silent, -s
+       o   --silent, -s
 
-          Silent mode. Print only the error message.
+           Silent mode. Print only the error message.
 
-       o  --verbose, -v
+       o   --verbose, -v
 
-          Verbose mode. Print error code and message. This is the default
-          behavior.
+           Verbose mode. Print error code and message. This is the default
+           behavior.
 
-       o  --version, -V
+       o   --version, -V
 
-          Display version information and exit.
+           Display version information and exit.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
+       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       reserved.
 
        This documentation is free software; you can redistribute it and/or
        modify it only under the terms of the GNU General Public License as
@@ -80,13 +81,14 @@ COPYRIGHT
        51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
        http://www.gnu.org/licenses/.
 
+
 SEE ALSO
        For more information, please refer to the MySQL Reference Manual, which
        may already be installed locally and which is also available online at
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       Sun Microsystems, Inc. (http://www.mysql.com/).
+       Oracle Corporation (http://dev.mysql.com/).
 
 
 

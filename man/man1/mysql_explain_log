@@ -20,45 +20,46 @@ DESCRIPTION
        Invoke mysql_explain_log like this, where log_file contains all or part
        of a MySQL query log:
 
-          shell> mysql_explain_log [options] < log_file
+           shell> mysql_explain_log [options] < log_file
 
        mysql_explain_log understands the following options:
 
-       o  --help, -?
+       o   --help, -?
 
-          Display a help message and exit.
+           Display a help message and exit.
 
-       o  --date=YYMMDD, -d YYMMDD
+       o   --date=YYMMDD, -d YYMMDD
 
-          Select entries from the log only for the given date.
+           Select entries from the log only for the given date.
 
-       o  --host=host_name, -h host_name
+       o   --host=host_name, -h host_name
 
-          Connect to the MySQL server on the given host.
+           Connect to the MySQL server on the given host.
 
-       o  --password=password, -p password
+       o   --password=password, -p password
 
-          The password to use when connecting to the server.
+           The password to use when connecting to the server.
 
-          Specifying a password on the command line should be considered
-          insecure. See Section 5.5.6.2, "End-User Guidelines for Password
-          Security".
+           Specifying a password on the command line should be considered
+           insecure. See Section 5.3.2.2, "End-User Guidelines for Password
+           Security".
 
-       o  --printerror=1, -e 1
+       o   --printerror=1, -e 1
 
-          Enable error output.
+           Enable error output.
 
-       o  --socket=path, -S path
+       o   --socket=path, -S path
 
-          For connections to localhost, the Unix socket file to use, or, on
-          Windows, the name of the named pipe to use.
+           For connections to localhost, the Unix socket file to use, or, on
+           Windows, the name of the named pipe to use.
 
-       o  --user=user_name, -u user_name
+       o   --user=user_name, -u user_name
 
-          The MySQL user name to use when connecting to the server.
+           The MySQL user name to use when connecting to the server.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
+       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       reserved.
 
        This documentation is free software; you can redistribute it and/or
        modify it only under the terms of the GNU General Public License as
@@ -74,13 +75,14 @@ COPYRIGHT
        51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
        http://www.gnu.org/licenses/.
 
+
 SEE ALSO
        For more information, please refer to the MySQL Reference Manual, which
        may already be installed locally and which is also available online at
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       Sun Microsystems, Inc. (http://www.mysql.com/).
+       Oracle Corporation (http://dev.mysql.com/).
 
 
 

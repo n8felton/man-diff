@@ -13,34 +13,34 @@ DESCRIPTION
 
        Invoke resolve_stack_dump like this:
 
-          shell> resolve_stack_dump [options] symbols_file [numeric_dump_file]
+           shell> resolve_stack_dump [options] symbols_file [numeric_dump_file]
 
        The symbols file should include the output from the nm --numeric-sort
        mysqld command. The numeric dump file should contain a numeric stack
        track from mysqld. If no numeric dump file is named on the command
        line, the stack trace is read from the standard input.
 
-       resolve_stack_dump supports the options described in the following
-       list.
+       resolve_stack_dump supports the following options.
 
-       o  --help, -h
+       o   --help, -h
 
-          Display a help message and exit.
+           Display a help message and exit.
 
-       o  --numeric-dump-file=file_name, -n file_name
+       o   --numeric-dump-file=file_name, -n file_name
 
-          Read the stack trace from the given file.
+           Read the stack trace from the given file.
 
-       o  --symbols-file=file_name, -s file_name
+       o   --symbols-file=file_name, -s file_name
 
-          Use the given symbols file.
+           Use the given symbols file.
 
-       o  --version, -V
+       o   --version, -V
 
-          Display version information and exit.
+           Display version information and exit.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
+       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       reserved.
 
        This documentation is free software; you can redistribute it and/or
        modify it only under the terms of the GNU General Public License as
@@ -56,13 +56,14 @@ COPYRIGHT
        51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
        http://www.gnu.org/licenses/.
 
+
 SEE ALSO
        For more information, please refer to the MySQL Reference Manual, which
        may already be installed locally and which is also available online at
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       Sun Microsystems, Inc. (http://www.mysql.com/).
+       Oracle Corporation (http://dev.mysql.com/).
 
 
 

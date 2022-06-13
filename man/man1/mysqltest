@@ -22,226 +22,231 @@ DESCRIPTION
 
        Features of mysqltest:
 
-       o  Can send SQL statements to MySQL servers for execution
+       o   Can send SQL statements to MySQL servers for execution
 
-       o  Can execute external shell commands
+       o   Can execute external shell commands
 
-       o  Can test whether the result from an SQL statement or shell command
-          is as expected
+       o   Can test whether the result from an SQL statement or shell command
+           is as expected
 
-       o  Can connect to one or more standalone mysqld servers and switch
-          between connections
+       o   Can connect to one or more standalone mysqld servers and switch
+           between connections
 
-       o  Can connect to an embedded server (libmysqld), if MySQL is compiled
-          with support for libmysqld. (In this case, the executable is named
-          mysqltest_embedded rather than mysqltest.)
+       o   Can connect to an embedded server (libmysqld), if MySQL is compiled
+           with support for libmysqld. (In this case, the executable is named
+           mysqltest_embedded rather than mysqltest.)
 
+       By default, mysqltest reads the test case on the standard input. To run
+       mysqltest this way, you normally invoke it like this:
 
-By default, mysqltest reads the test case on the standard input. To run
-mysqltest this way, you normally invoke it like this:
+           shell> mysqltest [options] [db_name] < test_file
 
-   shell> mysqltest [options] [db_name] < test_file
+       You can also name the test case file with a --test-file=file_name
+       option.
 
-You can also name the test case file with a --test-file=file_name option.
+       The exit value from mysqltest is 0 for success, 1 for failure, and 62
+       if it skips the test case (for example, if after checking some
+       preconditions it decides not to run the test).
 
-The exit value from mysqltest is 0 for success, 1 for failure, and 62 if it
-skips the test case (for example, if after checking some preconditions it
-decides not to run the test).
+       mysqltest supports the following options:
 
-mysqltest supports the following options:
+       o   --help, -?
 
-o  --help, -?
+           Display a help message and exit.
 
-   Display a help message and exit.
+       o   --basedir=dir_name, -b dir_name
 
-o  --basedir=dir_name, -b dir_name
+           The base directory for tests.
 
-   The base directory for tests.
+       o   --big-test, -B
 
-o  --big-test, -B
+           Define the mysqltest variable $BIG_TEST as 1. This option was
+           removed in MySQL 4.1.23, 5.0.30, and 5.1.13.
 
-   Define the mysqltest variable $BIG_TEST as 1. This option was removed in
-   MySQL 4.1.23, 5.0.30, and 5.1.13.
+       o   --character-sets-dir=path
 
-o  --character-sets-dir=path
+           The directory where character sets are installed. This option was
+           added in MySQL 4.1.23, 5.0.32, and 5.1.13.
 
-   The directory where character sets are installed. This option was added in
-   MySQL 4.1.23, 5.0.32, and 5.1.13.
+       o   --compress, -C
 
-o  --compress, -C
+           Compress all information sent between the client and the server if
+           both support compression.
 
-   Compress all information sent between the client and the server if both
-   support compression.
+       o   --cursor-protocol
 
-o  --cursor-protocol
+           Use cursors for prepared statements (implies --ps-protocol). This
+           option was added in MySQL 5.0.19.
 
-   Use cursors for prepared statements (implies --ps-protocol). This option
-   was added in MySQL 5.0.19.
+       o   --database=db_name, -D db_name
 
-o  --database=db_name, -D db_name
+           The default database to use.
 
-   The default database to use.
+       o   --debug[=debug_options], -#[debug_options]
 
-o  --debug[=debug_options], -#[debug_options]
+           Write a debugging log if MySQL is built with debugging support. The
+           default debug_options value is 'd:t:S:i:O,/tmp/mysqltest.trace'.
 
-   Write a debugging log if MySQL is built with debugging support. The default
-   debug_options value is 'd:t:S:i:O,/tmp/mysqltest.trace'.
+       o   --debug-check
 
-o  --debug-check
+           Print some debugging information when the program exits. This
+           option was added in MySQL 5.1.21.
 
-   Print some debugging information when the program exits. This option was
-   added in MySQL 5.1.21.
+       o   --debug-info
 
-o  --debug-info
+           Print debugging information and memory and CPU usage statistics
+           when the program exits. This option was added in MySQL 5.1.14.
 
-   Print debugging information and memory and CPU usage statistics when the
-   program exits. This option was added in MySQL 5.1.14.
+       o   --host=host_name, -h host_name
 
-o  --host=host_name, -h host_name
+           Connect to the MySQL server on the given host.
 
-   Connect to the MySQL server on the given host.
+       o   --include=file_name, -i file_name
 
-o  --include=file_name, -i file_name
+           Include the contents of the given file before processing the
+           contents of the test file. The included file should have the same
+           format as other mysqltest test files. This option has the same
+           effect as putting a --source file_name command as the first line of
+           the test file. This option was added in MySQL 4.1.23, 5.0.30, and
+           5.1.7.
 
-   Include the contents of the given file before processing the contents of
-   the test file. The included file should have the same format as other
-   mysqltest test files. This option has the same effect as putting a --source
-   file_name command as the first line of the test file. This option was added
-   in MySQL 4.1.23, 5.0.30, and 5.1.7.
+       o   --logdir=dir_name
 
-o  --logdir=dir_name
+           The directory to use for log files. This option was added in MySQL
+           5.1.14.
 
-   The directory to use for log files. This option was added in MySQL 5.1.14.
+       o   --mark-progress
 
-o  --mark-progress
+           Write the line number and elapsed time to test_file.progress. This
+           option was added in MySQL 4.1.23, 5.0.30, and 5.1.12.
 
-   Write the line number and elapsed time to test_file.progress. This option
-   was added in MySQL 4.1.23, 5.0.30, and 5.1.12.
+       o   --max-connect-retries=num
 
-o  --max-connect-retries=num
+           The maximum number of connection attempts when connecting to
+           server. This option was added in MySQL 4.1.23, 5.0.23, and 5.1.11.
 
-   The maximum number of connection attempts when connecting to server. This
-   option was added in MySQL 4.1.23, 5.0.23, and 5.1.11.
+       o   --no-defaults
 
-o  --no-defaults
+           Do not read default options from any option files.
 
-   Do not read default options from any option files.
+       o   --password[=password], -p[password]
 
-o  --password[=password], -p[password]
+           The password to use when connecting to the server. If you use the
+           short option form (-p), you cannot have a space between the option
+           and the password. If you omit the password value following the
+           --password or -p option on the command line, you are prompted for
+           one.
 
-   The password to use when connecting to the server. If you use the short
-   option form (-p), you cannot have a space between the option and the
-   password. If you omit the password value following the --password or -p
-   option on the command line, you are prompted for one.
+       o   --port=port_num, -P port_num
 
-o  --port=port_num, -P port_num
+           The TCP/IP port number to use for the connection.
 
-   The TCP/IP port number to use for the connection.
+       o   --ps-protocol
 
-o  --ps-protocol
+           Use the prepared-statement protocol for communication.
 
-   Use the prepared-statement protocol for communication.
+       o   --quiet
 
-o  --quiet
+           Suppress all normal output. This is a synonym for --silent.
 
-   Suppress all normal output. This is a synonym for --silent.
+       o   --record, -r
 
-o  --record, -r
+           Record the output that results from running the test file into the
+           file named by the --result-file option, if that option is given.
 
-   Record the output that results from running the test file into the file
-   named by the --result-file option, if that option is given.
+       o   --result-file=file_name, -R file_name
 
-o  --result-file=file_name, -R file_name
+           This option specifies the file for test case expected results.
+           --result-file, together with --record, determines how mysqltest
+           treats the test actual and expected results for a test case:
 
-   This option specifies the file for test case expected results.
-   --result-file, together with --record, determines how mysqltest treats the
-   test actual and expected results for a test case:
+           o   If the test produces no results, mysqltest exits with an error
+               message to that effect.
 
-   o  If the test produces no results, mysqltest exits with an error message
-      to that effect.
+           o   Otherwise, if --result-file is not given, mysqltest sends test
+               results to the standard output.
 
-   o  Otherwise, if --result-file is not given, mysqltest sends test results
-      to the standard output.
+           o   With --result-file but not --record, mysqltest reads the
+               expected results from the given file and compares them with the
+               actual results. If the results do not match, mysqltest writes a
+               .reject file in the same directory as the result file and exits
+               with an error.
 
-   o  With --result-file but not --record, mysqltest reads the expected
-      results from the given file and compares them with the actual results.
-      If the results do not match, mysqltest writes a .reject file in the same
-      directory as the result file and exits with an error.
+           o   With both --result-file and --record, mysqltest updates the
+               given file by writing the actual test results to it.
 
-   o  With both --result-file and --record, mysqltest updates the given file
-      by writing the actual test results to it.
+       o   --server-arg=value, -A value
 
-o  --server-arg=value, -A value
+           Pass the argument as an argument to the embedded server. For
+           example, --server-arg=--tmpdir=/tmp or --server-arg=--core. Up to
+           64 arguments can be given.
 
-   Pass the argument as an argument to the embedded server. For example,
-   --server-arg=--tmpdir=/tmp or --server-arg=--core. Up to 64 arguments can
-   be given.
+       o   --server-file=file_name, -F file_name
 
-o  --server-file=file_name, -F file_name
+           Read arguments for the embedded server from the given file. The
+           file should contain one argument per line.
 
-   Read arguments for the embedded server from the given file. The file should
-   contain one argument per line.
+       o   --silent, -s
 
-o  --silent, -s
+           Suppress all normal output.
 
-   Suppress all normal output.
+       o   --skip-safemalloc
 
-o  --skip-safemalloc
+           Do not use memory allocation checking.
 
-   Do not use memory allocation checking.
+       o   --sleep=num, -T num
 
-o  --sleep=num, -T num
+           Cause all sleep commands in the test case file to sleep num
+           seconds. This option does not affect real_sleep commands.
 
-   Cause all sleep commands in the test case file to sleep num seconds. This
-   option does not affect real_sleep commands.
+           As of MySQL 5.0.23, an option value of 0 can be used, which
+           effectively disables sleep commands in the test case.
 
-   As of MySQL 5.0.23, an option value of 0 can be used, which effectively
-   disables sleep commands in the test case.
+       o   --socket=path, -S path
 
-o  --socket=path, -S path
+           The socket file to use when connecting to localhost (which is the
+           default host).
 
-   The socket file to use when connecting to localhost (which is the default
-   host).
+       o   --sp-protocol
 
-o  --sp-protocol
+           Execute DML statements within a stored procedure. For every DML
+           statement, mysqltest creates and invokes a stored procedure that
+           executes the statement rather than executing the statement
+           directly. This option was added in MySQL 5.0.19.
 
-   Execute DML statements within a stored procedure. For every DML statement,
-   mysqltest creates and invokes a stored procedure that executes the
-   statement rather than executing the statement directly. This option was
-   added in MySQL 5.0.19.
+       o   --test-file=file_name, -x file_name
 
-o  --test-file=file_name, -x file_name
+           Read test input from this file. The default is to read from the
+           standard input.
 
-   Read test input from this file. The default is to read from the standard
-   input.
+       o   --timer-file=file_name, -m file_name
 
-o  --timer-file=file_name, -m file_name
+           The file where the timing in microseconds is written.
 
-   The file where the timing in microseconds is written.
+       o   --tmpdir=dir_name, -t dir_name
 
-o  --tmpdir=dir_name, -t dir_name
+           The temporary directory where socket files are put.
 
-   The temporary directory where socket files are put.
+       o   --user=user_name, -u user_name
 
-o  --user=user_name, -u user_name
+           The MySQL user name to use when connecting to the server.
 
-   The MySQL user name to use when connecting to the server.
+       o   --verbose, -v
 
-o  --verbose, -v
+           Verbose mode. Print out more information what the program does.
 
-   Verbose mode. Print out more information what the program does.
+       o   --version, -V
 
-o  --version, -V
+           Display version information and exit.
 
-   Display version information and exit.
+       o   --view-protocol
 
-o  --view-protocol
-
-   Every SELECT statement is wrapped inside a view. This option was added in
-   MySQL 5.0.19.
+           Every SELECT statement is wrapped inside a view. This option was
+           added in MySQL 5.0.19.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
+       Copyright (C) 2007, 2010, Oracle and/or its affiliates. All rights
+       reserved.
 
        This documentation is free software; you can redistribute it and/or
        modify it only under the terms of the GNU General Public License as
@@ -257,13 +262,14 @@ COPYRIGHT
        51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
        http://www.gnu.org/licenses/.
 
+
 SEE ALSO
        For more information, please refer to the MySQL Reference Manual, which
        may already be installed locally and which is also available online at
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       Sun Microsystems, Inc. (http://www.mysql.com/).
+       Oracle Corporation (http://dev.mysql.com/).
 
 
 

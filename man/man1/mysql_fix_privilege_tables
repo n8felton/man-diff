@@ -20,9 +20,9 @@ DESCRIPTION
        to uprade the system tables in the mysql database after a MySQL
        upgrade.
 
-       Note
-       As of MySQL 5.0.19, mysql_fix_privilege_tables is superseded by
-       mysql_upgrade, which should be used instead. See mysql_upgrade(1).
+           Note
+           As of MySQL 5.0.19, mysql_fix_privilege_tables is superseded by
+           mysql_upgrade, which should be used instead. See mysql_upgrade(1).
 
        Before running mysql_fix_privilege_tables, make a backup of your mysql
        database.
@@ -30,14 +30,14 @@ DESCRIPTION
        On Unix or Unix-like systems, update the system tables by running the
        mysql_fix_privilege_tables script:
 
-          shell> mysql_fix_privilege_tables
+           shell> mysql_fix_privilege_tables
 
        You must run this script while the server is running. It attempts to
        connect to the server running on the local host as root. If your root
        account requires a password, indicate the password on the command line
        like this:
 
-          shell> mysql_fix_privilege_tables --password=root_password
+           shell> mysql_fix_privilege_tables --password=root_password
 
        The mysql_fix_privilege_tables script performs any actions necessary to
        convert your system tables to the current format. You might see some
@@ -51,12 +51,14 @@ DESCRIPTION
        mysql client. For example, if your MySQL installation is located at
        C:\Program Files\MySQL\MySQL Server 5.0, the commands look like this:
 
-          C:\> cd "C:\Program Files\MySQL\MySQL Server 5.0"
-          C:\> bin\mysql -u root -p mysql
-          mysql> SOURCE share/mysql_fix_privilege_tables.sql
+           C:\> cd "C:\Program Files\MySQL\MySQL Server 5.0"
+           C:\> bin\mysql -u root -p mysql
+           mysql> SOURCE share/mysql_fix_privilege_tables.sql
 
-       Note
-       Prior to version 5.0.38, this script is found in the scripts directory.
+
+           Note
+           Prior to version 5.0.38, this script is found in the scripts
+           directory.
 
        The mysql command will prompt you for the root password; enter it when
        prompted.
@@ -71,7 +73,8 @@ DESCRIPTION
        After running the script, stop the server and restart it.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
+       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       reserved.
 
        This documentation is free software; you can redistribute it and/or
        modify it only under the terms of the GNU General Public License as
@@ -87,13 +90,14 @@ COPYRIGHT
        51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
        http://www.gnu.org/licenses/.
 
+
 SEE ALSO
        For more information, please refer to the MySQL Reference Manual, which
        may already be installed locally and which is also available online at
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       Sun Microsystems, Inc. (http://www.mysql.com/).
+       Oracle Corporation (http://dev.mysql.com/).
 
 
 

@@ -13,21 +13,21 @@ DESCRIPTION
        their tables, or a table's columns or indexes.
 
        mysqlshow provides a command-line interface to several SQL SHOW
-       statements. See Section 12.5.5, "SHOW Syntax". The same information can
+       statements. See Section 12.4.5, "SHOW Syntax". The same information can
        be obtained by using those statements directly. For example, you can
        issue them from the mysql client program.
 
        Invoke mysqlshow like this:
 
-          shell> mysqlshow [options] [db_name [tbl_name [col_name]]]
+           shell> mysqlshow [options] [db_name [tbl_name [col_name]]]
 
-       o  If no database is given, a list of database names is shown.
+       o   If no database is given, a list of database names is shown.
 
-       o  If no table is given, all matching tables in the database are shown.
+       o   If no table is given, all matching tables in the database are
+           shown.
 
-       o  If no column is given, all matching columns and column types in the
-          table are shown.
-
+       o   If no column is given, all matching columns and column types in the
+           table are shown.
 
        The output displays only the names of those databases, tables, or
        columns for which you have some privileges.
@@ -43,114 +43,118 @@ DESCRIPTION
        names that match the pattern. This is easily fixed by adding an extra
        "%" last on the command line as a separate argument.
 
-       mysqlshow supports the options in the following list. It also reads
-       option files and supports the options for processing them described at
-       Section 4.2.3.2.1, "Command-Line Options that Affect Option-File
-       Handling".
+       mysqlshow supports the following options, which can be specified on the
+       command line or in the [mysqlshow] and [client] option file groups.
+       mysqlshow also supports the options for processing option files
+       described at Section 4.2.3.3.1, "Command-Line Options that Affect
+       Option-File Handling".
 
-       o  --help, -?
+       o   --help, -?
 
-          Display a help message and exit.
+           Display a help message and exit.
 
-       o  --character-sets-dir=path
+       o   --character-sets-dir=path
 
-          The directory where character sets are installed. See Section 9.2,
-          "The Character Set Used for Data and Sorting".
+           The directory where character sets are installed. See Section 9.5,
+           "Character Set Configuration".
 
-       o  --compress, -C
+       o   --compress, -C
 
-          Compress all information sent between the client and the server if
-          both support compression.
+           Compress all information sent between the client and the server if
+           both support compression.
 
-       o  --count
+       o   --count
 
-          Show the number of rows per table. This can be slow for non-MyISAM
-          tables. This option was added in MySQL 5.0.6.
+           Show the number of rows per table. This can be slow for non-MyISAM
+           tables. This option was added in MySQL 5.0.6.
 
-       o  --debug[=debug_options], -# [debug_options]
+       o   --debug[=debug_options], -# [debug_options]
 
-          Write a debugging log. A typical debug_options string is
-          'd:t:o,file_name'. The default is 'd:t:o'.
+           Write a debugging log. A typical debug_options string is
+           'd:t:o,file_name'. The default is 'd:t:o'.
 
-       o  --default-character-set=charset_name
+       o   --default-character-set=charset_name
 
-          Use charset_name as the default character set. See Section 9.2, "The
-          Character Set Used for Data and Sorting".
+           Use charset_name as the default character set. See Section 9.5,
+           "Character Set Configuration".
 
-       o  --host=host_name, -h host_name
+       o   --host=host_name, -h host_name
 
-          Connect to the MySQL server on the given host.
+           Connect to the MySQL server on the given host.
 
-       o  --keys, -k
+       o   --keys, -k
 
-          Show table indexes.
+           Show table indexes.
 
-       o  --password[=password], -p[password]
+       o   --password[=password], -p[password]
 
-          The password to use when connecting to the server. If you use the
-          short option form (-p), you cannot have a space between the option
-          and the password. If you omit the password value following the
-          --password or -p option on the command line, you are prompted for
-          one.
+           The password to use when connecting to the server. If you use the
+           short option form (-p), you cannot have a space between the option
+           and the password. If you omit the password value following the
+           --password or -p option on the command line, mysqlshow prompts for
+           one.
 
-          Specifying a password on the command line should be considered
-          insecure. See Section 5.5.6.2, "End-User Guidelines for Password
-          Security".
+           Specifying a password on the command line should be considered
+           insecure. See Section 5.3.2.2, "End-User Guidelines for Password
+           Security". You can use an option file to avoid giving the password
+           on the command line. You can use an option file to avoid giving the
+           password on the command line.
 
-       o  --pipe, -W
+       o   --pipe, -W
 
-          On Windows, connect to the server via a named pipe. This option
-          applies only for connections to a local server, and only if the
-          server supports named-pipe connections.
+           On Windows, connect to the server via a named pipe. This option
+           applies only if the server supports named-pipe connections.
 
-       o  --port=port_num, -P port_num
+       o   --port=port_num, -P port_num
 
-          The TCP/IP port number to use for the connection.
+           The TCP/IP port number to use for the connection.
 
-       o  --protocol={TCP|SOCKET|PIPE|MEMORY}
+       o   --protocol={TCP|SOCKET|PIPE|MEMORY}
 
-          The connection protocol to use for connecting to the server. It is
-          useful when the other connection parameters normally would cause a
-          protocol to be used other than the one you want. For details on the
-          allowable values, see Section 4.2.2, "Connecting to the MySQL
-          Server".
+           The connection protocol to use for connecting to the server. It is
+           useful when the other connection parameters normally would cause a
+           protocol to be used other than the one you want. For details on the
+           allowable values, see Section 4.2.2, "Connecting to the MySQL
+           Server".
 
-       o  --show-table-type, -t
+       o   --show-table-type, -t
 
-          Show a column indicating the table type, as in SHOW FULL TABLES. The
-          type is BASE TABLE or VIEW. This option was added in MySQL 5.0.4.
+           Show a column indicating the table type, as in SHOW FULL TABLES.
+           The type is BASE TABLE or VIEW. This option was added in MySQL
+           5.0.4.
 
-       o  --socket=path, -S path
+       o   --socket=path, -S path
 
-          For connections to localhost, the Unix socket file to use, or, on
-          Windows, the name of the named pipe to use.
+           For connections to localhost, the Unix socket file to use, or, on
+           Windows, the name of the named pipe to use.
 
-       o  --ssl*
+       o   --ssl*
 
-          Options that begin with --ssl specify whether to connect to the
-          server via SSL and indicate where to find SSL keys and certificates.
-          See Section 5.5.7.3, "SSL Command Options".
+           Options that begin with --ssl specify whether to connect to the
+           server via SSL and indicate where to find SSL keys and
+           certificates. See Section 5.5.6.3, "SSL Command Options".
 
-       o  --status, -i
+       o   --status, -i
 
-          Display extra information about each table.
+           Display extra information about each table.
 
-       o  --user=user_name, -u user_name
+       o   --user=user_name, -u user_name
 
-          The MySQL user name to use when connecting to the server.
+           The MySQL user name to use when connecting to the server.
 
-       o  --verbose, -v
+       o   --verbose, -v
 
-          Verbose mode. Print more information about what the program does.
-          This option can be used multiple times to increase the amount of
-          information.
+           Verbose mode. Print more information about what the program does.
+           This option can be used multiple times to increase the amount of
+           information.
 
-       o  --version, -V
+       o   --version, -V
 
-          Display version information and exit.
+           Display version information and exit.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
+       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       reserved.
 
        This documentation is free software; you can redistribute it and/or
        modify it only under the terms of the GNU General Public License as
@@ -166,13 +170,14 @@ COPYRIGHT
        51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
        http://www.gnu.org/licenses/.
 
+
 SEE ALSO
        For more information, please refer to the MySQL Reference Manual, which
        may already be installed locally and which is also available online at
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       Sun Microsystems, Inc. (http://www.mysql.com/).
+       Oracle Corporation (http://dev.mysql.com/).
 
 
 

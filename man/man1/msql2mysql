@@ -19,9 +19,9 @@ DESCRIPTION
        in place, so make a copy of the original before converting it. For
        example, use msql2mysql like this:
 
-          shell> cp client-prog.c client-prog.c.orig
-          shell> msql2mysql client-prog.c
-          client-prog.c converted
+           shell> cp client-prog.c client-prog.c.orig
+           shell> msql2mysql client-prog.c
+           client-prog.c converted
 
        Then examine client-prog.c and make any post-conversion revisions that
        may be necessary.
@@ -30,7 +30,8 @@ DESCRIPTION
        substitutions. See replace(1).
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
+       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       reserved.
 
        This documentation is free software; you can redistribute it and/or
        modify it only under the terms of the GNU General Public License as
@@ -46,13 +47,14 @@ COPYRIGHT
        51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
        http://www.gnu.org/licenses/.
 
+
 SEE ALSO
        For more information, please refer to the MySQL Reference Manual, which
        may already be installed locally and which is also available online at
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       Sun Microsystems, Inc. (http://www.mysql.com/).
+       Oracle Corporation (http://dev.mysql.com/).
 
 
 

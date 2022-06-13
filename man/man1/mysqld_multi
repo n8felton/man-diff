@@ -32,7 +32,7 @@ DESCRIPTION
 
        To invoke mysqld_multi, use the following syntax:
 
-          shell> mysqld_multi [options] {start|stop|report} [GNR[,GNR] ...]
+           shell> mysqld_multi [options] {start|stop|report} [GNR[,GNR] ...]
 
        start, stop, and report indicate which operation to perform. You can
        perform the designated operation for a single server or multiple
@@ -52,32 +52,28 @@ DESCRIPTION
 
        This command starts a single server using option group [mysqld17]:
 
-          shell> mysqld_multi start 17
+           shell> mysqld_multi start 17
 
        This command stops several servers, using option groups [mysqld8] and
        [mysqld10] through [mysqld13]:
 
-          shell> mysqld_multi stop 8,10-13
+           shell> mysqld_multi stop 8,10-13
 
        For an example of how you might set up an option file, use this
        command:
 
-          shell> mysqld_multi --example
+           shell> mysqld_multi --example
 
        As of MySQL 5.0.42, mysqld_multi searches for option files as follows:
 
-       o  With --no-defaults, no option files are read.
+       o   With --no-defaults, no option files are read.
 
-       o  With --defaults-file=file_name, only the named file is read.
+       o   With --defaults-file=file_name, only the named file is read.
 
-       o  Otherwise, option files in the standard list of locations are read,
-          including any file named by the --defaults-extra-file=file_name
-          option, if one is given. (If the option is given multiple times, the
-          last value is used.)
-
-
-       Option files read are searched for [mysqld_multi] and [mysqldN] option
-       groups.
+       o   Otherwise, option files in the standard list of locations are read,
+           including any file named by the --defaults-extra-file=file_name
+           option, if one is given. (If the option is given multiple times,
+           the last value is used.)
 
        Before MySQL 5.0.42, the preceding options are not recognized. Files in
        the standard locations are read, and any file named by the
@@ -85,160 +81,175 @@ DESCRIPTION
        --config-file is read only for [mysqldN] option groups, not the
        [mysqld_multi] group.
 
-       mysqld_multi supports the following options:
+       Option files read are searched for [mysqld_multi] and [mysqldN] option
+       groups. The [mysqld_multi] group can be used for options to
+       mysqld_multi itself.  [mysqldN] groups can be used for options passed
+       to specific mysqld instances.
 
-       o  --help
+       As of MySQL 5.0.82, the [mysqld] or [mysqld_safe] groups can be used
+       for common options read by all instances of mysqld or mysqld_safe. You
+       can specify a --defaults-file=file_name option to use a different
+       configuration file for that instance, in which case the [mysqld] or
+       [mysqld_safe] groups from that file will be used for that instance.
+       Before MySQL 5.0.82, some versions of mysqld_multi pass the
+       --no-defaults options to instances, so these techniques are
+       inapplicable.
 
-          Display a help message and exit.
+       mysqld_multi supports the following options.
 
-       o  --config-file=file_name
+       o   --help
 
-          As of MySQL 5.0.42, this option is deprecated. If given, it is
-          treated the same way as --defaults-extra-file, described earlier.
+           Display a help message and exit.
 
-          Before MySQL 5.0.42, this option specifies the name of an extra
-          option file. It affects where mysqld_multi looks for [mysqldN]
-          option groups. Without this option, all options are read from the
-          usual my.cnf file. The option does not affect where mysqld_multi
-          reads its own options, which are always taken from the
-          [mysqld_multi] group in the usual my.cnf file.
+       o   --config-file=file_name
 
-       o  --example
+           As of MySQL 5.0.42, this option is deprecated. If given, it is
+           treated the same way as --defaults-extra-file, described earlier.
+           --config-file is removed in MySQL 5.5.
 
-          Display a sample option file.
+           Before MySQL 5.0.42, this option specifies the name of an extra
+           option file. It affects where mysqld_multi looks for [mysqldN]
+           option groups. Without this option, all options are read from the
+           usual my.cnf file. The option does not affect where mysqld_multi
+           reads its own options, which are always taken from the
+           [mysqld_multi] group in the usual my.cnf file.
 
-       o  --log=file_name
+       o   --example
 
-          Specify the name of the log file. If the file exists, log output is
-          appended to it.
+           Display a sample option file.
 
-       o  --mysqladmin=prog_name
+       o   --log=file_name
 
-          The mysqladmin binary to be used to stop servers.
+           Specify the name of the log file. If the file exists, log output is
+           appended to it.
 
-       o  --mysqld=prog_name
+       o   --mysqladmin=prog_name
 
-          The mysqld binary to be used. Note that you can specify mysqld_safe
-          as the value for this option also. If you use mysqld_safe to start
-          the server, you can include the mysqld or ledir options in the
-          corresponding [mysqldN] option group. These options indicate the
-          name of the server that mysqld_safe should start and the path name
-          of the directory where the server is located. (See the descriptions
-          for these options in mysqld_safe(1).) Example:
+           The mysqladmin binary to be used to stop servers.
 
-          [mysqld38]
-          mysqld = mysqld-debug
-          ledir  = /opt/local/mysql/libexec
+       o   --mysqld=prog_name
 
-       o  --no-log
+           The mysqld binary to be used. Note that you can specify mysqld_safe
+           as the value for this option also. If you use mysqld_safe to start
+           the server, you can include the mysqld or ledir options in the
+           corresponding [mysqldN] option group. These options indicate the
+           name of the server that mysqld_safe should start and the path name
+           of the directory where the server is located. (See the descriptions
+           for these options in mysqld_safe(1).) Example:
 
-          Print log information to stdout rather than to the log file. By
-          default, output goes to the log file.
+               [mysqld38]
+               mysqld = mysqld-debug
+               ledir  = /opt/local/mysql/libexec
 
-       o  --password=password
+       o   --no-log
 
-          The password of the MySQL account to use when invoking mysqladmin.
-          Note that the password value is not optional for this option, unlike
-          for other MySQL programs.
+           Print log information to stdout rather than to the log file. By
+           default, output goes to the log file.
 
-       o  --silent
+       o   --password=password
 
-          Silent mode; disable warnings.
+           The password of the MySQL account to use when invoking mysqladmin.
+           Note that the password value is not optional for this option,
+           unlike for other MySQL programs.
 
-       o  --tcp-ip
+       o   --silent
 
-          Connect to each MySQL server via the TCP/IP port instead of the Unix
-          socket file. (If a socket file is missing, the server might still be
-          running, but accessible only via the TCP/IP port.) By default,
-          connections are made using the Unix socket file. This option affects
-          stop and report operations.
+           Silent mode; disable warnings.
 
-       o  --user=user_name
+       o   --tcp-ip
 
-          The user name of the MySQL account to use when invoking mysqladmin.
+           Connect to each MySQL server via the TCP/IP port instead of the
+           Unix socket file. (If a socket file is missing, the server might
+           still be running, but accessible only via the TCP/IP port.) By
+           default, connections are made using the Unix socket file. This
+           option affects stop and report operations.
 
-       o  --verbose
+       o   --user=user_name
 
-          Be more verbose.
+           The user name of the MySQL account to use when invoking mysqladmin.
 
-       o  --version
+       o   --verbose
 
-          Display version information and exit.
+           Be more verbose.
 
+       o   --version
+
+           Display version information and exit.
 
        Some notes about mysqld_multi:
 
-       o  Most important: Before using mysqld_multi be sure that you
-          understand the meanings of the options that are passed to the mysqld
-          servers and why you would want to have separate mysqld processes.
-          Beware of the dangers of using multiple mysqld servers with the same
-          data directory. Use separate data directories, unless you know what
-          you are doing. Starting multiple servers with the same data
-          directory does not give you extra performance in a threaded system.
-          See Section 5.6, "Running Multiple MySQL Servers on the Same
-          Machine".
+       o   Most important: Before using mysqld_multi be sure that you
+           understand the meanings of the options that are passed to the
+           mysqld servers and why you would want to have separate mysqld
+           processes. Beware of the dangers of using multiple mysqld servers
+           with the same data directory. Use separate data directories, unless
+           you know what you are doing. Starting multiple servers with the
+           same data directory does not give you extra performance in a
+           threaded system. See Section 5.6, "Running Multiple MySQL Servers
+           on the Same Machine".
 
        o
 
-          Important
-          Make sure that the data directory for each server is fully
-          accessible to the Unix account that the specific mysqld process is
-          started as.  Do not use the Unix root account for this, unless you
-          know what you are doing. See Section 5.3.5, "How to Run MySQL as a
-          Normal User".
+               Important
+               Make sure that the data directory for each server is fully
+               accessible to the Unix account that the specific mysqld process
+               is started as.  Do not use the Unix root account for this,
+               unless you know what you are doing. See Section 5.3.6, "How to
+               Run MySQL as a Normal User".
 
-       o  Make sure that the MySQL account used for stopping the mysqld
-          servers (with the mysqladmin program) has the same user name and
-          password for each server. Also, make sure that the account has the
-          SHUTDOWN privilege. If the servers that you want to manage have
-          different user names or passwords for the administrative accounts,
-          you might want to create an account on each server that has the same
-          user name and password. For example, you might set up a common
-          multi_admin account by executing the following commands for each
-          server:
+       o   Make sure that the MySQL account used for stopping the mysqld
+           servers (with the mysqladmin program) has the same user name and
+           password for each server. Also, make sure that the account has the
+           SHUTDOWN privilege. If the servers that you want to manage have
+           different user names or passwords for the administrative accounts,
+           you might want to create an account on each server that has the
+           same user name and password. For example, you might set up a common
+           multi_admin account by executing the following commands for each
+           server:
 
-          shell> mysql -u root -S /tmp/mysql.sock -p
-          Enter password:
-          mysql> GRANT SHUTDOWN ON *.*
-              -> TO 'multi_admin'@'localhost' IDENTIFIED BY 'multipass';
-       See Section 5.4, "The MySQL Access Privilege System". You have to do
-       this for each mysqld server. Change the connection parameters
-       appropriately when connecting to each one. Note that the host name part
-       of the account name must allow you to connect as multi_admin from the
-       host where you want to run mysqld_multi.
+               shell> mysql -u root -S /tmp/mysql.sock -p
+               Enter password:
+               mysql> GRANT SHUTDOWN ON *.*
+                   -> TO 'multi_admin'@'localhost' IDENTIFIED BY 'multipass';
 
-       o  The Unix socket file and the TCP/IP port number must be different
-          for every mysqld. (Alternatively, if the host has multiple network
-          addresses, you can use --bind-address to cause different servers to
-          listen to different interfaces.)
+           See Section 5.4, "The MySQL Access Privilege System". You have to
+           do this for each mysqld server. Change the connection parameters
+           appropriately when connecting to each one. Note that the host name
+           part of the account name must allow you to connect as multi_admin
+           from the host where you want to run mysqld_multi.
 
-       o  The --pid-file option is very important if you are using mysqld_safe
-          to start mysqld (for example, --mysqld=mysqld_safe) Every mysqld
-          should have its own process ID file. The advantage of using
-          mysqld_safe instead of mysqld is that mysqld_safe monitors its
-          mysqld process and restarts it if the process terminates due to a
-          signal sent using kill -9 or for other reasons, such as a
-          segmentation fault. Please note that the mysqld_safe script might
-          require that you start it from a certain place. This means that you
-          might have to change location to a certain directory before running
-          mysqld_multi. If you have problems starting, please see the
-          mysqld_safe script. Check especially the lines:
+       o   The Unix socket file and the TCP/IP port number must be different
+           for every mysqld. (Alternatively, if the host has multiple network
+           addresses, you can use --bind-address to cause different servers to
+           listen to different interfaces.)
 
-          ----------------------------------------------------------------
-          MY_PWD=`pwd`
-          # Check if we are starting this relative (for the binary release)
-          if test -d $MY_PWD/data/mysql -a -f ./share/mysql/english/errmsg.sys -a \
-           -x ./bin/mysqld
-          ----------------------------------------------------------------
-       The test performed by these lines should be successful, or you might
-       encounter problems. See mysqld_safe(1).
+       o   The --pid-file option is very important if you are using
+           mysqld_safe to start mysqld (for example, --mysqld=mysqld_safe)
+           Every mysqld should have its own process ID file. The advantage of
+           using mysqld_safe instead of mysqld is that mysqld_safe monitors
+           its mysqld process and restarts it if the process terminates due to
+           a signal sent using kill -9 or for other reasons, such as a
+           segmentation fault. Please note that the mysqld_safe script might
+           require that you start it from a certain place. This means that you
+           might have to change location to a certain directory before running
+           mysqld_multi. If you have problems starting, please see the
+           mysqld_safe script. Check especially the lines:
 
-       o  You might want to use the --user option for mysqld, but to do this
-          you need to run the mysqld_multi script as the Unix root user.
-          Having the option in the option file doesn't matter; you just get a
-          warning if you are not the superuser and the mysqld processes are
-          started under your own Unix account.
+               ----------------------------------------------------------------
+               MY_PWD=`pwd`
+               # Check if we are starting this relative (for the binary release)
+               if test -d $MY_PWD/data/mysql -a -f ./share/mysql/english/errmsg.sys -a \
+                -x ./bin/mysqld
+               ----------------------------------------------------------------
 
+           The test performed by these lines should be successful, or you
+           might encounter problems. See mysqld_safe(1).
+
+       o   You might want to use the --user option for mysqld, but to do this
+           you need to run the mysqld_multi script as the Unix root user.
+           Having the option in the option file doesn't matter; you just get a
+           warning if you are not the superuser and the mysqld processes are
+           started under your own Unix account.
 
        The following example shows how you might set up an option file for use
        with mysqld_multi. The order in which the mysqld programs are started
@@ -248,47 +259,48 @@ DESCRIPTION
        illustrate that you can have "gaps" in the option file. This gives you
        more flexibility.
 
-          # This file should probably be in your home dir (~/.my.cnf)
-          # or /etc/my.cnf
-          # Version 2.1 by Jani Tolonen
-          [mysqld_multi]
-          mysqld     = /usr/local/bin/mysqld_safe
-          mysqladmin = /usr/local/bin/mysqladmin
-          user       = multi_admin
-          password   = multipass
-          [mysqld2]
-          socket     = /tmp/mysql.sock2
-          port       = 3307
-          pid-file   = /usr/local/mysql/var2/hostname.pid2
-          datadir    = /usr/local/mysql/var2
-          language   = /usr/local/share/mysql/english
-          user       = john
-          [mysqld3]
-          socket     = /tmp/mysql.sock3
-          port       = 3308
-          pid-file   = /usr/local/mysql/var3/hostname.pid3
-          datadir    = /usr/local/mysql/var3
-          language   = /usr/local/share/mysql/swedish
-          user       = monty
-          [mysqld4]
-          socket     = /tmp/mysql.sock4
-          port       = 3309
-          pid-file   = /usr/local/mysql/var4/hostname.pid4
-          datadir    = /usr/local/mysql/var4
-          language   = /usr/local/share/mysql/estonia
-          user       = tonu
-          [mysqld6]
-          socket     = /tmp/mysql.sock6
-          port       = 3311
-          pid-file   = /usr/local/mysql/var6/hostname.pid6
-          datadir    = /usr/local/mysql/var6
-          language   = /usr/local/share/mysql/japanese
-          user       = jani
+           # This file should probably be in your home dir (~/.my.cnf)
+           # or /etc/my.cnf
+           # Version 2.1 by Jani Tolonen
+           [mysqld_multi]
+           mysqld     = /usr/local/bin/mysqld_safe
+           mysqladmin = /usr/local/bin/mysqladmin
+           user       = multi_admin
+           password   = multipass
+           [mysqld2]
+           socket     = /tmp/mysql.sock2
+           port       = 3307
+           pid-file   = /usr/local/mysql/var2/hostname.pid2
+           datadir    = /usr/local/mysql/var2
+           language   = /usr/local/share/mysql/english
+           user       = john
+           [mysqld3]
+           socket     = /tmp/mysql.sock3
+           port       = 3308
+           pid-file   = /usr/local/mysql/var3/hostname.pid3
+           datadir    = /usr/local/mysql/var3
+           language   = /usr/local/share/mysql/swedish
+           user       = monty
+           [mysqld4]
+           socket     = /tmp/mysql.sock4
+           port       = 3309
+           pid-file   = /usr/local/mysql/var4/hostname.pid4
+           datadir    = /usr/local/mysql/var4
+           language   = /usr/local/share/mysql/estonia
+           user       = tonu
+           [mysqld6]
+           socket     = /tmp/mysql.sock6
+           port       = 3311
+           pid-file   = /usr/local/mysql/var6/hostname.pid6
+           datadir    = /usr/local/mysql/var6
+           language   = /usr/local/share/mysql/japanese
+           user       = jani
 
-       See Section 4.2.3.2, "Using Option Files".
+       See Section 4.2.3.3, "Using Option Files".
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
+       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       reserved.
 
        This documentation is free software; you can redistribute it and/or
        modify it only under the terms of the GNU General Public License as
@@ -304,13 +316,14 @@ COPYRIGHT
        51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
        http://www.gnu.org/licenses/.
 
+
 SEE ALSO
        For more information, please refer to the MySQL Reference Manual, which
        may already be installed locally and which is also available online at
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       Sun Microsystems, Inc. (http://www.mysql.com/).
+       Oracle Corporation (http://dev.mysql.com/).
 
 
 

@@ -16,55 +16,56 @@ DESCRIPTION
        To see what options are present in those groups in the standard option
        files, invoke my_print_defaults like this:
 
-          shell> my_print_defaults mysqlcheck client
-          --user=myusername
-          --password=secret
-          --host=localhost
+           shell> my_print_defaults mysqlcheck client
+           --user=myusername
+           --password=secret
+           --host=localhost
 
        The output consists of options, one per line, in the form that they
        would be specified on the command line.
 
-       my_print_defaults supports the following options:
+       my_print_defaults supports the following options.
 
-       o  --help, -?
+       o   --help, -?
 
-          Display a help message and exit.
+           Display a help message and exit.
 
-       o  --config-file=file_name, --defaults-file=file_name, -c file_name
+       o   --config-file=file_name, --defaults-file=file_name, -c file_name
 
-          Read only the given option file.
+           Read only the given option file.
 
-       o  --debug=debug_options, -# debug_options
+       o   --debug=debug_options, -# debug_options
 
-          Write a debugging log. A typical debug_options string is
-          'd:t:o,file_name'. The default is
-          'd:t:o,/tmp/my_print_defaults.trace'.
+           Write a debugging log. A typical debug_options string is
+           'd:t:o,file_name'. The default is
+           'd:t:o,/tmp/my_print_defaults.trace'.
 
-       o  --defaults-extra-file=file_name, --extra-file=file_name, -e
-          file_name
+       o   --defaults-extra-file=file_name, --extra-file=file_name, -e
+           file_name
 
-          Read this option file after the global option file but (on Unix)
-          before the user option file.
+           Read this option file after the global option file but (on Unix)
+           before the user option file.
 
-       o  --defaults-group-suffix=suffix, -g suffix
+       o   --defaults-group-suffix=suffix, -g suffix
 
-          In addition to the groups named on the command line, read groups
-          that have the given suffix.
+           In addition to the groups named on the command line, read groups
+           that have the given suffix.
 
-       o  --no-defaults, -n
+       o   --no-defaults, -n
 
-          Return an empty string.
+           Return an empty string.
 
-       o  --verbose, -v
+       o   --verbose, -v
 
-          Verbose mode. Print more information about what the program does.
+           Verbose mode. Print more information about what the program does.
 
-       o  --version, -V
+       o   --version, -V
 
-          Display version information and exit.
+           Display version information and exit.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
+       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       reserved.
 
        This documentation is free software; you can redistribute it and/or
        modify it only under the terms of the GNU General Public License as
@@ -80,13 +81,14 @@ COPYRIGHT
        51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
        http://www.gnu.org/licenses/.
 
+
 SEE ALSO
        For more information, please refer to the MySQL Reference Manual, which
        may already be installed locally and which is also available online at
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       Sun Microsystems, Inc. (http://www.mysql.com/).
+       Oracle Corporation (http://dev.mysql.com/).
 
 
 

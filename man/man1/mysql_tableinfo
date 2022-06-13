@@ -19,7 +19,7 @@ DESCRIPTION
 
        Invoke mysql_tableinfo like this:
 
-          shell> mysql_tableinfo [options] db_name [db_like [tbl_like]]
+           shell> mysql_tableinfo [options] db_name [db_like [tbl_like]]
 
        The db_name argument indicates which database mysql_tableinfo should
        use as the location for the metadata tables. The database will be
@@ -32,9 +32,9 @@ DESCRIPTION
 
        Examples:
 
-          mysql_tableinfo info
-          mysql_tableinfo info world
-          mysql_tableinfo info mydb tmp%
+           mysql_tableinfo info
+           mysql_tableinfo info world
+           mysql_tableinfo info mydb tmp%
 
        Each of the commands stores information into tables in the info
        database. The first stores information for all databases and tables.
@@ -44,69 +44,70 @@ DESCRIPTION
 
        mysql_tableinfo supports the following options:
 
-       o  --help
+       o   --help
 
-          Display a help message and exit.
+           Display a help message and exit.
 
-       o  --clear
+       o   --clear
 
-          Before populating each metadata table, drop it if it exists.
+           Before populating each metadata table, drop it if it exists.
 
-       o  --clear-only
+       o   --clear-only
 
-          Similar to --clear, but exits after dropping the metadata tables to
-          be populated.
+           Similar to --clear, but exits after dropping the metadata tables to
+           be populated.
 
-       o  --col
+       o   --col
 
-          Generate column metadata into the col table.
+           Generate column metadata into the col table.
 
-       o  --host=host_name, -h host_name
+       o   --host=host_name, -h host_name
 
-          Connect to the MySQL server on the given host.
+           Connect to the MySQL server on the given host.
 
-       o  --idx
+       o   --idx
 
-          Generate index metadata into the idx table.
+           Generate index metadata into the idx table.
 
-       o  --password=password, -ppassword
+       o   --password=password, -ppassword
 
-          The password to use when connecting to the server. Note that the
-          password value is not optional for this option, unlike for other
-          MySQL programs. You can use an option file to avoid giving the
-          password on the command line.
+           The password to use when connecting to the server. Note that the
+           password value is not optional for this option, unlike for other
+           MySQL programs. You can use an option file to avoid giving the
+           password on the command line.
 
-          Specifying a password on the command line should be considered
-          insecure. See Section 5.5.6.2, "End-User Guidelines for Password
-          Security".
+           Specifying a password on the command line should be considered
+           insecure. See Section 5.3.2.2, "End-User Guidelines for Password
+           Security".
 
-       o  --port=port_num, -P port_num
+       o   --port=port_num, -P port_num
 
-          The TCP/IP port number to use for the connection.
+           The TCP/IP port number to use for the connection.
 
-       o  --prefix=prefix_str
+       o   --prefix=prefix_str
 
-          Add prefix_str at the beginning of each metadata table name.
+           Add prefix_str at the beginning of each metadata table name.
 
-       o  --quiet, -q
+       o   --quiet, -q
 
-          Be silent except for errors.
+           Be silent except for errors.
 
-       o  --socket=path, -S path
+       o   --socket=path, -S path
 
-          The Unix socket file to use for the connection.
+           The Unix socket file to use for the connection.
 
-       o  --tbl-status
+       o   --tbl-status
 
-          Use SHOW TABLE STATUS instead of SHOW TABLES. This provides more
-          complete information, but is slower.
+           Use SHOW TABLE STATUS instead of SHOW TABLES. This provides more
+           complete information, but is slower.
 
-       o  --user=user_name, -u user_name
+       o   --user=user_name, -u user_name
 
-          The MySQL user name to use when connecting to the server.
+           The MySQL user name to use when connecting to the server.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
+       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       reserved.
 
        This documentation is free software; you can redistribute it and/or
        modify it only under the terms of the GNU General Public License as
@@ -122,13 +123,14 @@ COPYRIGHT
        51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
        http://www.gnu.org/licenses/.
 
+
 SEE ALSO
        For more information, please refer to the MySQL Reference Manual, which
        may already be installed locally and which is also available online at
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       Sun Microsystems, Inc. (http://www.mysql.com/).
+       Oracle Corporation (http://dev.mysql.com/).
 
 
 

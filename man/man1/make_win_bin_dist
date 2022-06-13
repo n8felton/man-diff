@@ -20,7 +20,7 @@ DESCRIPTION
        This program's use is subject to change. Currently, you invoke it as
        follows from the root directory of your source distribution:
 
-          shell> make_win_bin_dist [options] package_basename [copy_def ...]
+           shell> make_win_bin_dist [options] package_basename [copy_def ...]
 
        The package_basename argument provides the basename for the resulting
        ZIP archive. This name will be the name of the directory that results
@@ -33,42 +33,44 @@ DESCRIPTION
 
        Example:
 
-          bin/mysqld-max.exe=../my-max-build/sql/release/mysqld.exe
+           bin/mysqld-max.exe=../my-max-build/sql/release/mysqld.exe
 
        If you specify a directory, the entire directory will be copied.
 
-       make_win_bin_dist supports the following options:
+       make_win_bin_dist supports the following options.
 
-       o  --debug
+       o   --debug
 
-          Pack the debug binaries and produce an error if they were not built.
+           Pack the debug binaries and produce an error if they were not
+           built.
 
-       o  --embedded
+       o   --embedded
 
-          Pack the embedded server and produce an error if it was not built.
-          The default is to pack it if it was built.
+           Pack the embedded server and produce an error if it was not built.
+           The default is to pack it if it was built.
 
-       o  --exe-suffix=suffix
+       o   --exe-suffix=suffix
 
-          Add a suffix to the basename of the mysql binary. For example, a
-          suffix of -abc produces a binary named mysqld-abc.exe.
+           Add a suffix to the basename of the mysql binary. For example, a
+           suffix of -abc produces a binary named mysqld-abc.exe.
 
-       o  --no-debug
+       o   --no-debug
 
-          Don't pack the debug binaries even if they were built.
+           Do not pack the debug binaries even if they were built.
 
-       o  --no-embedded
+       o   --no-embedded
 
-          Don't pack the embedded server even if it was built.
+           Do not pack the embedded server even if it was built.
 
-       o  --only-debug
+       o   --only-debug
 
-          Use this option when the target for this build was Debug, and you
-          just want to replace the normal binaries with debug versions (that
-          is, do not use separate debug directories).
+           Use this option when the target for this build was Debug, and you
+           just want to replace the normal binaries with debug versions (that
+           is, do not use separate debug directories).
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
+       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       reserved.
 
        This documentation is free software; you can redistribute it and/or
        modify it only under the terms of the GNU General Public License as
@@ -84,13 +86,14 @@ COPYRIGHT
        51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
        http://www.gnu.org/licenses/.
 
+
 SEE ALSO
        For more information, please refer to the MySQL Reference Manual, which
        may already be installed locally and which is also available online at
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       Sun Microsystems, Inc. (http://www.mysql.com/).
+       Oracle Corporation (http://dev.mysql.com/).
 
 
 

@@ -10,153 +10,153 @@ SYNOPSIS
 
 DESCRIPTION
        mysqlhotcopy is a Perl script that was originally written and
-       contributed by Tim Bunce. It uses LOCK TABLES, FLUSH TABLES, and cp or
-       scp to make a database backup quickly. It is the fastest way to make a
-       backup of the database or single tables, but it can be run only on the
-       same machine where the database directories are located.  mysqlhotcopy
-       works only for backing up MyISAM and ARCHIVE tables. It runs on Unix
-       and NetWare.
+       contributed by Tim Bunce. It uses FLUSH TABLES, LOCK TABLES, and cp or
+       scp to make a database backup. It is a fast way to make a backup of the
+       database or single tables, but it can be run only on the same machine
+       where the database directories are located.  mysqlhotcopy works only
+       for backing up MyISAM and ARCHIVE tables. It runs on Unix and NetWare.
 
-          shell> mysqlhotcopy db_name [/path/to/new_directory]
+       To use mysqlhotcopy, you must have read access to the files for the
+       tables that you are backing up, the SELECT privilege for those tables,
+       the RELOAD privilege (to be able to execute FLUSH TABLES), and the LOCK
+       TABLES privilege (to be able to lock the tables).
 
-          shell> mysqlhotcopy db_name_1 ... db_name_n /path/to/new_directory
+           shell> mysqlhotcopy db_name [/path/to/new_directory]
+
+           shell> mysqlhotcopy db_name_1 ... db_name_n /path/to/new_directory
 
        Back up tables in the given database that match a regular expression:
 
-          shell> mysqlhotcopy db_name./regex/
+           shell> mysqlhotcopy db_name./regex/
 
        The regular expression for the table name can be negated by prefixing
        it with a tilde ("~"):
 
-          shell> mysqlhotcopy db_name./~regex/
+           shell> mysqlhotcopy db_name./~regex/
 
-       mysqlhotcopy supports the following options:
+       mysqlhotcopy supports the following options, which can be specified on
+       the command line or in the [mysqlhotcopy] and [client] option file
+       groups.
 
-       o  --help, -?
+       o   --help, -?
 
-          Display a help message and exit.
+           Display a help message and exit.
 
-       o  --addtodest
+       o   --addtodest
 
-          Do not rename target directory (if it exists); merely add files to
-          it.
+           Do not rename target directory (if it exists); merely add files to
+           it.
 
-       o  --allowold
+       o   --allowold
 
-          Do not abort if a target exists; rename it by adding an _old suffix.
+           Do not abort if a target exists; rename it by adding an _old
+           suffix.
 
-       o  --checkpoint=db_name.tbl_name
+       o   --checkpoint=db_name.tbl_name
 
-          Insert checkpoint entries into the specified database db_name and
-          table tbl_name.
+           Insert checkpoint entries into the specified database db_name and
+           table tbl_name.
 
-       o  --chroot=path
+       o   --chroot=path
 
-          Base directory of the chroot jail in which mysqld operates. The path
-          value should match that of the --chroot option given to mysqld.
+           Base directory of the chroot jail in which mysqld operates. The
+           path value should match that of the --chroot option given to
+           mysqld.
 
-       o  --debug
+       o   --debug
 
-          Enable debug output.
+           Enable debug output.
 
-       o  --dryrun, -n
+       o   --dryrun, -n
 
-          Report actions without performing them.
+           Report actions without performing them.
 
-       o  --flushlog
+       o   --flushlog
 
-          Flush logs after all tables are locked.
+           Flush logs after all tables are locked.
 
-       o  --host=host_name, -h host_name
+       o   --host=host_name, -h host_name
 
-          The host name of the local host to use for making a TCP/IP
-          connection to the local server. By default, the connection is made
-          to localhost using a Unix socket file.
+           The host name of the local host to use for making a TCP/IP
+           connection to the local server. By default, the connection is made
+           to localhost using a Unix socket file.
 
-       o  --keepold
+       o   --keepold
 
-          Do not delete previous (renamed) target when done.
+           Do not delete previous (renamed) target when done.
 
-       o  --method=command
+       o   --method=command
 
-          The method for copying files (cp or scp).
+           The method for copying files (cp or scp). The default is cp.
 
-       o  --noindices
+       o   --noindices
 
-          Do not include full index files in the backup. This makes the backup
-          smaller and faster. The indexes for reloaded tables can be
-          reconstructed later with myisamchk -rq.
+           Do not include full index files for MyISAM tables in the backup.
+           This makes the backup smaller and faster. The indexes for reloaded
+           tables can be reconstructed later with myisamchk -rq.
 
-       o  --password=password, -ppassword
+       o   --password=password, -ppassword
 
-          The password to use when connecting to the server. Note that the
-          password value is not optional for this option, unlike for other
-          MySQL programs. You can use an option file to avoid giving the
-          password on the command line.
+           The password to use when connecting to the server. The password
+           value is not optional for this option, unlike for other MySQL
+           programs.
 
-          Specifying a password on the command line should be considered
-          insecure. See Section 5.5.6.2, "End-User Guidelines for Password
-          Security".
+           Specifying a password on the command line should be considered
+           insecure. See Section 5.3.2.2, "End-User Guidelines for Password
+           Security". You can use an option file to avoid giving the password
+           on the command line.
 
-       o  --port=port_num, -P port_num
+       o   --port=port_num, -P port_num
 
-          The TCP/IP port number to use when connecting to the local server.
+           The TCP/IP port number to use when connecting to the local server.
 
-       o  --quiet, -q
+       o   --quiet, -q
 
-          Be silent except for errors.
+           Be silent except for errors.
 
-       o  --record_log_pos=db_name.tbl_name
+       o   --record_log_pos=db_name.tbl_name
 
-          Record master and slave status in the specified database db_name and
-          table tbl_name.
+           Record master and slave status in the specified database db_name
+           and table tbl_name.
 
-       o  --regexp=expr
+       o   --regexp=expr
 
-          Copy all databases with names that match the given regular
-          expression.
+           Copy all databases with names that match the given regular
+           expression.
 
-       o  --resetmaster
+       o   --resetmaster
 
-          Reset the binary log after locking all the tables.
+           Reset the binary log after locking all the tables.
 
-       o  --resetslave
+       o   --resetslave
 
-          Reset the master.info file after locking all the tables.
+           Reset the master.info file after locking all the tables.
 
-       o  --socket=path, -S path
+       o   --socket=path, -S path
 
-          The Unix socket file to use for the connection.
+           The Unix socket file to use for connections to localhost.
 
-       o  --suffix=str
+       o   --suffix=str
 
-          The suffix for names of copied databases.
+           The suffix to use for names of copied databases.
 
-       o  --tmpdir=path
+       o   --tmpdir=path
 
-          The temporary directory. The default is /tmp.
+           The temporary directory. The default is /tmp.
 
-       o  --user=user_name, -u user_name
+       o   --user=user_name, -u user_name
 
-          The MySQL user name to use when connecting to the server.
-
-
-       mysqlhotcopy reads the [client] and [mysqlhotcopy] option groups from
-       option files.
-
-       To execute mysqlhotcopy, you must have access to the files for the
-       tables that you are backing up, the SELECT privilege for those tables,
-       the RELOAD privilege (to be able to execute FLUSH TABLES), and the LOCK
-       TABLES privilege (to be able to lock the tables).
+           The MySQL user name to use when connecting to the server.
 
        Use perldoc for additional mysqlhotcopy documentation, including
        information about the structure of the tables needed for the
        --checkpoint and --record_log_pos options:
 
-          shell> perldoc mysqlhotcopy
+           shell> perldoc mysqlhotcopy
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
+       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       reserved.
 
        This documentation is free software; you can redistribute it and/or
        modify it only under the terms of the GNU General Public License as
@@ -172,13 +172,14 @@ COPYRIGHT
        51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
        http://www.gnu.org/licenses/.
 
+
 SEE ALSO
        For more information, please refer to the MySQL Reference Manual, which
        may already be installed locally and which is also available online at
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       Sun Microsystems, Inc. (http://www.mysql.com/).
+       Oracle Corporation (http://dev.mysql.com/).
 
 
 

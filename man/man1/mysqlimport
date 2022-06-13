@@ -16,7 +16,7 @@ DESCRIPTION
 
        Invoke mysqlimport like this:
 
-          shell> mysqlimport [options] db_name textfile1 [textfile2 ...]
+           shell> mysqlimport [options] db_name textfile1 [textfile2 ...]
 
        For each text file named on the command line, mysqlimport strips any
        extension from the file name and uses the result to determine the name
@@ -24,187 +24,191 @@ DESCRIPTION
        files named patient.txt, patient.text, and patient all would be
        imported into a table named patient.
 
-       mysqlimport supports the options in the following list. It also reads
-       option files and supports the options for processing them described at
-       Section 4.2.3.2.1, "Command-Line Options that Affect Option-File
-       Handling".
+       mysqldump supports the following options, which can be specified on the
+       command line or in the [mysqldump] and [client] option file groups.
+       mysqldump also supports the options for processing option files
+       described at Section 4.2.3.3.1, "Command-Line Options that Affect
+       Option-File Handling".
 
-       o  --help, -?
+       o   --help, -?
 
-          Display a help message and exit.
+           Display a help message and exit.
 
-       o  --character-sets-dir=path
+       o   --character-sets-dir=path
 
-          The directory where character sets are installed. See Section 9.2,
-          "The Character Set Used for Data and Sorting".
+           The directory where character sets are installed. See Section 9.5,
+           "Character Set Configuration".
 
-       o  --columns=column_list, -c column_list
+       o   --columns=column_list, -c column_list
 
-          This option takes a comma-separated list of column names as its
-          value. The order of the column names indicates how to match data
-          file columns with table columns.
+           This option takes a comma-separated list of column names as its
+           value. The order of the column names indicates how to match data
+           file columns with table columns.
 
-       o  --compress, -C
+       o   --compress, -C
 
-          Compress all information sent between the client and the server if
-          both support compression.
+           Compress all information sent between the client and the server if
+           both support compression.
 
-       o  --debug[=debug_options], -# [debug_options]
+       o   --debug[=debug_options], -# [debug_options]
 
-          Write a debugging log. A typical debug_options string is
-          'd:t:o,file_name'. The default is 'd:t:o'.
+           Write a debugging log. A typical debug_options string is
+           'd:t:o,file_name'. The default is 'd:t:o'.
 
-       o  --default-character-set=charset_name
+       o   --default-character-set=charset_name
 
-          Use charset_name as the default character set. See Section 9.2, "The
-          Character Set Used for Data and Sorting".
+           Use charset_name as the default character set. See Section 9.5,
+           "Character Set Configuration".
 
-       o  --delete, -D
+       o   --delete, -D
 
-          Empty the table before importing the text file.
+           Empty the table before importing the text file.
 
-       o  --fields-terminated-by=..., --fields-enclosed-by=...,
-          --fields-optionally-enclosed-by=..., --fields-escaped-by=...
+       o   --fields-terminated-by=..., --fields-enclosed-by=...,
+           --fields-optionally-enclosed-by=..., --fields-escaped-by=...
 
-          These options have the same meaning as the corresponding clauses for
-          LOAD DATA INFILE. See Section 12.2.6, "LOAD DATA INFILE Syntax".
+           These options have the same meaning as the corresponding clauses
+           for LOAD DATA INFILE. See Section 12.2.6, "LOAD DATA INFILE
+           Syntax".
 
-       o  --force, -f
+       o   --force, -f
 
-          Ignore errors. For example, if a table for a text file does not
-          exist, continue processing any remaining files. Without --force,
-          mysqlimport exits if a table does not exist.
+           Ignore errors. For example, if a table for a text file does not
+           exist, continue processing any remaining files. Without --force,
+           mysqlimport exits if a table does not exist.
 
-       o  --host=host_name, -h host_name
+       o   --host=host_name, -h host_name
 
-          Import data to the MySQL server on the given host. The default host
-          is localhost.
+           Import data to the MySQL server on the given host. The default host
+           is localhost.
 
-       o  --ignore, -i
+       o   --ignore, -i
 
-          See the description for the --replace option.
+           See the description for the --replace option.
 
-       o  --ignore-lines=N
+       o   --ignore-lines=N
 
-          Ignore the first N lines of the data file.
+           Ignore the first N lines of the data file.
 
-       o  --lines-terminated-by=...
+       o   --lines-terminated-by=...
 
-          This option has the same meaning as the corresponding clause for
-          LOAD DATA INFILE. For example, to import Windows files that have
-          lines terminated with carriage return/linefeed pairs, use
-          --lines-terminated-by="\r\n". (You might have to double the
-          backslashes, depending on the escaping conventions of your command
-          interpreter.) See Section 12.2.6, "LOAD DATA INFILE Syntax".
+           This option has the same meaning as the corresponding clause for
+           LOAD DATA INFILE. For example, to import Windows files that have
+           lines terminated with carriage return/linefeed pairs, use
+           --lines-terminated-by="\r\n". (You might have to double the
+           backslashes, depending on the escaping conventions of your command
+           interpreter.) See Section 12.2.6, "LOAD DATA INFILE Syntax".
 
-       o  --local, -L
+       o   --local, -L
 
-          Read input files locally from the client host.
+           Read input files locally from the client host.
 
-       o  --lock-tables, -l
+       o   --lock-tables, -l
 
-          Lock all tables for writing before processing any text files. This
-          ensures that all tables are synchronized on the server.
+           Lock all tables for writing before processing any text files. This
+           ensures that all tables are synchronized on the server.
 
-       o  --low-priority
+       o   --low-priority
 
-          Use LOW_PRIORITY when loading the table. This affects only storage
-          engines that use only table-level locking (MyISAM, MEMORY, MERGE).
+           Use LOW_PRIORITY when loading the table. This affects only storage
+           engines that use only table-level locking (such as MyISAM, MEMORY,
+           and MERGE).
 
-       o  --password[=password], -p[password]
+       o   --password[=password], -p[password]
 
-          The password to use when connecting to the server. If you use the
-          short option form (-p), you cannot have a space between the option
-          and the password. If you omit the password value following the
-          --password or -p option on the command line, you are prompted for
-          one.
+           The password to use when connecting to the server. If you use the
+           short option form (-p), you cannot have a space between the option
+           and the password. If you omit the password value following the
+           --password or -p option on the command line, mysqlimport prompts
+           for one.
 
-          Specifying a password on the command line should be considered
-          insecure. See Section 5.5.6.2, "End-User Guidelines for Password
-          Security".
+           Specifying a password on the command line should be considered
+           insecure. See Section 5.3.2.2, "End-User Guidelines for Password
+           Security". You can use an option file to avoid giving the password
+           on the command line.
 
-       o  --pipe, -W
+       o   --pipe, -W
 
-          On Windows, connect to the server via a named pipe. This option
-          applies only for connections to a local server, and only if the
-          server supports named-pipe connections.
+           On Windows, connect to the server via a named pipe. This option
+           applies only if the server supports named-pipe connections.
 
-       o  --port=port_num, -P port_num
+       o   --port=port_num, -P port_num
 
-          The TCP/IP port number to use for the connection.
+           The TCP/IP port number to use for the connection.
 
-       o  --protocol={TCP|SOCKET|PIPE|MEMORY}
+       o   --protocol={TCP|SOCKET|PIPE|MEMORY}
 
-          The connection protocol to use for connecting to the server. It is
-          useful when the other connection parameters normally would cause a
-          protocol to be used other than the one you want. For details on the
-          allowable values, see Section 4.2.2, "Connecting to the MySQL
-          Server".
+           The connection protocol to use for connecting to the server. It is
+           useful when the other connection parameters normally would cause a
+           protocol to be used other than the one you want. For details on the
+           allowable values, see Section 4.2.2, "Connecting to the MySQL
+           Server".
 
-       o  --replace, -r
+       o   --replace, -r
 
-          The --replace and --ignore options control handling of input rows
-          that duplicate existing rows on unique key values. If you specify
-          --replace, new rows replace existing rows that have the same unique
-          key value. If you specify --ignore, input rows that duplicate an
-          existing row on a unique key value are skipped. If you do not
-          specify either option, an error occurs when a duplicate key value is
-          found, and the rest of the text file is ignored.
+           The --replace and --ignore options control handling of input rows
+           that duplicate existing rows on unique key values. If you specify
+           --replace, new rows replace existing rows that have the same unique
+           key value. If you specify --ignore, input rows that duplicate an
+           existing row on a unique key value are skipped. If you do not
+           specify either option, an error occurs when a duplicate key value
+           is found, and the rest of the text file is ignored.
 
-       o  --silent, -s
+       o   --silent, -s
 
-          Silent mode. Produce output only when errors occur.
+           Silent mode. Produce output only when errors occur.
 
-       o  --socket=path, -S path
+       o   --socket=path, -S path
 
-          For connections to localhost, the Unix socket file to use, or, on
-          Windows, the name of the named pipe to use.
+           For connections to localhost, the Unix socket file to use, or, on
+           Windows, the name of the named pipe to use.
 
-       o  --ssl*
+       o   --ssl*
 
-          Options that begin with --ssl specify whether to connect to the
-          server via SSL and indicate where to find SSL keys and certificates.
-          See Section 5.5.7.3, "SSL Command Options".
+           Options that begin with --ssl specify whether to connect to the
+           server via SSL and indicate where to find SSL keys and
+           certificates. See Section 5.5.6.3, "SSL Command Options".
 
-       o  --user=user_name, -u user_name
+       o   --user=user_name, -u user_name
 
-          The MySQL user name to use when connecting to the server.
+           The MySQL user name to use when connecting to the server.
 
-       o  --verbose, -v
+       o   --verbose, -v
 
-          Verbose mode. Print more information about what the program does.
+           Verbose mode. Print more information about what the program does.
 
-       o  --version, -V
+       o   --version, -V
 
-          Display version information and exit.
-
+           Display version information and exit.
 
        Here is a sample session that demonstrates use of mysqlimport:
 
-          shell> mysql -e 'CREATE TABLE imptest(id INT, n VARCHAR(30))' test
-          shell> ed
-          a
-          100     Max Sydow
-          101     Count Dracula
-          w imptest.txt
-          32
-          q
-          shell> od -c imptest.txt
-          0000000   1   0   0  \t   M   a   x       S   y   d   o   w  \n   1   0
-          0000020   1  \t   C   o   u   n   t       D   r   a   c   u   l   a  \n
-          0000040
-          shell> mysqlimport --local test imptest.txt
-          test.imptest: Records: 2  Deleted: 0  Skipped: 0  Warnings: 0
-          shell> mysql -e 'SELECT * FROM imptest' test
-          +------+---------------+
-          | id   | n             |
-          +------+---------------+
-          |  100 | Max Sydow     |
-          |  101 | Count Dracula |
-          +------+---------------+
+           shell> mysql -e 'CREATE TABLE imptest(id INT, n VARCHAR(30))' test
+           shell> ed
+           a
+           100     Max Sydow
+           101     Count Dracula
+           .
+           w imptest.txt
+           32
+           q
+           shell> od -c imptest.txt
+           0000000   1   0   0  \t   M   a   x       S   y   d   o   w  \n   1   0
+           0000020   1  \t   C   o   u   n   t       D   r   a   c   u   l   a  \n
+           0000040
+           shell> mysqlimport --local test imptest.txt
+           test.imptest: Records: 2  Deleted: 0  Skipped: 0  Warnings: 0
+           shell> mysql -e 'SELECT * FROM imptest' test
+           +------+---------------+
+           | id   | n             |
+           +------+---------------+
+           |  100 | Max Sydow     |
+           |  101 | Count Dracula |
+           +------+---------------+
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
+       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       reserved.
 
        This documentation is free software; you can redistribute it and/or
        modify it only under the terms of the GNU General Public License as
@@ -220,13 +224,14 @@ COPYRIGHT
        51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
        http://www.gnu.org/licenses/.
 
+
 SEE ALSO
        For more information, please refer to the MySQL Reference Manual, which
        may already be installed locally and which is also available online at
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       Sun Microsystems, Inc. (http://www.mysql.com/).
+       Oracle Corporation (http://dev.mysql.com/).
 
 
 

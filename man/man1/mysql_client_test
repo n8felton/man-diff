@@ -24,79 +24,81 @@ DESCRIPTION
 
        mysql_client_test supports the following options:
 
-       o  --help, -?
+       o   --help, -?
 
-          Display a help message and exit.
+           Display a help message and exit.
 
-       o  -b dir_name, --basedir=dir_name
+       o   -b dir_name, --basedir=dir_name
 
-          The base directory for the tests.
+           The base directory for the tests.
 
-       o  -t count, --count=count
+       o   -t count, --count=count
 
-          The number of times to execute the tests.
+           The number of times to execute the tests.
 
-       o  --database=db_name, -D db_name
+       o   --database=db_name, -D db_name
 
-          The database to use.
+           The database to use.
 
-       o  --debug[=debug_options], -#[debug_options]
+       o   --debug[=debug_options], -#[debug_options]
 
-          Write a debugging log if MySQL is built with debugging support. The
-          default debug_options value is 'd:t:o,/tmp/mysql_client_test.trace'.
+           Write a debugging log if MySQL is built with debugging support. The
+           default debug_options value is
+           'd:t:o,/tmp/mysql_client_test.trace'.
 
-       o  -g option, --getopt-ll-test=option
+       o   -g option, --getopt-ll-test=option
 
-          Option to use for testing bugs in the getopt library.
+           Option to use for testing bugs in the getopt library.
 
-       o  --host=host_name, -h host_name
+       o   --host=host_name, -h host_name
 
-          Connect to the MySQL server on the given host.
+           Connect to the MySQL server on the given host.
 
-       o  --password[=password], -p[password]
+       o   --password[=password], -p[password]
 
-          The password to use when connecting to the server. If you use the
-          short option form (-p), you cannot have a space between the option
-          and the password. If you omit the password value following the
-          --password or -p option on the command line, you are prompted for
-          one.
+           The password to use when connecting to the server. If you use the
+           short option form (-p), you cannot have a space between the option
+           and the password. If you omit the password value following the
+           --password or -p option on the command line, you are prompted for
+           one.
 
-       o  --port=port_num, -P port_num
+       o   --port=port_num, -P port_num
 
-          The TCP/IP port number to use for the connection.
+           The TCP/IP port number to use for the connection.
 
-       o  -A arg, --server-arg=arg
+       o   -A arg, --server-arg=arg
 
-          Argument to send to the embedded server.
+           Argument to send to the embedded server.
 
-       o  -T, --show-tests
+       o   -T, --show-tests
 
-          Show all test names.
+           Show all test names.
 
-       o  --silent, -s
+       o   --silent, -s
 
-          Be more silent.
+           Be more silent.
 
-       o  --socket=path, -S path
+       o   --socket=path, -S path
 
-          The socket file to use when connecting to localhost (which is the
-          default host).
+           The socket file to use when connecting to localhost (which is the
+           default host).
 
-       o  -c, --testcase
+       o   -c, --testcase
 
-          The option may disable some code when run as a mysql-test-run.pl
-          test case.
+           The option may disable some code when run as a mysql-test-run.pl
+           test case.
 
-       o  --user=user_name, -u user_name
+       o   --user=user_name, -u user_name
 
-          The MySQL user name to use when connecting to the server.
+           The MySQL user name to use when connecting to the server.
 
-       o  -v dir_name, --vardir=dir_name
+       o   -v dir_name, --vardir=dir_name
 
-          The data directory for tests. The default is mysql-test/var.
+           The data directory for tests. The default is mysql-test/var.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
+       Copyright (C) 2007, 2010, Oracle and/or its affiliates. All rights
+       reserved.
 
        This documentation is free software; you can redistribute it and/or
        modify it only under the terms of the GNU General Public License as
@@ -112,13 +114,14 @@ COPYRIGHT
        51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
        http://www.gnu.org/licenses/.
 
+
 SEE ALSO
        For more information, please refer to the MySQL Reference Manual, which
        may already be installed locally and which is also available online at
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       Sun Microsystems, Inc. (http://www.mysql.com/).
+       Oracle Corporation (http://dev.mysql.com/).
 
 
 

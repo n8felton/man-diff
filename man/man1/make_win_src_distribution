@@ -18,44 +18,45 @@ DESCRIPTION
        Invoke make_win_src_distribution like this from the top-level directory
        of a MySQL source distribution:
 
-          shell> make_win_src_distribution [options]
+           shell> make_win_src_distribution [options]
 
        make_win_src_distribution understands the following options:
 
-       o  --help
+       o   --help
 
-          Display a help message and exit.
+           Display a help message and exit.
 
-       o  --debug
+       o   --debug
 
-          Print information about script operations; do not create a package.
+           Print information about script operations; do not create a package.
 
-       o  --dirname
+       o   --dirname
 
-          Directory name to copy files (intermediate).
+           Directory name to copy files (intermediate).
 
-       o  --silent
+       o   --silent
 
-          Do not print verbose list of files processed.
+           Do not print verbose list of files processed.
 
-       o  --suffix
+       o   --suffix
 
-          The suffix name for the package.
+           The suffix name for the package.
 
-       o  --tar
+       o   --tar
 
-          Create a tar.gz package instead of a .zip package.
+           Create a tar.gz package instead of a .zip package.
 
-          By default, make_win_src_distribution creates a Zip-format archive
-          with the name mysql-VERSION-win-src.zip, where VERSION represents
-          the version of your MySQL source tree.
+           By default, make_win_src_distribution creates a Zip-format archive
+           with the name mysql-VERSION-win-src.zip, where VERSION represents
+           the version of your MySQL source tree.
 
-       o  --tmp
+       o   --tmp
 
-          Specify the temporary location.
+           Specify the temporary location.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
+       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       reserved.
 
        This documentation is free software; you can redistribute it and/or
        modify it only under the terms of the GNU General Public License as
@@ -71,13 +72,14 @@ COPYRIGHT
        51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
        http://www.gnu.org/licenses/.
 
+
 SEE ALSO
        For more information, please refer to the MySQL Reference Manual, which
        may already be installed locally and which is also available online at
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       Sun Microsystems, Inc. (http://www.mysql.com/).
+       Oracle Corporation (http://dev.mysql.com/).
 
 
 

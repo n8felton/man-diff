@@ -36,47 +36,48 @@ DESCRIPTION
        [mysql_server] sections, although you should rename such sections to
        [mysql.server] when using MySQL 5.0.
 
-       mysql.server supports the following options:
+       mysql.server supports the following options.
 
-       o  --basedir=path
+       o   --basedir=path
 
-          The path to the MySQL installation directory.
+           The path to the MySQL installation directory.
 
-       o  --datadir=path
+       o   --datadir=path
 
-          The path to the MySQL data directory.
+           The path to the MySQL data directory.
 
-       o  --pid-file=file_name
+       o   --pid-file=file_name
 
-          The path name of the file in which the server should write its
-          process ID.
+           The path name of the file in which the server should write its
+           process ID.
 
-       o  --service-startup-timeout=file_name
+       o   --service-startup-timeout=file_name
 
-          How long in seconds to wait for confirmation of server startup. If
-          the server does not start within this time, mysql.server exits with
-          an error. The default value is 900. A value of 0 means not to wait
-          at all for startup. Negative values mean to wait forever (no
-          timeout). This option was added in MySQL 5.0.40. Before that, a
-          value of 900 is always used.
+           How long in seconds to wait for confirmation of server startup. If
+           the server does not start within this time, mysql.server exits with
+           an error. The default value is 900. A value of 0 means not to wait
+           at all for startup. Negative values mean to wait forever (no
+           timeout). This option was added in MySQL 5.0.40. Before that, a
+           value of 900 is always used.
 
-       o  --use-mysqld_safe
+       o   --use-mysqld_safe
 
-          Use mysqld_safe to start the server. This is the default. This
-          option was added in MySQL 5.0.4.
+           Use mysqld_safe to start the server. This is the default. This
+           option was added in MySQL 5.0.4.
 
-       o  --use-manager
+       o   --use-manager
 
-          Use Instance Manager to start the server. This option was added in
-          MySQL 5.0.4.
+           Use Instance Manager to start the server. This option was added in
+           MySQL 5.0.4.
 
-       o  --user=user_name
+       o   --user=user_name
 
-          The login user name to use for running mysqld. This option was added
-          in MySQL 5.0.4.
+           The login user name to use for running mysqld. This option was
+           added in MySQL 5.0.4.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
+       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       reserved.
 
        This documentation is free software; you can redistribute it and/or
        modify it only under the terms of the GNU General Public License as
@@ -92,13 +93,14 @@ COPYRIGHT
        51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
        http://www.gnu.org/licenses/.
 
+
 SEE ALSO
        For more information, please refer to the MySQL Reference Manual, which
        may already be installed locally and which is also available online at
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       Sun Microsystems, Inc. (http://www.mysql.com/).
+       Oracle Corporation (http://dev.mysql.com/).
 
 
 

@@ -9,16 +9,61 @@ SYNOPSIS
        mysql_upgrade [options]
 
 DESCRIPTION
+       mysql_upgrade examines all tables in all databases for
+       incompatibilities with the current version of MySQL Server.
+       mysql_upgrade also upgrades the system tables so that you can take
+       advantage of new privileges or capabilities that might have been added.
+
        mysql_upgrade should be executed each time you upgrade MySQL. It
        supersedes the older mysql_fix_privilege_tables script, which should no
        longer be used.
 
-       mysql_upgrade checks all tables in all databases for incompatibilities
-       with the current version of MySQL Server. If a table is found to have a
-       possible incompatibility, it is checked. If any problems are found, the
-       table is repaired.  mysql_upgrade also upgrades the system tables so
-       that you can take advantage of new privileges or capabilities that
-       might have been added.
+       If a table is found to have a possible incompatibility, mysql_upgrade
+       performs a table check. If any problems are found, a table repair is
+       attempted. If the table cannot be repaired, see Section 2.18.4,
+       "Rebuilding or Repairing Tables or Indexes" for manual table repair
+       strategies.
+
+           Caution
+           You should always back up your current MySQL installation before
+           performing an upgrade. See Section 6.2, "Database Backup Methods".
+
+           Some upgrade incompatibilities may require special handling before
+           you upgrade your MySQL installation and run mysql_upgrade. See
+           Section 2.18.1, "Upgrading MySQL", for instructions on determining
+           whether any such incompatibilities apply to your installation and
+           how to handle them.
+
+       To use mysql_upgrade, make sure that the server is running, and then
+       invoke it like this:
+
+           shell> mysql_upgrade [options]
+
+       After running mysql_upgrade, stop the server and restart it so that any
+       changes made to the system tables take effect.
+
+       mysql_upgrade executes the following commands to check and repair
+       tables and to upgrade the system tables:
+
+           mysqlcheck --all-databases --check-upgrade --auto-repair
+           mysql < fix_priv_tables
+
+       Notes about the preceding commands:
+
+       o   Because mysql_upgrade invokes mysqlcheck with the --all-databases
+           option, it processes all tables in all databases, which might take
+           a long time to complete. Each table is locked and therefore
+           unavailable to other sessions while it is being processed. Check
+           and repair operations can be time-consuming, particularly for large
+           tables.
+
+       o   For details about what checks the --check-upgrade option entails,
+           see the description of the FOR UPGRADE option of the CHECK TABLE
+           statement (see Section 12.4.2.3, "CHECK TABLE Syntax").
+
+       o   fix_priv_tables represents a script generated internally by
+           mysql_upgrade that contains SQL statements to upgrade the tables in
+           the mysql database.
 
        All checked and repaired tables are marked with the current MySQL
        version number. This ensures that next time you run mysql_upgrade with
@@ -27,86 +72,64 @@ DESCRIPTION
 
        mysql_upgrade also saves the MySQL version number in a file named
        mysql_upgrade_info in the data directory. This is used to quickly check
-       if all tables have been checked for this release so that table-checking
-       can be skipped. To ignore this file, use the --force option.
-
-       Caution
-       Some upgrade incompatibilities may require special handling before you
-       upgrade your MySQL installation and run mysql_upgrade. See
-       Section 2.18.1, "Upgrading MySQL", for instructions on determining
-       whether any such incompatibilities apply to your installation and how
-       to handle them.
-
-       mysql_upgrade executes the following commands to check and repair
-       tables and to upgrade the system tables.  fix_priv_tables represents a
-       script generated interally by mysql_upgrade that contains SQL
-       statements to upgrade the tables in the mysql database:
-
-          mysqlcheck --check-upgrade --all-databases --auto-repair
-          mysql < fix_priv_tables
-
-       For details about what is checked, see the description of the FOR
-       UPGRADE option of the CHECK TABLE statement (see Section 12.5.2.3,
-       "CHECK TABLE Syntax").
-
-       In MySQL 5.0.19, mysql_upgrade was added as a shell script and worked
-       only for Unix systems. As of MySQL 5.0.25, mysql_upgrade is an
-       executable binary and is available on all systems.
+       whether all tables have been checked for this release so that
+       table-checking can be skipped. To ignore this file and perform the
+       check regardless, use the --force option.
 
        If you install MySQL from RPM packages on Linux, you must install the
        server and client RPMs.  mysql_upgrade is included in the server RPM
        but requires the client RPM because the latter includes mysqlcheck.
        (See Section 2.10, "Installing MySQL from RPM Packages on Linux".)
 
-       To use mysql_upgrade, make sure that the server is running, and then
-       invoke it like this:
+       In MySQL 5.0.19, mysql_upgrade was added as a shell script and worked
+       only for Unix systems. As of MySQL 5.0.25, mysql_upgrade is an
+       executable binary and is available on all systems.
 
-          shell> mysql_upgrade [options]
+       mysql_upgrade supports the following options, which can be specified on
+       the command line or in the [mysql_upgrade] and [client] option file
+       groups. Other options are passed to mysqlcheck. For example, it might
+       be necessary to specify the --password[=password] option.
+       mysql_upgrade also supports the options for processing option files
+       described at Section 4.2.3.3.1, "Command-Line Options that Affect
+       Option-File Handling".
 
-       After running mysql_upgrade, stop the server and restart it so that any
-       changes made to the system tables take effect.
+       o   --help
 
-       mysql_upgrade supports the options in the following list. It also reads
-       option files (the [mysql_upgrade] and [client] groups) and supports the
-       options for processing them described at Section 4.2.3.2.1,
-       "Command-Line Options that Affect Option-File Handling". Other options
-       are passed to mysqlcheck. For example, it might be necessary to specify
-       the --password[=password] option.
+           Display a short help message and exit.
 
-       o  --help
+       o   --basedir=path
 
-          Display a short help message and exit.
+           The path to the MySQL installation directory. This option is
+           accepted for backward compatibility but ignored.
 
-       o  --basedir=path
+       o   --datadir=path
 
-          The path to the MySQL installation directory.
+           The path to the data directory. This option is accepted for
+           backward compatibility but ignored.
 
-       o  --datadir=path
+       o   --force
 
-          The path to the data directory.
+           Ignore the mysql_upgrade_info file and force execution of
+           mysqlcheck even if mysql_upgrade has already been executed for the
+           current version of MySQL.
 
-       o  --force
+       o   --tmpdir=path, -t path
 
-          Ignore the mysql_upgrade_info file and force execution of mysqlcheck
-          even if mysql_upgrade has already been executed for the current
-          version of MySQL.
+           The path name of the directory to use for creating temporary files.
+           This option was added in MySQL 5.0.62.
 
-       o  --tmpdir=path, -t path
+       o   --user=user_name, -u user_name
 
-          The path name of the directory to use for creating temporary files.
-          This option was added in MySQL 5.0.62.
+           The MySQL user name to use when connecting to the server. The
+           default user name is root.
 
-       o  --user=user_name, -u user_name
+       o   --verbose
 
-          The MySQL user name to use when connecting to the server. The
-          default user name is root.
-
-       o  --verbose
-
-          Verbose mode. Print more information about what the program does.
+           Verbose mode. Print more information about what the program does.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
+       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       reserved.
 
        This documentation is free software; you can redistribute it and/or
        modify it only under the terms of the GNU General Public License as
@@ -122,13 +145,14 @@ COPYRIGHT
        51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
        http://www.gnu.org/licenses/.
 
+
 SEE ALSO
        For more information, please refer to the MySQL Reference Manual, which
        may already be installed locally and which is also available online at
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       Sun Microsystems, Inc. (http://www.mysql.com/).
+       Oracle Corporation (http://dev.mysql.com/).
 
 
 

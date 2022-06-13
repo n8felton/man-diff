@@ -1,4 +1,4 @@
-MYSQL_INSTALL_DB.ds an-sectioMySQL)DatabaseMYSQL_INSTALL_DB.ds an-section "1()
+MYSQL_INSTALL_DB()                                          MYSQL_INSTALL_DB()
 
 
 
@@ -14,7 +14,7 @@ DESCRIPTION
 
        To invoke mysql_install_db, use the following syntax:
 
-          shell> mysql_install_db [options]
+           shell> mysql_install_db [options]
 
        Because the MySQL server, mysqld, needs to access the data directory
        when it runs later, you should either run mysql_install_db from the
@@ -24,9 +24,9 @@ DESCRIPTION
        --datadir if mysql_install_db does not use the correct locations for
        the installation directory or data directory. For example:
 
-          shell> bin/mysql_install_db --user=mysql \
-                   --basedir=/opt/mysql/mysql \
-                   --datadir=/opt/mysql/mysql/data
+           shell> bin/mysql_install_db --user=mysql \
+                    --basedir=/opt/mysql/mysql \
+                    --datadir=/opt/mysql/mysql/data
 
        mysql_install_db needs to invoke mysqld with the --bootstrap and
        --skip-grant-tables options (see Section 2.16.2, "Typical configure
@@ -36,59 +36,60 @@ DESCRIPTION
        name of a server that has all options enabled.  mysql_install_db will
        use that server.
 
-       mysql_install_db supports the options in the following list. It also
-       reads option files and supports the options for processing them
-       described at Section 4.2.3.2.1, "Command-Line Options that Affect
-       Option-File Handling".
+       mysql_install_db supports the following options, which can be specified
+       on the command line or in the [mysql_install_db] and (if they are
+       common to mysqld) [mysqld] option file groups.
 
-       o  --basedir=path
+       o   --basedir=path
 
-          The path to the MySQL installation directory.
+           The path to the MySQL installation directory.
 
-       o  --force
+       o   --force
 
-          Causes mysql_install_db to run even if DNS does not work. In that
-          case, grant table entries that normally use host names will use IP
-          addresses.
+           Cause mysql_install_db to run even if DNS does not work. In that
+           case, grant table entries that normally use host names will use IP
+           addresses.
 
-       o  --datadir=path, --ldata=path
+       o   --datadir=path, --ldata=path
 
-          The path to the MySQL data directory.
+           The path to the MySQL data directory.
 
-       o  --rpm
+       o   --rpm
 
-          For internal use. This option is used by RPM files during the MySQL
-          installation process.
+           For internal use. This option is used by RPM files during the MySQL
+           installation process.
 
-       o  --skip-name-resolve
+       o   --skip-name-resolve
 
-          Use IP addresses rather than host names when creating grant table
-          entries. This option can be useful if your DNS does not work.
+           Use IP addresses rather than host names when creating grant table
+           entries. This option can be useful if your DNS does not work.
 
-       o  --srcdir=path
+       o   --srcdir=path
 
-          For internal use. The directory under which mysql_install_db looks
-          for support files such as the error message file and the file for
-          populating the help tables. This option was added in MySQL 5.0.32.
+           For internal use. The directory under which mysql_install_db looks
+           for support files such as the error message file and the file for
+           populating the help tables. This option was added in MySQL 5.0.32.
 
-       o  --user=user_name
+       o   --user=user_name
 
-          The login user name to use for running mysqld. Files and directories
-          created by mysqld will be owned by this user. You must be root to
-          use this option. By default, mysqld runs using your current login
-          name and files and directories that it creates will be owned by you.
+           The login user name to use for running mysqld. Files and
+           directories created by mysqld will be owned by this user. You must
+           be root to use this option. By default, mysqld runs using your
+           current login name and files and directories that it creates will
+           be owned by you.
 
-       o  --verbose
+       o   --verbose
 
-          Verbose mode. Print more information about what the program does.
+           Verbose mode. Print more information about what the program does.
 
-       o  --windows
+       o   --windows
 
-          For internal use. This option is used for creating Windows
-          distributions.
+           For internal use. This option is used for creating Windows
+           distributions.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
+       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       reserved.
 
        This documentation is free software; you can redistribute it and/or
        modify it only under the terms of the GNU General Public License as
@@ -104,13 +105,14 @@ COPYRIGHT
        51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
        http://www.gnu.org/licenses/.
 
+
 SEE ALSO
        For more information, please refer to the MySQL Reference Manual, which
        may already be installed locally and which is also available online at
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       Sun Microsystems, Inc. (http://www.mysql.com/).
+       Oracle Corporation (http://dev.mysql.com/).
 
 
 

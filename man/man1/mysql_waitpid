@@ -15,7 +15,7 @@ DESCRIPTION
 
        Invoke mysql_waitpid like this:
 
-          shell> mysql_waitpid [options] pid wait_time
+           shell> mysql_waitpid [options] pid wait_time
 
        mysql_waitpid sends signal 0 to the process identified by pid and waits
        up to wait_time seconds for the process to terminate.  pid and
@@ -29,21 +29,22 @@ DESCRIPTION
 
        mysql_waitpid supports the following options:
 
-       o  --help, -?, -I
+       o   --help, -?, -I
 
-          Display a help message and exit.
+           Display a help message and exit.
 
-       o  --verbose, -v
+       o   --verbose, -v
 
-          Verbose mode. Display a warning if signal 0 could not be used and
-          signal 1 is used instead.
+           Verbose mode. Display a warning if signal 0 could not be used and
+           signal 1 is used instead.
 
-       o  --version, -V
+       o   --version, -V
 
-          Display version information and exit.
+           Display version information and exit.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
+       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       reserved.
 
        This documentation is free software; you can redistribute it and/or
        modify it only under the terms of the GNU General Public License as
@@ -59,13 +60,14 @@ COPYRIGHT
        51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
        http://www.gnu.org/licenses/.
 
+
 SEE ALSO
        For more information, please refer to the MySQL Reference Manual, which
        may already be installed locally and which is also available online at
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       Sun Microsystems, Inc. (http://www.mysql.com/).
+       Oracle Corporation (http://dev.mysql.com/).
 
 
 

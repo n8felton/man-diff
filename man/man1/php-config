@@ -11,7 +11,7 @@ SYNOPSIS
 
 
 DESCRIPTION
-       php-config  is  a  simple  shell script for obtaining information about
+       php-config is a simple shell script  for  obtaining  information  about
        installed PHP configuration.
 
 OPTIONS
@@ -21,12 +21,12 @@ OPTIONS
        --libs         Extra libraries which PHP was compiled with
        --extension-dir
                       Directory where extensions are searched by default
-       --include-dir  Directory  prefix  where  header  files are installed by
+       --include-dir  Directory prefix where header  files  are  installed  by
                       default
        --php-binary   Full path to php CLI or CGI binary
        --php-sapis    Show all SAPI modules available
        --configure-options
-                      Configure options to recreate configuration  of  current
+                      Configure  options  to recreate configuration of current
                       PHP installation
        --version      PHP version
        --vernum       PHP version as integer
@@ -36,18 +36,18 @@ OPTIONS
               php(1)
 
 VERSION INFORMATION
-       This manpage describes php, version 5.2.12.
+       This manpage describes php, version 5.2.14.
 
 COPYRIGHT
-       Copyright (C) 1997-2006 The PHP Group
+       Copyright (C) 1997-2010 The PHP Group
 
        This source file is subject to version 3.01 of the PHP license, that is
        bundled with this package in the file LICENSE, and is available through
        the world-wide-web at the following url:
        http://www.php.net/license/3_01.txt
 
-       If  you  did  not  receive  a copy of the PHP license and are unable to
-       obtain  it  through  the  world-wide-web,  please  send   a   note   to
+       If you did not receive a copy of the PHP  license  and  are  unable  to
+       obtain   it   through   the  world-wide-web,  please  send  a  note  to
        license@php.net so we can mail you a copy immediately.
 
 

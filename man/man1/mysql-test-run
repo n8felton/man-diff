@@ -1,4 +1,4 @@
-MYSQL-TEST-RUN.PL(1)         MySQL Database System        MYSQL-TEST-RUN.PL(1)
+MYSQL-TEST-RUN()                                              MYSQL-TEST-RUN()
 
 
 
@@ -16,7 +16,7 @@ DESCRIPTION
 
        Invoke mysql-test-run.pl in the mysql-test directory like this:
 
-          shell> mysql-test-run.pl [options] [test_name] ...
+           shell> mysql-test-run.pl [options] [test_name] ...
 
        Each test_name argument names a test case. The test case file that
        corresponds to the test name is t/test_name.test.
@@ -28,14 +28,14 @@ DESCRIPTION
        If no suffix is given for the test name, a suffix of .test is assumed.
        Any leading path name is ignored. These commands are equivalent:
 
-          shell> mysql-test-run.pl mytest
-          shell> mysql-test-run.pl mytest.test
-          shell> mysql-test-run.pl t/mytest.test
+           shell> mysql-test-run.pl mytest
+           shell> mysql-test-run.pl mytest.test
+           shell> mysql-test-run.pl t/mytest.test
 
        As of MySQL 5.1.23, a suite name can be given as part of the test name.
        That is, the syntax for naming a test is:
 
-          [suite_name.]test_name[.suffix]
+           [suite_name.]test_name[.suffix]
 
        If a suite name is given, mysql-test-run.pl looks in that suite for the
        test. With no suite name, mysql-test-run.pl looks in the default list
@@ -68,7 +68,7 @@ DESCRIPTION
 
        To perform setup prior to running tests, mysql-test-run.pl needs to
        invoke mysqld with the --bootstrap and --skip-grant-tables options (see
-       [1]Typical configure Options). If MySQL was configured with the
+       Typical configure Options[1]). If MySQL was configured with the
        --disable-grant-options option, --bootstrap, --skip-grant-tables, and
        --init-file will be disabled. To handle this, set the MYSQLD_BOOTSTRAP
        environment variable to the full path name of a server that has all
@@ -78,9 +78,9 @@ DESCRIPTION
        The init_file test will fail if --init-file is disabled. This is an
        expected failure that can be handled as follows:
 
-          shell> export MYSQLD_BOOTSTRAP
-          shell> MYSQLD_BOOTSTRAP=/full/path/to/mysqld
-          shell> make test force="--skip-test=init_file"
+           shell> export MYSQLD_BOOTSTRAP
+           shell> MYSQLD_BOOTSTRAP=/full/path/to/mysqld
+           shell> make test force="--skip-test=init_file"
 
        To run mysql-test-run.pl on Windows, you'll need either Cygwin or
        ActiveState Perl to run it. You may also need to install the modules
@@ -90,10 +90,10 @@ DESCRIPTION
        and invoke mysql-test-run.pl. For example (using Cygwin and the bash
        shell):
 
-          shell> cd mysql-test
-          shell> export MTS_VS_CONFIG=debug
-          shell> ./mysqltest-run.pl --force --timer
-          shell> ./mysqltest-run.pl --force --timer --ps-protocol
+           shell> cd mysql-test
+           shell> export MTR_VS_CONFIG=debug
+           shell> ./mysqltest-run.pl --force --timer
+           shell> ./mysqltest-run.pl --force --timer --ps-protocol
 
        If you have a copy of mysqld running on the machine where you want to
        run the test suite, you do not have to stop it, as long as it is not
@@ -102,8 +102,8 @@ DESCRIPTION
        and the test suite will use a different set of ports for master, slave,
        NDB, and Instance Manager). For example:
 
-          shell> export MTR_BUILD_THREAD=31
-          shell> ./mysql-test-run.pl [options] [test_name]
+           shell> export MTR_BUILD_THREAD=31
+           shell> ./mysql-test-run.pl [options] [test_name]
 
        mysql-test-run.pl defines several environment variables. Some of them
        are listed in the following table.
@@ -139,581 +139,597 @@ DESCRIPTION
        supported by mysql-test-run.pl and mysql-test-run appears following the
        list.)
 
-       o  --help, -h
+       o   --help, -h
 
-          Display a help message and exit.
+           Display a help message and exit.
 
-       o  --bench
+       o   --bench
 
-          Run the benchmark suite.
+           Run the benchmark suite.
 
-       o  --benchdir=path
+       o   --benchdir=path
 
-          The directory where the benchmark suite is located. The default path
-          is ../../mysql-bench.
+           The directory where the benchmark suite is located. The default
+           path is ../../mysql-bench.
 
-       o  --big-test
+       o   --big-test
 
-          Pass the --big-test option to mysqltest.
+           Pass the --big-test option to mysqltest.
 
-       o  --check-testcases
+       o   --check-testcases
 
-          Check test cases for side effects.
+           Check test cases for side effects.
 
-       o  --client-bindir
+       o   --client-bindir
 
-          The path to the directory where client binaries are located. This
-          option was added in MySQL 5.0.66/5.1.27.
+           The path to the directory where client binaries are located. This
+           option was added in MySQL 5.0.66/5.1.27.
 
-       o  --client-ddd
+       o   --client-ddd
 
-          Start mysqltest in the ddd debugger.
+           Start mysqltest in the ddd debugger.
 
-       o  --client-debugger
+       o   --client-debugger
 
-          Start mysqltest in the named debugger.
+           Start mysqltest in the named debugger.
 
-       o  --client-gdb
+       o   --client-gdb
 
-          Start mysqltest in the gdb debugger.
+           Start mysqltest in the gdb debugger.
 
-       o  --client-libdir
+       o   --client-libdir
 
-          The path to the directory where client libraries are located. This
-          option was added in MySQL 5.0.66/5.1.27.
+           The path to the directory where client libraries are located. This
+           option was added in MySQL 5.0.66/5.1.27.
 
-       o  --combination=value
+       o   --combination=value
 
-          Extra options to pass to mysqld. The value should consist of one or
-          more comma-separated mysqld options. This option is similar to
-          --mysqld but should be given two or more times.  mysql-test-run.pl
-          executes multiple test runs, using the options for each instance of
-          --combination in successive runs. If --combination is given only
-          once, it has no effect. For test runs specific to a given test
-          suite, an alternative to the use of --combination is to create a
-          combinations file in the suite directory. The file should contain a
-          section of options for each test run. See Section 4.9, "Passing
-          Options from mysql-test-run.pl to mysqld or mysqltest".
+           Extra options to pass to mysqld. The value should consist of one or
+           more comma-separated mysqld options. This option is similar to
+           --mysqld but should be given two or more times.  mysql-test-run.pl
+           executes multiple test runs, using the options for each instance of
+           --combination in successive runs. If --combination is given only
+           once, it has no effect. For test runs specific to a given test
+           suite, an alternative to the use of --combination is to create a
+           combinations file in the suite directory. The file should contain a
+           section of options for each test run. See Section 4.9, "Passing
+           Options from mysql-test-run.pl to mysqld or mysqltest".
 
-          This option was added in MySQL 5.1.23/6.0.4.
+           This option was added in MySQL 5.1.23/6.0.4.
 
-       o  --comment=str
+       o   --comment=str
 
-          Write str to the output.
+           Write str to the output.
 
-       o  --compress
+       o   --compress
 
-          Compress all information sent between the client and the server if
-          both support compression.
+           Compress all information sent between the client and the server if
+           both support compression.
 
-       o  --cursor-protocol
+       o   --cursor-protocol
 
-          Pass the --cursor-protocol option to mysqltest (implies
-          --ps-protocol).
+           Pass the --cursor-protocol option to mysqltest (implies
+           --ps-protocol).
 
-       o  --ddd
+       o   --ddd
 
-          Start mysqld in the ddd debugger.
+           Start mysqld in the ddd debugger.
 
-       o  --debug
+       o   --debug
 
-          Dump trace output for all clients and servers.
+           Dump trace output for all clients and servers.
 
-       o  --debugger
+       o   --debugger
 
-          Start mysqld using the named debugger.
+           Start mysqld using the named debugger.
 
-       o  --debug-sync-timeout=N
+       o   --debug-sync-timeout=N
 
-          Controls whether the Debug Sync facility for testing and debugging
-          is enabled. The option value is a timeout in seconds. The default
-          value is 300. A value of 0 disables Debug Sync. The value of this
-          option also becomes the default timeout for individual
-          synchronization points.
+           Controls whether the Debug Sync facility for testing and debugging
+           is enabled. The option value is a timeout in seconds. The default
+           value is 300. A value of 0 disables Debug Sync. The value of this
+           option also becomes the default timeout for individual
+           synchronization points.
 
-          mysql-test-run.pl passes --loose-debug-sync-timeout=N to mysqld. The
-          --loose prefix is used so that mysqld does not fail if Debug Sync is
-          not compiled in.
+           mysql-test-run.pl passes --loose-debug-sync-timeout=N to mysqld.
+           The --loose prefix is used so that mysqld does not fail if Debug
+           Sync is not compiled in.
 
-          For information about using the Debug Sync facility for testing, see
-          Section 4.14, "Thread Synchronization in Test Cases".
+           For information about using the Debug Sync facility for testing,
+           see Section 4.14, "Thread Synchronization in Test Cases".
 
-          This option was added in MySQL 6.0.6.
+           This option was added in MySQL 5.1.41/5.5.0/6.0.6.
 
-       o  --do-test=prefix
+       o   --do-test=prefix
 
-          Run all test cases having a name that begins with the given prefix
-          value. This option provides a convenient way to run a family of
-          similarly named tests.
+           Run all test cases having a name that begins with the given prefix
+           value. This option provides a convenient way to run a family of
+           similarly named tests.
 
-          As of MySQL 5.0.54/5.1.23/6.0.5, the argument for the --do-test
-          option allows more flexible specification of which tests to perform.
-          If the argument contains a pattern metacharacter other than a lone
-          period, it is interpreted as a Perl regular expression and applies
-          to test names that match the pattern. If the argument contains a
-          lone period or does not contain any pattern metacharacters, it is
-          interpreted the same way as previously and matches test names that
-          begin with the argument value. For example, --do-test=testa matches
-          tests that begin with testa, --do-test=main.testa matches tests in
-          the main test suite that begin with testa, and --do-test=main.*testa
-          matches test names that contain main followed by testa with anything
-          in between. In the latter case, the pattern match is not anchored to
-          the beginning of the test name, so it also matches names such as
-          xmainytestz.
+           As of MySQL 5.0.54/5.1.23/6.0.5, the argument for the --do-test
+           option allows more flexible specification of which tests to
+           perform. If the argument contains a pattern metacharacter other
+           than a lone period, it is interpreted as a Perl regular expression
+           and applies to test names that match the pattern. If the argument
+           contains a lone period or does not contain any pattern
+           metacharacters, it is interpreted the same way as previously and
+           matches test names that begin with the argument value. For example,
+           --do-test=testa matches tests that begin with testa,
+           --do-test=main.testa matches tests in the main test suite that
+           begin with testa, and --do-test=main.*testa matches test names that
+           contain main followed by testa with anything in between. In the
+           latter case, the pattern match is not anchored to the beginning of
+           the test name, so it also matches names such as xmainytestz.
 
-       o  --embedded-server
+       o   --embedded-server
 
-          Use a version of mysqltest built with the embedded server.
+           Use a version of mysqltest built with the embedded server.
 
-       o  --experimental=file_name
+       o   --experimental=file_name
 
-          Specify a file that contains a list of test cases that should be
-          displayed with the [ exp-fail ] code rather than [ fail ] if they
-          fail. This option was added in MySQL 5.1.33/6.0.11.
+           Specify a file that contains a list of test cases that should be
+           displayed with the [ exp-fail ] code rather than [ fail ] if they
+           fail. This option was added in MySQL 5.1.33/6.0.11.
 
-       o  --extern
+           For an example of a file that might be specified via this option,
+           see mysql-test/collections/default.experimental.
 
-          Use an already running server.
+       o   --extern
 
-          Note: If a test case has an .opt file that requires the server to be
-          restarted with specific options, the file will not be used. The test
-          case likely will fail as a result.
+           Use an already running server.
 
-       o  --fast
+           Note: If a test case has an .opt file that requires the server to
+           be restarted with specific options, the file will not be used. The
+           test case likely will fail as a result.
 
-          Do not clean up from earlier test runs.
+       o   --fast
 
-       o  --force
+           Do not clean up from earlier test runs.
 
-          Normally, mysql-test-run.pl exits if a test case fails.  --force
-          causes execution to continue regardless of test case failure.
+       o   --force
 
-       o  --gcov
+           Normally, mysql-test-run.pl exits if a test case fails.  --force
+           causes execution to continue regardless of test case failure.
 
-          Run tests with the gcov test coverage tool.
+       o   --gcov
 
-       o  --gdb
+           Run tests with the gcov test coverage tool.
 
-          Start mysqld in the gdb debugger.
+       o   --gdb
 
-       o  --gprof
+           Start mysqld in the gdb debugger.
 
-          Run tests with the gprof profiling tool.
+       o   --gprof
 
-       o  --im-mysqld1-port
+           Run tests with the gprof profiling tool.
 
-          TCP/IP port number to use for the first mysqld, controlled by
-          Instance Manager.
+       o   --im-mysqld1-port
 
-       o  --im-mysqld2-port
+           TCP/IP port number to use for the first mysqld, controlled by
+           Instance Manager.
 
-          TCP/IP port number to use for the second mysqld, controlled by
-          Instance Manager.
+       o   --im-mysqld2-port
 
-       o  --im-port
+           TCP/IP port number to use for the second mysqld, controlled by
+           Instance Manager.
 
-          TCP/IP port number to use for mysqld, controlled by Instance
-          Manager.
+       o   --im-port
 
-       o  --log-warnings
+           TCP/IP port number to use for mysqld, controlled by Instance
+           Manager.
 
-          Pass the --log-warnings option to mysqld.
+       o   --log-warnings
 
-       o  --manual-debug
+           Pass the --log-warnings option to mysqld.
 
-          Use a server that has already been started by the user in a
-          debugger.
+       o   --manual-debug
 
-       o  --manual-gdb
+           Use a server that has already been started by the user in a
+           debugger.
 
-          Use a server that has already been started by the user in the gdb
-          debugger.
+       o   --manual-gdb
 
-       o  --master-binary=path
+           Use a server that has already been started by the user in the gdb
+           debugger.
 
-          Specify the path of the mysqld binary to use for master servers.
+       o   --master-binary=path
 
-       o  --master_port=port_num
+           Specify the path of the mysqld binary to use for master servers.
 
-          Specify the TCP/IP port number for the first master server to use.
-          Observe that the option name has an underscore and not a dash.
+       o   --master_port=port_num
 
-       o  --mem
+           Specify the TCP/IP port number for the first master server to use.
+           Observe that the option name has an underscore and not a dash.
 
-          Run the test suite in memory, using tmpfs or ramdisk. This can
-          decrease test times significantly.  mysql-test-run.pl attempts to
-          find a suitable location using a built-in list of standard locations
-          for tmpfs and puts the var directory there. This option also affects
-          placement of temporary files, which are created in var/tmp.
+       o   --mem
 
-          The default list includes /dev/shm. You can also enable this option
-          by setting the environment variable MTR_MEM[=dir_name]. If dir_name
-          is given, it is added to the beginning of the list of locations to
-          search, so it takes precedence over any built-in locations.
+           Run the test suite in memory, using tmpfs or ramdisk. This can
+           decrease test times significantly.  mysql-test-run.pl attempts to
+           find a suitable location using a built-in list of standard
+           locations for tmpfs and puts the var directory there. This option
+           also affects placement of temporary files, which are created in
+           var/tmp.
 
-          This option was added in MySQL 4.1.22, 5.0.30, and 5.1.13.
+           The default list includes /dev/shm. You can also enable this option
+           by setting the environment variable MTR_MEM[=dir_name]. If dir_name
+           is given, it is added to the beginning of the list of locations to
+           search, so it takes precedence over any built-in locations.
 
-       o  --mysqld=value
+           This option was added in MySQL 4.1.22, 5.0.30, and 5.1.13. It is
+           not supported on Windows.
 
-          Extra options to pass to mysqld. The value should consist of one or
-          more comma-separated mysqld options. See Section 4.9, "Passing
-          Options from mysql-test-run.pl to mysqld or mysqltest".
+       o   --mysqld=value
 
-       o  --mysqltest=value
+           Extra options to pass to mysqld. The value should consist of one or
+           more comma-separated mysqld options. See Section 4.9, "Passing
+           Options from mysql-test-run.pl to mysqld or mysqltest".
 
-          Extra options to pass to mysqltest. The value should consist of one
-          or more comma-separated mysqltest options. See Section 4.9, "Passing
-          Options from mysql-test-run.pl to mysqld or mysqltest". This option
-          was added in MySQL 6.0.6.
+       o   --mysqltest=value
 
-       o  --ndb-connectstring=str
+           Extra options to pass to mysqltest. The value should consist of one
+           or more comma-separated mysqltest options. See Section 4.9,
+           "Passing Options from mysql-test-run.pl to mysqld or mysqltest".
+           This option was added in MySQL 6.0.6.
 
-          Pass --ndb-connectstring=str to the master MySQL server. This option
-          also prevents mysql-test-run.pl from starting a cluster. It is
-          assumed that there is already a cluster running to which the server
-          can connect with the given connectstring.
+       o   --ndb-connectstring=str
 
-       o  --ndb-connectstring-slave=str
+           Pass --ndb-connectstring=str to the master MySQL server. This
+           option also prevents mysql-test-run.pl from starting a cluster. It
+           is assumed that there is already a cluster running to which the
+           server can connect with the given connectstring.
 
-          Pass --ndb-connectstring=str to slave MySQL servers. This option
-          also prevents mysql-test-run.pl from starting a cluster. It is
-          assumed that there is already a cluster running to which the server
-          can connect with the given connectstring.
+       o   --ndb-connectstring-slave=str
 
-       o  --ndb-extra-test
+           Pass --ndb-connectstring=str to slave MySQL servers. This option
+           also prevents mysql-test-run.pl from starting a cluster. It is
+           assumed that there is already a cluster running to which the server
+           can connect with the given connectstring.
 
-          Unknown.
+       o   --ndb-extra-test
 
-       o  --ndbcluster-port=port_num, --ndbcluster_port=port_num
+           Unknown.
 
-          Specify the TCP/IP port number that NDB Cluster should use.
+       o   --ndbcluster-port=port_num, --ndbcluster_port=port_num
 
-       o  --ndbcluster-port-slave=port_num
+           Specify the TCP/IP port number that NDB Cluster should use.
 
-          Specify the TCP/IP port number that the slave NDB Cluster should
-          use.
+       o   --ndbcluster-port-slave=port_num
 
-       o  --netware
+           Specify the TCP/IP port number that the slave NDB Cluster should
+           use.
 
-          Run mysqld with options needed on NetWare.
+       o   --netware
 
-       o  --notimer
+           Run mysqld with options needed on NetWare.
 
-          Cause mysqltest not to generate a timing file.
+       o   --notimer
 
-       o  --ps-protocol
+           Cause mysqltest not to generate a timing file.
 
-          Pass the --ps-protocol option to mysqltest.
+       o   --parallel={N|auto}
 
-       o  --record
+           Run tests using N parallel threads. By default, 1 thread is used.
+           Use --parallel=auto for auto-setting of N. This option was added in
+           MySQL 5.1.36.
 
-          Pass the --record option to mysqltest. This option requires a
-          specific test case to be named on the command line.
+       o   --ps-protocol
 
-       o  --reorder
+           Pass the --ps-protocol option to mysqltest.
 
-          Reorder tests to minimize the number of server restarts needed.
+       o   --record
 
-       o  --report-features
+           Pass the --record option to mysqltest. This option requires a
+           specific test case to be named on the command line.
 
-          Display the output of SHOW ENGINES and SHOW VARIABLES. This can be
-          used to verify that binaries are built with all required features.
+       o   --reorder
 
-          This option was added in MySQL 4.1.23, 5.0.30, and 5.1.14.
+           Reorder tests to minimize the number of server restarts needed.
 
-       o  --script-debug
+       o   --report-features
 
-          Enable debug output for mysql-test-run.pl itself.
+           Display the output of SHOW ENGINES and SHOW VARIABLES. This can be
+           used to verify that binaries are built with all required features.
 
-       o  --skip-im
+           This option was added in MySQL 4.1.23, 5.0.30, and 5.1.14.
 
-          Do not start Instance Manager; skip Instance Manager test cases.
+       o   --script-debug
 
-       o  --skip-master-binlog
+           Enable debug output for mysql-test-run.pl itself.
 
-          Do not enable master server binary logging.
+       o   --skip-im
 
-       o  --skip-ndbcluster, --skip-ndb
+           Do not start Instance Manager; skip Instance Manager test cases.
 
-          Do not start NDB Cluster; skip Cluster test cases.
+       o   --skip-master-binlog
 
-       o  --skip-ndbcluster-slave, --skip-ndb-slave
+           Do not enable master server binary logging.
 
-          Do not start an NDB Cluster slave.
+       o   --skip-ndbcluster, --skip-ndb
 
-       o  --skip-rpl
+           Do not start NDB Cluster; skip Cluster test cases.
 
-          Skip replication test cases.
+       o   --skip-ndbcluster-slave, --skip-ndb-slave
 
-       o  --skip-slave-binlog
+           Do not start an NDB Cluster slave.
 
-          Do not enable master server binary logging.
+       o   --skip-rpl
 
-       o  --skip-ssl
+           Skip replication test cases.
 
-          Do not start mysqld with support for SSL connections.
+       o   --skip-slave-binlog
 
-       o  --skip-test=regex
+           Do not enable master server binary logging.
 
-          Specify a regular expression to be applied to test case names. Cases
-          with names that match the expression are skipped. tests to skip.
+       o   --skip-ssl
 
-          As of MySQL 5.0.54/5.1.23/6.0.5, the argument for the --skip-test
-          option allows more flexible specification of which tests to skip. If
-          the argument contains a pattern metacharacter other than a lone
-          period, it is interpreted as a Perl regular expression and applies
-          to test names that match the pattern. See the description of the
-          --do-test option for details.
+           Do not start mysqld with support for SSL connections.
 
-       o  --skip-*
+       o   --skip-test=regex
 
-          --skip-* options not otherwise recognized by mysql-test-run.pl are
-          passed to the master server.
+           Specify a regular expression to be applied to test case names.
+           Cases with names that match the expression are skipped. tests to
+           skip.
 
-       o  --slave-binary=path
+           As of MySQL 5.0.54/5.1.23/6.0.5, the argument for the --skip-test
+           option allows more flexible specification of which tests to skip.
+           If the argument contains a pattern metacharacter other than a lone
+           period, it is interpreted as a Perl regular expression and applies
+           to test names that match the pattern. See the description of the
+           --do-test option for details.
 
-          Specify the path of the mysqld binary to use for slave servers.
+       o   --skip-*
 
-       o  --slave_port=port_num
+           --skip-* options not otherwise recognized by mysql-test-run.pl are
+           passed to the master server.
 
-          Specify the TCP/IP port number for the first master server to use.
-          Observe that the option name has an underscore and not a dash.
+       o   --slave-binary=path
 
-       o  --sleep=N
+           Specify the path of the mysqld binary to use for slave servers.
 
-          Pass --sleep=N to mysqltest.
+       o   --slave_port=port_num
 
-       o  --small-bench
+           Specify the TCP/IP port number for the first master server to use.
+           Observe that the option name has an underscore and not a dash.
 
-          Run the benchmarks with the --small-tests and --small-tables
-          options.
+       o   --sleep=N
 
-       o  --socket=file_name
+           Pass --sleep=N to mysqltest.
 
-          For connections to localhost, the Unix socket file to use, or, on
-          Windows, the name of the named pipe to use.
+       o   --small-bench
 
-       o  --sp-protocol
+           Run the benchmarks with the --small-tests and --small-tables
+           options.
 
-          Pass the --sp-protocol option to mysqltest.
+       o   --socket=file_name
 
-       o  --ssl
+           For connections to localhost, the Unix socket file to use, or, on
+           Windows, the name of the named pipe to use.
 
-          If mysql-test-run.pl is started with the --ssl option, it sets up a
-          secure conection for all test cases. In this case, if mysqld does
-          not support SSL, mysql-test-run.pl exits with an error message:
-          Couldn't find support for SSL
+       o   --sp-protocol
 
-       o  --start
+           Pass the --sp-protocol option to mysqltest.
 
-          Initialize and start servers with the startup settings for the first
-          specified test case. For example:
+       o   --ssl
 
-          shell> cd mysql-test
-          shell> ./mysql-test-run.pl --start alias &
-       This option was added in MySQL 5.1.32/6.0.11.
+           If mysql-test-run.pl is started with the --ssl option, it sets up a
+           secure conection for all test cases. In this case, if mysqld does
+           not support SSL, mysql-test-run.pl exits with an error message:
+           Couldn't find support for SSL
 
-       o  --start-and-exit
+       o   --start
 
-          Initialize and start servers with the startup settings for the
-          specified test case or cases, if any, and then exit. You can use
-          this option to start a server to which you can connect later. For
-          example, after building a source distribution you can start a server
-          and connect to it with the mysql client like this:
+           Initialize and start servers with the startup settings for the
+           first specified test case. For example:
 
-          shell> cd mysql-test
-          shell> ./mysql-test-run.pl --start-and-exit
-          shell> ../mysql -S ./var/tmp/master.sock -h localhost -u root
+               shell> cd mysql-test
+               shell> ./mysql-test-run.pl --start alias &
 
-       o  --start-dirty
+           This option was added in MySQL 5.1.32/6.0.11.
 
-          Start servers (without initialization) for the specified test case
-          or cases, if any, and then exit. You can then manually run the test
-          cases.
+       o   --start-and-exit
 
-       o  --start-from=test_name
+           Initialize and start servers with the startup settings for the
+           specified test case or cases, if any, and then exit. You can use
+           this option to start a server to which you can connect later. For
+           example, after building a source distribution you can start a
+           server and connect to it with the mysql client like this:
 
-          mysql-test-run.pl sorts the list of names of the test cases to be
-          run, and then begins with test_name.
+               shell> cd mysql-test
+               shell> ./mysql-test-run.pl --start-and-exit
+               shell> ../mysql -S ./var/tmp/master.sock -h localhost -u root
 
-       o  --strace-client
+       o   --start-dirty
 
-          Create strace output for mysqltest.
+           Start servers (without initialization) for the specified test case
+           or cases, if any, and then exit. You can then manually run the test
+           cases.
 
-       o  --stress
+       o   --start-from=test_name
 
-          Run the stress test. The other --stress-xxx options apply in this
-          case.
+           mysql-test-run.pl sorts the list of names of the test cases to be
+           run, and then begins with test_name.
 
-       o  --stress-init-file=file_name
+       o   --strace-client
 
-          file_name is the location of the file that contains the list of
-          tests. The default file is stress_init.txt in the test suite
-          directory.
+           Create strace output for mysqltest.
 
-       o  --stress-loop-count=N
+       o   --stress
 
-          In sequential stress-test mode, the number of loops to execute
-          before exiting.
+           Run the stress test. The other --stress-xxx options apply in this
+           case.
 
-       o  --stress-mode=mode
+       o   --stress-init-file=file_name
 
-          This option indicates the test order in stress-test mode. The mode
-          value is either random to select tests in random order or seq to run
-          tests in each thread in the order specified in the test list file.
-          The default mode is random.
+           file_name is the location of the file that contains the list of
+           tests. The default file is stress_init.txt in the test suite
+           directory.
 
-       o  --stress-suite=suite_name
+       o   --stress-loop-count=N
 
-          The name of the test suite to use for stress testing. The default
-          suite name is main (the regular test suite located in the mysql-test
-          directory).
+           In sequential stress-test mode, the number of loops to execute
+           before exiting.
 
-       o  --stress-test-count=N
+       o   --stress-mode=mode
 
-          For stress testing, the number of tests to execute before exiting.
+           This option indicates the test order in stress-test mode. The mode
+           value is either random to select tests in random order or seq to
+           run tests in each thread in the order specified in the test list
+           file. The default mode is random.
 
-       o  --stress-test-duration=N
+       o   --stress-suite=suite_name
 
-          For stress testing, the duration of stress testing in seconds.
+           The name of the test suite to use for stress testing. The default
+           suite name is main (the regular test suite located in the
+           mysql-test directory).
 
-       o  --stress-test-file=file_name
+       o   --stress-test-count=N
 
-          The file that contains the list of tests to use in stress testing.
-          The tests should be named without the .test extension. The default
-          file is stress_tests.txt in the test suite directory.
+           For stress testing, the number of tests to execute before exiting.
 
-       o  --stress-threads=N
+       o   --stress-test-duration=N
 
-          The number of threads to use in stress testing. The default is 5.
+           For stress testing, the duration of stress testing in seconds.
 
-       o  --suite=suite_name
+       o   --stress-test-file=file_name
 
-          Run the named test suite. The default name is main (the regular test
-          suite located in the mysql-test directory).
+           The file that contains the list of tests to use in stress testing.
+           The tests should be named without the .test extension. The default
+           file is stress_tests.txt in the test suite directory.
 
-       o  --suite-timeout=minutes
+       o   --stress-threads=N
 
-          Specify the maximum test suite runtime.
+           The number of threads to use in stress testing. The default is 5.
 
-       o  --testcase-timeout
+       o   --suite=suite_name
 
-          Specify the maximum test case runtime.
+           Run the named test suite. The default name is main (the regular
+           test suite located in the mysql-test directory).
 
-       o  --timer
+       o   --suite-timeout=minutes
 
-          Cause mysqltest to generate a timing file. The default file is named
-          ./var/log/timer.
+           Specify the maximum test suite runtime.
 
-       o  --tmpdir=path
+       o   --testcase-timeout
 
-          The directory where temporary file are stored. The default location
-          is ./var/tmp.
+           Specify the maximum test case runtime.
 
-       o  --unified-diff, --udiff
+       o   --timer
 
-          Use unified diff format when presenting differences between expected
-          and actual test case results.
+           Cause mysqltest to generate a timing file. The default file is
+           named ./var/log/timer.
 
-       o  --use-old-data
+       o   --tmpdir=path
 
-          Do not install the test databases. (Use existing ones.)
+           The directory where temporary file are stored. The default location
+           is ./var/tmp.
 
-       o  --user-test=val
+       o   --unified-diff, --udiff
 
-          Unused.
+           Use unified diff format when presenting differences between
+           expected and actual test case results.
 
-       o  --user=user_name
+       o   --use-old-data
 
-          The MySQL user name to use when connecting to the server.
+           Do not install the test databases. (Use existing ones.)
 
-       o  --valgrind
+       o   --user-test=val
 
-          Run mysqltest and mysqld with valgrind.
+           Unused.
 
-       o  --valgrind-all
+       o   --user=user_name
 
-          Like --valgrind, but passes the --verbose and --show-reachable
-          options to valgrind.
+           The MySQL user name to use when connecting to the server.
 
-       o  --valgrind-mysqltest
+       o   --valgrind
 
-          Run mysqltest with valgrind.
+           Run mysqltest and mysqld with valgrind.
 
-       o  --valgrind-mysqltest-all
+       o   --valgrind-all
 
-          Like --valgrind-mysqltest, but passes the --verbose and
-          --show-reachable options to valgrind.
+           Like --valgrind, but passes the --verbose and --show-reachable
+           options to valgrind.
 
-       o  --valgrind-options=str
+       o   --valgrind-mysqltest
 
-          Extra options to pass to valgrind.
+           Run mysqltest with valgrind.
 
-       o  --valgrind-path=path
+       o   --valgrind-mysqltest-all
 
-          Specify the path name to the valgrind executable.
+           Like --valgrind-mysqltest, but passes the --verbose and
+           --show-reachable options to valgrind.
 
-       o  --vardir=path
+       o   --valgrind-options=str
 
-          Specify the path where files generated during the test run are
-          stored. The default location is ./var.
+           Extra options to pass to valgrind.
 
-       o  --view-protocol
+       o   --valgrind-path=path
 
-          Pass the --view-protocol option to mysqltest.
+           Specify the path name to the valgrind executable.
 
-       o  --vs-config=config_val
+       o   --vardir=path
 
-          Specify the configuration used to build MySQL (for example,
-          --vs-config=debug --vs-config=release). This option is for Windows
-          only. It is available as of MySQL 4.1.23, 5.0.30, and 5.1.14.
+           Specify the path where files generated during the test run are
+           stored. The default location is ./var.
 
-       o  --wait-timeout=N
+       o   --view-protocol
 
-          Unused?
+           Pass the --view-protocol option to mysqltest.
 
-       o  --warnings
+       o   --vs-config=config_val
 
-          This option is a synonym for --log-warnings.
+           Specify the configuration used to build MySQL (for example,
+           --vs-config=debug --vs-config=release). This option is for Windows
+           only. It is available as of MySQL 4.1.23, 5.0.30, and 5.1.14.
 
-       o  --with-ndbcluster
+       o   --wait-timeout=N
 
-          Use NDB Cluster and enable test cases that require it.
+           Unused?
 
-       o  --with-ndbcluster-all
+       o   --warnings
 
-          Use NDB Cluster in all tests.
+           Search the server log for errors or warning after each test and
+           report any suspicious ones; if any are found, the test will be
+           marked as failed. This is the default behavior, it may be turned
+           off with --nowarnings.
 
-       o  --with-ndbcluster-only
+       o   --with-ndbcluster
 
-          Run only test cases that have ndb in their name.
+           Use NDB Cluster and enable test cases that require it.
 
-       o  --with-ndbcluster-slave
+       o   --with-ndbcluster-all
 
-          Unknown.
+           Use NDB Cluster in all tests.
 
-       o  --with-openssl
+       o   --with-ndbcluster-only
 
-          This option is a synonym for --ssl.
+           Run only test cases that have ndb in their name.
 
+       o   --with-ndbcluster-slave
 
-       Note
-       mysql-test-run supports the following options not supported by
-       mysql-test-run.pl: --local, --local-master, --ndb-verbose,
-       --ndb_mgm-extra-opts, --ndb_mgmd-extra-opts, --ndbd-extra-opts,
-       --old-master, --purify, --use-old-data, --valgrind-mysqltest-all.
+           Unknown.
 
-       Conversely, mysql-test-run.pl supports the following options not
-       supported by mysql-test-run: --benchdir, --check-testcases,
-       --client-ddd, --client-debugger, --cursor-protocol, --debugger,
-       --im-mysqld1-port, --im-mysqld2-port, --im-port, --manual-debug,
-       --netware, --notimer, --reorder, --script-debug, --skip-im, --skip-ssl,
-       --sp-protocol, --start-dirty, --suite, --suite-timeout,
-       --testcase-timeout, --udiff, --unified-diff,, --valgrind-path,
-       --vardir, --view-protocol.
+       o   --with-openssl
+
+           This option is a synonym for --ssl.
+
+           Note
+           mysql-test-run supports the following options not supported by
+           mysql-test-run.pl: --local, --local-master, --ndb-verbose,
+           --ndb_mgm-extra-opts, --ndb_mgmd-extra-opts, --ndbd-extra-opts,
+           --old-master, --purify, --use-old-data, --valgrind-mysqltest-all.
+
+           Conversely, mysql-test-run.pl supports the following options not
+           supported by mysql-test-run: --benchdir, --check-testcases,
+           --client-ddd, --client-debugger, --cursor-protocol, --debugger,
+           --im-mysqld1-port, --im-mysqld2-port, --im-port, --manual-debug,
+           --netware, --notimer, --reorder, --script-debug, --skip-im,
+           --skip-ssl, --sp-protocol, --start-dirty, --suite, --suite-timeout,
+           --testcase-timeout, --udiff, --unified-diff,, --valgrind-path,
+           --vardir, --view-protocol.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
+       Copyright (C) 2007, 2010, Oracle and/or its affiliates. All rights
+       reserved.
 
        This documentation is free software; you can redistribute it and/or
        modify it only under the terms of the GNU General Public License as
@@ -729,9 +745,10 @@ COPYRIGHT
        51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
        http://www.gnu.org/licenses/.
 
-REFERENCES
-       1. Typical configure Options
-          http://dev.mysql.com/doc/refman/5.1/en/configure-options.html
+
+NOTES
+        1. Typical configure Options
+           http://dev.mysql.com/doc/refman/5.1/en/configure-options.html
 
 SEE ALSO
        For more information, please refer to the MySQL Reference Manual, which
@@ -739,7 +756,7 @@ SEE ALSO
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       Sun Microsystems, Inc. (http://www.mysql.com/).
+       Oracle Corporation (http://dev.mysql.com/).
 
 
 

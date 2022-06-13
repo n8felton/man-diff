@@ -12,25 +12,25 @@ DESCRIPTION
        This program enables you to improve the security of your MySQL
        installation in the following ways:
 
-       o  You can set a password for root accounts.
+       o   You can set a password for root accounts.
 
-       o  You can remove root accounts that are accessible from outside the
-          local host.
+       o   You can remove root accounts that are accessible from outside the
+           local host.
 
-       o  You can remove anonymous-user accounts.
+       o   You can remove anonymous-user accounts.
 
-       o  You can remove the test database, which by default can be accessed
-          by anonymous users.
+       o   You can remove the test database, which by default can be accessed
+           by anonymous users.
 
+       Invoke mysql_secure_installation without arguments:
 
-Invoke mysql_secure_installation without arguments:
+           shell> mysql_secure_installation
 
-   shell> mysql_secure_installation
-
-The script will prompt you to determine which actions to perform.
+       The script will prompt you to determine which actions to perform.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
+       Copyright (C) 2008, 2010, Oracle and/or its affiliates. All rights
+       reserved.
 
        This documentation is free software; you can redistribute it and/or
        modify it only under the terms of the GNU General Public License as
@@ -46,13 +46,14 @@ COPYRIGHT
        51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
        http://www.gnu.org/licenses/.
 
+
 SEE ALSO
        For more information, please refer to the MySQL Reference Manual, which
        may already be installed locally and which is also available online at
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       Sun Microsystems, Inc. (http://www.mysql.com/).
+       Oracle Corporation (http://dev.mysql.com/).
 
 
 
