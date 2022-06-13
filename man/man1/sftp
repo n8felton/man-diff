@@ -7,8 +7,8 @@ SYNOPSIS
      sftp [-1Cv] [-B buffer_size] [-b batchfile] [-F ssh_config]
           [-o ssh_option] [-P sftp_server_path] [-R num_requests] [-S program]
           [-s subsystem | sftp_server] host
-     sftp [[user@]host[:file [file]]]
-     sftp [[user@]host[:dir[/]]]
+     sftp [user@]host[:file ...]
+     sftp [user@]host[:dir[/]]
      sftp -b batchfile [user@]host
 
 DESCRIPTION
@@ -257,7 +257,7 @@ INTERACTIVE COMMANDS
      version
              Display the sftp protocol version.
 
-     ! command
+     !command
              Execute command in local shell.
 
      !       Escape to local shell.

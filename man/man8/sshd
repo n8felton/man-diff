@@ -458,8 +458,7 @@ FILES
              are writable by other users, then the file could be modified or
              replaced by unauthorized users.  In this case, sshd will not
              allow it to be used unless the StrictModes option has been set to
-             ``no''.  The recommended permissions can be set by executing
-             ``chmod go-w ~/ ~/.ssh ~/.ssh/authorized_keys''.
+             ``no''.
 
      ~/.ssh/environment
              This file is read into the environment at login (if it exists).

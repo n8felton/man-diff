@@ -6,7 +6,7 @@ NAME
        slapacl - Check access to a list of attributes.
 
 SYNOPSIS
-       /BinaryCache/OpenLDAP/OpenLDAP-110~17/Root/usr/sbin/slapacl   [-v]  [-d
+       /BinaryCache/OpenLDAP/OpenLDAP-111~1/Root/usr/sbin/slapacl   [-v]   [-d
        level] [-f slapd.conf] [-F confdir] [-D authcDN |  -U  authcID]  -b  DN
        [-u] [-X authzID | -o authzDN=DN] [attr[/access][:value]] [...]
 
@@ -81,7 +81,7 @@ OPTIONS
 EXAMPLES
        The command
 
-            /BinaryCache/OpenLDAP/OpenLDAP-110~17/Root/usr/sbin/slapacl -f //etc/openldap/slapd.conf -v \
+            /BinaryCache/OpenLDAP/OpenLDAP-111~1/Root/usr/sbin/slapacl -f //etc/openldap/slapd.conf -v \
                    -U bjorn -b "o=University of Michigan,c=US" \
                 "o/read:University of Michigan"
 

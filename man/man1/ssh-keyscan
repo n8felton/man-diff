@@ -5,7 +5,7 @@ NAME
 
 SYNOPSIS
      ssh-keyscan [-46Hv] [-f file] [-p port] [-T timeout] [-t type]
-                 [host | addrlist namelist] [...]
+                 [host | addrlist namelist] ...
 
 DESCRIPTION
      ssh-keyscan is a utility for gathering the public ssh host keys of a num-
@@ -80,7 +80,7 @@ FILES
      /etc/ssh_known_hosts
 
 EXAMPLES
-     Print the rsa1 host key for machine hostname:
+     Print the rsa host key for machine hostname:
 
      $ ssh-keyscan hostname
 

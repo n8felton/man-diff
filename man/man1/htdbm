@@ -39,7 +39,7 @@ SYNOPSIS
 SUMMARY
        htdbm  is  used  to manipulate the DBM format files used to store user-
        names  and  password  for  basic  authentication  of  HTTP  users   via
-       mod_auth_dbm.  See  the  dbmmanage  documentation  for more information
+       mod_authn_dbm.  See  the  dbmmanage  documentation for more information
        about these DBM files.
 
 
