@@ -53,6 +53,12 @@ DIRECTIVES
               Enable logging to a specified file. Highly recommended.
               Default: disabled.
 
+       LogFileMaxSize SIZE
+              Limit the size of the log file. The logger will be automatically
+              disabled if the file is greater than SIZE. Value of  0  disables
+              the limit.
+              Default: 1M
+
        LogSyslog BOOL
               Enable  logging  to  Syslog.  May  be  used  in combination with
               UpdateLogFile.
@@ -94,6 +100,12 @@ DIRECTIVES
        ScriptedUpdates BOOL
               With  this  option you can control scripted updates. It's highly
               recommended to keep it enabled.
+              Default: enabled
+
+       TestDatabases BOOL
+              With this option enabled, freshclam will  attempt  to  load  new
+              databases  into memory to make sure they are properly handled by
+              libclamav before replacing the old ones.
               Default: enabled
 
        CompressLocalDatabase BOOL
@@ -173,6 +185,44 @@ DIRECTIVES
               http://www.iana.org/domains/root/db/) of the country of  origin.
               Default: disabled
 
+       DetectionStatsHostID STRING
+              This  option  enables support for our "Personal Statistics" ser-
+              vice. When this option is enabled, the  information  on  malware
+              detected  by  your  clamd  installation is made available to you
+              through   our   website.   To   get   your   HostID,   log    on
+              http://www.stats.clamav.net  and  add  a  new  host to your host
+              list. Once you have the HostID, uncomment this option and  paste
+              the  HostID  here.  As  soon as your freshclam starts submitting
+              information to our stats collecting service, you will be able to
+              view  the  statistics of this clamd installation by logging into
+              http://www.stats.clamav.net with the same credentials  you  used
+              to   generate   the  HostID.  For  more  information  refer  to:
+              http://www.clamav.net/support/faq/faq-cctts/.    This    feature
+              requires SubmitDetectionStats to be enabled.
+              Default: disabled
+
+       SafeBrowsing BOOL
+              This option enables support for Google Safe Browsing. When acti-
+              vated for the first time, freshclam will download a new database
+              file  (safebrowsing.cvd)  which  will be automatically loaded by
+              clamd and clamscan during the next  reload,  provided  that  the
+              heuristic   phishing  detection  is  turned  on.  This  database
+              includes information about websites that may be  phishing  sites
+              or  possible  sources  of  malware. When using this option, it's
+              mandatory to run freshclam at least every 30 minutes.  Freshclam
+              uses  the ClamAV's mirror infrastructure to distribute the data-
+              base and its updates but all the  contents  are  provided  under
+              Google's   terms   of   use.   See   http://code.google.com/sup-
+              port/bin/answer.py?answer=70015   and   http://safebrowsing.cla-
+              mav.net for more information.
+              Default: disabled
+
+       Bytecode BOOL
+              This  option enables downloading of bytecode.cvd, which includes
+              additional detection mechanisms and improvements to  the  ClamAV
+              engine.
+              Default: enabled
+
 FILES
        /private/etc/freshclam.conf
 
@@ -180,8 +230,7 @@ AUTHOR
        Thomas Lamy <thomas.lamy@netwake.de>, Tomasz Kojm <tkojm@clamav.net>
 
 SEE ALSO
-       freshclam(1), clamd.conf(5), clamd(8), clamav-milter(8), clamscan(1)
-
+       freshclam(1), clamd.conf(5), clamd(8), clamscan(1)
 
 
 

@@ -42,11 +42,16 @@ OPTIONS
               Scan files listed line by line in FILE.
 
        -m, --multiscan
-              In multiscan mode several files are scanned in parallel, one for
-              each  available  scan  thread in clamd.  This is achieved either
-              via MULTISCAN or IDSESSION requests, depending on the configura-
-              tion  and  other  options.   Can  be combined with --fdpass (see
-              below)
+              In the multiscan mode clamd will attempt to scan  the  directory
+              contents  in  parallel  using  available threads. This option is
+              especially useful on multiprocessor and multi-core  systems.  If
+              you  pass  more  than one file or directory in the command line,
+              they are put in a queue and sent  to  clamd  individually.  This
+              means,  that single files are always scanned by a single thread.
+              Similarly, clamdscan will wait for clamd to finish  a  directory
+              scan  (performed  in  multiscan  mode) before sending request to
+              scan  another  directory.  This  option  can  be  combined  with
+              --fdpass (see below).
 
        --remove
               Remove infected files. Be careful.
@@ -62,14 +67,14 @@ OPTIONS
 
        --fdpass
               Pass the file descriptor permissions to clamd. This is useful if
-              clamd  is  running  as  a  different  user  as it is faster than
-              streaming the file to clamd.  Only  available  if  connected  to
+              clamd is running as a  different  user  as  it  is  faster  than
+              streaming  the  file  to  clamd.  Only available if connected to
               clamd via local(unix) socket.
 
        --stream
-              Forces  file streaming to clamd. This is generally not needed as
-              clamdscan detects automatically if streaming is  required.  This
-              option  only  exists  for debugging and testing purposes, in all
+              Forces file streaming to clamd. This is generally not needed  as
+              clamdscan  detects  automatically if streaming is required. This
+              option only exists for debugging and testing  purposes,  in  all
               other cases --fdpass is preferred.
 
 EXAMPLES
@@ -107,7 +112,7 @@ AUTHOR
        Tomasz Kojm <tkojm@clamav.net>
 
 SEE ALSO
-       clamd(8), clamd.conf(5), clamscan(1), freshclam(1)
+       clamd(8), clamd.conf(5), clamscan(1)
 
 
 

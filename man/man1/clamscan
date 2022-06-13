@@ -41,11 +41,15 @@ OPTIONS
               Load virus database from FILE or load all virus  database  files
               from DIR.
 
+       --official-db-only=[yes/no(*)]
+              Only  load  the  official  signatures  published  by  the ClamAV
+              project.
+
        -l FILE, --log=FILE
               Save scan report to FILE.
 
        --tempdir=DIRECTORY
-              Create  temporary files in DIRECTORY. Directory must be writable
+              Create temporary files in DIRECTORY. Directory must be  writable
               for the '_clamav' user or unprivileged user running clamscan.
 
        --leave-temps
@@ -55,21 +59,24 @@ OPTIONS
               Scan files listed line by line in FILE.
 
        -r, --recursive
-              Scan directories recursively.  All  the  subdirectories  in  the
+              Scan  directories  recursively.  All  the  subdirectories in the
               given directory will be scanned.
+
+       --cross-fs=[yes(*)/no]
+              Scan files and directories on other filesystems.
 
        --bell Sound bell on virus detection.
 
        --no-summary
               Do not display summary at the end of scanning.
 
-       --exclude=PATT, --exclude-dir=PATT
-              Don't  scan file/directory names containing PATT. It may be used
-              multiple times.
+       --exclude=REGEX, --exclude-dir=REGEX
+              Don't scan file/directory  names  matching  regular  expression.
+              These options can be used multiple times.
 
-       --include=PATT, --include-dir=PATT
-              Only scan file/directory names containing PATT. It may  be  used
-              multiple times.
+       --include=REGEX, --include-dir=REGEX
+              Only  scan  file/directory  matching  regular  expression. These
+              options can be used multiple times.
 
        -i, --infected
               Only print infected files.
@@ -78,12 +85,24 @@ OPTIONS
               Remove infected files. Be careful.
 
        --move=DIRECTORY
-              Move  infected  files into DIRECTORY. Directory must be writable
+              Move infected files into DIRECTORY. Directory must  be  writable
               for the '_clamav' user or unprivileged user running clamscan.
 
        --copy=DIRECTORY
-              Copy infected files into DIRECTORY. Directory must  be  writable
+              Copy  infected  files into DIRECTORY. Directory must be writable
               for the '_clamav' user or unprivileged user running clamscan.
+
+       --bytecode[=yes(*)/no]
+              With this option enabled ClamAV  will  load  bytecode  from  the
+              database.  It  is highly recommended you keep this option turned
+              on, otherwise you may miss detections for many new viruses.
+
+       --bytecode-trust-all[=yes/no(*)]
+              This option disables safety checks and makes  ClamAV  trust  all
+              bytecode. It should only be used for debugging.
+
+       --bytecode-timeout=N
+              Set bytecode timeout in milliseconds (default: 60000 = 60s)
 
        --detect-pua[=yes/no(*)]
               Detect Possibly Unwanted Applications.
@@ -181,11 +200,6 @@ OPTIONS
               Mark   encrypted    archives    as    viruses    (Encrypted.Zip,
               Encrypted.RAR).
 
-       --mail-follow-urls[=yes/no(*)]
-              If  an  email  contains  URLs ClamAV can download and scan them.
-              WARNING: This option may open your system to a DoS attack. Never
-              use it on loaded servers.
-
        --max-files=#n
               Extract at most #n files from each scanned file (when this is an
               archive, a document or another kind of container).  This  option
@@ -236,41 +250,11 @@ EXAMPLES
               clamscan -r /var/spool/mail
 
 RETURN CODES
-       Note: some return codes may only appear in a  single  file  mode  (when
-       clamscan  is  started  with  a  single argument). Those are marked with
-       (ofm).
-
        0 : No virus found.
 
        1 : Virus(es) found.
 
-       40: Unknown option passed.
-
-       50: Database initialization error.
-
-       52: Not supported file type.
-
-       53: Can't open directory.
-
-       54: Can't open file. (ofm)
-
-       55: Error reading file. (ofm)
-
-       56: Can't stat input file / directory.
-
-       57: Can't get absolute path name of current working directory.
-
-       58: I/O error, please check your file system.
-
-       62: Can't initialize logger.
-
-       63: Can't create temporary files/directories (check permissions).
-
-       64: Can't write to temporary directory (please specify another one).
-
-       70: Can't allocate memory (calloc).
-
-       71: Can't allocate memory (malloc).
+       2 : Some error(s) occured.
 
 CREDITS
        Please check the full documentation for credits.
@@ -279,7 +263,7 @@ AUTHOR
        Tomasz Kojm <tkojm@clamav.net>
 
 SEE ALSO
-       clamdscan(1), freshclam(1)
+       clamdscan(1), freshclam(1), freshclam.conf(5)
 
 
 

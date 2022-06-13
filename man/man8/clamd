@@ -146,6 +146,17 @@ OPTIONS
        -c FILE, --config-file=FILE
               Read configuration from FILE.
 
+SIGNALS
+       Clamd recognizes the following signals:
+
+       SIGHUP Reopen the logfile.
+
+       SIGUSR2
+              Reload the signature databases.
+
+       SIGTERM
+              Perform a clean exit.
+
 FILES
        /private/etc/clamd.conf
 
@@ -156,8 +167,8 @@ AUTHOR
        Tomasz Kojm <tkojm@clamav.net>
 
 SEE ALSO
-       clamd.conf(5),  clamdscan(1),  clamscan(1),  freshclam(1),  sigtool(1),
-       clamav-milter(8)
+       clamd.conf(5),   clamdscan(1),  freshclam(1),  freshclam.conf(5),  cla-
+       mav-milter(8)
 
 
 

@@ -110,9 +110,7 @@ RETURN CODES
        cute=EXIT_1  will  force  freshclam to always return 1 after successful
        database update.
 
-       0 : Database successfully updated.
-
-       1 : Database is up-to-date.
+       0 : Database is up-to-date or successfully updated.
 
        40: Unknown option passed.
 
@@ -152,8 +150,7 @@ AUTHOR
        Tomasz Kojm <tkojm@clamav.net>
 
 SEE ALSO
-       clamd(8), clamdscan(1), clamscan(1), sigtool(1), clamd.conf(5), clamav-
-       milter(8)
+       freshclam.conf(5), clamd(8), clamd.conf(5), clamscan(1)
 
 
 

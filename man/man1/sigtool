@@ -74,8 +74,21 @@ OPTIONS
        --verify-cdiff=FILE, -r FILE
               Verify DIFF against CVD/INCDIR.
 
-       -l, --list-sigs
-              List signature names.
+       -l[FILE], --list-sigs[=FILE]
+              List  all  signature  names  from  the  local database directory
+              (default) or from FILE.
+
+       -fREGEX, --find-sigs=REGEX
+              Find and display signatures from the  local  database  directory
+              which match the given REGEX. The whole signature body (name, hex
+              string, etc.) is checked.
+
+       -fREGEX, --decode-sigs=REGEX
+              Decode signatures read from the standard input (eg.  piped  from
+              --find-sigs)
+
+       -fREGEX, --test-sigs=DATABASE TARGET_FILE
+              Test all signatures from DATABASE against TARGET_FILE.
 
 EXAMPLES
        Generate hex string from testfile and save it to testfile.hex:
@@ -89,8 +102,7 @@ AUTHOR
        Tomasz Kojm <tkojm@clamav.net>
 
 SEE ALSO
-       clamd(8),  clamdscan(1), clamscan(1), freshclam(1), clamd.conf(5), cla-
-       mav-milter(8)
+       freshclam(1), freshclam.conf(5)
 
 
 
