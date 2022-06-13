@@ -3,22 +3,22 @@ RESOLVEIP(1)                 MySQL Database System                RESOLVEIP(1)
 
 
 NAME
-       resolveip - resolve hostname to IP address or vice versa
+       resolveip - resolve host name to IP address or vice versa
 
 SYNOPSIS
        resolveip [options] {host_name|ip-addr} ...
 
 DESCRIPTION
-       The resolveip utility resolves hostnames to IP addresses and vice
+       The resolveip utility resolves host names to IP addresses and vice
        versa.
 
        Invoke resolveip like this:
 
           shell> resolveip [options] {host_name|ip-addr} ...
 
-       resolveip understands the options described in the following list.
+       resolveip supports the options described in the following list.
 
-       o  --help, -info, -?, -I
+       o  --help, --info, -?, -I
 
           Display a help message and exit.
 
@@ -31,10 +31,10 @@ DESCRIPTION
           Display version information and exit.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB
+       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
 
        This documentation is free software; you can redistribute it and/or
-       modify it under the terms of the GNU General Public License as
+       modify it only under the terms of the GNU General Public License as
        published by the Free Software Foundation; version 2 of the License.
 
        This documentation is distributed in the hope that it will be useful,
@@ -53,7 +53,7 @@ SEE ALSO
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       MySQL AB (http://www.mysql.com/).
+       Sun Microsystems, Inc. (http://www.mysql.com/).
 
 
 

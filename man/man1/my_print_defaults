@@ -24,7 +24,7 @@ DESCRIPTION
        The output consists of options, one per line, in the form that they
        would be specified on the command line.
 
-       my_print_defaults understands the following options:
+       my_print_defaults supports the following options:
 
        o  --help, -?
 
@@ -36,7 +36,7 @@ DESCRIPTION
 
        o  --debug=debug_options, -# debug_options
 
-          Write a debugging log. The debug_options string often is
+          Write a debugging log. A typical debug_options string is
           'd:t:o,file_name'. The default is
           'd:t:o,/tmp/my_print_defaults.trace'.
 
@@ -64,10 +64,10 @@ DESCRIPTION
           Display version information and exit.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB
+       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
 
        This documentation is free software; you can redistribute it and/or
-       modify it under the terms of the GNU General Public License as
+       modify it only under the terms of the GNU General Public License as
        published by the Free Software Foundation; version 2 of the License.
 
        This documentation is distributed in the hope that it will be useful,
@@ -86,7 +86,7 @@ SEE ALSO
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       MySQL AB (http://www.mysql.com/).
+       Sun Microsystems, Inc. (http://www.mysql.com/).
 
 
 

@@ -109,12 +109,36 @@ DIRECTIVES
               time (seconds).
               Default: 120
 
+       CommandReadTimeout NUMBER
+              This  option  specifies  the time (in seconds) after which clamd
+              should timeout if a client doesn't provide any  initial  command
+              after  connecting.   Note: the timeout for subsequents commands,
+              and/or data chunks is specified by ReadTimeout.
+              Default: 5
+
+       SendBufTimeout NUMBER
+              This option specifies how long to wait (in miliseconds)  if  the
+              send buffer is full.  Keep this value low to prevent clamd hang-
+              ing.
+              Default: 500
+
+       MaxQueue NUMBER
+              Maximum number of queued items (including those being  processed
+              by MaxThreads threads).  It is recommended to have this value at
+              least twice MaxThreads if possible.
+              WARNING: you shouldn't increase this too much to  avoid  running
+              out  of  file  descriptors, the following condition should hold:
+              MaxThreads*MaxRecursion  +  MaxQueue  -   MaxThreads   +   6   <
+              RLIMIT_NOFILE.  RLIMIT_NOFILE is the maximum number of open file
+              descriptors (usually 1024), set by ulimit -n.
+              Default: 100
+
        IdleTimeout NUMBER
               Waiting for a new job will timeout after this time (seconds).
               Default: 30
 
        ExcludePath REGEX
-              Don't  scan files and directories matching REGEX. This directive
+              Don't scan files and directories matching REGEX. This  directive
               can be used multiple times.
               Default: scan all
 
@@ -135,7 +159,7 @@ DIRECTIVES
               Default: 1800
 
        VirusEvent COMMAND
-              Execute COMMAND when a virus is found. In the command string  %v
+              Execute  COMMAND when a virus is found. In the command string %v
               will be replaced with the virus name.
               Default: no
 
@@ -144,12 +168,12 @@ DIRECTIVES
               Default: no
 
        User STRING
-              Run  as another user (clamd must be started by root to make this
+              Run as another user (clamd must be started by root to make  this
               option working).
               Default: no
 
        AllowSupplementaryGroups BOOL
-              Initialize supplementary group access (clamd must be started  by
+              Initialize  supplementary group access (clamd must be started by
               root).
               Default: no
 
@@ -166,11 +190,11 @@ DIRECTIVES
 
        StreamMaxLength SIZE
               Clamd  uses  FTP-like  protocol  to  receive  data  from  remote
-              clients. If you are using clamav-milter to balance load  between
-              remote  clamd  daemons  on firewall servers you may need to tune
+              clients.  If you are using clamav-milter to balance load between
+              remote clamd daemons on firewall servers you may  need  to  tune
               the Stream* options. This option allows you to specify the upper
-              limit  for  data  size  that will be transfered to remote daemon
-              when scanning a single file. It should match  your  MTA's  limit
+              limit for data size that will be  transfered  to  remote  daemon
+              when  scanning  a  single file. It should match your MTA's limit
               for a maximum attachment size.
               Default: 10M
 
@@ -188,43 +212,43 @@ DIRECTIVES
 
        ExcludePUA CATEGORY
               Exclude a specific PUA category. This directive can be used mul-
-              tiple times. See http://www.clamav.net/support/pua for the  com-
+              tiple  times. See http://www.clamav.net/support/pua for the com-
               plete list of PUA categories.
               Default: Load all categories (if DetectPUA is activated)
 
        IncludePUA CATEGORY
               Only include a specific PUA category. This directive can be used
-              multiple times. See  http://www.clamav.net/support/pua  for  the
+              multiple  times.  See  http://www.clamav.net/support/pua for the
               complete list of PUA categories.
               Default: Load all categories (if DetectPUA is activated)
 
        AlgorithmicDetection BOOL
-              In  some  cases (eg. complex malware, exploits in graphic files,
-              and others), ClamAV uses special algorithms to provide  accurate
+              In some cases (eg. complex malware, exploits in  graphic  files,
+              and  others), ClamAV uses special algorithms to provide accurate
               detection. This option controls the algorithmic detection.
               Default: yes
 
        ScanPE BOOL
               PE stands for Portable Executable - it's an executable file for-
               mat used in all 32 and 64-bit versions of Windows operating sys-
-              tems.  This option allows ClamAV to perform a deeper analysis of
-              executable files and it's also  required  for  decompression  of
+              tems. This option allows ClamAV to perform a deeper analysis  of
+              executable  files  and  it's  also required for decompression of
               popular executable packers such as UPX.
               Default: yes
 
        ScanELF BOOL
               Executable and Linking Format is a standard format for UN*X exe-
-              cutables. This option allows you to control the scanning of  ELF
+              cutables.  This option allows you to control the scanning of ELF
               files.
               Default: yes
 
        DetectBrokenExecutables BOOL
-              With  this  option  clamd  will try to detect broken executables
+              With this option clamd will try  to  detect  broken  executables
               (both PE and ELF) and mark them as Broken.Executable.
               Default: no
 
        ScanOLE2 BOOL
-              This option enables scanning of OLE2 files,  such  as  Microsoft
+              This  option  enables  scanning of OLE2 files, such as Microsoft
               Office documents and .msi files.
               Default: yes
 
@@ -241,14 +265,14 @@ DIRECTIVES
               Default: yes
 
        MailFollowURLs BOOL
-              If  an  email  contains  URLs ClamAV can download and scan them.
+              If an email contains URLs ClamAV can  download  and  scan  them.
               WARNING: This option may open your system to a DoS attack. Never
               use it on loaded servers.
               Default: no
 
        ScanPartialMessages BOOL
-              Scan  RFC1341  messages split over many emails. You will need to
-              periodically clean up $TemporaryDirectory/clamav-partial  direc-
+              Scan RFC1341 messages split over many emails. You will  need  to
+              periodically  clean up $TemporaryDirectory/clamav-partial direc-
               tory. WARNING: This option may open your system to a DoS attack.
               Never use it on loaded servers.
               Default: no
@@ -257,7 +281,7 @@ DIRECTIVES
               WARNING: This option is no longer accepted. See MaxRecursion.
 
        PhishingSignatures BOOL
-              With this option enabled ClamAV  will  try  to  detect  phishing
+              With  this  option  enabled  ClamAV  will try to detect phishing
               attempts by using signatures.
               Default: yes
 
@@ -268,26 +292,26 @@ DIRECTIVES
               Default: yes
 
        PhishingAlwaysBlockSSLMismatch BOOL
-              Always  block  SSL  mismatches in URLs, even if the URL isn't in
+              Always block SSL mismatches in URLs, even if the  URL  isn't  in
               the database. This can lead to false positives.
               Default: no
 
        PhishingAlwaysBlockCloak BOOL
-              Always block cloaked URLs, even if URL isn't in  database.  This
+              Always  block  cloaked URLs, even if URL isn't in database. This
               can lead to false positives.
               Default: no
 
        HeuristicScanPrecedence BOOL
-              Allow  heuristic  match  to  take precedence. When enabled, if a
-              heuristic  scan  (such  as  phishingScan)  detects  a   possible
-              virus/phishing  it  will stop scanning immediately. Recommended,
-              saves CPU scan-time. When disabled, virus/phishing  detected  by
-              heuristic  scans  will be reported only at the end of a scan. If
-              an archive contains both a heuristically  detected  virus/phish-
+              Allow heuristic match to take precedence.  When  enabled,  if  a
+              heuristic   scan  (such  as  phishingScan)  detects  a  possible
+              virus/phishing it will stop scanning  immediately.  Recommended,
+              saves  CPU  scan-time. When disabled, virus/phishing detected by
+              heuristic scans will be reported only at the end of a  scan.  If
+              an  archive  contains both a heuristically detected virus/phish-
               ing, and a real malware, the real malware will be reported. Keep
-              this disabled if you intend to handle  "*.Heuristics.*"  viruses
+              this  disabled  if you intend to handle "*.Heuristics.*" viruses
               differently from "real" malware. If a non-heuristically-detected
-              virus (signature-based) is found first, the scan is  interrupted
+              virus  (signature-based) is found first, the scan is interrupted
               immediately, regardless of this config option.
               Default: no
 
@@ -296,22 +320,22 @@ DIRECTIVES
               Default: no
 
        StructuredMinCreditCardCount NUMBER
-              This  option sets the lowest number of Credit Card numbers found
+              This option sets the lowest number of Credit Card numbers  found
               in a file to generate a detect.
               Default: 3
 
        StructuredMinSSNCount NUMBER
-              This option sets the lowest number of  Social  Security  Numbers
+              This  option  sets  the lowest number of Social Security Numbers
               found in a file to generate a detect.
               Default: 3
 
        StructuredSSNFormatNormal BOOL
-              With  this  option  enabled the DLP module will search for valid
+              With this option enabled the DLP module will  search  for  valid
               SSNs formatted as xxx-yy-zzzz.
               Default: Yes
 
        StructuredSSNFormatStripped BOOL
-              With this option enabled the DLP module will  search  for  valid
+              With  this  option  enabled the DLP module will search for valid
               SSNs formatted as xxxyyzzzz.
               Default: No
 
@@ -320,7 +344,7 @@ DIRECTIVES
               Default: yes
 
        ArchiveMaxFileSize (OBSOLETE)
-              WARNING:  This option is no longer accepted. See MaxFileSize and
+              WARNING: This option is no longer accepted. See MaxFileSize  and
               MaxScanSize.
 
        ArchiveMaxRecursion (OBSOLETE)
@@ -336,19 +360,19 @@ DIRECTIVES
               WARNING: This option is no longer accepted.
 
        ArchiveLimitMemoryUsage BOOL
-              Use slower decompression algorithm which uses less memory.  This
+              Use  slower decompression algorithm which uses less memory. This
               option only affects the bzip2 decompressor.
               Default: no
 
        ArchiveBlockEncrypted BOOL
-              Mark    encrypted    archives    as    viruses   (Encrypted.Zip,
+              Mark   encrypted    archives    as    viruses    (Encrypted.Zip,
               Encrypted.RAR).
               Default: no
 
        MaxScanSize SIZE
-              Sets the maximum amount of data to be  scanned  for  each  input
-              file.  Archives  and  other containers are recursively extracted
-              and scanned up to this value. Warning: disabling this  limit  or
+              Sets  the  maximum  amount  of data to be scanned for each input
+              file. Archives and other containers  are  recursively  extracted
+              and  scanned  up to this value. Warning: disabling this limit or
               setting it too high may result in severe damage to the system.
               Default: 100M
 
@@ -356,21 +380,21 @@ DIRECTIVES
               Files larger than this limit won't be scanned. Affects the input
               file itself as well as files contained inside it (when the input
               file is an archive, a document or some other kind of container).
-              Warning: disabling this limit or setting it too high may  result
+              Warning:  disabling this limit or setting it too high may result
               in severe damage to the system.
               Default: 25M
 
        MaxRecursion NUMBER
-              Nested  archives  are scanned recursively, e.g. if a Zip archive
-              contains a RAR file, all files within it will also  be  scanned.
-              This  options specifies how deeply the process should be contin-
-              ued. Warning: disabling this limit or setting it  too  high  may
+              Nested archives are scanned recursively, e.g. if a  Zip  archive
+              contains  a  RAR file, all files within it will also be scanned.
+              This options specifies how deeply the process should be  contin-
+              ued.  Warning:  disabling  this limit or setting it too high may
               result in severe damage to the system.
               Default: 16
 
        MaxFiles NUMBER
-              Number  of files to be scanned within an archive, a document, or
-              any other kind of container. Warning: disabling  this  limit  or
+              Number of files to be scanned within an archive, a document,  or
+              any  other  kind  of container. Warning: disabling this limit or
               setting it too high may result in severe damage to the system.
               Default: 10000
 
@@ -392,8 +416,8 @@ DIRECTIVES
               Default: no
 
        ClamukoIncludePath STRING
-              Set the include paths (all files  and  directories  inside  them
-              will  be  scanned).  You  can  have  multiple ClamukoIncludePath
+              Set  the  include  paths  (all files and directories inside them
+              will be  scanned).  You  can  have  multiple  ClamukoIncludePath
               directives but each directory must be added in a separate line).
               Default: no
 
@@ -404,6 +428,10 @@ DIRECTIVES
        ClamukoMaxFileSize SIZE
               Ignore files larger than SIZE.
               Default: 5M
+
+NOTES
+       All  options expressing a size are limited to max 4GB. Values in excess
+       will be resetted to the maximum.
 
 FILES
        /private/etc/clamd.conf

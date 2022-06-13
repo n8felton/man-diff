@@ -21,7 +21,7 @@ DESCRIPTION
        also specify a table by naming its index file (the file with the .MYI
        suffix). If you do not invoke myisam_ftdump in the directory where the
        table files are located, the table or index file name must be preceded
-       by the pathname to the table's database directory. Index numbers begin
+       by the path name to the table's database directory. Index numbers begin
        with 0.
 
        Example: Suppose that the test database contains a table named
@@ -41,14 +41,14 @@ DESCRIPTION
 
           shell> myisam_ftdump mytexttable 1
 
-       If the pathname to the test database directory is
+       If the path name to the test database directory is
        /usr/local/mysql/data/test, you can also specify the table name
-       argument using that pathname. This is useful if you do not invoke
+       argument using that path name. This is useful if you do not invoke
        myisam_ftdump in the database directory:
 
           shell> myisam_ftdump /usr/local/mysql/data/test/mytexttable 1
 
-       myisam_ftdump understands the following options:
+       myisam_ftdump supports the following options:
 
        o  --help, -h -?
 
@@ -76,10 +76,10 @@ DESCRIPTION
           Verbose mode. Print more output about what the program does.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB
+       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
 
        This documentation is free software; you can redistribute it and/or
-       modify it under the terms of the GNU General Public License as
+       modify it only under the terms of the GNU General Public License as
        published by the Free Software Foundation; version 2 of the License.
 
        This documentation is distributed in the hope that it will be useful,
@@ -98,7 +98,7 @@ SEE ALSO
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       MySQL AB (http://www.mysql.com/).
+       Sun Microsystems, Inc. (http://www.mysql.com/).
 
 
 

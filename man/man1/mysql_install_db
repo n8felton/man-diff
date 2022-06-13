@@ -10,25 +10,36 @@ SYNOPSIS
 
 DESCRIPTION
        mysql_install_db initializes the MySQL data directory and creates the
-       system tables that it contains, if they do not exist. Because the MySQL
-       server, mysqld, needs to access the data directory when it runs later,
-       you should either run mysql_install_db from the same account that will
-       be used for running mysqld or run it as root and use the --user option
-       to indicate the username that mysqld will run as.
+       system tables that it contains, if they do not exist.
 
        To invoke mysql_install_db, use the following syntax:
 
           shell> mysql_install_db [options]
 
+       Because the MySQL server, mysqld, needs to access the data directory
+       when it runs later, you should either run mysql_install_db from the
+       same account that will be used for running mysqld or run it as root and
+       use the --user option to indicate the user name that mysqld will run
+       as. It might be necessary to specify other options such as --basedir or
+       --datadir if mysql_install_db does not use the correct locations for
+       the installation directory or data directory. For example:
+
+          shell> bin/mysql_install_db --user=mysql \
+                   --basedir=/opt/mysql/mysql \
+                   --datadir=/opt/mysql/mysql/data
+
        mysql_install_db needs to invoke mysqld with the --bootstrap and
-       --skip-grant-tables options (see Section 4.15.2, "Typical configure
+       --skip-grant-tables options (see Section 2.16.2, "Typical configure
        Options"). If MySQL was configured with the --disable-grant-options
        option, --bootstrap and --skip-grant-tables will be disabled. To handle
-       this, set the MYSQLD_BOOTSTRAP environment variable to the full
-       pathname of a server that has all options enabled.  mysql_install_db
-       will use that server.
+       this, set the MYSQLD_BOOTSTRAP environment variable to the full path
+       name of a server that has all options enabled.  mysql_install_db will
+       use that server.
 
-       mysql_install_db supports the following options:
+       mysql_install_db supports the options in the following list. It also
+       reads option files and supports the options for processing them
+       described at Section 4.2.3.2.1, "Command-Line Options that Affect
+       Option-File Handling".
 
        o  --basedir=path
 
@@ -37,7 +48,7 @@ DESCRIPTION
        o  --force
 
           Causes mysql_install_db to run even if DNS does not work. In that
-          case, grant table entries that normally use hostnames will use IP
+          case, grant table entries that normally use host names will use IP
           addresses.
 
        o  --datadir=path, --ldata=path
@@ -51,7 +62,7 @@ DESCRIPTION
 
        o  --skip-name-resolve
 
-          Use IP addresses rather than hostnames when creating grant table
+          Use IP addresses rather than host names when creating grant table
           entries. This option can be useful if your DNS does not work.
 
        o  --srcdir=path
@@ -62,7 +73,7 @@ DESCRIPTION
 
        o  --user=user_name
 
-          The login username to use for running mysqld. Files and directories
+          The login user name to use for running mysqld. Files and directories
           created by mysqld will be owned by this user. You must be root to
           use this option. By default, mysqld runs using your current login
           name and files and directories that it creates will be owned by you.
@@ -77,10 +88,10 @@ DESCRIPTION
           distributions.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB
+       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
 
        This documentation is free software; you can redistribute it and/or
-       modify it under the terms of the GNU General Public License as
+       modify it only under the terms of the GNU General Public License as
        published by the Free Software Foundation; version 2 of the License.
 
        This documentation is distributed in the hope that it will be useful,
@@ -99,7 +110,7 @@ SEE ALSO
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       MySQL AB (http://www.mysql.com/).
+       Sun Microsystems, Inc. (http://www.mysql.com/).
 
 
 

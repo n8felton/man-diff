@@ -38,14 +38,16 @@ Invoke myisampack like this:
 
    shell> myisampack [options] file_name ...
 
-Each filename argument should be the name of an index (.MYI) file. If you are
-not in the database directory, you should specify the pathname to the file. It
-is permissible to omit the .MYI extension.
+Each file name argument should be the name of an index (.MYI) file. If you are
+not in the database directory, you should specify the path name to the file.
+It is permissible to omit the .MYI extension.
 
 After you compress a table with myisampack, you should use myisamchk -rq to
 rebuild its indexes.  myisamchk(1).
 
-myisampack supports the following options:
+myisampack supports the options in the following list. It also reads option
+files and supports the options for processing them described at
+Section 4.2.3.2.1, "Command-Line Options that Affect Option-File Handling".
 
 o  --help, -?
 
@@ -57,12 +59,13 @@ o  --backup, -b
 
 o  --character-sets-dir=path
 
-   The directory where character sets are installed. See Section 2, "The
+   The directory where character sets are installed. See Section 9.2, "The
    Character Set Used for Data and Sorting".
 
 o  --debug[=debug_options], -# [debug_options]
 
-   Write a debugging log. The debug_options string often is 'd:t:o,file_name'.
+   Write a debugging log. A typical debug_options string is 'd:t:o,file_name'.
+   The default is 'd:t:o'.
 
 o  --force, -f
 
@@ -397,10 +400,10 @@ new table.
 To unpack a packed table, use the --unpack option to myisamchk.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB
+       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
 
        This documentation is free software; you can redistribute it and/or
-       modify it under the terms of the GNU General Public License as
+       modify it only under the terms of the GNU General Public License as
        published by the Free Software Foundation; version 2 of the License.
 
        This documentation is distributed in the hope that it will be useful,
@@ -419,7 +422,7 @@ SEE ALSO
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       MySQL AB (http://www.mysql.com/).
+       Sun Microsystems, Inc. (http://www.mysql.com/).
 
 
 

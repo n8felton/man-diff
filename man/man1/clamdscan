@@ -10,10 +10,10 @@ SYNOPSIS
        clamdscan [options] [file/directory]
 
 DESCRIPTION
-       clamdscan is a simple clamd client which may  be  used  as  a  clamscan
-       replacement.  It  accepts  all  the options implemented in clamscan but
-       most of them will be ignored because its scanning abilities only depend
-       on clamd.
+       clamdscan is a clamd client which may be used as  a  clamscan  replace-
+       ment.  It  accepts  all the options implemented in clamscan but most of
+       them will be ignored because its  scanning  abilities  only  depend  on
+       clamd.
 
 OPTIONS
        -h, --help
@@ -38,8 +38,15 @@ OPTIONS
        -l FILE, --log=FILE
               Save the scan report to FILE.
 
+       -f FILE, --file-list=FILE
+              Scan files listed line by line in FILE.
+
        -m, --multiscan
-              Always use MULTISCAN instead of CONTSCAN.
+              In multiscan mode several files are scanned in parallel, one for
+              each  available  scan  thread in clamd.  This is achieved either
+              via MULTISCAN or IDSESSION requests, depending on the configura-
+              tion  and  other  options.   Can  be combined with --fdpass (see
+              below)
 
        --remove
               Remove infected files. Be careful.
@@ -54,10 +61,16 @@ OPTIONS
               Request clamd to reload virus database.
 
        --fdpass
-              Pass the file descriptor permissions clamd. This  is  useful  if
+              Pass the file descriptor permissions to clamd. This is useful if
               clamd  is  running  as  a  different  user  as it is faster than
               streaming the file to clamd.  Only  available  if  connected  to
-              clamd through local(unix) sockets and scanning stdin.
+              clamd via local(unix) socket.
+
+       --stream
+              Forces  file streaming to clamd. This is generally not needed as
+              clamdscan detects automatically if streaming is  required.  This
+              option  only  exists  for debugging and testing purposes, in all
+              other cases --fdpass is preferred.
 
 EXAMPLES
        (0) To scan a one file:
@@ -74,7 +87,11 @@ EXAMPLES
 
        (3) To scan a file when clamd is running as a different user:
 
-              clamdscan - <file_to_scan
+              clamdscan --fdpass ~/downloads
+
+       (4) To scan from standard input:
+
+              clamdscan - <file_to_scan cat file_to_scan | clamdscan -
 
 RETURN CODES
        0 : No virus found.

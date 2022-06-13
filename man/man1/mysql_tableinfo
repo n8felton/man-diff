@@ -15,7 +15,7 @@ DESCRIPTION
 
        In MySQL 5.0 and up, the INFORMATION_SCHEMA database contains the same
        kind of information in the SCHEMATA, TABLES, COLUMNS, and STATISTICS
-       tables. See Chapter 24, INFORMATION_SCHEMA Tables.
+       tables. See Chapter 19, INFORMATION_SCHEMA Tables.
 
        Invoke mysql_tableinfo like this:
 
@@ -77,7 +77,8 @@ DESCRIPTION
           password on the command line.
 
           Specifying a password on the command line should be considered
-          insecure. See Section 5.6, "Keeping Your Password Secure".
+          insecure. See Section 5.5.6.2, "End-User Guidelines for Password
+          Security".
 
        o  --port=port_num, -P port_num
 
@@ -102,13 +103,13 @@ DESCRIPTION
 
        o  --user=user_name, -u user_name
 
-          The MySQL username to use when connecting to the server.
+          The MySQL user name to use when connecting to the server.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB
+       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
 
        This documentation is free software; you can redistribute it and/or
-       modify it under the terms of the GNU General Public License as
+       modify it only under the terms of the GNU General Public License as
        published by the Free Software Foundation; version 2 of the License.
 
        This documentation is distributed in the hope that it will be useful,
@@ -127,7 +128,7 @@ SEE ALSO
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       MySQL AB (http://www.mysql.com/).
+       Sun Microsystems, Inc. (http://www.mysql.com/).
 
 
 

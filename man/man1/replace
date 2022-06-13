@@ -21,7 +21,7 @@ DESCRIPTION
        There can be one or more pairs of strings.
 
        Use the -- option to indicate where the string-replacement list ends
-       and the filenames begin. In this case, any file named on the command
+       and the file names begin. In this case, any file named on the command
        line is modified in place, so you may want to make a copy of the
        original before converting it.  replace prints a message indicating
        which of the input files it actually modifies.
@@ -60,10 +60,10 @@ DESCRIPTION
           Display version information and exit.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB
+       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
 
        This documentation is free software; you can redistribute it and/or
-       modify it under the terms of the GNU General Public License as
+       modify it only under the terms of the GNU General Public License as
        published by the Free Software Foundation; version 2 of the License.
 
        This documentation is distributed in the hope that it will be useful,
@@ -82,7 +82,7 @@ SEE ALSO
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       MySQL AB (http://www.mysql.com/).
+       Sun Microsystems, Inc. (http://www.mysql.com/).
 
 
 

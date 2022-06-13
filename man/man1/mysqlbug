@@ -31,13 +31,13 @@ DESCRIPTION
        The script will place you in an editor with a copy of the report to be
        sent. Edit the lines near the beginning that indicate the nature of the
        problem. Then write the file to save your changes, quit the editor, and
-       mysqlbug will send the report by email. perform.
+       mysqlbug will send the report by email.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB
+       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
 
        This documentation is free software; you can redistribute it and/or
-       modify it under the terms of the GNU General Public License as
+       modify it only under the terms of the GNU General Public License as
        published by the Free Software Foundation; version 2 of the License.
 
        This documentation is distributed in the hope that it will be useful,
@@ -56,7 +56,7 @@ SEE ALSO
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       MySQL AB (http://www.mysql.com/).
+       Sun Microsystems, Inc. (http://www.mysql.com/).
 
 
 

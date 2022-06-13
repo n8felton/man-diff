@@ -15,8 +15,8 @@ DESCRIPTION
 
           shell> innochecksum [options] file_name
 
-       innodchecksum understands the options described in the following list.
-       For options that refer to page numbers, the numbers are zero-based.
+       innochecksum supports the options described in the following list. For
+       options that refer to page numbers, the numbers are zero-based.
 
        o  -c
 
@@ -43,10 +43,10 @@ DESCRIPTION
           Verbose mode; print a progress indicator every five seconds.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB
+       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
 
        This documentation is free software; you can redistribute it and/or
-       modify it under the terms of the GNU General Public License as
+       modify it only under the terms of the GNU General Public License as
        published by the Free Software Foundation; version 2 of the License.
 
        This documentation is distributed in the hope that it will be useful,
@@ -65,7 +65,7 @@ SEE ALSO
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       MySQL AB (http://www.mysql.com/).
+       Sun Microsystems, Inc. (http://www.mysql.com/).
 
 
 

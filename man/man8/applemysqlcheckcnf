@@ -1,0 +1,27 @@
+applemysqlcheckcnf(8)                                    applemysqlcheckcnf(8)
+
+
+
+NAME
+       applemysqlcheckcnf - MySQL configuration upgrade tool
+
+DESCRIPTION
+       The applemysqlcheckcnf tool creates a MySQL config file which optimizes
+       MySQL performance based on  available  system  memory.  The  tool  will
+       install  the  config  file  as  /etc/my.cnf, unless a file by that name
+       already   exists,   in   which   case   it   will   install    it    as
+       /etc/my.cnf.default.  In the latter case, the optimized config file has
+       no effect until it replaces the old /etc/my.cnf.
+
+       The applemysqlcheckcnf tool is run automatically each time  MySQL  ser-
+       vice is started and does not need to be run by the administrator.
+
+FILES
+       /usr/libexec/applemysqlcheckcnf     /usr/sbin/serveradmin     /Applica-
+       tions/Server Admin.app
+
+SEE ALSO
+       serveradmin(8), Mac OS X Server administration command-line  interface.
+
+
+

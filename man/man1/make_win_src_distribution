@@ -12,7 +12,7 @@ DESCRIPTION
        make_win_src_distribution creates a Windows source package to be used
        on Windows systems. It is used after you configure and build the source
        distribution on a Unix or Unix-like system so that you have a server
-       binary to work with. (See the instructions at Section 4.15.6.5,
+       binary to work with. (See the instructions at Section 2.16.6.5,
        "Creating a Windows Source Package from the Bazaar Repository".)
 
        Invoke make_win_src_distribution like this from the top-level directory
@@ -30,14 +30,6 @@ DESCRIPTION
 
           Print information about script operations; do not create a package.
 
-       o  --tmp
-
-          Specify the temporary location.
-
-       o  --suffix
-
-          The suffix name for the package.
-
        o  --dirname
 
           Directory name to copy files (intermediate).
@@ -45,6 +37,10 @@ DESCRIPTION
        o  --silent
 
           Do not print verbose list of files processed.
+
+       o  --suffix
+
+          The suffix name for the package.
 
        o  --tar
 
@@ -54,11 +50,15 @@ DESCRIPTION
           with the name mysql-VERSION-win-src.zip, where VERSION represents
           the version of your MySQL source tree.
 
+       o  --tmp
+
+          Specify the temporary location.
+
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB
+       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
 
        This documentation is free software; you can redistribute it and/or
-       modify it under the terms of the GNU General Public License as
+       modify it only under the terms of the GNU General Public License as
        published by the Free Software Foundation; version 2 of the License.
 
        This documentation is distributed in the hope that it will be useful,
@@ -77,7 +77,7 @@ SEE ALSO
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       MySQL AB (http://www.mysql.com/).
+       Sun Microsystems, Inc. (http://www.mysql.com/).
 
 
 

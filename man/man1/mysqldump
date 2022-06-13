@@ -104,7 +104,10 @@ DESCRIPTION
        inf in the table, so this mysqldump behavior is only relevant when you
        deal with old servers.
 
-       mysqldump supports the following options:
+       mysqldump supports the options in the following list. It also reads
+       option files and supports the options for processing them described at
+       Section 4.2.3.2.1, "Command-Line Options that Affect Option-File
+       Handling".
 
        o  --help, -?
 
@@ -122,7 +125,7 @@ DESCRIPTION
 
           Surround each table dump with LOCK TABLES and UNLOCK TABLES
           statements. This results in faster inserts when the dump file is
-          reloaded. See Section 2.18, "Speed of INSERT Statements".
+          reloaded. See Section 7.2.19, "Speed of INSERT Statements".
 
        o  --all-databases, -A
 
@@ -136,7 +139,7 @@ DESCRIPTION
 
        o  --character-sets-dir=path
 
-          The directory where character sets are installed. See Section 2,
+          The directory where character sets are installed. See Section 9.2,
           "The Character Set Used for Data and Sorting".
 
        o  --comments, -i
@@ -168,7 +171,7 @@ DESCRIPTION
           no_key_options, no_table_options, or no_field_options. To use
           several values, separate them by commas. These values have the same
           meaning as the corresponding options for setting the server SQL
-          mode. See Section 1.7, "SQL Modes".
+          mode. See Section 5.1.7, "Server SQL Modes".
 
           This option does not guarantee compatibility with other servers. It
           only enables those SQL mode values that are currently available for
@@ -203,7 +206,7 @@ DESCRIPTION
 
        o  --debug[=debug_options], -# [debug_options]
 
-          Write a debugging log. The debug_options string is often
+          Write a debugging log. A typical debug_options string is
           'd:t:o,file_name'. The default value is
           'd:t:o,/tmp/mysqldump.trace'.
 
@@ -214,9 +217,12 @@ DESCRIPTION
 
        o  --default-character-set=charset_name
 
-          Use charset_name as the default character set. See Section 2, "The
+          Use charset_name as the default character set. See Section 9.2, "The
           Character Set Used for Data and Sorting". If no character set is
           specified, mysqldump uses utf8, and earlier versions use latin1.
+
+          This option has no effect for output data files produced by using
+          the --tab option. See the description for that option.
 
        o  --delayed-insert
 
@@ -256,8 +262,8 @@ DESCRIPTION
           --fields-optionally-enclosed-by=..., --fields-escaped-by=...
 
           These options are used with the -T option and have the same meaning
-          as the corresponding clauses for LOAD DATA INFILE. See Section 2.5,
-          "LOAD DATA INFILE Syntax".
+          as the corresponding clauses for LOAD DATA INFILE. See
+          Section 12.2.6, "LOAD DATA INFILE Syntax".
 
        o  --first-slave, -x
 
@@ -289,9 +295,9 @@ DESCRIPTION
 
           One use for this option is to cause mysqldump to continue executing
           even when it encounters a view that has become invalid because the
-          defintion refers to a table that has been dropped. Without --force,
+          definition refers to a table that has been dropped. Without --force,
           mysqldump exits with an error message. With --force, mysqldump
-          prints the error message, but it also writes a SQL comment
+          prints the error message, but it also writes an SQL comment
           containing the view definition to the dump output and continues
           executing.
 
@@ -310,7 +316,7 @@ DESCRIPTION
 
           Do not dump the given table, which must be specified using both the
           database and table names. To ignore multiple tables, use this option
-          multiple times.
+          multiple times. This option also can be used to ignore views.
 
        o  --insert-ignore
 
@@ -319,7 +325,7 @@ DESCRIPTION
        o  --lines-terminated-by=...
 
           This option is used with the -T option and has the same meaning as
-          the corresponding clause for LOAD DATA INFILE. See Section 2.5,
+          the corresponding clause for LOAD DATA INFILE. See Section 12.2.6,
           "LOAD DATA INFILE Syntax".
 
        o  --lock-all-tables, -x
@@ -352,7 +358,7 @@ DESCRIPTION
           Use this option to dump a master replication server to produce a
           dump file that can be used to set up another server as a slave of
           the master. It causes the dump output to include a CHANGE MASTER TO
-          statement that indicates the binary log coordinates (filename and
+          statement that indicates the binary log coordinates (file name and
           position) of the dumped server. These are the master server
           coordinates from which the slave should start replicating.
 
@@ -411,7 +417,7 @@ DESCRIPTION
        o  --no-autocommit
 
           Enclose the INSERT statements for each dumped table within SET
-          AUTOCOMMIT=0 and COMMIT statements.
+          autocommit = 0 and COMMIT statements.
 
        o  --no-create-db, -n
 
@@ -459,7 +465,8 @@ DESCRIPTION
           one.
 
           Specifying a password on the command line should be considered
-          insecure. See Section 5.6, "Keeping Your Password Secure".
+          insecure. See Section 5.5.6.2, "End-User Guidelines for Password
+          Security".
 
        o  --pipe, -W
 
@@ -476,7 +483,8 @@ DESCRIPTION
           The connection protocol to use for connecting to the server. It is
           useful when the other connection parameters normally would cause a
           protocol to be used other than the one you want. For details on the
-          allowable values, see Section 2.2, "Connecting to the MySQL Server".
+          allowable values, see Section 4.2.2, "Connecting to the MySQL
+          Server".
 
        o  --quick, -q
 
@@ -503,7 +511,7 @@ DESCRIPTION
 
        o  --routines, -R
 
-          Dump stored routines (functions and procedures) from the dumped
+          Dump stored routines (procedures and functions) from the dumped
           databases. Use of this option requires the SELECT privilege for the
           mysql.proc table. The output generated by using --routines contains
           CREATE PROCEDURE and CREATE FUNCTION statements to re-create the
@@ -580,7 +588,7 @@ DESCRIPTION
 
           Options that begin with --ssl specify whether to connect to the
           server via SSL and indicate where to find SSL keys and certificates.
-          See Section 5.7.3, "SSL Command Options".
+          See Section 5.5.7.3, "SSL Command Options".
 
        o  --tab=path, -T path
 
@@ -593,6 +601,12 @@ DESCRIPTION
           between column values and a newline at the end of each line. The
           format can be specified explicitly using the --fields-xxx and
           --lines-terminated-by options.
+
+          Column values are dumped using the binary character set and the
+          --default-character-set option is ignored. In effect, there is no
+          character set conversion. If a table contains columns in several
+          character sets, the output data file will as well and you may not be
+          able to reload the file correctly.
 
           Note
           This option should be used only when mysqldump is run on the same
@@ -625,7 +639,7 @@ DESCRIPTION
 
        o  --user=user_name, -u user_name
 
-          The MySQL username to use when connecting to the server.
+          The MySQL user name to use when connecting to the server.
 
        o  --verbose, -v
 
@@ -654,7 +668,7 @@ DESCRIPTION
           NULL, 'NULL', and Empty Values: For some column named column_name,
           the NULL value, an empty string, and the string value 'NULL' are
           distinguished from one another in the output generated by this
-          option as follows:
+          option as follows.
 
           +----------------------+-----------------------------------------------------+
           |Value:                | XML Representation:                                 |
@@ -765,20 +779,20 @@ DESCRIPTION
 
           shell> mysqldump --all-databases --single-transaction > all_databases.sql
 
-       This backup just needs to acquire a global read lock on all tables
-       (using FLUSH TABLES WITH READ LOCK) at the beginning of the dump. As
-       soon as this lock has been acquired, the binary log coordinates are
-       read and the lock is released. If and only if one long updating
-       statement is running when the FLUSH statement is issued, the MySQL
-       server may get stalled until that long statement finishes, and then the
-       dump becomes lock-free. If the update statements that the MySQL server
-       receives are short (in terms of execution time), the initial lock
-       period should not be noticeable, even with many updates.
+       This backup acquires a global read lock on all tables (using FLUSH
+       TABLES WITH READ LOCK) at the beginning of the dump. As soon as this
+       lock has been acquired, the binary log coordinates are read and the
+       lock is released. If long updating statements are running when the
+       FLUSH statement is issued, the MySQL server may get stalled until those
+       statements finish. After that, the dump becomes lock-free and does not
+       disturb reads and writes on the tables. If the update statements that
+       the MySQL server receives are short (in terms of execution time), the
+       initial lock period should not be noticeable, even with many updates.
 
        For point-in-time recovery (also known as "roll-forward," when you need
        to restore an old backup and replay the changes that happened since
        that backup), it is often useful to rotate the binary log (see
-       Section 2.3, "The Binary Log") or at least know the binary log
+       Section 5.2.3, "The Binary Log") or at least know the binary log
        coordinates to which the dump corresponds:
 
           shell> mysqldump --all-databases --master-data=2 > all_databases.sql
@@ -793,19 +807,19 @@ DESCRIPTION
        backup suitable for point-in-time recovery if tables are stored using
        the InnoDB storage engine.
 
-       For more information on making backups, see Section 1, "Database
-       Backups", and Section 2, "Example Backup and Recovery Strategy".
+       For more information on making backups, see Section 6.1, "Database
+       Backups", and Section 6.2, "Example Backup and Recovery Strategy".
 
        If you encounter problems backing up views, please read the section
        that covers restrictions on views which describes a workaround for
        backing up views when this fails due to insufficient privileges. See
-       Section 4, "Restrictions on Views".
+       Section F.4, "Restrictions on Views".
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB
+       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
 
        This documentation is free software; you can redistribute it and/or
-       modify it under the terms of the GNU General Public License as
+       modify it only under the terms of the GNU General Public License as
        published by the Free Software Foundation; version 2 of the License.
 
        This documentation is distributed in the hope that it will be useful,
@@ -824,7 +838,7 @@ SEE ALSO
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       MySQL AB (http://www.mysql.com/).
+       Sun Microsystems, Inc. (http://www.mysql.com/).
 
 
 

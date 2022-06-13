@@ -25,7 +25,7 @@ DESCRIPTION
 
           shell> comp_err [options]
 
-       comp_err understands the options described in the following list.
+       comp_err supports the options described in the following list.
 
        o  --help, -?
 
@@ -37,7 +37,7 @@ DESCRIPTION
 
        o  --debug=debug_options, -# debug_options
 
-          Write a debugging log. The debug_options string often is
+          Write a debugging log. A typical debug_options string is
           'd:t:O,file_name'. The default is 'd:t:O,/tmp/comp_err.trace'.
 
        o  --debug-info, -T
@@ -73,10 +73,10 @@ DESCRIPTION
           Display version information and exit.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB
+       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
 
        This documentation is free software; you can redistribute it and/or
-       modify it under the terms of the GNU General Public License as
+       modify it only under the terms of the GNU General Public License as
        published by the Free Software Foundation; version 2 of the License.
 
        This documentation is distributed in the hope that it will be useful,
@@ -95,7 +95,7 @@ SEE ALSO
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       MySQL AB (http://www.mysql.com/).
+       Sun Microsystems, Inc. (http://www.mysql.com/).
 
 
 

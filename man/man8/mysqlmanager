@@ -9,6 +9,10 @@ SYNOPSIS
        mysqlmanager [options]
 
 DESCRIPTION
+       Important
+       MySQL Instance Manager is been deprecated in MySQL 5.1 and is removed
+       in MySQL 6.0.
+
        mysqlmanager is the MySQL Instance Manager (IM). This program monitors
        and manages MySQL Database Server instances. MySQL Instance Manager is
        available for Unix-like operating systems, and also on Windows as of
@@ -53,6 +57,10 @@ DESCRIPTION
        more detail.
 
 MYSQL INSTANCE MANAGER COMMAND OPTIONS
+       Important
+       MySQL Instance Manager is been deprecated in MySQL 5.1 and is removed
+       in MySQL 6.0.
+
        The MySQL Instance Manager supports a number of command options. For a
        brief listing, invoke mysqlmanager with the --help option. Options may
        be given on the command line or in the Instance Manager configuration
@@ -61,7 +69,10 @@ MYSQL INSTANCE MANAGER COMMAND OPTIONS
        file is /etc/my.cnf. To specify a different configuration file, start
        Instance Manager with the --defaults-file option.
 
-       mysqlmanager supports the following options:
+       mysqlmanager supports the options in the following list. It also reads
+       option files and supports the options for processing them described at
+       Section 4.2.3.2.1, "Command-Line Options that Affect Option-File
+       Handling".
 
        o  --help, -?
 
@@ -71,7 +82,7 @@ MYSQL INSTANCE MANAGER COMMAND OPTIONS
 
           The file in which the angel process records its process ID when
           mysqlmanager runs in daemon mode (that is, when the --run-as-service
-          option is given). The default filename is mysqlmanager.angel.pid.
+          option is given). The default file name is mysqlmanager.angel.pid.
 
           If the --angel-pid-file option is not given, the default angel PID
           file has the same name as the PID file except that any PID file
@@ -86,10 +97,10 @@ MYSQL INSTANCE MANAGER COMMAND OPTIONS
 
        o  --default-mysqld-path=path
 
-          The pathname of the MySQL Server binary. This pathname is used for
+          The path name of the MySQL Server binary. This path name is used for
           all server instance sections in the configuration file for which no
           mysqld-path option is present. The default value of this option is
-          the compiled-in pathname, which depends on how the MySQL
+          the compiled-in path name, which depends on how the MySQL
           distribution was configured. Example:
           --default-mysqld-path=/usr/sbin/mysqld
 
@@ -114,11 +125,11 @@ MYSQL INSTANCE MANAGER COMMAND OPTIONS
        o  --log=file_name
 
           The path to the Instance Manager log file. This option has no effect
-          unless the --run-as-service option is also given. If the filename
+          unless the --run-as-service option is also given. If the file name
           specified for the option is a relative name, the log file is created
           under the directory from which Instance Manager is started. To
           ensure that the file is created in a specific directory, specify it
-          as a full pathname.
+          as a full path name.
 
           If --run-as-service is given without --log, the log file is
           mysqlmanager.log in the data directory.
@@ -160,14 +171,16 @@ MYSQL INSTANCE MANAGER COMMAND OPTIONS
 
           Prepare an entry for the password file, print it to the standard
           output, and exit. You can redirect the output from Instance Manager
-          to a file to save the entry in the file.
+          to a file to save the entry in the file. See also the section called
+          "INSTANCE MANAGER USER AND PASSWORD MANAGEMENT". This
 
        o  --password-file=file_name
 
           The name of the file where the Instance Manager looks for users and
           passwords. On Windows, the default is mysqlmanager.passwd in the
           directory where Instance Manager is installed. On Unix, the default
-          file is /etc/mysqlmanager.passwd.
+          file is /etc/mysqlmanager.passwd. See also the section called
+          "INSTANCE MANAGER USER AND PASSWORD MANAGEMENT".
 
        o  --pid-file=file_name
 
@@ -212,7 +225,7 @@ MYSQL INSTANCE MANAGER COMMAND OPTIONS
 
        o  --user=user_name
 
-          On Unix, the username of the system account to use for starting and
+          On Unix, the user name of the system account to use for starting and
           running mysqlmanager. This option generates a warning and has no
           effect unless you start mysqlmanager as root (so that it can change
           its effective user ID), or as the named user. It is recommended that
@@ -233,6 +246,10 @@ MYSQL INSTANCE MANAGER COMMAND OPTIONS
           30 seconds and cannot be changed.
 
 MYSQL INSTANCE MANAGER CONFIGURATION FILES
+       Important
+       MySQL Instance Manager is been deprecated in MySQL 5.1 and is removed
+       in MySQL 6.0.
+
        Instance Manager uses its standard configuration file unless it is
        started with a --defaults-file option that specifies a different file.
        On Windows, the standard file is my.ini in the directory where Instance
@@ -260,11 +277,11 @@ MYSQL INSTANCE MANAGER CONFIGURATION FILES
 
        Each [mysqld] or [mysqldN] instance section specifies options given by
        Instance Manager to a server instance at startup. These are mainly
-       common MySQL Server options (see Section 1.2, "Command Options"). In
-       addition, a [mysqldN] section can contain the options in the following
-       list, which are specific to Instance Manager. These options are
-       interpreted by Instance Manager itself; it does not pass them to the
-       server when it attempts to start that server.
+       common MySQL Server options (see Section 5.1.2, "Server Command
+       Options"). In addition, a [mysqldN] section can contain the options in
+       the following list, which are specific to Instance Manager. These
+       options are interpreted by Instance Manager itself; it does not pass
+       them to the server when it attempts to start that server.
 
        Warning
        The Instance Manager-specific options must not be used in a [mysqld]
@@ -273,7 +290,7 @@ MYSQL INSTANCE MANAGER CONFIGURATION FILES
 
        o  mysqld-path = path
 
-          The pathname of the mysqld server binary to use for the server
+          The path name of the mysqld server binary to use for the server
           instance.
 
        o  nonguarded
@@ -321,6 +338,10 @@ MYSQL INSTANCE MANAGER CONFIGURATION FILES
           log=/tmp/fordel.log
 
 STARTING THE MYSQL SERVER WITH MYSQL INSTANCE MANAGER
+       Important
+       MySQL Instance Manager is been deprecated in MySQL 5.1 and is removed
+       in MySQL 6.0.
+
        This section discusses how Instance Manager starts server instances
        when it starts. However, before you start Instance Manager, you should
        set up a password file for it. Otherwise, you will not be able to
@@ -357,7 +378,7 @@ STARTING THE MYSQL SERVER WITH MYSQL INSTANCE MANAGER
        Manager creates an instance named mysqld and attempts to start it with
        default (compiled-in) configuration values. This means that the
        Instance Manager cannot find the mysqld program if it is not installed
-       in the default location. (Section 4.6, "Installation Layouts",
+       in the default location. (Section 2.7, "Installation Layouts",
        describes default locations for components of MySQL distributions.) If
        you have installed the MySQL server in a non-standard location, you
        should create the Instance Manager configuration file.
@@ -373,7 +394,7 @@ STARTING THE MYSQL SERVER WITH MYSQL INSTANCE MANAGER
        the mysqld binary resides. If there are multiple instances, it may also
        be necessary to set other options such as datadir and port, to ensure
        that each instance has a different data directory and TCP/IP port
-       number.  Section 6, "Running Multiple MySQL Servers on the Same
+       number.  Section 5.6, "Running Multiple MySQL Servers on the Same
        Machine", discusses the configuration values that must differ for each
        instance when you run multiple instance on the same machine.
 
@@ -395,6 +416,10 @@ STARTING THE MYSQL SERVER WITH MYSQL INSTANCE MANAGER
           /etc/init.d/mysql stop command), it shuts down all server instances.
 
 INSTANCE MANAGER USER AND PASSWORD MANAGEMENT
+       Important
+       MySQL Instance Manager is been deprecated in MySQL 5.1 and is removed
+       in MySQL 6.0.
+
        The Instance Manager stores its user information in a password file. On
        Windows, the default is mysqlmanager.passwd in the directory where
        Instance Manager is installed. On Unix, the default file is
@@ -410,7 +435,7 @@ INSTANCE MANAGER USER AND PASSWORD MANAGEMENT
        it and restart it after making password entry changes.
 
        Entries in the password file have the following format, where the two
-       fields are the account username and encrypted password, separated by a
+       fields are the account user name and encrypted password, separated by a
        colon:
 
           petr:*35110DC9B4D8140F5DE667E28C72DD2597B5C848
@@ -421,15 +446,15 @@ INSTANCE MANAGER USER AND PASSWORD MANAGEMENT
 
        Instance Manager accounts differ somewhat from MySQL Server accounts:
 
-       o  MySQL Server accounts are associated with a hostname, username, and
-          password (see Section 5.1, "MySQL Usernames and Passwords").
+       o  MySQL Server accounts are associated with a host name, user name,
+          and password (see Section 5.5.1, "User Names and Passwords").
 
-       o  Instance Manager accounts are associated with a username and
+       o  Instance Manager accounts are associated with a user name and
           password only.
 
 
        This means that a client can connect to Instance Manager with a given
-       username from any host. To limit connections so that clients can
+       user name from any host. To limit connections so that clients can
        connect only from the local host, start Instance Manager with the
        --bind-address=127.0.0.1 option so that it listens only to the local
        network interface. Remote clients will not be able to connect. Local
@@ -447,7 +472,7 @@ INSTANCE MANAGER USER AND PASSWORD MANAGEMENT
           Enter password: mikepass
           Re-type password: mikepass
 
-       At the prompts, enter the username and password for the new Instance
+       At the prompts, enter the user name and password for the new Instance
        Manager user. You must enter the password twice. It does not echo to
        the screen, so double entry guards against entering a different
        password than you intend (if the two passwords do not match, no entry
@@ -458,7 +483,21 @@ INSTANCE MANAGER USER AND PASSWORD MANAGEMENT
 
           mike:*BBF1F551DD9DD96A01E66EC7DDC073911BAD17BA
 
+       Use of the --password option fails if mysqlmanager is invoked directly
+       from an IBM 5250 terminal. To work around this, use a command like the
+       following from the command line to generate the password entry:
+
+          shell> mysql -B --skip-column-name \
+                   -e 'SELECT CONCAT("user_name",":",PASSWORD("pass_val"));'
+
+       The output from the command can be used an entry in the
+       /etc/mysqlmanager.passwd file.
+
 MYSQL SERVER INSTANCE STATUS MONITORING
+       Important
+       MySQL Instance Manager is been deprecated in MySQL 5.1 and is removed
+       in MySQL 6.0.
+
        To monitor the status of each guarded server instance, the MySQL
        Instance Manager attempts to connect to the instance at regular
        intervals using the MySQL_Instance_Manager@localhost user account with
@@ -469,7 +508,7 @@ MYSQL SERVER INSTANCE STATUS MONITORING
        server is operational if the server accepts the connection attempt but
        refuses access for the account by returning a login error. However,
        these failed connection attempts are logged by the server to its
-       general query log (see Section 2.2, "The General Query Log").
+       general query log (see Section 5.2.2, "The General Query Log").
 
        Instance Manager also attempts a connection to nonguarded server
        instances when you use the SHOW INSTANCES or SHOW INSTANCE STATUS
@@ -482,6 +521,10 @@ MYSQL SERVER INSTANCE STATUS MONITORING
        parent process of the instance.
 
 CONNECTING TO MYSQL INSTANCE MANAGER
+       Important
+       MySQL Instance Manager is been deprecated in MySQL 5.1 and is removed
+       in MySQL 6.0.
+
        After you set up a password file for the MySQL Instance Manager and
        Instance Manager is running, you can connect to it. The MySQL
        client-server protocol is used to communicate with the Instance
@@ -496,6 +539,10 @@ CONNECTING TO MYSQL INSTANCE MANAGER
        connect to it.
 
 MYSQL INSTANCE MANAGER COMMANDS
+       Important
+       MySQL Instance Manager is been deprecated in MySQL 5.1 and is removed
+       in MySQL 6.0.
+
        After you connect to MySQL Instance Manager, you can issue commands.
        The following general principles apply to Instance Manager command
        execution:
@@ -604,7 +651,7 @@ MYSQL INSTANCE MANAGER COMMANDS
           | GENERAL LOG | /home/cps/var/mysql/owlet.log      | 471503   |
           | SLOW LOG    | /home/cps/var/mysql/owlet-slow.log | 4463     |
           +-------------+------------------------------------+----------+
-       Log options are described in Section 1.2, "Command Options".
+       Log options are described in Section 5.1.2, "Server Command Options".
 
        o  SHOW instance_name LOG {ERROR | SLOW | GENERAL}
           size[,offset_from_end]
@@ -662,10 +709,10 @@ MYSQL INSTANCE MANAGER COMMANDS
        FLUSH INSTANCES is deprecated and will be removed in MySQL 5.2.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB
+       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
 
        This documentation is free software; you can redistribute it and/or
-       modify it under the terms of the GNU General Public License as
+       modify it only under the terms of the GNU General Public License as
        published by the Free Software Foundation; version 2 of the License.
 
        This documentation is distributed in the hope that it will be useful,
@@ -684,7 +731,7 @@ SEE ALSO
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       MySQL AB (http://www.mysql.com/).
+       Sun Microsystems, Inc. (http://www.mysql.com/).
 
 
 

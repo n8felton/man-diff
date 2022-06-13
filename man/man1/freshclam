@@ -105,6 +105,11 @@ EXAMPLES
               freshclam -d -c 2
 
 RETURN CODES
+       Some  return codes of freshclam can be overwritten with a built-in com-
+       mand EXIT_n which can be passed to --on-*-execute, eg. --on-update-exe-
+       cute=EXIT_1  will  force  freshclam to always return 1 after successful
+       database update.
+
        0 : Database successfully updated.
 
        1 : Database is up-to-date.

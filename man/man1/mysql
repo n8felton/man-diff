@@ -19,7 +19,7 @@ DESCRIPTION
 
        If you use the Linux server RPM package (MySQL-server-VERSION.rpm), the
        mysql.server script will be installed in the /etc/init.d directory with
-       the name mysql. You need not install it manually. See Section 4.9,
+       the name mysql. You need not install it manually. See Section 2.10,
        "Installing MySQL from RPM Packages on Linux", for more information on
        the Linux RPM packages.
 
@@ -29,14 +29,14 @@ DESCRIPTION
        If you install MySQL from a source distribution or using a binary
        distribution format that does not install mysql.server automatically,
        you can install it manually. Instructions are provided in
-       Section 4.16.2.2, "Starting and Stopping MySQL Automatically".
+       Section 2.17.2.2, "Starting and Stopping MySQL Automatically".
 
        mysql.server reads options from the [mysql.server] and [mysqld]
        sections of option files. For backward compatibility, it also reads
        [mysql_server] sections, although you should rename such sections to
        [mysql.server] when using MySQL 5.0.
 
-       mysql.server understands the following options:
+       mysql.server supports the following options:
 
        o  --basedir=path
 
@@ -48,7 +48,7 @@ DESCRIPTION
 
        o  --pid-file=file_name
 
-          The pathname of the file in which the server should write its
+          The path name of the file in which the server should write its
           process ID.
 
        o  --service-startup-timeout=file_name
@@ -72,14 +72,14 @@ DESCRIPTION
 
        o  --user=user_name
 
-          The login username to use for running mysqld. This option was added
+          The login user name to use for running mysqld. This option was added
           in MySQL 5.0.4.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB
+       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
 
        This documentation is free software; you can redistribute it and/or
-       modify it under the terms of the GNU General Public License as
+       modify it only under the terms of the GNU General Public License as
        published by the Free Software Foundation; version 2 of the License.
 
        This documentation is distributed in the hope that it will be useful,
@@ -98,7 +98,7 @@ SEE ALSO
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       MySQL AB (http://www.mysql.com/).
+       Sun Microsystems, Inc. (http://www.mysql.com/).
 
 
 

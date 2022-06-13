@@ -16,7 +16,8 @@ DESCRIPTION
        Caution
        It is best to make a backup of a table before performing a table repair
        operation; under some circumstances the operation might cause data
-       loss. Possible causes include but are not limited to filesystem errors.
+       loss. Possible causes include but are not limited to file system
+       errors.
 
        Invoke myisamchk like this:
 
@@ -34,10 +35,11 @@ DESCRIPTION
        tbl_name is the database table you want to check or repair. If you run
        myisamchk somewhere other than in the database directory, you must
        specify the path to the database directory, because myisamchk has no
-       idea where the database is located. In fact, myisamchk doesn't actually
-       care whether the files you are working on are located in a database
-       directory. You can copy the files that correspond to a database table
-       into some other location and perform recovery operations on them there.
+       idea where the database is located. In fact, myisamchk does not
+       actually care whether the files you are working on are located in a
+       database directory. You can copy the files that correspond to a
+       database table into some other location and perform recovery operations
+       on them there.
 
        You can name several tables on the myisamchk command line if you wish.
        You can also specify a table by naming its index file (the file with
@@ -96,10 +98,13 @@ DESCRIPTION
        running myisamchk
 
        However, the easiest way to avoid this problem is to use CHECK TABLE
-       instead of myisamchk to check tables. See Section 5.2.3, "CHECK TABLE
-       Syntax".
+       instead of myisamchk to check tables. See Section 12.5.2.3, "CHECK
+       TABLE Syntax".
 
-       A complete listing of all the myisamchk options follows.
+       myisamchk supports the options in the following table. It also reads
+       option files and supports the options for processing them described at
+       Section 4.2.3.2.1, "Command-Line Options that Affect Option-File
+       Handling".
 
 MYISAMCHK GENERAL OPTIONS
        The options described in this section can be used for any type of table
@@ -109,12 +114,18 @@ MYISAMCHK GENERAL OPTIONS
 
        o  --help, -?
 
-          Display a help message and exit.
+          Display a help message and exit. Options are grouped by type of
+          operation.
+
+       o  --HELP, -H
+
+          Display a help message and exit. Options are presented in a single
+          list.
 
        o  --debug=debug_options, -# debug_options
 
-          Write a debugging log. The debug_options string often is
-          'd:t:o,file_name'.
+          Write a debugging log. A typical debug_options string is
+          'd:t:o,file_name'. The default is 'd:t:o,/tmp/myisamchk.trace'.
 
        o  --silent, -s
 
@@ -207,10 +218,11 @@ MYISAMCHK GENERAL OPTIONS
        stats_method influences how NULL values are treated for index
        statistics collection when the --analyze option is given. It acts like
        the myisam_stats_method system variable. For more information, see the
-       description of myisam_stats_method in Section 1.3, "System Variables",
-       and Section 4.7, "MyISAM Index Statistics Collection". For MySQL 5.0,
-       stats_method was added in MySQL 5.0.14. For older versions, the
-       statistics collection method is equivalent to nulls_equal.
+       description of myisam_stats_method in Section 5.1.3, "Server System
+       Variables", and Section 7.4.6, "MyISAM Index Statistics Collection".
+       For MySQL 5.0, stats_method was added in MySQL 5.0.14. For older
+       versions, the statistics collection method is equivalent to
+       nulls_equal.
 
        The ft_min_word_len and ft_max_word_len variables are available as of
        MySQL 4.0.0.  ft_stopword_file is available as of MySQL 4.0.19.
@@ -294,10 +306,10 @@ MYISAMCHK CHECK OPTIONS
 
        o  --read-only, -T
 
-          Don't mark the table as checked. This is useful if you use myisamchk
-          to check a table that is in use by some other application that
-          doesn't use locking, such as mysqld when run with external locking
-          disabled.
+          Do not mark the table as checked. This is useful if you use
+          myisamchk to check a table that is in use by some other application
+          that does not use locking, such as mysqld when run with external
+          locking disabled.
 
        o  --update-state, -U
 
@@ -316,7 +328,7 @@ MYISAMCHK REPAIR OPTIONS
 
        o  --character-sets-dir=path
 
-          The directory where character sets are installed. See Section 2,
+          The directory where character sets are installed. See Section 9.2,
           "The Character Set Used for Data and Sorting".
 
        o  --correct-checksum
@@ -331,7 +343,7 @@ MYISAMCHK REPAIR OPTIONS
        o  --extend-check, -e
 
           Do a repair that tries to recover every possible row from the data
-          file. Normally, this also finds a lot of garbage rows. Don't use
+          file. Normally, this also finds a lot of garbage rows. Do not use
           this option unless you are desperate.
 
        o  --force, -f
@@ -375,10 +387,10 @@ MYISAMCHK REPAIR OPTIONS
        o  --recover, -r
 
           Do a repair that can fix almost any problem except unique keys that
-          aren't unique (which is an extremely unlikely error with MyISAM
+          are not unique (which is an extremely unlikely error with MyISAM
           tables). If you want to recover a table, this is the option to try
           first. You should try --safe-recover only if myisamchk reports that
-          the table can't be recovered using --recover. (In the unlikely case
+          the table cannot be recovered using --recover. (In the unlikely case
           that --recover fails, the data file remains intact.)
 
           If you have lots of memory, you should increase the value of
@@ -391,7 +403,7 @@ MYISAMCHK REPAIR OPTIONS
           is an order of magnitude slower than --recover, but can handle a
           couple of very unlikely cases that --recover cannot. This recovery
           method also uses much less disk space than --recover. Normally, you
-          should repair first with --recover, and then with --safe-recover
+          should repair first using --recover, and then with --safe-recover
           only if --recover fails.
 
           If you have lots of memory, you should increase the value of
@@ -493,22 +505,22 @@ MYISAMCHK MEMORY USAGE
        Using --sort_buffer_size=16M should probably be enough for most cases.
 
        Be aware that myisamchk uses temporary files in TMPDIR. If TMPDIR
-       points to a memory filesystem, you may easily get out of memory errors.
-       If this happens, run myisamchk with the --tmpdir=path option to specify
-       some directory located on a filesystem that has more space.
+       points to a memory file system, you may easily get out of memory
+       errors. If this happens, run myisamchk with the --tmpdir=path option to
+       specify some directory located on a file system that has more space.
 
        When repairing, myisamchk also needs a lot of disk space:
 
        o  Double the size of the data file (the original file and a copy).
           This space is not needed if you do a repair with --quick; in this
-          case, only the index file is re-created. This space is needed on the
-          same filesystem as the original data file! (The copy is created in
-          the same directory as the original.)
+          case, only the index file is re-created.  This space must be
+          available on the same file system as the original data file, as the
+          copy is created in the same directory as the original.
 
        o  Space for the new index file that replaces the old one. The old
           index file is truncated at the start of the repair operation, so you
-          usually ignore this space. This space is needed on the same
-          filesystem as the original index file!
+          usually ignore this space. This space must be available on the same
+          file system as the original data file.
 
        o  When using --recover or --sort-recover (but not when using
           --safe-recover), you need space for a sort buffer. The following
@@ -524,10 +536,10 @@ MYISAMCHK MEMORY USAGE
        --safe-recover instead of --recover.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB
+       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
 
        This documentation is free software; you can redistribute it and/or
-       modify it under the terms of the GNU General Public License as
+       modify it only under the terms of the GNU General Public License as
        published by the Free Software Foundation; version 2 of the License.
 
        This documentation is distributed in the hope that it will be useful,
@@ -546,7 +558,7 @@ SEE ALSO
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       MySQL AB (http://www.mysql.com/).
+       Sun Microsystems, Inc. (http://www.mysql.com/).
 
 
 

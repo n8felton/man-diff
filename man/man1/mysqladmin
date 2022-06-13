@@ -70,8 +70,8 @@ DESCRIPTION
        o  old-password new-password
 
           This is like the password command but stores the password using the
-          old (pre-4.1) password-hashing format. (See Section 4.8, "Password
-          Hashing as of MySQL 4.1".)
+          old (pre-4.1) password-hashing format. (See Section 5.5.6.3,
+          "Password Hashing in MySQL".)
 
        o  password new-password
 
@@ -89,6 +89,15 @@ DESCRIPTION
 
           shell> mysqladmin password "my new password"
 
+       Caution
+       Do not use this command used if the server was started with the
+       --skip-grant-tables option. No password change will be applied. This is
+       true even if you precede the password command with flush-privileges on
+       the same command line to re-enable the grant tables because the flush
+       operation occurs after you connect. However, you can use mysqladmin
+       flush-privileges to re-enable the grant table and then use a separate
+       mysqladmin password command to change the password.
+
        o  ping
 
           Check whether the server is alive. The return status from mysqladmin
@@ -101,8 +110,8 @@ DESCRIPTION
 
           Show a list of active server threads. This is like the output of the
           SHOW PROCESSLIST statement. If the --verbose option is given, the
-          output is like that of SHOW FULL PROCESSLIST. (See Section 5.5.24,
-          "SHOW PROCESSLIST Syntax".)
+          output is like that of SHOW FULL PROCESSLIST. (See
+          Section 12.5.5.27, "SHOW PROCESSLIST Syntax".)
 
        o  reload
 
@@ -167,7 +176,7 @@ DESCRIPTION
        o  Slow queries
 
           The number of queries that have taken more than long_query_time
-          seconds. See Section 2.4, "The Slow Query Log".
+          seconds. See Section 5.2.4, "The Slow Query Log".
 
        o  Opens
 
@@ -199,7 +208,10 @@ DESCRIPTION
        ID file has been removed, to ensure that the server has stopped
        properly.
 
-       mysqladmin supports the following options:
+       mysqladmin supports the options in the following list. It also reads
+       option files and supports the options for processing them described at
+       Section 4.2.3.2.1, "Command-Line Options that Affect Option-File
+       Handling".
 
        o  --help, -?
 
@@ -207,7 +219,7 @@ DESCRIPTION
 
        o  --character-sets-dir=path
 
-          The directory where character sets are installed. See Section 2,
+          The directory where character sets are installed. See Section 9.2,
           "The Character Set Used for Data and Sorting".
 
        o  --compress, -C
@@ -222,12 +234,12 @@ DESCRIPTION
 
        o  --debug[=debug_options], -# [debug_options]
 
-          Write a debugging log. The debug_options string often is
+          Write a debugging log. A typical debug_options string is
           'd:t:o,file_name'. The default is 'd:t:o,/tmp/mysqladmin.trace'.
 
        o  --default-character-set=charset_name
 
-          Use charset_name as the default character set. See Section 2, "The
+          Use charset_name as the default character set. See Section 9.2, "The
           Character Set Used for Data and Sorting".
 
        o  --force, -f
@@ -248,7 +260,8 @@ DESCRIPTION
           one.
 
           Specifying a password on the command line should be considered
-          insecure. See Section 5.6, "Keeping Your Password Secure".
+          insecure. See Section 5.5.6.2, "End-User Guidelines for Password
+          Security".
 
        o  --pipe, -W
 
@@ -265,7 +278,8 @@ DESCRIPTION
           The connection protocol to use for connecting to the server. It is
           useful when the other connection parameters normally would cause a
           protocol to be used other than the one you want. For details on the
-          allowable values, see Section 2.2, "Connecting to the MySQL Server".
+          allowable values, see Section 4.2.2, "Connecting to the MySQL
+          Server".
 
        o  --relative, -r
 
@@ -293,11 +307,11 @@ DESCRIPTION
 
           Options that begin with --ssl specify whether to connect to the
           server via SSL and indicate where to find SSL keys and certificates.
-          See Section 5.7.3, "SSL Command Options".
+          See Section 5.5.7.3, "SSL Command Options".
 
        o  --user=user_name, -u user_name
 
-          The MySQL username to use when connecting to the server.
+          The MySQL user name to use when connecting to the server.
 
        o  --verbose, -v
 
@@ -337,10 +351,10 @@ DESCRIPTION
        --set-variable format is deprecated.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB
+       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
 
        This documentation is free software; you can redistribute it and/or
-       modify it under the terms of the GNU General Public License as
+       modify it only under the terms of the GNU General Public License as
        published by the Free Software Foundation; version 2 of the License.
 
        This documentation is distributed in the hope that it will be useful,
@@ -359,7 +373,7 @@ SEE ALSO
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       MySQL AB (http://www.mysql.com/).
+       Sun Microsystems, Inc. (http://www.mysql.com/).
 
 
 

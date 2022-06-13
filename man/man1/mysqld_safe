@@ -44,12 +44,12 @@ You can also use --ledir to indicate the directory where mysqld_safe should
 look for the server.
 
 Many of the options to mysqld_safe are the same as the options to mysqld. See
-Section 1.2, "Command Options".
+Section 5.1.2, "Server Command Options".
 
 All options specified to mysqld_safe on the command line are passed to mysqld.
 If you want to use any options that are specific to mysqld_safe and that
 mysqld doesn't support, do not specify them on the command line. Instead, list
-them in the [mysqld_safe] group of an option file. See Section 2.3.2, "Using
+them in the [mysqld_safe] group of an option file. See Section 4.2.3.2, "Using
 Option Files".
 
 mysqld_safe reads all options from the [mysqld], [server], and [mysqld_safe]
@@ -63,7 +63,9 @@ For backward compatibility, mysqld_safe also reads [safe_mysqld] sections,
 although you should rename such sections to [mysqld_safe] in MySQL 5.0
 installations.
 
-mysqld_safe supports the following options:
+mysqld_safe supports the options in the following list. It also reads option
+files and supports the options for processing them described at
+Section 4.2.3.2.1, "Command-Line Options that Affect Option-File Handling".
 
 o  --help
 
@@ -106,19 +108,19 @@ o  --defaults-file=file_name
 
 o  --ledir=path
 
-   If mysqld_safe cannot find the server, use this option to indicate the
-   pathname to the directory where the server is located.
+   If mysqld_safe cannot find the server, use this option to indicate the path
+   name to the directory where the server is located.
 
 o  --log-error=file_name
 
-   Write the error log to the given file. See Section 2.1, "The Error Log".
+   Write the error log to the given file. See Section 5.2.1, "The Error Log".
 
 o  --mysqld=prog_name
 
    The name of the server program (in the ledir directory) that you want to
    start. This option is needed if you use the MySQL binary distribution but
    have the data directory outside of the binary distribution. If mysqld_safe
-   cannot find the server, use the --ledir option to indicate the pathname to
+   cannot find the server, use the --ledir option to indicate the path name to
    the directory where the server is located.
 
 o  --mysqld-version=suffix
@@ -147,7 +149,7 @@ o  --open-files-limit=count
 
 o  --pid-file=file_name
 
-   The pathname of the process ID file.
+   The path name of the process ID file.
 
 o  --port=port_num
 
@@ -178,7 +180,7 @@ o  --user={user_name|user_id}
    not a MySQL user listed in the grant tables.)
 
 
-If you execute mysqld_safe with the --defaults-file or --defaults-extra-option
+If you execute mysqld_safe with the --defaults-file or --defaults-extra-file
 option to name an option file, the option must be the first one given on the
 command line or the option file will not be used. For example, this command
 will not use the named option file:
@@ -192,7 +194,7 @@ Instead, use the following command:
 The mysqld_safe script is written so that it normally can start a server that
 was installed from either a source or a binary distribution of MySQL, even
 though these types of distributions typically install the server in slightly
-different locations. (See Section 4.6, "Installation Layouts".)  mysqld_safe
+different locations. (See Section 2.7, "Installation Layouts".)  mysqld_safe
 expects one of the following conditions to be true:
 
 o  The server and databases can be found relative to the working directory
@@ -204,7 +206,7 @@ o  The server and databases can be found relative to the working directory
    binary distribution).
 
 o  If the server and databases cannot be found relative to the working
-   directory, mysqld_safe attempts to locate them by absolute pathnames.
+   directory, mysqld_safe attempts to locate them by absolute path names.
    Typical locations are /usr/local/libexec and /usr/local/var. The actual
    locations are determined from the values configured into the distribution
    at the time it was built. They should be correct if MySQL is installed in
@@ -248,10 +250,10 @@ the original Unix shell script. It starts the server as follows:
    directory.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB
+       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
 
        This documentation is free software; you can redistribute it and/or
-       modify it under the terms of the GNU General Public License as
+       modify it only under the terms of the GNU General Public License as
        published by the Free Software Foundation; version 2 of the License.
 
        This documentation is distributed in the hope that it will be useful,
@@ -270,7 +272,7 @@ SEE ALSO
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       MySQL AB (http://www.mysql.com/).
+       Sun Microsystems, Inc. (http://www.mysql.com/).
 
 
 

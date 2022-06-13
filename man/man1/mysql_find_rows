@@ -12,15 +12,17 @@ DESCRIPTION
        mysql_find_rows reads files containing SQL statements and extracts
        statements that match a given regular expression or that contain USE
        db_name or SET statements. The utility was written for use with update
-       log files, but it can be used with other files that contain SQL
-       statements.
+       log files (as used prior to MySQL 5.0) and as such expects statements
+       to be terminated with semicolon (;) characters. It may be useful with
+       other files that contain SQL statements as long as statements are
+       terminated with semicolons.
 
        Invoke mysql_find_rows like this:
 
           shell> mysql_find_rows [options] [file_name ...]
 
        Each file_name argument should be the name of file containing SQL
-       statements. If no filenames are given, mysql_find_rows reads the
+       statements. If no file names are given, mysql_find_rows reads the
        standard input.
 
        Examples:
@@ -51,10 +53,10 @@ DESCRIPTION
           Start output from this row.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB
+       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
 
        This documentation is free software; you can redistribute it and/or
-       modify it under the terms of the GNU General Public License as
+       modify it only under the terms of the GNU General Public License as
        published by the Free Software Foundation; version 2 of the License.
 
        This documentation is distributed in the hope that it will be useful,
@@ -73,7 +75,7 @@ SEE ALSO
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       MySQL AB (http://www.mysql.com/).
+       Sun Microsystems, Inc. (http://www.mysql.com/).
 
 
 

@@ -469,7 +469,8 @@ DIRECTIVES
             Specifies the email address of the server administrator.
 
        ServerAlias hostname
-            Specifies an alternate name that the server is known by.
+            Specifies  an alternate name that the server is known by. The spe-
+            cial name "*" allows any name to be used.
 
        ServerBin directory
             Specifies the directory where backends, CGIs, daemons, and filters
@@ -485,7 +486,7 @@ DIRECTIVES
             Specifies the fully-qualified hostname of the server.
 
        ServerRoot directory
-            Specifies the directory where the server configuration  files  can
+            Specifies  the  directory where the server configuration files can
             be found.
 
        ServerTokens Full
@@ -501,15 +502,15 @@ DIRECTIVES
        ServerTokens OS
 
        ServerTokens ProductOnly
-            Specifies  what  information  is  included in the Server header of
+            Specifies what information is included in  the  Server  header  of
             HTTP responses.
 
        SetEnv variable value
-            Set the specified environment variable to be passed to child  pro-
+            Set  the specified environment variable to be passed to child pro-
             cesses.
 
        SSLListen
-            Listens  on  the  specified address and port for encrypted connec-
+            Listens on the specified address and port  for  encrypted  connec-
             tions.
 
        SSLPort
@@ -525,7 +526,7 @@ DIRECTIVES
             Specifies the HTTP request timeout in seconds.
 
        User user-name
-            Specifies the user name or ID that is used when  running  external
+            Specifies  the  user name or ID that is used when running external
             programs.
 
 SEE ALSO

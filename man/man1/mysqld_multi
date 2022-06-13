@@ -23,11 +23,11 @@ DESCRIPTION
        which servers you want to start, stop, or obtain a status report for.
        Options listed in these groups are the same that you would use in the
        [mysqld] group used for starting mysqld. (See, for example,
-       Section 4.16.2.2, "Starting and Stopping MySQL Automatically".)
+       Section 2.17.2.2, "Starting and Stopping MySQL Automatically".)
        However, when using multiple servers, it is necessary that each one use
        its own value for options such as the Unix socket file and TCP/IP port
        number. For more information on which options must be unique per server
-       in a multiple-server environment, see Section 6, "Running Multiple
+       in a multiple-server environment, see Section 5.6, "Running Multiple
        MySQL Servers on the Same Machine".
 
        To invoke mysqld_multi, use the following syntax:
@@ -122,9 +122,9 @@ DESCRIPTION
           as the value for this option also. If you use mysqld_safe to start
           the server, you can include the mysqld or ledir options in the
           corresponding [mysqldN] option group. These options indicate the
-          name of the server that mysqld_safe should start and the pathname of
-          the directory where the server is located. (See the descriptions for
-          these options in mysqld_safe(1).) Example:
+          name of the server that mysqld_safe should start and the path name
+          of the directory where the server is located. (See the descriptions
+          for these options in mysqld_safe(1).) Example:
 
           [mysqld38]
           mysqld = mysqld-debug
@@ -155,7 +155,7 @@ DESCRIPTION
 
        o  --user=user_name
 
-          The username of the MySQL account to use when invoking mysqladmin.
+          The user name of the MySQL account to use when invoking mysqladmin.
 
        o  --verbose
 
@@ -175,7 +175,8 @@ DESCRIPTION
           data directory. Use separate data directories, unless you know what
           you are doing. Starting multiple servers with the same data
           directory does not give you extra performance in a threaded system.
-          See Section 6, "Running Multiple MySQL Servers on the Same Machine".
+          See Section 5.6, "Running Multiple MySQL Servers on the Same
+          Machine".
 
        o
 
@@ -183,16 +184,16 @@ DESCRIPTION
           Make sure that the data directory for each server is fully
           accessible to the Unix account that the specific mysqld process is
           started as.  Do not use the Unix root account for this, unless you
-          know what you are doing. See Section 3.5, "How to Run MySQL as a
+          know what you are doing. See Section 5.3.5, "How to Run MySQL as a
           Normal User".
 
        o  Make sure that the MySQL account used for stopping the mysqld
-          servers (with the mysqladmin program) has the same username and
+          servers (with the mysqladmin program) has the same user name and
           password for each server. Also, make sure that the account has the
           SHUTDOWN privilege. If the servers that you want to manage have
-          different usernames or passwords for the administrative accounts,
+          different user names or passwords for the administrative accounts,
           you might want to create an account on each server that has the same
-          username and password. For example, you might set up a common
+          user name and password. For example, you might set up a common
           multi_admin account by executing the following commands for each
           server:
 
@@ -200,15 +201,15 @@ DESCRIPTION
           Enter password:
           mysql> GRANT SHUTDOWN ON *.*
               -> TO 'multi_admin'@'localhost' IDENTIFIED BY 'multipass';
-       See Section 4.2, "How the Privilege System Works". You have to do this
-       for each mysqld server. Change the connection parameters appropriately
-       when connecting to each one. Note that the hostname part of the account
-       name must allow you to connect as multi_admin from the host where you
-       want to run mysqld_multi.
+       See Section 5.4, "The MySQL Access Privilege System". You have to do
+       this for each mysqld server. Change the connection parameters
+       appropriately when connecting to each one. Note that the host name part
+       of the account name must allow you to connect as multi_admin from the
+       host where you want to run mysqld_multi.
 
        o  The Unix socket file and the TCP/IP port number must be different
           for every mysqld. (Alternatively, if the host has multiple network
-          addresses, you can use --bind-adress to cause different servers to
+          addresses, you can use --bind-address to cause different servers to
           listen to different interfaces.)
 
        o  The --pid-file option is very important if you are using mysqld_safe
@@ -284,13 +285,13 @@ DESCRIPTION
           language   = /usr/local/share/mysql/japanese
           user       = jani
 
-       See Section 2.3.2, "Using Option Files".
+       See Section 4.2.3.2, "Using Option Files".
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB
+       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
 
        This documentation is free software; you can redistribute it and/or
-       modify it under the terms of the GNU General Public License as
+       modify it only under the terms of the GNU General Public License as
        published by the Free Software Foundation; version 2 of the License.
 
        This documentation is distributed in the hope that it will be useful,
@@ -309,7 +310,7 @@ SEE ALSO
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       MySQL AB (http://www.mysql.com/).
+       Sun Microsystems, Inc. (http://www.mysql.com/).
 
 
 

@@ -26,7 +26,7 @@ DESCRIPTION
        files in the t subdirectory.
 
        If no suffix is given for the test name, a suffix of .test is assumed.
-       Any leading pathname is ignored. These commands are equivalent:
+       Any leading path name is ignored. These commands are equivalent:
 
           shell> mysql-test-run.pl mytest
           shell> mysql-test-run.pl mytest.test
@@ -71,7 +71,7 @@ DESCRIPTION
        [1]Typical configure Options). If MySQL was configured with the
        --disable-grant-options option, --bootstrap, --skip-grant-tables, and
        --init-file will be disabled. To handle this, set the MYSQLD_BOOTSTRAP
-       environment variable to the full pathname of a server that has all
+       environment variable to the full path name of a server that has all
        options enabled.  mysql-test-run.pl will use that server to perform
        setup; it is not used to run the tests.
 
@@ -111,16 +111,16 @@ DESCRIPTION
        +-----------------+----------------------------+
        |Variable         | Meaning                    |
        +-----------------+----------------------------+
-       |MYSQL_TEST       | Pathname to mysqltest      |
+       |MYSQL_TEST       | Path name to mysqltest     |
        |                 | binary                     |
        +-----------------+----------------------------+
-       |MYSQLTEST_VARDIR | Pathname to the var        |
+       |MYSQLTEST_VARDIR | Path name to the var       |
        |                 | directory that is used for |
        |                 |                 logs,      |
        |                 | temporary files, and so    |
        |                 | forth                      |
        +-----------------+----------------------------+
-       |MYSQLD_BOOTSTRAP | Full pathname to mysqld    |
+       |MYSQLD_BOOTSTRAP | Full path name to mysqld   |
        |                 | that has all options       |
        |                 | enabled                    |
        +-----------------+----------------------------+
@@ -160,6 +160,11 @@ DESCRIPTION
 
           Check test cases for side effects.
 
+       o  --client-bindir
+
+          The path to the directory where client binaries are located. This
+          option was added in MySQL 5.0.66/5.1.27.
+
        o  --client-ddd
 
           Start mysqltest in the ddd debugger.
@@ -171,6 +176,26 @@ DESCRIPTION
        o  --client-gdb
 
           Start mysqltest in the gdb debugger.
+
+       o  --client-libdir
+
+          The path to the directory where client libraries are located. This
+          option was added in MySQL 5.0.66/5.1.27.
+
+       o  --combination=value
+
+          Extra options to pass to mysqld. The value should consist of one or
+          more comma-separated mysqld options. This option is similar to
+          --mysqld but should be given two or more times.  mysql-test-run.pl
+          executes multiple test runs, using the options for each instance of
+          --combination in successive runs. If --combination is given only
+          once, it has no effect. For test runs specific to a given test
+          suite, an alternative to the use of --combination is to create a
+          combinations file in the suite directory. The file should contain a
+          section of options for each test run. See Section 4.9, "Passing
+          Options from mysql-test-run.pl to mysqld or mysqltest".
+
+          This option was added in MySQL 5.1.23/6.0.4.
 
        o  --comment=str
 
@@ -198,6 +223,23 @@ DESCRIPTION
 
           Start mysqld using the named debugger.
 
+       o  --debug-sync-timeout=N
+
+          Controls whether the Debug Sync facility for testing and debugging
+          is enabled. The option value is a timeout in seconds. The default
+          value is 300. A value of 0 disables Debug Sync. The value of this
+          option also becomes the default timeout for individual
+          synchronization points.
+
+          mysql-test-run.pl passes --loose-debug-sync-timeout=N to mysqld. The
+          --loose prefix is used so that mysqld does not fail if Debug Sync is
+          not compiled in.
+
+          For information about using the Debug Sync facility for testing, see
+          Section 4.14, "Thread Synchronization in Test Cases".
+
+          This option was added in MySQL 6.0.6.
+
        o  --do-test=prefix
 
           Run all test cases having a name that begins with the given prefix
@@ -222,6 +264,12 @@ DESCRIPTION
        o  --embedded-server
 
           Use a version of mysqltest built with the embedded server.
+
+       o  --experimental=file_name
+
+          Specify a file that contains a list of test cases that should be
+          displayed with the [ exp-fail ] code rather than [ fail ] if they
+          fail. This option was added in MySQL 5.1.33/6.0.11.
 
        o  --extern
 
@@ -305,9 +353,18 @@ DESCRIPTION
 
           This option was added in MySQL 4.1.22, 5.0.30, and 5.1.13.
 
-       o  --mysqld=str
+       o  --mysqld=value
 
-          Extra options to pass to mysqld.
+          Extra options to pass to mysqld. The value should consist of one or
+          more comma-separated mysqld options. See Section 4.9, "Passing
+          Options from mysql-test-run.pl to mysqld or mysqltest".
+
+       o  --mysqltest=value
+
+          Extra options to pass to mysqltest. The value should consist of one
+          or more comma-separated mysqltest options. See Section 4.9, "Passing
+          Options from mysql-test-run.pl to mysqld or mysqltest". This option
+          was added in MySQL 6.0.6.
 
        o  --ndb-connectstring=str
 
@@ -447,6 +504,15 @@ DESCRIPTION
           not support SSL, mysql-test-run.pl exits with an error message:
           Couldn't find support for SSL
 
+       o  --start
+
+          Initialize and start servers with the startup settings for the first
+          specified test case. For example:
+
+          shell> cd mysql-test
+          shell> ./mysql-test-run.pl --start alias &
+       This option was added in MySQL 5.1.32/6.0.11.
+
        o  --start-and-exit
 
           Initialize and start servers with the startup settings for the
@@ -559,7 +625,7 @@ DESCRIPTION
 
        o  --user=user_name
 
-          The MySQL username to use when connecting to the server.
+          The MySQL user name to use when connecting to the server.
 
        o  --valgrind
 
@@ -585,7 +651,7 @@ DESCRIPTION
 
        o  --valgrind-path=path
 
-          Specify the pathname to the valgrind executable.
+          Specify the path name to the valgrind executable.
 
        o  --vardir=path
 
@@ -647,10 +713,10 @@ DESCRIPTION
        --vardir, --view-protocol.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB
+       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
 
        This documentation is free software; you can redistribute it and/or
-       modify it under the terms of the GNU General Public License as
+       modify it only under the terms of the GNU General Public License as
        published by the Free Software Foundation; version 2 of the License.
 
        This documentation is distributed in the hope that it will be useful,
@@ -673,7 +739,7 @@ SEE ALSO
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       MySQL AB (http://www.mysql.com/).
+       Sun Microsystems, Inc. (http://www.mysql.com/).
 
 
 

@@ -11,20 +11,23 @@ SYNOPSIS
 DESCRIPTION
        The mysqlimport client provides a command-line interface to the LOAD
        DATA INFILE SQL statement. Most options to mysqlimport correspond
-       directly to clauses of LOAD DATA INFILE syntax. See Section 2.5, "LOAD
-       DATA INFILE Syntax".
+       directly to clauses of LOAD DATA INFILE syntax. See Section 12.2.6,
+       "LOAD DATA INFILE Syntax".
 
        Invoke mysqlimport like this:
 
           shell> mysqlimport [options] db_name textfile1 [textfile2 ...]
 
        For each text file named on the command line, mysqlimport strips any
-       extension from the filename and uses the result to determine the name
+       extension from the file name and uses the result to determine the name
        of the table into which to import the file's contents. For example,
        files named patient.txt, patient.text, and patient all would be
        imported into a table named patient.
 
-       mysqlimport supports the following options:
+       mysqlimport supports the options in the following list. It also reads
+       option files and supports the options for processing them described at
+       Section 4.2.3.2.1, "Command-Line Options that Affect Option-File
+       Handling".
 
        o  --help, -?
 
@@ -32,7 +35,7 @@ DESCRIPTION
 
        o  --character-sets-dir=path
 
-          The directory where character sets are installed. See Section 2,
+          The directory where character sets are installed. See Section 9.2,
           "The Character Set Used for Data and Sorting".
 
        o  --columns=column_list, -c column_list
@@ -48,12 +51,12 @@ DESCRIPTION
 
        o  --debug[=debug_options], -# [debug_options]
 
-          Write a debugging log. The debug_options string often is
-          'd:t:o,file_name'.
+          Write a debugging log. A typical debug_options string is
+          'd:t:o,file_name'. The default is 'd:t:o'.
 
        o  --default-character-set=charset_name
 
-          Use charset_name as the default character set. See Section 2, "The
+          Use charset_name as the default character set. See Section 9.2, "The
           Character Set Used for Data and Sorting".
 
        o  --delete, -D
@@ -64,7 +67,7 @@ DESCRIPTION
           --fields-optionally-enclosed-by=..., --fields-escaped-by=...
 
           These options have the same meaning as the corresponding clauses for
-          LOAD DATA INFILE. See Section 2.5, "LOAD DATA INFILE Syntax".
+          LOAD DATA INFILE. See Section 12.2.6, "LOAD DATA INFILE Syntax".
 
        o  --force, -f
 
@@ -92,7 +95,7 @@ DESCRIPTION
           lines terminated with carriage return/linefeed pairs, use
           --lines-terminated-by="\r\n". (You might have to double the
           backslashes, depending on the escaping conventions of your command
-          interpreter.) See Section 2.5, "LOAD DATA INFILE Syntax".
+          interpreter.) See Section 12.2.6, "LOAD DATA INFILE Syntax".
 
        o  --local, -L
 
@@ -117,7 +120,8 @@ DESCRIPTION
           one.
 
           Specifying a password on the command line should be considered
-          insecure. See Section 5.6, "Keeping Your Password Secure".
+          insecure. See Section 5.5.6.2, "End-User Guidelines for Password
+          Security".
 
        o  --pipe, -W
 
@@ -134,7 +138,8 @@ DESCRIPTION
           The connection protocol to use for connecting to the server. It is
           useful when the other connection parameters normally would cause a
           protocol to be used other than the one you want. For details on the
-          allowable values, see Section 2.2, "Connecting to the MySQL Server".
+          allowable values, see Section 4.2.2, "Connecting to the MySQL
+          Server".
 
        o  --replace, -r
 
@@ -159,11 +164,11 @@ DESCRIPTION
 
           Options that begin with --ssl specify whether to connect to the
           server via SSL and indicate where to find SSL keys and certificates.
-          See Section 5.7.3, "SSL Command Options".
+          See Section 5.5.7.3, "SSL Command Options".
 
        o  --user=user_name, -u user_name
 
-          The MySQL username to use when connecting to the server.
+          The MySQL user name to use when connecting to the server.
 
        o  --verbose, -v
 
@@ -199,10 +204,10 @@ DESCRIPTION
           +------+---------------+
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB
+       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
 
        This documentation is free software; you can redistribute it and/or
-       modify it under the terms of the GNU General Public License as
+       modify it only under the terms of the GNU General Public License as
        published by the Free Software Foundation; version 2 of the License.
 
        This documentation is distributed in the hope that it will be useful,
@@ -221,7 +226,7 @@ SEE ALSO
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       MySQL AB (http://www.mysql.com/).
+       Sun Microsystems, Inc. (http://www.mysql.com/).
 
 
 

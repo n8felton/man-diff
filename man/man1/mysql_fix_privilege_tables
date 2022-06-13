@@ -14,12 +14,18 @@ DESCRIPTION
        features. When you update to a new version of MySQL, you should update
        your system tables as well to make sure that their structure is up to
        date. Otherwise, there might be capabilities that you cannot take
-       advantage of. First, make a backup of your mysql database, and then use
-       the following procedure.
+       advantage of.
+
+       mysql_fix_privilege_tables is an older script that previously was used
+       to uprade the system tables in the mysql database after a MySQL
+       upgrade.
 
        Note
        As of MySQL 5.0.19, mysql_fix_privilege_tables is superseded by
        mysql_upgrade, which should be used instead. See mysql_upgrade(1).
+
+       Before running mysql_fix_privilege_tables, make a backup of your mysql
+       database.
 
        On Unix or Unix-like systems, update the system tables by running the
        mysql_fix_privilege_tables script:
@@ -37,8 +43,8 @@ DESCRIPTION
        convert your system tables to the current format. You might see some
        Duplicate column name warnings as it runs; you can ignore them.
 
-       After running the script, stop the server and restart it so that it
-       uses any changes that were made to the system tables.
+       After running the script, stop the server and restart it so that any
+       changes made to the system tables take effect.
 
        On Windows systems, MySQL distributions include a
        mysql_fix_privilege_tables.sql SQL script that you can run using the
@@ -56,7 +62,7 @@ DESCRIPTION
        prompted.
 
        If your installation is located in some other directory, adjust the
-       pathnames appropriately.
+       path names appropriately.
 
        As with the Unix procedure, you might see some Duplicate column name
        warnings as mysql processes the statements in the
@@ -65,10 +71,10 @@ DESCRIPTION
        After running the script, stop the server and restart it.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB
+       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
 
        This documentation is free software; you can redistribute it and/or
-       modify it under the terms of the GNU General Public License as
+       modify it only under the terms of the GNU General Public License as
        published by the Free Software Foundation; version 2 of the License.
 
        This documentation is distributed in the hope that it will be useful,
@@ -87,7 +93,7 @@ SEE ALSO
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       MySQL AB (http://www.mysql.com/).
+       Sun Microsystems, Inc. (http://www.mysql.com/).
 
 
 

@@ -12,6 +12,12 @@ DESCRIPTION
        clamscan is a command line anti-virus scanner.
 
 OPTIONS
+       Most  of  the  options are simple switches which enable or disable some
+       features. Options marked with [=yes/no(*)] can be  optionally  followed
+       by  =yes/=no; if they get called without the boolean argument the scan-
+       ner will assume 'yes'. The asterisk marks the default internal  setting
+       for a given option.
+
        -h, --help
               Print help information and exit.
 
@@ -45,6 +51,9 @@ OPTIONS
        --leave-temps
               Do not remove temporary files.
 
+       -f FILE, --file-list=FILE
+              Scan files listed line by line in FILE.
+
        -r, --recursive
               Scan directories recursively.  All  the  subdirectories  in  the
               given directory will be scanned.
@@ -65,7 +74,7 @@ OPTIONS
        -i, --infected
               Only print infected files.
 
-       --remove
+       --remove[=yes/no(*)]
               Remove infected files. Be careful.
 
        --move=DIRECTORY
@@ -76,7 +85,7 @@ OPTIONS
               Copy infected files into DIRECTORY. Directory must  be  writable
               for the '_clamav' user or unprivileged user running clamscan.
 
-       --detect-pua
+       --detect-pua[=yes/no(*)]
               Detect Possibly Unwanted Applications.
 
        --exclude-pua=CATEGORY
@@ -89,9 +98,9 @@ OPTIONS
               multiple times. See  http://www.clamav.net/support/pua  for  the
               complete list of PUA
 
-       --detect-structured
-              Enable  the  DLP  (Data  Loss  Prevention) module which provides
-              detection of SSN and Credit Card numbers.
+       --detect-structured[=yes/no(*)]
+              Use  the  DLP  (Data  Loss  Prevention) module to detect SSN and
+              Credit Card numbers inside documents/text files.
 
        --structured-ssn-format=X
               X=0: search for valid SSNs formatted  as  xxx-yy-zzzz  (normal);
@@ -106,17 +115,17 @@ OPTIONS
               This  option sets the lowest number of Credit Card numbers found
               in a file to generate a detect (default: 3).
 
-       --no-mail
-              Disable scanning of mail files.
+       --scan-mail[=yes(*)/no]
+              Scan mail files.
 
-       --no-phishing-sigs
-              Disable signature-based phishing detection.
+       --phishing-sigs[=yes(*)/no]
+              Use the signature-based phishing detection.
 
-       --no-phishing-scan-urls
-              Disable url-based heuristic phishing  detection.  This  disables
-              Phishing.Heuristics.Email.*
+       --phishing-scan-urls[=yes(*)/no]
+              Use the url-based heuristic phishing detection (Phishing.Heuris-
+              tics.Email.*)
 
-       --heuristic-scan-precedence
+       --heuristic-scan-precedence[=yes/no(*)]
               Allow  heuristic  match  to  take precedence. When enabled, if a
               heuristic  scan  (such  as  phishingScan)  detects  a   possible
               virus/phish  it  will  stop scan immediately. Recommended, saves
@@ -129,73 +138,73 @@ OPTIONS
               ture-based) is found first,  the  scan  is  interrupted  immedi-
               ately, regardless of this config option.
 
-       --phishing-ssl
-              Always  block  SSL mismatches in URLs (might lead to false posi-
-              tives!).
+       --phishing-ssl[=yes/no(*)]
+              Block SSL mismatches in URLs (might lead to false positives!).
 
-       --phishing-cloak
-              Always block cloaked URLs (might lead to some false  positives).
+       --phishing-cloak[=yes/no(*)]
+              Block cloaked URLs (might lead to some false positives).
 
-       --no-algorithmic
+       --algorithmic-detection[=yes(*)/no]
               In  some  cases (eg. complex malware, exploits in graphic files,
               and others), ClamAV uses special algorithms to provide  accurate
-              detection. This option disables the algorithmic detection.
+              detection.  This  option  can be used to control the algorithmic
+              detection.
 
-       --no-pe
+       --scan-pe[=yes(*)/no]
               PE stands for Portable Executable - it's an executable file for-
               mat used in all 32-bit versions of Windows operating systems. By
-              default  ClamAV performs deeper analysis of executable files and
-              attempts to decompress popular executable packers such  as  UPX,
-              Petite,  and  FSG. This option disables PE support and should be
-              used with care!
+              default ClamAV performs deeper analysis of executable files  and
+              attempts  to  decompress popular executable packers such as UPX,
+              Petite, and FSG.
 
-       --no-elf
+       --scan-elf[=yes(*)/no]
               Executable and Linking Format is a standard format for UN*X exe-
-              cutables. This option disables ELF support.
+              cutables. This option controls the ELF support.
 
-       --no-ole2
-              Disable support for Microsoft Office documents and .msi files.
+       --scan-ole2[=yes(*)/no]
+              Scan Microsoft Office documents and .msi files.
 
-       --no-pdf
-              Disable scanning within PDF files.
+       --scan-pdf[=yes(*)/no]
+              Scan within PDF files.
 
-       --no-html
-              Disable support for HTML detection and normalisation.
+       --scan-html[=yes(*)/no]
+              Detect,  normalize/decrypt  and  scan  HTML  files  and embedded
+              scripts.
 
-       --no-archive
-              Disable archive support built in libclamav.
+       --scan-archive[=yes(*)/no]
+              Scan archives supported by libclamav.
 
-       --detect-broken
+       --detect-broken[=yes/no(*)]
               Mark broken executables as viruses (Broken.Executable).
 
-       --block-encrypted
-              Mark    encrypted    archives    as    viruses   (Encrypted.Zip,
+       --block-encrypted[=yes/no(*)]
+              Mark   encrypted    archives    as    viruses    (Encrypted.Zip,
               Encrypted.RAR).
 
-       --mail-follow-urls
-              If an email contains URLs ClamAV can  download  and  scan  them.
+       --mail-follow-urls[=yes/no(*)]
+              If  an  email  contains  URLs ClamAV can download and scan them.
               WARNING: This option may open your system to a DoS attack. Never
               use it on loaded servers.
 
        --max-files=#n
               Extract at most #n files from each scanned file (when this is an
-              archive,  a  document or another kind of container). This option
+              archive, a document or another kind of container).  This  option
               protects your system against DoS attacks (default: 10000)
 
        --max-filesize=#n
               Extract and scan at most #n kilobytes from each archive. You may
-              pass  the  value  in  megabytes in format xM or xm, where x is a
-              number. This option protects your  system  against  DoS  attacks
-              (default: 25 MB)
+              pass the value in megabytes in format xM or xm,  where  x  is  a
+              number.  This  option  protects  your system against DoS attacks
+              (default: 25 MB, max: <4 GB)
 
        --max-scansize=#n
-              Extract  and  scan  at most #n kilobytes from each scanned file.
-              You may pass the value in megabytes in format xM or xm, where  x
-              is  a  number.  This  option  protects  your  system against DoS
-              attacks (default: 100 MB)
+              Extract and scan at most #n kilobytes from  each  scanned  file.
+              You  may pass the value in megabytes in format xM or xm, where x
+              is a number.  This  option  protects  your  system  against  DoS
+              attacks (default: 100 MB, max: <4 GB)
 
        --max-recursion=#n
-              Set archive recursion level limit.  This  option  protects  your
+              Set  archive  recursion  level  limit. This option protects your
               system against DoS attacks (default: 16).
 
        --max-dir-recursion=#n
@@ -227,8 +236,8 @@ EXAMPLES
               clamscan -r /var/spool/mail
 
 RETURN CODES
-       Note:  some  return  codes  may only appear in a single file mode (when
-       clamscan is started with a single  argument).  Those  are  marked  with
+       Note: some return codes may only appear in a  single  file  mode  (when
+       clamscan  is  started  with  a  single argument). Those are marked with
        (ofm).
 
        0 : No virus found.

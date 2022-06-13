@@ -69,9 +69,9 @@ DESCRIPTION
 
        o  --host=host_name, -h host_name
 
-          The hostname of the local host to use for making a TCP/IP connection
-          to the local server. By default, the connection is made to localhost
-          using a Unix socket file.
+          The host name of the local host to use for making a TCP/IP
+          connection to the local server. By default, the connection is made
+          to localhost using a Unix socket file.
 
        o  --keepold
 
@@ -95,7 +95,8 @@ DESCRIPTION
           password on the command line.
 
           Specifying a password on the command line should be considered
-          insecure. See Section 5.6, "Keeping Your Password Secure".
+          insecure. See Section 5.5.6.2, "End-User Guidelines for Password
+          Security".
 
        o  --port=port_num, -P port_num
 
@@ -137,7 +138,7 @@ DESCRIPTION
 
        o  --user=user_name, -u user_name
 
-          The MySQL username to use when connecting to the server.
+          The MySQL user name to use when connecting to the server.
 
 
        mysqlhotcopy reads the [client] and [mysqlhotcopy] option groups from
@@ -155,10 +156,10 @@ DESCRIPTION
           shell> perldoc mysqlhotcopy
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB
+       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
 
        This documentation is free software; you can redistribute it and/or
-       modify it under the terms of the GNU General Public License as
+       modify it only under the terms of the GNU General Public License as
        published by the Free Software Foundation; version 2 of the License.
 
        This documentation is distributed in the hope that it will be useful,
@@ -177,7 +178,7 @@ SEE ALSO
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       MySQL AB (http://www.mysql.com/).
+       Sun Microsystems, Inc. (http://www.mysql.com/).
 
 
 

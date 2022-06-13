@@ -19,10 +19,10 @@ DESCRIPTION
        The default operation is update (-u). If a recovery is done (-r), all
        writes and possibly updates and deletes are done and errors are only
        counted. The default log file name is myisam.log for myisamlog and
-       isam.log for isamlog if no log_file argument is given, If tables are
+       isam.log for isamlog if no log_file argument is given. If tables are
        named on the command line, only those tables are updated.
 
-       myisamlog understands the following options:
+       myisamlog supports the following options:
 
        o  -?, -I
 
@@ -74,10 +74,10 @@ DESCRIPTION
           Display version information.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB
+       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
 
        This documentation is free software; you can redistribute it and/or
-       modify it under the terms of the GNU General Public License as
+       modify it only under the terms of the GNU General Public License as
        published by the Free Software Foundation; version 2 of the License.
 
        This documentation is distributed in the hope that it will be useful,
@@ -96,7 +96,7 @@ SEE ALSO
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       MySQL AB (http://www.mysql.com/).
+       Sun Microsystems, Inc. (http://www.mysql.com/).
 
 
 

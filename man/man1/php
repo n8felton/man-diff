@@ -105,13 +105,13 @@ OPTIONS
        -E code        Run PHP code after processing all input lines
 
        --syntax-highlight
-       -s             Display colour syntax highlighted source
+       -s             Output HTML syntax highlighted source
 
        --version
        -v             Version number
 
        --stripped
-       -w             Display source with stripped comments and whitespace
+       -w             Output source with stripped comments and whitespace
 
        --zend-extension file
        -z file        Load Zend extension file
@@ -209,10 +209,10 @@ AUTHORS
        of contributors all around the world.
 
 VERSION INFORMATION
-       This manpage describes php, version 5.2.8.
+       This manpage describes php, version 5.2.10.
 
 COPYRIGHT
-       Copyright (C) 1997-2008 The PHP Group
+       Copyright (C) 1997-2009 The PHP Group
 
        This source file is subject to version 3.01 of the PHP license, that is
        bundled with this package in the file LICENSE, and is available through

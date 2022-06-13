@@ -26,8 +26,8 @@ DESCRIPTION
 
        o  Can execute external shell commands
 
-       o  Can test whether the result from a SQL statement or shell command is
-          as expected
+       o  Can test whether the result from an SQL statement or shell command
+          is as expected
 
        o  Can connect to one or more standalone mysqld servers and switch
           between connections
@@ -43,6 +43,10 @@ mysqltest this way, you normally invoke it like this:
    shell> mysqltest [options] [db_name] < test_file
 
 You can also name the test case file with a --test-file=file_name option.
+
+The exit value from mysqltest is 0 for success, 1 for failure, and 62 if it
+skips the test case (for example, if after checking some preconditions it
+decides not to run the test).
 
 mysqltest supports the following options:
 
@@ -221,7 +225,7 @@ o  --tmpdir=dir_name, -t dir_name
 
 o  --user=user_name, -u user_name
 
-   The MySQL username to use when connecting to the server.
+   The MySQL user name to use when connecting to the server.
 
 o  --verbose, -v
 
@@ -237,10 +241,10 @@ o  --view-protocol
    MySQL 5.0.19.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB
+       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
 
        This documentation is free software; you can redistribute it and/or
-       modify it under the terms of the GNU General Public License as
+       modify it only under the terms of the GNU General Public License as
        published by the Free Software Foundation; version 2 of the License.
 
        This documentation is distributed in the hope that it will be useful,
@@ -259,7 +263,7 @@ SEE ALSO
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       MySQL AB (http://www.mysql.com/).
+       Sun Microsystems, Inc. (http://www.mysql.com/).
 
 
 

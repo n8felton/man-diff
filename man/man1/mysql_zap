@@ -25,7 +25,7 @@ DESCRIPTION
        signal to send to each process. Otherwise, mysql_zap tries first with
        TERM (signal 15) and then with KILL (signal 9).
 
-       mysql_zap understands the following additional options:
+       mysql_zap supports the following additional options:
 
        o  --help, -?, -I
 
@@ -42,10 +42,10 @@ DESCRIPTION
           it.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB
+       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
 
        This documentation is free software; you can redistribute it and/or
-       modify it under the terms of the GNU General Public License as
+       modify it only under the terms of the GNU General Public License as
        published by the Free Software Foundation; version 2 of the License.
 
        This documentation is distributed in the hope that it will be useful,
@@ -64,7 +64,7 @@ SEE ALSO
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       MySQL AB (http://www.mysql.com/).
+       Sun Microsystems, Inc. (http://www.mysql.com/).
 
 
 

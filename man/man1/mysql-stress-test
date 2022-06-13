@@ -50,7 +50,7 @@ DESCRIPTION
 
        o  --mysqltest=path
 
-          The pathname to the mysqltest program.
+          The path name to the mysqltest program.
 
        o  --server-database=db_name
 
@@ -58,9 +58,9 @@ DESCRIPTION
 
        o  --server-host=host_name
 
-          The hostname of the local host to use for making a TCP/IP connection
-          to the local server. By default, the connection is made to localhost
-          using a Unix socket file.
+          The host name of the local host to use for making a TCP/IP
+          connection to the local server. By default, the connection is made
+          to localhost using a Unix socket file.
 
        o  --server-logs-dir=path
 
@@ -85,8 +85,8 @@ DESCRIPTION
 
        o  --server-user=user_name
 
-          The MySQL username to use when connecting to the server. The default
-          is root.
+          The MySQL user name to use when connecting to the server. The
+          default is root.
 
        o  --sleep-time=N
 
@@ -158,10 +158,10 @@ DESCRIPTION
           Verbose mode. Print more information about what the program does.
 
 COPYRIGHT
-       Copyright 2007-2008 MySQL AB
+       Copyright 2007-2008 MySQL AB, 2009 Sun Microsystems, Inc.
 
        This documentation is free software; you can redistribute it and/or
-       modify it under the terms of the GNU General Public License as
+       modify it only under the terms of the GNU General Public License as
        published by the Free Software Foundation; version 2 of the License.
 
        This documentation is distributed in the hope that it will be useful,
@@ -180,7 +180,7 @@ SEE ALSO
        http://dev.mysql.com/doc/.
 
 AUTHOR
-       MySQL AB (http://www.mysql.com/).
+       Sun Microsystems, Inc. (http://www.mysql.com/).
 
 
 
