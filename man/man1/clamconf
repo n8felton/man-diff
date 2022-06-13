@@ -1,0 +1,42 @@
+Config tool(1)                  Clam AntiVirus                  Config tool(1)
+
+
+
+NAME
+       clamconf - Clam AntiVirus configuration utility
+
+SYNOPSIS
+       clamconf [options]
+
+DESCRIPTION
+       clamconf displays the values of configuration options.
+
+OPTIONS
+       -h, --help
+              Display help and exit.
+
+       -V, --version
+              Display software version and exit.
+
+       -c DIR, --config-dir DIR
+              Search  for configuration files clamd.conf and freshclam.conf in
+              DIR.
+
+       -n, --non-default
+              Only print non-default settings.
+
+       -g CONFIG_NAME, --generate-config=CONFIG_NAME
+              Generate example configuration file.
+
+CREDITS
+       The idea of this tool is based on Postfix's postconf. clamconf was cre-
+       ated under pressure from Tomasz Papszun ;-)
+
+AUTHOR
+       Tomasz Kojm <tkojm@clamav.net>
+
+SEE ALSO
+       clamd.conf(5), freshclam.conf(5)
+
+
+

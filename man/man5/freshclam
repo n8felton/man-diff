@@ -115,6 +115,12 @@ DIRECTIVES
               next database update.
               Default: no
 
+       DatabaseCustomURL STR
+              With  this  option  you  can  provide custom sources (http:// or
+              file://) for database files. This option can  be  used  multiple
+              times.
+              Default: no custom URLs
+
        HTTPProxyServer STR, HTTPProxyPort NUMBER
               Use given proxy server and TCP port for database downloads.
 
@@ -170,8 +176,8 @@ DIRECTIVES
               Project  about  the latest virus detections in your environment.
               The ClamAV maintainers will then use this data to determine what
               types  of malware are the most detected in the field and in what
-              geographic area they are. This feature requires LogTime and Log-
-              File  to  be enabled in clamd.conf. The path for clamd.conf file
+              geographic area they are. Freshclam will  connect  to  clamd  in
+              order to get the recent statistics. The path for clamd.conf file
               must be provided.
               Default: disabled
 

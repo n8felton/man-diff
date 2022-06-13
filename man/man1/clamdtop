@@ -1,0 +1,198 @@
+Clamdtop(1)                     Clam AntiVirus                     Clamdtop(1)
+
+
+
+NAME
+       clamdtop - monitor the Clam AntiVirus Daemon
+
+SYNOPSIS
+       clamdtop [options] [clamdspec ...]
+
+DESCRIPTION
+       clamdtop  is  a  tool  to  monitor  one or multiple clamd(s).  It has a
+       (color) ncurses interface, that shows the jobs in clamd's queue, memory
+       usage,  and  information  about the loaded signature database.  You can
+       specify on the command-line to which clamd(s) it should connect to.  By
+       default  it  will  attempt  to connect to the local clamd as defined in
+       clamd.conf.
+
+
+OPTIONS
+       -h, --help
+              Display help information and exit.
+
+       -V, --version
+              Print version number and exit.   --config-file=FILE  Read  clamd
+              settings from FILE, to determine how to connect to it.
+
+       clamdspec
+              Specifies  the  clamd  to connect to: either a path to the local
+              (unix domain) socket of clamd, or an IP address and an port num-
+              ber  (that  defaults  to  3310)  to connect to a local or remote
+              clamd using TCP/IP.
+
+
+OVERVIEW
+   KEYS:
+       H       Displays a short helpscreen, describing the meaning of  various
+              elements on the display.
+
+       Q       Quits clamdtop
+
+       R       Resets the maximum values.
+
+       up arrow, down arrow
+
+              If you are monitoring multiple clamds then clamdtop will show an
+              overview screen by default. You can use the up arrow  and   down
+              arrow  keys  to  cycle  through each clamd individually, and the
+              overview screen.  A blue bar will highlight the  clamd  that  is
+              currently  shown  in  detail. On the overview screen none of the
+              clamds is selected (hence no blue bar),  and  you  can  see  the
+              items from the queue of all clamds.
+
+
+   The top bar
+       Shows  the  version  of clamdtop and the current time. Clamdtop updates
+       the display once every 2 seconds.
+
+
+   The list of clamds
+       Shows the clamds that clamdtop is connected to,  and  statistics  about
+       them.
+
+
+       NO     Unique clamd number
+
+       CONNTIME
+              How long clamdtop has been connected (reset upon a reconnect)
+
+       LIV    Total number of live threads
+
+       IDL    Total number of idle threads
+
+       QUEUE  Number of items in queue
+
+       MAXQ   Maximum number of items observed in the queue
+
+       MEM    Total memory usage (if available)
+
+       HOST   Which clamd, local means unix socket
+
+       ENGINE Engine version
+
+       DBVER  Database version
+
+       DBTIME Database publish time
+
+   Clamd detailed view
+       Primary threads live
+              The number of threads that are executing commands or scanning.
+
+       Primary threads idle
+              The  number of threads that are idle, waiting for commands. They
+              will exit after IdleTimeout (30 seconds).
+
+       Primary threads max
+              The maximum number of threads configured.
+
+       Queue items
+              The number of items (scanjobs) in clamd's queue that are waiting
+              for a free thread to be processed.
+
+       Queue max
+              The maximum number of items observed in clamd's queue.
+
+   The memory usage view
+       If available, it will show details on clamd's memory usage:
+
+       Mem heap
+              The amount of memory used by libc from the heap in MegaBytes.
+
+       Mem mmap
+              The  amount of memory used by libc from mmap-allocated memory in
+              MegaBytes.
+
+       Mem unused
+              The amount of memory that can be reclaimed by libc.
+
+       Libc used
+              The amount of useful memory allocated by libc.
+
+       Libc free
+              The amount of memory allocated by libc, that can't be freed  due
+              to fragmentation.
+
+       Libc total
+              The amount of memory allocated by libc from the system in total.
+
+       Pool count
+              The number of mmap regions allocated by clamd' memory pool allo-
+              cator (for the signature database).
+
+       Pool used
+              The  amount of memory used by clamd's memory pool allocator (for
+              the signature database).
+
+       Total  The total amount of memory  allocated  by  clamd's  memory  pool
+              allocator.
+
+   The clamd job queue
+       COMMAND
+              Kind  of  command  being  executed, STATS is clamdtop, SCAN/CON-
+              TSCAN/FILDES/MULTISCAN is scan of a  file/directory,  MULTISCAN-
+              FILE is scan of one item by a MULTISCAN job.
+
+       QUEUEDSINCE
+              The time since the command got queued, until now.
+
+       FILE   The name of the file being processed (if applicable).
+
+EXAMPLES
+       (1) To connect to the clamd configured in the default clamd.conf:
+
+              clamdtop
+
+       (2) To connect to the clamd configured in another clamd.conf:
+
+              clamdtop --config-file=/path/to/clamd.conf
+
+
+       (3)  To  connect to a clamd running on another machine (192.168.0.3) on
+       the LAN:
+
+              clamdtop 192.168.0.3
+
+
+       (4) To connect to a clamd running on another machine (192.168.0.3) on a
+       non-default port (3410):
+
+              clamdtop 192.168.0.3:3410
+
+       (5) To monitor the local clamd and 2 other remote clamds over TCP/IP:
+
+              clamdtop localhost 192.168.0.3 192.168.0.4
+
+NOTES
+       clamdtop uses colors if the terminal is capable of colors.  If you know
+       your terminal is capable of colors, yet you  aren't  seeing  any,  then
+       check  that your TERM environment variable is set correctly.  For exam-
+       ple try setting it to TERM=xterm-color if  you  are  in  an  xterm-like
+       environment.
+
+RETURN CODES
+       0 : Normal terminator
+
+       >0: Error occured.
+
+CREDITS
+       Please check the full documentation for credits.
+
+AUTHOR
+       TA9|rA9|k Edvin <edwin@clamav.net>
+
+SEE ALSO
+       clamd(8), clamd.conf(5)
+
+
+

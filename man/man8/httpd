@@ -10,7 +10,7 @@ SYNOPSIS
        httpd [ -d serverroot ] [ -f config ] [ -C directive ] [ -c directive ]
        [ -D parameter ] [ -e level ] [ -E file  ]  [  -k  start|restart|grace-
        ful|stop|graceful-stop ] [ -R directory ] [ -h ] [ -l ] [ -L ] [ -S ] [
-       -t ] [ -v ] [ -V ] [ -X ] [ -M ]
+       -t ] [ -v ] [ -V ] [ -X ] [ -M ] [ -T ]
 
 
        On Windows systems, the following additional arguments are available:
@@ -87,6 +87,9 @@ OPTIONS
 
        -S     Show the settings as parsed from the config file (currently only
               shows the virtualhost settings).
+
+       -T (Available in 2.2.17 and later)
+              Skip document root check at startup/restart.
 
        -t     Run syntax tests for configuration files only. The program imme-
               diately  exits  after  these  syntax parsing tests with either a

@@ -1,0 +1,40 @@
+clamav-milter(8)                Clam AntiVirus                clamav-milter(8)
+
+
+
+NAME
+       clamav-milter - milter compatible mail scanner
+
+SYNOPSIS
+       clamav-milter [options]
+
+DESCRIPTION
+       Clamav-milter  is a filter for sendmail(1) mail server.  It uses a mail
+       scanning engine built into clamd(8).
+
+       Clamav-milter can use load balancing and fault tolerant  techniques  to
+       connect  to  more  than  one clamd(8) server and seamlessly hot-swap to
+       even the load between different  machines  and  to  keep  scanning  for
+       viruses even when a server goes down.
+
+OPTIONS
+       -h, --help
+              Output help information and exit.
+
+       -V, --version
+              Print the version number and exit.
+
+       -c FILE, --config-file=FILE
+              Read configuration from FILE.
+
+FILES
+       /private/etc/clamav-milter.conf
+
+AUTHOR
+       aCaB <acab@clamav.net>
+
+SEE ALSO
+       sendmail(8), clamav-milter.conf(5), clamd(8), clamd.conf(5)
+
+
+

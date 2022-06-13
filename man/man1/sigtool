@@ -59,7 +59,10 @@ OPTIONS
               ClamAV Signing Service address (for virus  database  maintainers
               only).
 
-       --unpack FILE, -u FILE
+       --datadir=DIR
+              Use DIR as the default database directory for all operations.
+
+       --unpack=FILE, -u FILE
               Unpack FILE (CVD) to a current directory.
 
        --unpack-current
@@ -88,7 +91,10 @@ OPTIONS
               --find-sigs)
 
        -fREGEX, --test-sigs=DATABASE TARGET_FILE
-              Test all signatures from DATABASE against TARGET_FILE.
+              Test  all  signatures  from  DATABASE  against TARGET_FILE. This
+              option will only give valid results if the target  file  is  the
+              final  one  (after unpacking, normalization, etc.) for which the
+              signatures were created.
 
 EXAMPLES
        Generate hex string from testfile and save it to testfile.hex:
