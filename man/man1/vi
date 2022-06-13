@@ -356,49 +356,49 @@ ON-LINE HELP
        viewed in this way, for example ":help syntax.txt".
 
 FILES
-       /usr/share/vim/vim72/doc/*.txt
+       /usr/local/lib/vim/doc/*.txt
                       The Vim documentation files.  Use ":help  doc-file-list"
                       to get the complete list.
 
-       /usr/share/vim/vim72/doc/tags
+       /usr/local/lib/vim/doc/tags
                       The  tags file used for finding information in the docu-
                       mentation files.
 
-       /usr/share/vim/vim72/syntax/syntax.vim
+       /usr/local/lib/vim/syntax/syntax.vim
                       System wide syntax initializations.
 
-       /usr/share/vim/vim72/syntax/*.vim
+       /usr/local/lib/vim/syntax/*.vim
                       Syntax files for various languages.
 
-       /usr/share/vim/vimrc
+       /usr/local/lib/vim/vimrc
                       System wide Vim initializations.
 
        ~/.vimrc       Your personal Vim initializations.
 
-       /usr/share/vim/gvimrc
+       /usr/local/lib/vim/gvimrc
                       System wide gvim initializations.
 
        ~/.gvimrc      Your personal gvim initializations.
 
-       /usr/share/vim/vim72/optwin.vim
+       /usr/local/lib/vim/optwin.vim
                       Script used for the ":options" command, a  nice  way  to
                       view and set options.
 
-       /usr/share/vim/vim72/menu.vim
+       /usr/local/lib/vim/menu.vim
                       System wide menu initializations for gvim.
 
-       /usr/share/vim/vim72/bugreport.vim
+       /usr/local/lib/vim/bugreport.vim
                       Script to generate a bug report.  See ":help bugs".
 
-       /usr/share/vim/vim72/filetype.vim
+       /usr/local/lib/vim/filetype.vim
                       Script  to  detect  the type of a file by its name.  See
                       ":help 'filetype'".
 
-       /usr/share/vim/vim72/scripts.vim
+       /usr/local/lib/vim/scripts.vim
                       Script to detect the type of a  file  by  its  contents.
                       See ":help 'filetype'".
 
-       /usr/share/vim/vim72/print/*.ps
+       /usr/local/lib/vim/print/*.ps
                       Files used for PostScript printing.
 
        For recent info read the VIM home page:

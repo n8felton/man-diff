@@ -11,10 +11,10 @@ SYNOPSIS
        -C cookie-name=value ] [ -d ] [ -e csv-file ] [ -f protocol ] [ -g gnu-
        plot-file ] [ -h ] [ -H custom-header ] [ -i ] [ -k ] [ -n requests ] [
        -p POST-file ] [ -P proxy-auth-username:password ] [ -q ] [ -r ] [ -s ]
-       [ -S ] [ -t timelimit ] [ -T content-type ] [ -v verbosity] [ -V ] [ -w
-       ] [ -x <table>-attributes ] [ -X proxy[:port] ] [ -y <tr>-attributes  ]
-       [   -z   <td>-attributes   ]   [  -Z  ciphersuite  ]  [http[s]://]host-
-       name[:port]/path
+       [  -S  ] [ -t timelimit ] [ -T content-type ] [ -u PUT-file ] [ -v ver-
+       bosity] [ -V ] [ -w ] [ -x <table>-attributes ] [ -X proxy[:port]  ]  [
+       -y  <tr>-attributes  ]  [  -z  <td>-attributes  ]  [  -Z  ciphersuite ]
+       [http[s]://]hostname[:port]/path
 
 
 
@@ -114,8 +114,11 @@ OPTIONS
               timelimit.
 
        -T content-type
-              Content-type header to use for POST data, eg. application/x-www-
-              form-urlencoded. Default: text/plain.
+              Content-type header to use for POST/PUT data, eg. application/x-
+              www-form-urlencoded. Default: text/plain.
+
+       -u PUT-file
+              File containing data to PUT. Remember to also set -T.
 
        -v verbosity
               Set verbosity level - 4 and above prints information on headers,

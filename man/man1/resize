@@ -25,7 +25,7 @@ DESCRIPTION
 
        Users of versions of the Bourne shell (usually known as  /bin/sh)  that
        don't  have  command functions will need to send the output to a tempo-
-       rary file and the read it back in with the ``.'' command:
+       rary file and then read it back in with the "." command:
 
                $  resize > /tmp/out
                $  . /tmp/out

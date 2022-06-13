@@ -688,15 +688,15 @@ OPTIONS
 
               If this option is used several times, the last one will be used.
 
-       --krb4 <level>
-              (FTP) Enable Kerberos4 authentication and use. The level must be
+       --krb <level>
+              (FTP)  Enable Kerberos authentication and use. The level must be
               entered and should be one of 'clear', 'safe', 'confidential'  or
               'private'.  Should  you  use  a  level that is not one of these,
               'private' will instead be used.
 
-              This option requires that the library was built  with  Kerberos4
-              support.  This  is  not  very common. Use -V/--version to see if
-              your curl supports it.
+              This option requires that the library was built  with  kerberos4
+              or  GSSAPI (GSS-Negotiate) support. This is not very common. Use
+              -V/--version to see if your curl supports it.
 
               If this option is used several times, the last one will be used.
 
@@ -1349,7 +1349,7 @@ OPTIONS
               NTLM   NTLM authentication is supported.
 
               GSS-Negotiate
-                     Negotiate authentication is supported.
+                     Negotiate authentication and krb5 for ftp is supported.
 
               Debug  This curl uses a libcurl built with Debug.  This  enables
                      more  error-tracking  and memory debugging etc. For curl-

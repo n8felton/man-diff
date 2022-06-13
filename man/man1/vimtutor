@@ -28,10 +28,10 @@ DESCRIPTION
        Vim is always started in Vi compatible mode.
 
 FILES
-       /usr/share/vim/vim72/tutor/tutor[.language]
+       /usr/local/lib/vim/tutor/tutor[.language]
                       The Vimtutor text file(s).
 
-       /usr/share/vim/vim72/tutor/tutor.vim
+       /usr/local/lib/vim/tutor/tutor.vim
                       The Vim script used to copy the Vimtutor text file.
 
 AUTHOR
