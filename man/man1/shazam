@@ -1,0 +1,170 @@
+shazam(1)                    General Commands Manual                   shazam(1)
+
+
+
+NAME
+     shazam – A utility for shazaming
+
+
+SYNOPSIS
+     shazam custom-catalog create [--signature-asset signature-asset]
+            [--media-items media-items] [--output output-custom-catalog]
+
+
+     shazam custom-catalog display [--input input-custom-catalog]
+
+
+     shazam custom-catalog update [--input input-custom-catalog]
+            [--signature-asset signature-asset] [--media-items media-items]
+            [--output output-custom-catalog]
+
+
+     shazam custom-catalog remove [--input input-custom-catalog]
+            [--signature-id signature-id] [--media-item-ids media-item-ids]
+            [--output output-custom-catalog]
+
+
+     shazam custom-catalog export [--input input-custom-catalog]
+            [--output output-directory]
+
+
+     shazam signature [--input input-media] [--output output-signature]
+
+
+     shazam <subcommand> [--help] [--verbose]
+
+
+
+
+DESCRIPTION
+     The shazam utility offers commands for creating signatures as well as
+     processing custom catalogs to build better audio experiences with
+     ShazamKit. Current operations supported for a custom catalog include:
+
+     -   Creating a custom catalog from a signature asset file and csv of
+         metadata.
+
+     -   Updating an existing custom catalog with a signature asset file and csv
+         of metadata.
+
+     -   Exporting the signatures and meta data contents of a custom catalog
+         file to disk.
+
+     -   Removing a signature and/or media item entry from a custom catalog
+         file.
+
+     -   Displaying the contents of an existing custom catalog file.
+
+     The latest ShazamKit documentation can be viewed at
+     https://developer.apple.com/shazamkit.
+
+
+SHAZAM COMMANDS
+     The commands supported by shazam are divided into Signature and Custom
+     Catalog commands.
+
+
+   Signature Commands
+
+
+     shazam signature
+             Generate a signature file from a media input
+
+
+   Custom Catalog Commands
+
+
+     shazam custom-catalog create
+             Generate a custom catalog file from a signature asset file and a
+             media items csv file.
+
+
+     shazam custom-catalog display
+             Display the contents of a custom catalog file.
+
+
+     shazam custom-catalog update
+             Update an existing custom catalog file with a signature asset file
+             and a media items csv file.
+
+
+     shazam custom-catalog export
+             Export the contents of a custom catalog file to disk
+
+
+     shazam custom-catalog remove
+             Remove a signature and/or media item entry from a custom catalog
+             file.
+
+
+OPTIONS
+     The options supported by the commands are as follows:
+
+
+     -h, --help
+             Show help information about the command.
+
+
+     -i,--input input-custom-catalog
+             Path to an existing custom catalog file to perform an operation on.
+
+
+     -i,--input input-media
+             Path to an audio or video file to generate a shazam signature from.
+
+
+     -m,--media-items media-items
+             Path to a csv file containing metadata to be associated with a
+             shazam signature.
+
+
+     -m,--media-item-ids media-item-ids
+             Comma separated list of media item IDs associated with a signature
+             in a custom catalog. Use the display command to display the IDs of
+             media items associated with a signature in a custom catalog.
+
+
+     -o,--output output-custom-catalog
+             Path to save a new custom catalog file. If this is a directory a
+             new custom catalog file is created in that directory with the same
+             name as the signature asset file. For the shazam custom-catalog
+             update command, the custom catalog file name will be saved in the
+             specified directory with the same name as input-custom-catalog
+
+
+     -o,--output output-directory
+             Path to a directory to export the contents of a custom catalog to.
+             Signatures are exported as a .shazamsignature file having the ID of
+             the signature as part of the exported file name. Media items are
+             exported as a .csv file per shazam signature and have the same ID
+             of the signature they are associated with as part of the exported
+             file name.
+
+
+     -o,--output output-signature
+             Path to save the new shazam signature. If output-signature is a
+             directory, the shazam signature is created in that directory with
+             the same name as the input-media file. If output-signature is not
+             specified, the shazam signature is saved in the current directory
+             with the same name as the input-media file.
+
+
+     -s,--signature-asset signature-asset
+             Path to an audio, video or shazam signature file.
+
+
+     -s,--signature-id signature-id
+             Unique identifier of a signature in a custom catalog. Use the
+             display command to display the ID of a signature in a custom
+             catalog.
+
+
+     -v, --verbose
+             Show verbose information about the operation.
+
+
+
+NOTES
+     1.   ShazamKit Documentation
+          https://developer.apple.com/shazamkit
+

@@ -1,0 +1,10 @@
+linkd(1)                     General Commands Manual                    linkd(1)
+
+NAME
+     linkd, LinkDaemon – daemon that handles interaction with applications via
+     their Link interfaces.
+
+DESCRIPTION
+     linkd, The linkd daemon powers features centered around allowing Siri and
+     Shortcuts to interact with apps.
+
