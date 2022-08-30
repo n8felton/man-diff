@@ -1064,9 +1064,12 @@ OPTIONS
               See also -o, --output.
 
        --egd-file <file>
-              (TLS) Specify the path name to the Entropy Gathering Daemon
-              socket. The socket is used to seed the random engine for SSL
-              connections.
+              (TLS) Deprecated option. This option is ignored by curl since
+              7.84.0. Prior to that it only had an effect on curl if built to
+              use old versions of OpenSSL.
+
+              Specify the path name to the Entropy Gathering Daemon socket. The
+              socket is used to seed the random engine for SSL connections.
 
               Example:
                curl --egd-file /random/here https://example.com
@@ -2251,12 +2254,16 @@ OPTIONS
               See also -L, --location.
 
        -m, --max-time <fractional seconds>
-              Maximum time in seconds that you allow the whole operation to
-              take.  This is useful for preventing your batch jobs from hanging
-              for hours due to slow networks or links going down.  Since 7.32.0,
+              Maximum time in seconds that you allow each transfer to take.
+              This is useful for preventing your batch jobs from hanging for
+              hours due to slow networks or links going down.  Since 7.32.0,
               this option accepts decimal values, but the actual timeout will
               decrease in accuracy as the specified timeout increases in decimal
               precision.
+
+              If you enable retrying the transfer (--retry) then the maximum
+              time counter is reset each time the transfer is retried. You can
+              use --retry-max-time to limit the retry time.
 
               If this option is used several times, the last one will be used.
 
@@ -2264,7 +2271,7 @@ OPTIONS
                curl --max-time 10 https://example.com
                curl --max-time 2.92 https://example.com
 
-              See also --connect-timeout.
+              See also --connect-timeout and --retry-max-time.
 
        --metalink
               This option was previously used to specify a metalink resource.
@@ -3133,6 +3140,9 @@ OPTIONS
               specific SOCKS version to be used.
 
 
+              Unix domain sockets are supported for socks proxy. Set localhost
+              for the host part. e.g. socks5h://localhost/path/to/socket.sock
+
               HTTPS proxy support via https:// protocol prefix was added in
               7.52.0 for OpenSSL, GnuTLS and NSS.
 
@@ -3304,9 +3314,13 @@ OPTIONS
        See also -X, --request.
 
        --random-file <file>
+              Deprecated option. This option is ignored by curl since 7.84.0.
+              Prior to that it only had an effect on curl if built to use old
+              versions of OpenSSL.
+
               Specify the path name to file containing what will be considered
               as random data. The data may be used to seed the random engine for
-              SSL connections. See also the --egd-file option.
+              SSL connections.
 
               Example:
                curl --random-file rubbish https://example.com
@@ -3355,6 +3369,43 @@ OPTIONS
                curl --range 22-44 https://example.com
 
               See also -C, --continue-at and -a, --append.
+
+       --rate <max request rate>
+              Specify the maximum transfer frequency you allow curl to use - in
+              number of transfer starts per time unit (sometimes called request
+              rate). Without this option, curl will start the next transfer as
+              fast as possible.
+
+              If given several URLs and a transfer completes faster than the
+              allowed rate, curl will wait until the next transfer is started to
+              maintain the requested rate. This option has no effect when
+              --parallel is used.
+
+              The request rate is provided as "N/U" where N is an integer number
+              and U is a time unit. Supported units are 's' (second), 'm'
+              (minute), 'h' (hour) and 'd' /(day, as in a 24 hour unit). The
+              default time unit, if no "/U" is provided, is number of transfers
+              per hour.
+
+              If curl is told to allow 10 requests per minute, it will not start
+              the next request until 6 seconds have elapsed since the previous
+              transfer was started.
+
+              This function uses millisecond resolution. If the allowed
+              frequency is set more than 1000 per second, it will instead run
+              unrestricted.
+
+              When retrying transfers, enabled with --retry, the separate retry
+              delay logic is used and not this setting.
+
+              If this option is used several times, the last one will be used.
+
+              Examples:
+               curl --rate 2/s https://example.com
+               curl --rate 3/h https://example.com
+               curl --rate 14/m https://example.com
+
+              See also --limit-rate and --retry-delay. Added in 7.84.0.
 
        --raw  (HTTP) When used, it disables all internal HTTP decoding of
               content or transfer encodings and instead makes them passed on
@@ -3430,7 +3481,7 @@ OPTIONS
               The file will be saved in the current working directory. If you
               want the file saved in a different directory, make sure you change
               the current working directory before invoking curl with this
-              option.
+              option or use --output-dir.
 
               The remote file name to use for saving is extracted from the given
               URL, nothing else, and if it already exists it will be
@@ -3449,7 +3500,8 @@ OPTIONS
               Example:
                curl -O https://example.com/filename
 
-              See also --remote-name-all.
+              See also --remote-name-all, --output-dir and -J, --remote-header-
+              name.
 
        -R, --remote-time
               When used, this will make curl attempt to figure out the timestamp
@@ -3737,6 +3789,9 @@ OPTIONS
               curl resolve the host name and passing the address on to the
               proxy.
 
+              To specify proxy on a unix domain socket, use localhost for host,
+              e.g.  socks4://localhost/path/to/socket.sock
+
               This option overrides any previous use of -x, --proxy, as they are
               mutually exclusive.
 
@@ -3759,6 +3814,9 @@ OPTIONS
               Use the specified SOCKS4a proxy. If the port number is not
               specified, it is assumed at port 1080. This asks the proxy to
               resolve the host name.
+
+              To specify proxy on a unix domain socket, use localhost for host,
+              e.g.  socks4a://localhost/path/to/socket.sock
 
               This option overrides any previous use of -x, --proxy, as they are
               mutually exclusive.
@@ -3831,6 +3889,9 @@ OPTIONS
               name). If the port number is not specified, it is assumed at port
               1080.
 
+              To specify proxy on a unix domain socket, use localhost for host,
+              e.g.  socks5h://localhost/path/to/socket.sock
+
               This option overrides any previous use of -x, --proxy, as they are
               mutually exclusive.
 
@@ -3854,6 +3915,9 @@ OPTIONS
               locally. If the port number is not specified, it is assumed at
               port 1080.
 
+              To specify proxy on a unix domain socket, use localhost for host,
+              e.g.  socks5://localhost/path/to/socket.sock
+
               This option overrides any previous use of -x, --proxy, as they are
               mutually exclusive.
 
@@ -3876,7 +3940,7 @@ OPTIONS
               See also --socks5-hostname and --socks4a.
 
        -Y, --speed-limit <speed>
-              If a download is slower than this given speed (in bytes per
+              If a transfer is slower than this given speed (in bytes per
               second) for speed-time seconds it gets aborted. speed-time is set
               with --speed-time and is 30 if not set.
 
@@ -3888,14 +3952,14 @@ OPTIONS
               See also -y, --speed-time, --limit-rate and -m, --max-time.
 
        -y, --speed-time <seconds>
-              If a download is slower than speed-limit bytes per second during a
-              speed-time period, the download gets aborted. If speed-time is
+              If a transfer runs slower than speed-limit bytes per second during
+              a speed-time period, the transfer is aborted. If speed-time is
               used, the default speed-limit will be 1 unless set with -Y,
               --speed-limit.
 
-              This option controls transfers and thus will not affect slow
-              connects etc. If this is a concern for you, try the --connect-
-              timeout option.
+              This option controls transfers (in both directions) but will not
+              affect slow connects etc. If this is a concern for you, try the
+              --connect-timeout option.
 
               If this option is used several times, the last one will be used.
 
@@ -4237,7 +4301,7 @@ OPTIONS
               Example:
                curl --tlsv1.1 https://example.com
 
-              See also --tlsv1.3. Added in 7.34.0.
+              See also --tlsv1.3 and --tls-max. Added in 7.34.0.
 
        --tlsv1.2
               (TLS) Forces curl to use TLS version 1.2 or later when connecting
@@ -4250,7 +4314,7 @@ OPTIONS
               Example:
                curl --tlsv1.2 https://example.com
 
-              See also --tlsv1.3. Added in 7.34.0.
+              See also --tlsv1.3 and --tls-max. Added in 7.34.0.
 
        --tlsv1.3
               (TLS) Forces curl to use TLS version 1.3 or later when connecting
@@ -4264,7 +4328,7 @@ OPTIONS
               Example:
                curl --tlsv1.3 https://example.com
 
-              See also --tlsv1.2. Added in 7.52.0.
+              See also --tlsv1.2 and --tls-max. Added in 7.52.0.
 
        -1, --tlsv1
               (SSL) Tells curl to use at least TLS version 1.x when negotiating
@@ -4609,11 +4673,11 @@ OPTIONS
               The output will be written to standard output, but this can be
               switched to standard error by using %{stderr}.
 
-              EXPERIMENTAL feature: Output HTTP headers from the most recent
-              request by using %header{name} where name is the case insensitive
-              name of the header (without the trailing colon). The header
-              contents are exactly as sent over the network, with leading and
-              trailing whitespace trimmed. Added in curl 7.83.0.
+              Output HTTP headers from the most recent request by using
+              %header{name} where name is the case insensitive name of the
+              header (without the trailing colon). The header contents are
+              exactly as sent over the network, with leading and trailing
+              whitespace trimmed. Added in curl 7.84.0.
 
               NOTE: The %-symbol is a special symbol in the win32-environment,
               where all occurrences of % must be doubled when using this option.
@@ -4638,9 +4702,7 @@ OPTIONS
               ftp_entry_path The initial path curl ended up in when logging on
                              to the remote FTP server.
 
-              header_json    EXPERIMENTAL feature.
-
-                             A JSON object with all HTTP response headers from
+              header_json    A JSON object with all HTTP response headers from
                              the recent transfer. Values are provided as arrays,
                              since in the case of multiple headers there can be
                              multiple values.
@@ -4952,6 +5014,9 @@ EXIT CODES
        There are a bunch of different error codes and their corresponding error
        messages that may appear under error conditions. At the time of this
        writing, the exit codes are:
+
+       0      Success. The operation completed successfully according to the
+              instructions.
 
        1      Unsupported protocol. This build of curl has no support for this
               protocol.
