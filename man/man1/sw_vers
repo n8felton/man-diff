@@ -33,7 +33,7 @@ DESCRIPTION
 
 OPTIONS
      The output of sw_vers can be refined by the following options. These long-
-     form options are case-insensitive.
+     form options can also be passed in lowercase for convenience.
 
      -productName     Print only the value of the ProductName property.
 
@@ -56,6 +56,13 @@ EXAMPLES
 
      % sw_vers -buildVersion
      22A100
+
+COMPATIBILITY
+     Previous versions of sw_vers respected the SYSTEM_VERSION_COMPAT
+     environment variable to provide compatibility fallback versions for scripts
+     which did not support the macOS 11.0+ version transition. This is no longer
+     supported, versions returned by sw_vers will always reflect the real system
+     version.
 
 FILES
      /System/Library/CoreServices/SystemVersion.plist

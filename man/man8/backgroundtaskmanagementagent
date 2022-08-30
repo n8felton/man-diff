@@ -1,11 +1,11 @@
-btmagent(8)                  System Manager's Manual                 btmagent(8)
+BackgroundTaskManagementAgent(8)                         System Manager's Manual
 
 NAME
-     backgroundtaskmanagementagent – User agent which manages notifications
+     BackgroundTaskManagementAgent – User agent which manages notifications
      about background task processes
 
 DESCRIPTION
-     backgroundtaskmanagementagent is a per-user agent that manages
+     BackgroundTaskManagementAgent is a per-user agent that manages
      notifications of background tasks.  This includes items in System Settings
      > General > Login Items, items installed with SMAppService or
      SMLoginItemSetEnabled(), and items from managed device profiles.
@@ -13,7 +13,7 @@ DESCRIPTION
      This command is not intended to be invoked directly.
 
 FILES
-     /System/Library/PrivateFrameworks/BackgroundTaskManagement.framework/Support/backgroundtaskmanagementagent
+     /System/Library/PrivateFrameworks/BackgroundTaskManagement.framework/Support/BackgroundTaskManagementAgent.app
 
      /System/Library/LaunchAgents/com.apple.backgroundtaskmanagement.agent.plist
 
