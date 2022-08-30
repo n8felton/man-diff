@@ -182,7 +182,7 @@ ASSET SELECTION
              given multiple times, or languages can be specified as a comma
              separated list.
 
-     --male, --female, --unspecified
+     --male, --female, --neutral, --unspecified
              Specify the gender(s) we're interested in.
 
      -t technology(s), --technology technology(s)
