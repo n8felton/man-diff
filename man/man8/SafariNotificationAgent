@@ -1,0 +1,13 @@
+SAFARINOTIFICATIONAGENT(8)   System Manager's Manual  SAFARINOTIFICATIONAGENT(8)
+
+NAME
+     SafariNotificationAgent – Safari Push Notification Agent
+
+DESCRIPTION
+     SafariNotificationAgent is the system launch agent that delivers Safari
+     Push Notifications from websites, handles users registering and
+     unregistering for those notifications, and verifies website push packages.
+
+     There are no configuration options to SafariNotificationAgent, and users
+     should not run SafariNotificationAgent manually.
+

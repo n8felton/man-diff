@@ -1,0 +1,11 @@
+deviceaccessd(8)             System Manager's Manual            deviceaccessd(8)
+
+NAME
+     deviceaccessd – Device Access daemon.
+
+SYNOPSIS
+     Daemon or managing user-specified access to devices.
+
+LOCATION
+     /usr/libexec/deviceaccessd
+
