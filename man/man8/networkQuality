@@ -4,7 +4,7 @@ NAME
      networkQuality – Network quality testing tool
 
 SYNOPSIS
-     networkQuality [-chksv] [-I interface] [-C configuration URL]
+     networkQuality [-chksv] [-C configuration URL] [-I interface] [-r host]
 
 DESCRIPTION
      networkQuality allows for measuring the different aspects of Network
@@ -36,6 +36,8 @@ DESCRIPTION
               Bind test to interface (e.g., en0, pdp_ip0,...)
 
               If not specified, the default interface will be used.
+
+     -r host  Connect to host or IP, overriding DNS for initial config request
 
      -c       Produce computer-readable output.
 
