@@ -127,6 +127,15 @@ DESCRIPTION
               behavior, where hard mounts never time out. Setting a zero value
               is useful for laptops that are being used as desktops.
 
+     nfs.client.uninterruptible_pagein
+              Sets the behavior for nfs requests generated as a result of a
+              page-in operation. If the value is set to 1, then nfs requests
+              resulting from page-in operations will not pay attention to the
+              relavant mount options. In particular, nfs requests generated for
+              an interruptible mount will be sent in an uninterruptible manner.
+              If the value is set to 0, then nfs requests are always done with
+              accordance to relevant mount options. The default value is 0.
+
      nfs.lockd.grace_period
               This option specifies the grace period (in seconds) during which
               lockd will only accept requests from hosts which are reclaiming
