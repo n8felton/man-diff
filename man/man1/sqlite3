@@ -25,7 +25,7 @@ DESCRIPTION
        table named "memos" and insert a couple of records into that table:
 
        $ sqlite3 mydata.db
-       SQLite version 3.39.0 2022-06-30 02:14:17
+       SQLite version 3.39.4 2022-09-07 20:51:41
        Enter ".help" for usage hints.
        sqlite> CREATE TABLE memos(text, priority INTEGER);
        sqlite> INSERT INTO memos VALUES('deliver project description', 10);
