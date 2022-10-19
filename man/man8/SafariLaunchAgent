@@ -1,0 +1,12 @@
+SAFARILAUNCHAGENT(8)         System Manager's Manual        SAFARILAUNCHAGENT(8)
+
+NAME
+     SafariLaunchAgent – Safari Launch Agent
+
+DESCRIPTION
+     SafariLaunchAgent is the system launch agent that listens for requests to
+     launch Safari to a specified URL.
+
+     There are no configuration options to SafariLaunchAgent, and users should
+     not run SafariLaunchAgent manually.
+

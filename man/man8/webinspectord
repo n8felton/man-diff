@@ -1,0 +1,11 @@
+webinspectord(8)             System Manager's Manual            webinspectord(8)
+
+NAME
+     webinspectord – Remote Web Inspector relay daemon
+
+DESCRIPTION
+     webinspectord relays commands between Web Inspector and targets that it can
+     remotely inspect, such as WKWebView and JSContext instances.
+
+     The webinspectord daemon should be not invoked directly.
+
