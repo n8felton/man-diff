@@ -20,7 +20,7 @@ SYNOPSIS
              [-S ST] [-C C]
      sc_auth delete-ctk-identity -h hash
      sc_auth delete-all-ctk-identities
-     sc_auth list-ctk-identities
+     sc_auth list-ctk-identities [-t sha1|sha256|ssh] [-e hex|b64]
      sc_auth import-ctk-identities -f fileName [-t bio|none] [-p password]
      sc_auth export-ctk-identity -h hash -f fileName [-p password]
      sc_auth create-ctk-csr -h hash -f fileName [-N CN] [-E emailAddress]
@@ -144,7 +144,14 @@ COMMANDS - CTK Identity
 
      delete-all-ctk-identities Delete all CTK Identities.
 
-     list-ctk-identities List all CTK identities.
+     list-ctk-identities [-t sha1|sha256 |ssh] [-e hex|b64] List all CTK
+     identities.
+
+            -t sha1|sha256|ssh
+                     Specifies used alghorithm for public key hash. SHA-1,
+                     SHA-256 and SHA-256 compatible with SSH.
+            -e hex|b64
+                     Specifies public key hash encoding, hexadecimal or Base64
 
      import-ctk-identities -f fileName [-t bio|none] [-p password] Import one or
      more Identities from a PKCS#12 archive.

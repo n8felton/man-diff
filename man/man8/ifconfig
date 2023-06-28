@@ -524,6 +524,11 @@ DESCRIPTION
              address and shuts the interface down.  The iface argument is
              useless and hence deprecated.
 
+     tbr rate
+             Set a token bucket regulator that limits the egress bandwidth to
+             rate, measured in bps, Kbps, Mbps or Gbps.  If the specified rate
+             is zero, the token bucket regulator is disabled.
+
      The ifconfig utility displays the current configuration for a network
      interface when no optional parameters are supplied.  If a protocol family
      is specified, ifconfig will report only the details specific to that
