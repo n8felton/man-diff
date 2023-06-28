@@ -2,17 +2,19 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>BuildID</key>
+	<string>CEA2E3A4-C53D-11ED-99DF-F6894E48406F</string>
 	<key>ProductBuildVersion</key>
-	<string>22D49</string>
+	<string>22E252</string>
 	<key>ProductCopyright</key>
 	<string>1983-2023 Apple Inc.</string>
 	<key>ProductName</key>
 	<string>macOS</string>
 	<key>ProductUserVisibleVersion</key>
-	<string>13.2</string>
+	<string>13.3</string>
 	<key>ProductVersion</key>
-	<string>13.2</string>
+	<string>13.3</string>
 	<key>iOSSupportVersion</key>
-	<string>16.3</string>
+	<string>16.4</string>
 </dict>
 </plist>
