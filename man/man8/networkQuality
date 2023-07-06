@@ -33,9 +33,13 @@ DESCRIPTION
               https://github.com/network-quality/server for server
               implementation details.
 
-     -f http-version
-              Force usage of a specific HTTP-version. h1 for HTTP/1.1, h2 for
-              HTTP/2 or h3 for HTTP/3 (QUIC)
+     -f <option[,<option>,...]>
+              Force usage of a specific protocol selection:
+                 h1: To enforce HTTP/1.1
+                 h2: To enforce HTTP/2
+                 h3: To enforce HTTP/3 (QUIC)
+                 L4S: To force-enable L4S
+                 noL4S: To force-disable L4S
 
      -I interface
               Bind test to interface (e.g., en0, pdp_ip0,...)
