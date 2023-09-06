@@ -63,7 +63,7 @@ DESCRIPTION
              drop the extents for path from the first snapshot
 
      -G path
-             get stats on the purgeble files on the volume specified by path.
+             get stats on the purgeable files on the volume specified by path.
 
      -k      Return the UUID of the apfs volume on device.
 
