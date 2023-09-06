@@ -374,9 +374,20 @@ COMMANDS
        • rebuild: System subcommand used to attempt an Auxiliary kext collection
          rebuild.  This command evaluates the current Auxiliary kext collection
          for changes, which may add newly approved third-party kexts and remove
-         kexts that were previously installed and have since been deleted.  If
-         changes are detected, prompts for system owner authentication and
-         requires a system reboot for the rebuild to take effect.
+         kexts that were previously installed and have since been deleted or
+         moved from their installed location.
+
+         To uninstall a kext from the Auxiliary kext collection:
+
+         1. Delete or move the kext bundle(s) to be uninstalled from their
+            installed location.
+
+         2. Run “kmutil rebuild” from Terminal and confirm the Auxiliary kext
+            collection changes.
+
+         3. Authorize the Auxiliary kext collection rebuild.
+
+         4. Reboot the system for the changes to take effect.
 
 RECOVERY COMMANDS
        The following commands can only be run in Recovery Mode.
