@@ -94,6 +94,12 @@ OPTIONS
               column layout. Additional whitespace and line breaks are allowed
               anywhere.
 
+       -R when
+              In output the hex-value and the value are both colored with the
+              same color depending on the hex-value. Mostly helping to
+              differentiate printable and non-printable characters.  when is
+              never, always, or auto.
+
        -seek offset
               When used after -r: revert with <offset> added to file positions
               found in hex dump.
