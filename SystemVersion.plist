@@ -3,18 +3,18 @@
 <plist version="1.0">
 <dict>
 	<key>BuildID</key>
-	<string>4FCE0468-9B58-11EE-A63E-3D3423121F25</string>
+	<string>F33E420C-B11A-11EE-B36C-D0F69201D0D9</string>
 	<key>ProductBuildVersion</key>
-	<string>23C71</string>
+	<string>23D56</string>
 	<key>ProductCopyright</key>
-	<string>1983-2023 Apple Inc.</string>
+	<string>1983-2024 Apple Inc.</string>
 	<key>ProductName</key>
 	<string>macOS</string>
 	<key>ProductUserVisibleVersion</key>
-	<string>14.2.1</string>
+	<string>14.3</string>
 	<key>ProductVersion</key>
-	<string>14.2.1</string>
+	<string>14.3</string>
 	<key>iOSSupportVersion</key>
-	<string>17.2</string>
+	<string>17.3</string>
 </dict>
 </plist>
